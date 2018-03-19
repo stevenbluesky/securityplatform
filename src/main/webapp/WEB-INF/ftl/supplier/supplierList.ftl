@@ -91,7 +91,7 @@
           alert("数据加载失败！");
       },
       onDblClickRow: function (row, $element) {
-          var id = row.ID;
+          var id = row.id;
           EditViewById(id, 'view');
       }
 });

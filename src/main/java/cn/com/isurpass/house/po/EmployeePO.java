@@ -33,12 +33,13 @@ public class EmployeePO {
 		super();
 	}
 
-	public EmployeePO(String loginname, String password, String question, String answer) {
+	public EmployeePO(String loginname, String password, String question, String answer,Date createtime) {
 		super();
 		this.loginname = loginname;
 		this.password = password;
 		this.question = question;
 		this.answer = answer;
+		this.createtime = createtime;
 	}
 
 	public EmployeePO(Integer employeeid, String loginname, String code, String name, String password,

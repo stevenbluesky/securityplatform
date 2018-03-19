@@ -34,9 +34,9 @@
   			<div class="tree well">
         <ul>
             <li>
-              <i class="icon-folder-open"></i> <a style="text-decoration:none;" href="supplier/supplierList" target="right">服务商列表</a>
+              <i class="icon-folder-open"></i> <a style="text-decoration:none;" href="org/supplierList" target="right">服务商列表</a>
                 <ul>
-                    <li></i> <a style="text-decoration:none;" href="supplier/addSupplierPage" target="right">新增服务商</a></li>
+                    <li></i> <a style="text-decoration:none;" href="org/addSupplierPage" target="right">新增服务商</a></li>
                 </ul>
             </li>
             <li>
@@ -46,9 +46,9 @@
                 </ul>
             </li>
             <li>
-              <i class="icon-folder-open"></i> <a style="text-decoration:none;" href="installer/installerList" target="right">安装商列表</a>
+              <i class="icon-folder-open"></i> <a style="text-decoration:none;" href="org/installerList" target="right">安装商列表</a>
                 <ul>
-                    <li></i> <a style="text-decoration:none;" href="installer/addInstallerPage" target="right">新增安装商</a></li>
+                    <li></i> <a style="text-decoration:none;" href="org/addInstallerPage" target="right">新增安装商</a></li>
                 </ul>
             </li>
             <li>
@@ -87,7 +87,7 @@
   		</div>
     </div>
   		<div  class="col-md-10"  style="height: 800px;">
-		    <iframe class="embed-responsive-item" id="right" name="right" frameborder="0" src="supplier/supplierList" style="height: 100%;width: 100%;"></iframe> 
+		    <iframe class="embed-responsive-item" id="right" name="right" frameborder="0" src="org/supplierList" style="height: 100%;width: 100%;"></iframe> 
   		</div>
    </div>
 <#include "_foot0.ftl"/>

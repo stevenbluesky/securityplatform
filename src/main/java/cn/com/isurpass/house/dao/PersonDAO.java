@@ -8,7 +8,9 @@ import cn.com.isurpass.house.po.PersonPO;
 public class PersonDAO extends BaseDAO{
 
 	public Integer add(PersonPO person) {
-		return null;
+		getSession().save(person);
+		return person.getPersonid();
 	}
+	
 
 }

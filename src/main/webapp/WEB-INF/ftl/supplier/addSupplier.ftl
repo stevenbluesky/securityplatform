@@ -310,7 +310,7 @@ $(document).ready(function() {
 $("#btn-submit").click(function () {
         $("#defaultForm").bootstrapValidator('validate');//提交验证  
         if ($("#defaultForm").data('bootstrapValidator').isValid()) {//获取验证结果，如果成功，执行下面代码  
-            var url= "../supplier/add";       
+            var url= "../org/add";       
                 $.ajax({
                     type: "POST",
                     dataType: "html",

@@ -3,8 +3,9 @@ package cn.com.isurpass.house.util;
 import java.lang.reflect.Field;
 import java.util.Date;
 
+import ch.qos.logback.core.net.SyslogOutputStream;
 import cn.com.isurpass.house.po.OrganizationPO;
-import cn.com.isurpass.house.vo.AddSupplierVO;
+import cn.com.isurpass.house.vo.OrgAddVO;
 
 public class FormUtils {
 
@@ -13,7 +14,7 @@ public class FormUtils {
 	 * @param as
 	 * @return
 	 */
-	public static boolean checkNull(AddSupplierVO as) {
+	public static boolean checkNull(OrgAddVO as) {
 		if(StringUtils.checkNUll(as.getName())&&StringUtils.checkNUll(as.getCode())
 				&&StringUtils.checkNUll(as.getCountry())
 				&&StringUtils.checkNUll(as.getProvince())
@@ -48,14 +49,18 @@ public class FormUtils {
 	}
 	
 	/**
-	 * 将一个实体类中的属性复制到另一个对象中(AddPO -> OrgPO)
+	 * 将一个实体类中的属性赋值到另一个对象中(AddPO -> OrgPO)
 	 */
-	public static void copyO2O(OrganizationPO org, AddSupplierVO as) {
+	public static void copyO2O(OrganizationPO org, OrgAddVO as) {
 		org.setName(as.getName());
 		org.setCode(as.getCode());
-		org.setOrgtype(1);//0:Ameta 1:服务商 2:安装商
 		org.setStatus(1);
 		org.setCentralstationname(as.getCsname());
 		org.setCreatetime(new Date());
+//		org.setOrgtype(1);//0:Ameta 1:服务商 2:安装商
+		if(as.getParentorgid() == null)
+			org.setOrgtype(Constants.ORGTYPE_SUPPLIER);
+		else
+			org.setOrgtype(Constants.ORGTYPE_INSTALLER);
 	}
 }

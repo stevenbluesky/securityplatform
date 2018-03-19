@@ -7,7 +7,8 @@ import cn.com.isurpass.house.po.EmployeePO;
 @Repository
 public class EmployeeDAO extends BaseDAO{
 	
-	public EmployeePO add(EmployeePO emp) {
-		return null;
+	public Integer add(EmployeePO emp) {
+		getSession().save(emp);
+		return emp.getEmployeeid();
 	}
 }
