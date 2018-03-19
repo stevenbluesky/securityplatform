@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+         http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+	<context:component-scan base-package="cn.com.isurpass">
+		<!-- <context:include-filter type="annotation" expression="org.springframework.stereotype.Service" 
+			/> -->
+	</context:component-scan>
+
+	<!-- 使用注解开发，不用配置controller，需要配置一个组件扫描器 -->
+	<mvc:annotation-driven />
+	<mvc:default-servlet-handler />
+
+	<!-- i18n配置 -->
+	<bean id="localeResolver"
+		class="org.springframework.web.servlet.i18n.SessionLocaleResolver" />
+	<!-- 本地化配置 -->
+	<!-- <bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver"> 
+		<property name="cookieName" value="clientlanguage"/> <property name="cookieMaxAge" 
+		value="94608000"/> <property name="defaultLocale" value="en" /> </bean> -->
+
+	<!-- formatter转换配置 -->
+	<!-- <bean id="formatService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean"> 
+		<property name="formatters"> <set> <bean class="org.springframework.format.number.CurrencyStyleFormatter"> 
+		</bean> <bean class="org.springframework.format.number.NumberStyleFormatter"> 
+		</bean> <bean class="org.springframework.format.number.PercentStyleFormatter"> 
+		</bean> <bean class="org.springframework.format.datetime.DateFormatter"> 
+		</bean> <bean class="com.sky.locale.demo.formatter.MyDateFormatter" /> <bean 
+		class="com.sky.locale.demo.formatter.MyCurrencyFormatter" /> </set> </property> 
+		</bean> -->
+	<bean id="messageSource"
+		class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basenames">
+			<list>
+				<!-- src/messages -->
+				<value>messages</value>
+			</list>
+		</property>
+		<property name="defaultEncoding" value="UTF-8" />
+		<!-- 如果没有找到国际化key值 默认输出key -->
+		<property name="useCodeAsDefaultMessage" value="true" />
+	</bean>
+
+
+	<!-- 配置freeMarker的模板路径 -->
+	<bean
+		class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+		<property name="templateLoaderPath" value="WEB-INF/ftl/" />
+		<property name="defaultEncoding" value="UTF-8" />
+	</bean>
+	<!-- freemarker视图解析器 -->
+	<bean
+		class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+		<property name="suffix" value=".ftl" />
+		<property name="contentType" value="text/html;charset=UTF-8" />
+		<!-- 此变量值为pageContext.request, 页面使用方法：rc.contextPath -->
+		<property name="requestContextAttribute" value="rc" />
+	</bean>
+
+	<!-- 视图解析器 -->
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<!-- 配置从项目根目录到指定目录一端路径 ,建议指定浅一点的目录 -->
+		<property name="prefix" value="/WEB-INF/jsp/"></property>
+		<!-- 文件的后缀名 -->
+		<property name="suffix" value=".jsp"></property>
+	</bean>
+
+	<import resource="application.xml" />
+	<!-- <import resource="spring-shiro.xml" /> -->
+</beans>
