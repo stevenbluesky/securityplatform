@@ -34,6 +34,7 @@
     <thead>
         <tr>
             <th data-field="id">ID</th><!-- 页面会吃掉一行, i don't know why.. -->
+            <!--<th data-field="organizationid">ID</th>-->
             <th data-field="name">名称</th>
             <th data-field="code">代码</th>
             <th data-field="city">城市</th>

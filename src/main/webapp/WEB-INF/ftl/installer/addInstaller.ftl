@@ -338,13 +338,13 @@ $("#btn-submit").click(function () {
         }else{
         	alert("必填字段不能为空!");
         }
-    });
+});
 
 getParentOrg();
 function getParentOrg() {
 	$.ajax({
 		type : "get",
-		url : "../org/listAllInstaller",
+		url : "../org/listAllSupplier",
 		async : true,
 		success : function(data) {
 			var str = "";

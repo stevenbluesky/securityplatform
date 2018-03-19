@@ -8,19 +8,17 @@ function getbcountry() {
 		url : "../address/getCountry",
 		async : true,
 		success : function(data) {
-			var str = "";
+			var str = "<option value=''></option>";
 			for (var i = 0; i < data.length; i++) {
 				str += '<option value=' + data[i].countryid + '>'
 						+ data[i].countryname + '</option>'
 			}
 			$("#bcountry").html(str);
-
 			$("#bcountry").selectpicker('refresh');
 
 		}
 	});
 }
-
 $("#bcountry").change(
 		function() {
 			var countryid = $("#bcountry").val();
@@ -29,7 +27,7 @@ $("#bcountry").change(
 				url : "../address/getProvince?countryid=" + countryid,
 				async : true,
 				success : function(data) {
-					var str = "";
+					var str = "<option value=''></option>";
 					for (var i = 0; i < data.length; i++) {
 						str += '<option value=' + data[i].provinceid + '>'
 								+ data[i].provincename + '</option>'
@@ -50,7 +48,7 @@ $("#bprovince").change(
 				url : "../address/getCity?provinceid=" + provinceid,
 				async : true,
 				success : function(data) {
-					var str = "";
+					var str = "<option value=''></option>";
 					for (var i = 0; i < data.length; i++) {
 						str += '<option value=' + data[i].cityid + '>'
 								+ data[i].cityname + '</option>'
@@ -70,7 +68,7 @@ function getcscountry() {
 		url : "../address/getCountry",
 		async : true,
 		success : function(data) {
-			var str = "";
+			var str = "<option value=''></option>";
 			for (var i = 0; i < data.length; i++) {
 				str += '<option value=' + data[i].countryid + '>'
 						+ data[i].countryname + '</option>'
@@ -91,7 +89,7 @@ $("#cscountry").change(
 				url : "../address/getProvince?countryid=" + countryid,
 				async : true,
 				success : function(data) {
-					var str = "";
+					var str = "<option value=''></option>";
 					for (var i = 0; i < data.length; i++) {
 						str += '<option value=' + data[i].provinceid + '>'
 								+ data[i].provincename + '</option>'
@@ -112,7 +110,7 @@ $("#csprovince").change(
 				url : "../address/getCity?provinceid=" + provinceid,
 				async : true,
 				success : function(data) {
-					var str = "";
+					var str = "<option value=''></option>";
 					for (var i = 0; i < data.length; i++) {
 						str += '<option value=' + data[i].cityid + '>'
 								+ data[i].cityname + '</option>'

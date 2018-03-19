@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50556
 File Encoding         : 65001
 
-Date: 2018-03-19 15:57:51
+Date: 2018-03-19 20:31:57
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -29,7 +29,7 @@ CREATE TABLE `address` (
   `fax` varchar(128) DEFAULT NULL,
   `phonenumber` varchar(128) DEFAULT NULL,
   PRIMARY KEY (`addressid`)
-) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of address
@@ -46,6 +46,9 @@ INSERT INTO `address` VALUES ('34', '1', '1', '3', '详细', '邮编', null, nul
 INSERT INTO `address` VALUES ('41', '1', '1', '1', '详细', '邮编', null, null);
 INSERT INTO `address` VALUES ('42', '1', '1', '3', '', 'fdsafd', null, null);
 INSERT INTO `address` VALUES ('43', '1', '1', '3', '详细', '邮编', null, null);
+INSERT INTO `address` VALUES ('47', '1', '1', '3', '', '', null, null);
+INSERT INTO `address` VALUES ('48', '1', '1', '1', '', '', null, null);
+INSERT INTO `address` VALUES ('49', '1', '1', '2', '', '', null, null);
 
 -- ----------------------------
 -- Table structure for city
@@ -107,17 +110,24 @@ CREATE TABLE `employee` (
   `expiredate` datetime DEFAULT NULL,
   `createtime` datetime NOT NULL,
   PRIMARY KEY (`employeeid`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of employee
 -- ----------------------------
-INSERT INTO `employee` VALUES ('2', 'zhulei', null, null, 'zhuleif1', '9', '密码问题f', '密码答案f', '1', null, null, null, '2018-03-19 11:39:38');
-INSERT INTO `employee` VALUES ('3', 'zhulei', null, null, 'zhuleif1x', '11', '密码问题f', '密码答案f', '1', null, null, null, '2018-03-19 11:47:27');
-INSERT INTO `employee` VALUES ('4', 'zhuleif', null, null, 'zhuleif1x', '13', '密码问题f', '密码答案f', '1', null, null, null, '2018-03-19 11:49:16');
-INSERT INTO `employee` VALUES ('5', 'ameta', null, null, 'psw', '14', 'q1', 'a1', '1', null, null, null, '2018-03-19 11:58:28');
-INSERT INTO `employee` VALUES ('6', 'zhulei', null, null, 'zhulei', '17', 'q2', 'a2', '1', null, null, null, '2018-03-19 15:48:29');
-INSERT INTO `employee` VALUES ('7', 'zhulei', null, null, 'zhuleif', '20', 'q2', 'a2', '1', null, null, null, '2018-03-19 15:49:12');
+INSERT INTO `employee` VALUES ('2', 'zhulei', null, 'name', 'zhuleif1', '9', '密码问题f', '密码答案f', '1', null, null, null, '2018-03-19 11:39:38');
+INSERT INTO `employee` VALUES ('3', 'zhulei', null, 'name1', 'zhuleif1x', '11', '密码问题f', '密码答案f', '1', null, null, null, '2018-03-19 11:47:27');
+INSERT INTO `employee` VALUES ('4', 'zhuleif', null, 'name2', 'zhuleif1x', '13', '密码问题f', '密码答案f', '1', null, null, null, '2018-03-19 11:49:16');
+INSERT INTO `employee` VALUES ('5', 'ameta', null, 'name3', 'psw', '14', 'q1', 'a1', '1', null, null, null, '2018-03-19 11:58:28');
+INSERT INTO `employee` VALUES ('6', 'zhulei', null, 'name4', 'zhulei', '17', 'q2', 'a2', '1', null, null, null, '2018-03-19 15:48:29');
+INSERT INTO `employee` VALUES ('7', 'zhulei', null, 'name5', 'zhuleif', '20', 'q2', 'a2', '1', null, null, null, '2018-03-19 15:49:12');
+INSERT INTO `employee` VALUES ('8', 'zhulll', null, 'name7', 'zfff', '21', '', '', '1', null, null, null, '2018-03-19 16:57:45');
+INSERT INTO `employee` VALUES ('9', 'asdff', '', ' name8', 'adsf', '15', '', '', '1', '33', null, '2018-03-19 19:40:29', '2018-03-19 19:40:29');
+INSERT INTO `employee` VALUES ('10', 'asdff', '', ' name9', 'asdf', '15', '', '', '1', '34', null, '2018-03-19 19:54:14', '2018-03-19 19:54:14');
+INSERT INTO `employee` VALUES ('11', 'asdffff', 'xx', ' name10', 'asdf', '15', '', '', '1', '35', null, '2018-03-19 19:56:51', '2018-03-19 19:56:51');
+INSERT INTO `employee` VALUES ('12', 'zhulei3', '888', 'zhulei', 'zhule', '17', '', '', '1', '36', null, '2018-03-19 20:27:37', '2018-03-19 20:27:37');
+INSERT INTO `employee` VALUES ('13', 'zzzzzz', '', 'zhu lei', '123123', '11', '', '', '1', '37', null, '2018-03-19 20:28:57', '2018-03-19 20:28:57');
+INSERT INTO `employee` VALUES ('14', 'zzzzzz', '', 'zhu lei', '123123f', '11', '', '', '1', '38', null, '2018-03-19 20:29:51', '2018-03-19 20:29:51');
 
 -- ----------------------------
 -- Table structure for employeerole
@@ -231,7 +241,7 @@ CREATE TABLE `organization` (
   PRIMARY KEY (`organizationid`),
   UNIQUE KEY `name` (`name`),
   UNIQUE KEY `code` (`code`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of organization
@@ -243,6 +253,7 @@ INSERT INTO `organization` VALUES ('15', '123123', null, '1231', '13', '2', '1',
 INSERT INTO `organization` VALUES ('16', '3432', null, '132', '14', '2', '1', null, null, null, null, null, null, '2018-03-19 14:54:35');
 INSERT INTO `organization` VALUES ('17', '代码132', null, '132安装商', null, '2', '1', '32', '34', '25', 'fuwus', '33', '26', '2018-03-19 15:48:29');
 INSERT INTO `organization` VALUES ('20', '代码1322', null, '132安装商f', null, '2', '1', '41', '43', '31', 'fuwus', '42', '32', '2018-03-19 15:49:12');
+INSERT INTO `organization` VALUES ('21', 'lesss', null, 'less', null, '1', '1', '47', '49', null, '', '48', null, '2018-03-19 16:57:45');
 
 -- ----------------------------
 -- Table structure for orgrole
@@ -278,7 +289,7 @@ CREATE TABLE `person` (
   `fax` varchar(128) DEFAULT NULL,
   `addressid` int(9) DEFAULT NULL,
   PRIMARY KEY (`personid`)
-) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of person
@@ -295,6 +306,12 @@ INSERT INTO `person` VALUES ('25', 'zzz', null, null, null, null, null, 'zzz', '
 INSERT INTO `person` VALUES ('26', 'zhul', null, null, null, null, null, 'zhuk', '8@q.com', 'zhul', null);
 INSERT INTO `person` VALUES ('31', 'zzz', null, null, null, null, null, 'zzz', '2@q.c', 'zzz', null);
 INSERT INTO `person` VALUES ('32', 'zhul', null, null, null, null, null, 'zhuk', '8@q.com', 'zhul', null);
+INSERT INTO `person` VALUES ('33', ' ', '', '0', '', '', '', '', '', '', null);
+INSERT INTO `person` VALUES ('34', ' ', '', '0', '', '', '', '', '', '', null);
+INSERT INTO `person` VALUES ('35', ' ', '', '0', '', '', '', '', '', '', null);
+INSERT INTO `person` VALUES ('36', ' ', '', '0', '', '', '', '', '', '', null);
+INSERT INTO `person` VALUES ('37', 'zhu lei', '', '1', '', 'lei', 'zhu', '', '', '', null);
+INSERT INTO `person` VALUES ('38', 'zhu lei', '', '1', '', 'lei', 'zhu', '', '', '', null);
 
 -- ----------------------------
 -- Table structure for phonecard

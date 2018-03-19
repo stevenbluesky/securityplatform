@@ -62,8 +62,8 @@ public class AddressDAO extends BaseDAO {
 		
 	}
 
-	public Integer add(AddressPO bAddress) {
-		getSession().save(bAddress);
-		return bAddress.getAddressid();
+	public Integer add(AddressPO address) {
+		getSession().save(address);
+		return address.getAddressid();
 	}
 }

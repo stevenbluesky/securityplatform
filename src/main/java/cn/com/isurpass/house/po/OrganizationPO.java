@@ -30,6 +30,17 @@ public class OrganizationPO {
 	private Date createtime;
 
 	
+	public OrganizationPO() {
+		super();
+	}
+	
+	public OrganizationPO(Integer organizationid, String name) {
+		super();
+		this.organizationid = organizationid;
+		this.name = name;
+	}
+
+
 	public Integer getOrganizationid() {
 		return organizationid;
 	}

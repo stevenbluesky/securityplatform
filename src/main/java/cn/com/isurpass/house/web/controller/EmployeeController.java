@@ -1,48 +1,27 @@
 package cn.com.isurpass.house.web.controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import cn.com.isurpass.house.exception.MyArgumentNullException;
 import cn.com.isurpass.house.po.EmployeePO;
+import cn.com.isurpass.house.result.JsonResult;
+import cn.com.isurpass.house.service.EmployeeService;
+import cn.com.isurpass.house.util.PageResult;
+import cn.com.isurpass.house.vo.EmployeeAddVO;
 
 @Controller
 @RequestMapping("/employee")
 public class EmployeeController {
 
-	@RequestMapping("employeeJsonList")
-	@ResponseBody
-	public Map<String, Object> employeeList(Integer rows, Integer page) {
-		// 查询数据库...
-
-		Map<String, Object> map = new HashMap<>();
-		map.put("total", 8);
-	/*	List<EmployeePO> personList = new ArrayList<>();
-		EmployeePO user1 = new EmployeePO("小明", 1, 2, 34, 4, "操作");
-		EmployeePO user2 = new EmployeePO("小明", 1, 2, 34, 4, "操作");
-		EmployeePO user3 = new EmployeePO("小明", 1, 2, 34, 4, "操作");
-		EmployeePO user4 = new EmployeePO("小明", 1, 2, 34, 4, "操作");
-		EmployeePO user5 = new EmployeePO("小明", 1, 2, 34, 4, "操作");
-		EmployeePO user6 = new EmployeePO("小明", 1, 2, 34, 4, "操作");
-		EmployeePO user7 = new EmployeePO("小明", 1, 2, 34, 4, "操作");
-		EmployeePO user8 = new EmployeePO("小红", 5, 123, 45, 67, "操作");
-		personList.add(user1);
-		personList.add(user2);
-		personList.add(user3);
-		personList.add(user4);
-		personList.add(user5);
-		personList.add(user6);
-		personList.add(user7);
-		personList.add(user8);*/
-		map.put("rows", "");
-		return map;
-	}
-
+	@Autowired
+	EmployeeService es;
 
 	@RequestMapping("addEmployeePage")
 	public String addEmployeePage() {
@@ -50,12 +29,27 @@ public class EmployeeController {
 	}
 	
 	@RequestMapping("employeeList")
-	public String employeeListPage() {
+	public String employeeList() {
 		return "employee/employeeList";
 	}
 	
-	@RequestMapping("addEmployee")
-	public String addEmployee() {
-		return null;
+	@RequestMapping("employeeJsonList")
+	@ResponseBody
+	public Map<String, Object> employeeJsonList(PageResult pr) {
+		return es.listAllEmployee(pr);
+	}
+	
+	@RequestMapping("add")
+	@ResponseBody
+	public JsonResult addEmployee(EmployeeAddVO emp) {
+		try {
+			es.add(emp);
+		} catch (MyArgumentNullException e) {
+			return new JsonResult(-1,e.getMessage());
+		} catch (RuntimeException e) {
+//			e.printStackTrace();
+			return new JsonResult(-1,"出错啦~");
+		}
+		return new JsonResult(1,"success");
 	}
 }

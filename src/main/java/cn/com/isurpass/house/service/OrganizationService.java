@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import cn.com.isurpass.house.dao.AddressDAO;
 import cn.com.isurpass.house.dao.EmployeeDAO;
 import cn.com.isurpass.house.dao.PersonDAO;
+import cn.com.isurpass.house.exception.MyArgumentNullException;
 import cn.com.isurpass.house.dao.OrganizationDAO;
 import cn.com.isurpass.house.po.AddressPO;
 import cn.com.isurpass.house.po.EmployeePO;
@@ -39,10 +40,11 @@ public class OrganizationService {
 	 * 添加一个机构
 	 * 
 	 * @param as
+	 * @throws MyArgumentNullException 
 	 */
-	public void add(OrgAddVO as) {
+	public void add(OrgAddVO as) throws MyArgumentNullException {
 		if (!FormUtils.checkNull(as)) // 必填项为空时
-			throw new RuntimeException("必填字段不能为空!");
+			throw new MyArgumentNullException("必填字段不能为空!");
 		OrganizationPO org = new OrganizationPO();
 
 		FormUtils.copyO2O(org, as);// 将一些机构的属性复制到 org 中
@@ -84,7 +86,7 @@ public class OrganizationService {
 			sPId = pd.add(sPerson);
 		if (!FormUtils.isEmpty(csPerson)) {// 服务商总公司联系人不为空
 			csPId = pd.add(csPerson);
-			org.setParentorgid(od.findParentOrgId(as.getCsname()));
+			org.setParentorgid(od.getParentOrgId(as.getCsname()));
 		}
 
 		// 取到各分支方法返回的主键id后将其存入 org 对象中,然后再进行保存
@@ -117,6 +119,7 @@ public class OrganizationService {
 		List<OrgListVO> list = new ArrayList<>();
 		orgList.forEach(o -> {
 			OrgListVO orgVO = new OrgListVO();
+			orgVO.setOrganizationid(o.getOrganizationid());
 			orgVO.setName(o.getName());
 			if (o.getOfficeaddressid() != null)
 				orgVO.setCity(ad.getCityName(o.getOfficeaddressid()));
@@ -135,8 +138,25 @@ public class OrganizationService {
 	 * 
 	 * @return
 	 */
-	public List<OrganizationPO> listAllInstaller(Integer orgType) {
+	public List<OrganizationPO> listOrgByType(Integer orgType) {
 		return od.listOrgByType(orgType);
+	}
+
+	/**
+	 * 与 listOrgByTyep 不同的是此方法只返回 organizationid 和 name.
+	 * @param orgType
+	 * @return
+	 */
+	public List<OrganizationPO> listOrgSelectByType(Integer orgType) {
+		return od.listOrgSelectByType(orgType);
+	}
+	
+	public List<OrganizationPO> listAllOrg() {
+		return od.listAllOrg();
+	}
+
+	public List<OrganizationPO> listAllOrgSelect () {
+		return od.listAllOrgSelect();
 	}
 
 }

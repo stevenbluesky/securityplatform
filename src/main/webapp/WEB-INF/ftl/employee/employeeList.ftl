@@ -35,7 +35,7 @@
         <tr>
             <th data-field="id">ID</th><!-- 页面会吃掉一行, i don't know why.. -->
             <th data-field="name">姓名</th>
-            <th data-field="organizationid">所属机构</th>
+            <th data-field="parentOrgName">所属机构</th>
             <th data-field="code">员工代码</th>
             <th data-field="status">状态</th>
             <th data-field="employeeroleid">权限</th>

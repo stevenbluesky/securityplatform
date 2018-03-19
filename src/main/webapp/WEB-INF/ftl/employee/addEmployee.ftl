@@ -3,19 +3,15 @@
     <div class="row-horizontal">
         <div class="col-md-1"></div>
         <div class="col-md-10">
-          <form action="/house/supplier/add" method="POST">
+          <form id="defaultForm" method="POST">
+          
               <div class="text-center"><h1>新增员工</h1></div>
 
               <div class="text-left"><h4>账号信息</h4></div>
               <div  class="form-group">
                 <label for="organizationid"  class="col-sm-2 control-label">所属机构</label>
                 <div class="col-sm-10">
-               <select name="organizationid" class="selectpicker" data-live-search="true" title="选择机构">
-                      <option value="1">机构1</option>
-                      <option value="2">机构2</option>
-                      <option value="3">机构3</option>
-                      <option value="4">机构4</option>
-                      <option value="5">机构5</option>                            
+               <select name="organizationid" id="organizationid" class="selectpicker" data-live-search="true" title="选择机构">
                     </select>
                 </div>
               </div>
@@ -74,8 +70,9 @@
                 <div class="col-sm-10">
              	   <select id="status" name="status" class="selectpicker" title="选择状态">
                       <option value="1">生效</option>
-                      <option value="2">未生效</option>
-                      <option value="3">冻结</option>
+                      <option value="0">未生效</option>
+                      <option value="2">冻结</option>
+                      <option value="3">删除</option>
                    </select>
                 </div>
               </div>
@@ -114,9 +111,9 @@
                 <label for="gender"  class="col-sm-2 control-label">性别</label>
                 <div class="col-sm-10">
                <select name="gender" class="selectpicker" title="选择性别">
+                      <option value="0">女</option>
                       <option value="1">男</option>
-                      <option value="2">女</option>
-                      <option value="3">LGBT</option>
+                      <option value="2">LGBT</option>
                     </select>
                 </div>
               </div>
@@ -136,9 +133,9 @@
               </div>
               
                <div  class="form-group">
-                <label for="fox"  class="col-sm-2 control-label">传真</label>
+                <label for="fax"  class="col-sm-2 control-label">传真</label>
                 <div class="col-sm-10">
-                 <input type="text" class="form-control" id="fox" name="fox" placeholder="Email">
+                 <input type="text" class="form-control" id="fax" name="fax" placeholder="Email">
                </div>
               </div> 
   
@@ -174,7 +171,7 @@
               
               <div class="row">
 	              <div class="col-sm-4"></div>
-	              <div class="col-sm-8"><button type="submit" class="btn btn-default" style="width:100px;	">提交</button></div>
+	              <div class="col-sm-8"><button id="btn-submit" type="submit" class="btn btn-default" style="width:100px;	">提交</button></div>
               </div>
               
         </form>
@@ -185,9 +182,109 @@
     </div>
 
 <!-- JavaScript 部分 -->
-    <script type="text/javascript">
-      $("form").submit(function(e){
+<script src="../static/js/addressController.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#defaultForm').bootstrapValidator({
+ //       live: 'disabled',
+        message: 'This value is not valid',
+        feedbackIcons: {
+            valid: 'glyphicon glyphicon-ok',
+            invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+            loginname: {
+                message: 'The loginname is not valid',
+                validators: {
+                    notEmpty: {
+                        message: 'The loginname is required and cannot be empty'
+                    },
+                    stringLength: {
+                        min: 4,
+                        max: 30,
+                        message: 'The loginname must be more than 4 and less than 30 characters long'
+                    },
+                    regexp: {
+                        regexp: /^[a-zA-Z0-9_\.]+$/,
+                        message: 'The loginname can only consist of alphabetical, number, dot and underscore'
+                    }
+                }
+            },
+            password: {
+                validators: {
+                    notEmpty: {
+                        message: 'The password is required and cannot be empty'
+                    },
+                    identical: {
+                        field: 'repassword',
+                        message: 'The password and its confirm are not the same'
+                    }
+                }
+            },
+            organizationid: {
+                validators: {
+                    notEmpty: {
+                        message: 'The password is required and cannot be empty'
+                    }
+                }
+            },
+            repassword: {
+                validators: {
+                    notEmpty: {
+                        message: 'The repassword is required and cannot be empty'
+                    },
+                    identical: {
+                        field: 'password',
+                        message: 'The password and its confirm are not the same'
+                    }
+                }
+            }
+        }
+    });
+});
+
+$("#btn-submit").click(function () {
+        $("#defaultForm").bootstrapValidator('validate');//提交验证  
+        if ($("#defaultForm").data('bootstrapValidator').isValid()) {//获取验证结果，如果成功，执行下面代码  
+            var url= "../employee/add";       
+                $.ajax({
+                    type: "POST",
+                    dataType: "html",
+                    url: url,
+                    data: $('#defaultForm').serialize(),
+                    success: function (data) {
+                        var strresult=data;
+                        alert(strresult);
+                    },
+                    error: function(data) {
+                        alert("error:"+data.responseText);
+                     }
+                });
+        }else{
+        	alert("必填字段不能为空!");
+        }
+});
+
+getParentOrg();
+function getParentOrg() {
+	$.ajax({
+		type : "get",
+		url : "../org/listAllOrgSelect",
+		async : true,
+		success : function(data) {
+			var str = "<option value=''></option>";
+			for (var i = 0; i < data.length; i++) {
+				str += '<option value=' + data[i].organizationid + '>'
+						+ data[i].name + '</option>'
+			}
+			$("#organizationid").html(str);
+
+			$("#organizationid").selectpicker('refresh');
+
+		}
 	});
-    </script>
-	<script src="../static/js/addressController.js"></script>
+}
+</script>
 <#include "/_foot0.ftl"/>

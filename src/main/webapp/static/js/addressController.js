@@ -9,7 +9,7 @@ function getCountry() {
 		url : "../address/getCountry",
 		async : true,
 		success : function(data) {
-			var str = "";
+			var str = "<option value=''></option>";
 			for (var i = 0; i < data.length; i++) {
 				str += '<option value=' + data[i].countryid + '>'
 						+ data[i].countryname + '</option>'
@@ -29,7 +29,7 @@ $("#country").change(
 				url : "../address/getProvince?countryid=" + countryid,
 				async : true,
 				success : function(data) {
-					var str = "";
+					var str = "<option value=''></option>";
 					for (var i = 0; i < data.length; i++) {
 						str += '<option value=' + data[i].provinceid + '>'
 								+ data[i].provincename + '</option>'
@@ -50,7 +50,7 @@ $("#province").change(
 				url : "../address/getCity?provinceid=" + provinceid,
 				async : true,
 				success : function(data) {
-					var str = "";
+					var str = "<option value=''></option>";
 					for (var i = 0; i < data.length; i++) {
 						str += '<option value=' + data[i].cityid + '>'
 								+ data[i].cityname + '</option>'
