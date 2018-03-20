@@ -3,8 +3,6 @@ package cn.com.isurpass.house.po;
 import java.util.Date;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -13,7 +11,6 @@ import javax.persistence.Table;
 public class GatewayPO {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private String deviceid;
 	private String name;
 	private Integer status; // 0:离线 1:在线

@@ -1,7 +1,6 @@
 package com.isurpass.house;
 
 import javax.annotation.Resource;
-import javax.transaction.Transactional;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,8 +17,9 @@ public class CityTest {
 	@Resource
 	CityDAO cityDAO;
 	@Test
-	@Transactional
 	public void testCitySave() {
-		CityPO city = new CityPO("12321","12312","312fdsf");
+		CityPO city = new CityPO("fda","12312","312fdsf");
+		city.setProvinceid(1);
+		cityDAO.save(city);
 	}
 }
