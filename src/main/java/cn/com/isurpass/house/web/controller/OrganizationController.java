@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -70,13 +73,15 @@ public class OrganizationController {
 	@RequestMapping("supplierJsonList")
 	@ResponseBody
 	public Map<String, Object> supplierJsonList(PageResult pr) {
-		return ss.listOrgByType(pr, Constants.ORGTYPE_SUPPLIER);
+		Pageable pageable = new PageRequest(pr.getPage(),pr.getRows(),Sort.Direction.ASC,"organizationid");
+		return ss.listOrgByType(pageable, Constants.ORGTYPE_SUPPLIER);
 	}
 
 	@RequestMapping("installerJsonList")
 	@ResponseBody
 	public Map<String, Object> installerJsonList(PageResult pr) {
-		return ss.listOrgByType(pr, Constants.ORGTYPE_INSTALLER);
+		Pageable pageable = new PageRequest(pr.getPage(),pr.getRows(),Sort.Direction.ASC,"organizationid");
+		return ss.listOrgByType(pageable, Constants.ORGTYPE_INSTALLER);
 	}
 
 	@RequestMapping("listAllSupplier")

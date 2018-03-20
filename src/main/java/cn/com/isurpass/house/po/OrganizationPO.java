@@ -152,4 +152,13 @@ public class OrganizationPO {
 	public void setCreatetime(Date createtime) {
 		this.createtime = createtime;
 	}
+
+	@Override
+	public String toString() {
+		return "OrganizationPO [organizationid=" + organizationid + ", code=" + code + ", citycode=" + citycode
+				+ ", name=" + name + ", parentorgid=" + parentorgid + ", orgtype=" + orgtype + ", status=" + status
+				+ ", officeaddressid=" + officeaddressid + ", billingaddressid=" + billingaddressid + ", contactid="
+				+ contactid + ", centralstationname=" + centralstationname + ", csaddressid=" + csaddressid
+				+ ", cscontactid=" + cscontactid + ", createtime=" + createtime + "]";
+	}
 }

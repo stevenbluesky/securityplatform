@@ -59,12 +59,15 @@
               </div>
               
               <div  class="form-group">
-                <label for="expiredate"  class="col-sm-2 control-label">失效日期</label>
-                <div class="col-sm-10">
-                 <input type="text" class="form-control" id="expiredate" name="expiredate" placeholder="Email">
+                <label for="expiredate"  class="col-sm-2 control-label" data-date="1979-09-16T05:25:07Z" data-date-format="dd MM yyyy - HH:ii p" data-link-field="dtp_input1">失效日期</label>
+		                <div class="col-sm-3 input-group date form_datetime">
+		                  <input class="form-control" size="16" name="expiredate" type="text" value="" readonly>
+		                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+							<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+		                </div>
+					<input type="hidden" id="dtp_input1"  value="" /><br/>
                </div>
-              </div>
-              
+            
               <div  class="form-group">
                 <label for="status"  class="col-sm-2 control-label">状态</label>
                 <div class="col-sm-10">
@@ -286,5 +289,17 @@ function getParentOrg() {
 		}
 	});
 }
+
+  $('.form_datetime').datetimepicker({
+        //language:  'fr',
+        format: 'yyyy/mm/dd hh:ii',
+        weekStart: 1,
+        todayBtn:  1,
+		autoclose: 1,
+		todayHighlight: 1,
+		startView: 2,
+		forceParse: 0,
+        showMeridian: 1
+    });
 </script>
 <#include "/_foot0.ftl"/>

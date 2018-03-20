@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import cn.com.isurpass.house.dao.AddressDAO;
@@ -19,7 +21,6 @@ import cn.com.isurpass.house.po.EmployeePO;
 import cn.com.isurpass.house.po.PersonPO;
 import cn.com.isurpass.house.util.Constants;
 import cn.com.isurpass.house.util.FormUtils;
-import cn.com.isurpass.house.util.PageResult;
 import cn.com.isurpass.house.vo.EmployeeAddVO;
 import cn.com.isurpass.house.vo.EmployeeListVO;
 
@@ -39,7 +40,7 @@ public class EmployeeService {
 		if (emp.getOrganizationid() == null || !FormUtils.checkNUll(emp.getLoginname())
 				|| !FormUtils.checkNUll(emp.getPassword()))
 			throw new MyArgumentNullException("必填字段不能为空!");
-		if (od.getOrgType(emp.getOrganizationid()) == Constants.ORGTYPE_INSTALLER
+		if (od.findOrgtypeByOrganizationid(emp.getOrganizationid()) == Constants.ORGTYPE_INSTALLER
 				&& !FormUtils.checkNUll(emp.getCode()))// 是安装员且code为空时
 			throw new MyArgumentNullException("安装员必须要有员工代码!");
 		EmployeePO empPO = new EmployeePO();
@@ -69,17 +70,17 @@ public class EmployeeService {
 		personPO.setFax(emp.getFax());
 
 		if (!FormUtils.isEmpty(addressPO))
-			empPO.setAddressid(ad.add(addressPO));
+			empPO.setAddressid(ad.save(addressPO).getAddressid());
 		if (!FormUtils.isEmpty(personPO))
-			empPO.setPersonid(pd.add(personPO));
+			empPO.setPersonid(pd.save(personPO).getPersonid());
 
-		ed.add(empPO);
+		ed.save(empPO);
 	}
 
-	public Map<String, Object> listAllEmployee(PageResult pr) {
+	public Map<String, Object> listAllEmployee(Pageable pageable) {
 		Map<String, Object> map = new HashMap<>();
-		map.put("total", ed.getTotal());
-		List<EmployeePO> empList = ed.listAllEmployee(pr);
+		map.put("total", ed.count());
+		Page<EmployeePO> empList = ed.findAll(pageable);
 		List<EmployeeListVO> list = new ArrayList<>();
 		empList.forEach(e -> {
 			EmployeeListVO emp = new EmployeeListVO();
@@ -87,7 +88,7 @@ public class EmployeeService {
 			emp.setEmployeeid(e.getEmployeeid());
 			emp.setCode(e.getCode());
 			emp.setStatus(e.getStatus());
-			emp.setParentOrgName(od.getOrgNameById(e.getOrganizationid()));
+			emp.setParentOrgName(od.findOrganizationnameByOrganizationid(e.getOrganizationid()));
 			list.add(emp);
 		});
 		map.put("rows", list);

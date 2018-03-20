@@ -38,6 +38,7 @@
 	
 	<tx:annotation-driven transaction-manager="transactionManager" />
 	<jpa:repositories base-package="cn.com.isurpass.house.dao"/>
+	
 	<!-- <import resource="classpath:spring-activemq.xml"/> -->
 
 	<!-- <bean id="shiroPermissionLoadUtils" class="cn.com.isurpass.util.ShiroPermissionLoadUtils"></bean> -->

@@ -5,7 +5,6 @@
 	<version>0.0.1</version>
 	<packaging>war</packaging>
 
-
 	<build>
 		<finalName>house</finalName>
 		<plugins>
@@ -24,14 +23,13 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<hibernate.version>5.2.2.Final</hibernate.version>
-		<spring.version>5.0.4.RELEASE</spring.version>
+		<hibernate.version>5.2.13.Final</hibernate.version>
+		<spring.version>4.3.7.RELEASE</spring.version>
 		<mybatis.version>3.2.1</mybatis.version>
 		<slf4j.version>1.6.6</slf4j.version>
 		<log4j.version>1.2.12</log4j.version>
 		<mysql.version>5.1.35</mysql.version>
 		<jsonVersion>2.5.0</jsonVersion>
-		<org.springframework-version>4.0.2.RELEASE</org.springframework-version>
 	</properties>
 
 	<dependencies>
@@ -50,8 +48,44 @@
 		<dependency>
 			<groupId>javax.validation</groupId>
 			<artifactId>validation-api</artifactId>
+			<version>1.0.0.Final</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>4.3.2.Final</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.6.3</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>2.6.3</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+			<version>2.6.0</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
 			<version>1.0.0.GA</version>
 		</dependency>
+
+<!-- https://mvnrepository.com/artifact/org.jboss.logging/jboss-logging -->
+		<dependency>
+		    <groupId>org.jboss.logging</groupId>
+		    <artifactId>jboss-logging</artifactId>
+		    <version>3.3.0.Final</version>
+		</dependency>
+		
+
 
 		<!-- 添加Spring依赖 -->
 		<dependency>
@@ -120,11 +154,11 @@
 			<artifactId>spring-data-commons</artifactId>
 			<version>2.0.5.RELEASE</version>
 		</dependency>
-        <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-jpa</artifactId>
-            <version>2.0.5.RELEASE</version>
-        </dependency>
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-jpa</artifactId>
+			<version>2.0.5.RELEASE</version>
+		</dependency>
 
 		<!-- mysql驱动包 -->
 		<dependency>
@@ -229,12 +263,12 @@
 			<version>${hibernate.version}</version>
 		</dependency>
 
-		<dependency>  
-            <groupId>org.hibernate</groupId>  
-            <artifactId>hibernate-entitymanager</artifactId>  
-            <version>${hibernate.version}</version>   
-        </dependency>
-      
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>${hibernate.version}</version>
+		</dependency>
+
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
@@ -304,5 +338,5 @@
 		</dependency>
 
 	</dependencies>
-	<groupId>com.isurpass</groupId>
+	<groupId>cn.com.isurpass</groupId>
 </project>

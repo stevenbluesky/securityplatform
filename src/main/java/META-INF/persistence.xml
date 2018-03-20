@@ -12,7 +12,7 @@
             <property name="javax.persistence.jdbc.driver" value="net.sf.log4jdbc.DriverSpy"/>
             <property name="javax.persistence.jdbc.url" value="jdbc:log4jdbc:mysql://127.0.0.1:3306/house?useUnicode=true&amp;characterEncoding=utf-8"/>
             <property name="javax.persistence.jdbc.user" value="root"/>
-            <property name="javax.persistence.jdbc.password" value="111111"/>
+            <property name="javax.persistence.jdbc.password" value="root"/>
             
              <property name="hibernate.show_sql" value="true" />
              <property name="hibernate.format_sql" value="true" />

@@ -7,20 +7,21 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import cn.com.isurpass.house.dao.AddressDAO;
 import cn.com.isurpass.house.dao.EmployeeDAO;
+import cn.com.isurpass.house.dao.OrganizationDAO;
 import cn.com.isurpass.house.dao.PersonDAO;
 import cn.com.isurpass.house.exception.MyArgumentNullException;
-import cn.com.isurpass.house.dao.OrganizationDAO;
 import cn.com.isurpass.house.po.AddressPO;
 import cn.com.isurpass.house.po.EmployeePO;
 import cn.com.isurpass.house.po.OrganizationPO;
 import cn.com.isurpass.house.po.PersonPO;
 import cn.com.isurpass.house.util.Constants;
 import cn.com.isurpass.house.util.FormUtils;
-import cn.com.isurpass.house.util.PageResult;
 import cn.com.isurpass.house.vo.OrgAddVO;
 import cn.com.isurpass.house.vo.OrgListVO;
 
@@ -50,7 +51,7 @@ public class OrganizationService {
 		FormUtils.copyO2O(org, as);// 将一些机构的属性复制到 org 中
 
 		if (as.getParentorgid() == null) {// 没有填写上级机构id,则表明这是一个服务商
-			Integer ametaId = od.listOrgByType(Constants.ORGTYPE_AMETA).get(0).getOrganizationid();// 取 Ameta 的机构id
+			Integer ametaId = od.findByOrgtype(Constants.ORGTYPE_AMETA).get(0).getOrganizationid();// 取 Ameta 的机构id
 			as.setParentorgid(ametaId);
 		}
 
@@ -77,16 +78,16 @@ public class OrganizationService {
 		Integer csPId = null;
 
 		if (!FormUtils.isEmpty(address))
-			aId = ad.add(address);
+			aId = ad.save(address).getAddressid();
 		if (!FormUtils.isEmpty(csAddress))
-			csAId = ad.add(csAddress);
+			csAId = ad.save(csAddress).getAddressid();
 		if (!FormUtils.isEmpty(bAddress))
-			bAId = ad.add(bAddress);
+			bAId = ad.save(bAddress).getAddressid();
 		if (!FormUtils.isEmpty(sPerson)) // 服务商联系人不为空
-			sPId = pd.add(sPerson);
+			sPId = pd.save(sPerson).getAddressid();
 		if (!FormUtils.isEmpty(csPerson)) {// 服务商总公司联系人不为空
-			csPId = pd.add(csPerson);
-			org.setParentorgid(od.getParentOrgId(as.getCsname()));
+			csPId = pd.save(csPerson).getPersonid();
+			org.setParentorgid(od.getParentorgidByName(as.getCsname()));
 		}
 
 		// 取到各分支方法返回的主键id后将其存入 org 对象中,然后再进行保存
@@ -97,12 +98,12 @@ public class OrganizationService {
 		org.setContactid(sPId);
 		org.setCscontactid(csPId);
 		
-		Integer orgId = od.add(org);
+		Integer orgId = od.save(org).getOrganizationid();
 		
 		emp.setOrganizationid(orgId);
 		emp.setStatus(1);
 		if (!FormUtils.isEmpty(emp))// 管理员不为空..由于此方法一开始就对管理员账号不存在的情况进行了处理,所以此处管理员对象是肯定存在的.
-			ed.add(emp);
+			ed.save(emp);
 	}
 
 	/**
@@ -112,17 +113,17 @@ public class OrganizationService {
 	 * @param orgType
 	 * @return
 	 */
-	public Map<String, Object> listOrgByType(PageResult pr, Integer orgType) {
+	public Map<String, Object> listOrgByType(Pageable pageable, Integer orgType) {
 		Map<String, Object> map = new HashMap<>();
-		map.put("total", od.getTotal());
-		List<OrganizationPO> orgList = od.listOrgByType(pr, orgType);
+		map.put("total", od.count());
+		Page<OrganizationPO> orgList = od.findByOrgtype(pageable, orgType);
 		List<OrgListVO> list = new ArrayList<>();
 		orgList.forEach(o -> {
 			OrgListVO orgVO = new OrgListVO();
 			orgVO.setOrganizationid(o.getOrganizationid());
 			orgVO.setName(o.getName());
 			if (o.getOfficeaddressid() != null)
-				orgVO.setCity(ad.getCityName(o.getOfficeaddressid()));
+				orgVO.setCity(ad.findCityByAddressid((o.getOfficeaddressid())));
 			else
 				orgVO.setCity("-");
 			orgVO.setCode(o.getCode());
@@ -139,7 +140,7 @@ public class OrganizationService {
 	 * @return
 	 */
 	public List<OrganizationPO> listOrgByType(Integer orgType) {
-		return od.listOrgByType(orgType);
+		return od.findByOrgtype(orgType);
 	}
 
 	/**
@@ -148,15 +149,15 @@ public class OrganizationService {
 	 * @return
 	 */
 	public List<OrganizationPO> listOrgSelectByType(Integer orgType) {
-		return od.listOrgSelectByType(orgType);
+		return od.findAllOrgSelect(orgType);
 	}
 	
 	public List<OrganizationPO> listAllOrg() {
-		return od.listAllOrg();
+		return od.findAll();
 	}
 
 	public List<OrganizationPO> listAllOrgSelect () {
-		return od.listAllOrgSelect();
+		return od.findAllOrgSelect();
 	}
 
 }
