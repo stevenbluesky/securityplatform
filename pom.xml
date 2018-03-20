@@ -33,11 +33,18 @@
 	</properties>
 
 	<dependencies>
-		<dependency>
+<!-- 		<dependency>
 			<groupId>org.freemarker</groupId>
 			<artifactId>freemarker</artifactId>
 			<version>2.3.23</version>
+		</dependency> -->
+		<!-- https://mvnrepository.com/artifact/org.freemarker/freemarker -->
+		<dependency>
+		    <groupId>org.freemarker</groupId>
+		    <artifactId>freemarker</artifactId>
+		    <version>2.3.24-incubating</version>
 		</dependency>
+		
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
@@ -55,15 +62,15 @@
 			<artifactId>hibernate-validator</artifactId>
 			<version>5.2.4.Final</version>
 		</dependency>
-		
 
-<!-- https://mvnrepository.com/artifact/org.jboss.logging/jboss-logging -->
+
+		<!-- https://mvnrepository.com/artifact/org.jboss.logging/jboss-logging -->
 		<dependency>
-		    <groupId>org.jboss.logging</groupId>
-		    <artifactId>jboss-logging</artifactId>
-		    <version>3.3.0.Final</version>
+			<groupId>org.jboss.logging</groupId>
+			<artifactId>jboss-logging</artifactId>
+			<version>3.3.0.Final</version>
 		</dependency>
-		
+
 
 
 		<!-- 添加Spring依赖 -->
@@ -100,11 +107,6 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-jdbc</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-web</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
 		<!--spring单元测试依赖 -->
@@ -193,7 +195,7 @@
 		</dependency>
 
 		<!-- 添加servlet3.0核心包 -->
-		<dependency>
+	<!-- 	<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
 			<version>3.1.0</version>
@@ -202,7 +204,7 @@
 			<groupId>javax.servlet.jsp</groupId>
 			<artifactId>javax.servlet.jsp-api</artifactId>
 			<version>2.3.2-b01</version>
-		</dependency>
+		</dependency> -->
 		<!-- jstl -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
