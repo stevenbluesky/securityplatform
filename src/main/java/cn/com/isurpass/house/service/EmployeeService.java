@@ -20,7 +20,6 @@ import cn.com.isurpass.house.po.PersonPO;
 import cn.com.isurpass.house.util.Constants;
 import cn.com.isurpass.house.util.FormUtils;
 import cn.com.isurpass.house.util.PageResult;
-import cn.com.isurpass.house.util.StringUtils;
 import cn.com.isurpass.house.vo.EmployeeAddVO;
 import cn.com.isurpass.house.vo.EmployeeListVO;
 
@@ -37,11 +36,11 @@ public class EmployeeService {
 	OrganizationDAO od;
 
 	public void add(EmployeeAddVO emp) throws MyArgumentNullException {
-		if (emp.getOrganizationid() == null || !StringUtils.checkNUll(emp.getLoginname())
-				|| !StringUtils.checkNUll(emp.getPassword()))
+		if (emp.getOrganizationid() == null || !FormUtils.checkNUll(emp.getLoginname())
+				|| !FormUtils.checkNUll(emp.getPassword()))
 			throw new MyArgumentNullException("必填字段不能为空!");
 		if (od.getOrgType(emp.getOrganizationid()) == Constants.ORGTYPE_INSTALLER
-				&& !StringUtils.checkNUll(emp.getCode()))// 是安装员且code为空时
+				&& !FormUtils.checkNUll(emp.getCode()))// 是安装员且code为空时
 			throw new MyArgumentNullException("安装员必须要有员工代码!");
 		EmployeePO empPO = new EmployeePO();
 		PersonPO personPO = new PersonPO();
@@ -50,9 +49,9 @@ public class EmployeeService {
 
 		empPO.setLoginname(emp.getLoginname());
 		empPO.setCode(emp.getCode());
-		empPO.setPassword(emp.getPassword());
+		empPO.setPassword(FormUtils.encrypt(emp.getPassword()));//加密
 		empPO.setQuestion(emp.getQuestion());
-		empPO.setAnswer(emp.getAnswer());
+		empPO.setAnswer(FormUtils.encrypt(emp.getAnswer()));
 		empPO.setStatus(emp.getStatus());
 		empPO.setExpiredate(new Date());
 		empPO.setCreatetime(new Date());

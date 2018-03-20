@@ -49,6 +49,7 @@ public class OrganizationController {
 		} catch (MyArgumentNullException e) {
 			return new JsonResult(-1,e.getMessage());
 		}catch(RuntimeException e) {
+			e.printStackTrace();
 			return new JsonResult(-1,"出错啦~");
 		}
 		return new JsonResult(1,"success");

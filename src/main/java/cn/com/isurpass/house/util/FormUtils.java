@@ -3,7 +3,6 @@ package cn.com.isurpass.house.util;
 import java.lang.reflect.Field;
 import java.util.Date;
 
-import ch.qos.logback.core.net.SyslogOutputStream;
 import cn.com.isurpass.house.po.OrganizationPO;
 import cn.com.isurpass.house.vo.OrgAddVO;
 
@@ -14,13 +13,13 @@ public class FormUtils {
 	 * @param as
 	 * @return
 	 */
-	public static boolean checkNull(OrgAddVO as) {
-		if(StringUtils.checkNUll(as.getName())&&StringUtils.checkNUll(as.getCode())
-				&&StringUtils.checkNUll(as.getCountry())
-				&&StringUtils.checkNUll(as.getProvince())
-				&&StringUtils.checkNUll(as.getCity())
-				&&StringUtils.checkNUll(as.getLoginname())
-				&&StringUtils.checkNUll(as.getPassword()))
+	public static boolean checkOrgNull(OrgAddVO as) {
+		if(FormUtils.checkNUll(as.getName())&&FormUtils.checkNUll(as.getCode())
+				&&FormUtils.checkNUll(as.getCountry())
+				&&FormUtils.checkNUll(as.getProvince())
+				&&FormUtils.checkNUll(as.getCity())
+				&&FormUtils.checkNUll(as.getLoginname())
+				&&FormUtils.checkNUll(as.getPassword()))
 			return true;
 		return false;
 	}
@@ -62,5 +61,26 @@ public class FormUtils {
 			org.setOrgtype(Constants.ORGTYPE_SUPPLIER);
 		else
 			org.setOrgtype(Constants.ORGTYPE_INSTALLER);
+	}
+	
+	/**
+	 * 判断一个字符串是否为空(值为 null 或者长度为 0)<br>
+	 * 为空时返回 false, 不为空时返回 true
+	 * @return
+	 */
+	public static boolean checkNUll(String str) {
+		if (str == null || str.length() == 0)
+			return false;
+		return true;
+	}
+	
+	/**
+	 * 通过 MD5 和盐生成加密的字符串
+	 * @param psw
+	 * @return
+	 */
+	public static String encrypt(String psw) {
+		String pswSalt = "/@JWZH@/";
+		return MD5Utils.MD5(psw+pswSalt);
 	}
 }

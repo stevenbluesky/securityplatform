@@ -1,20 +1,23 @@
  <#include "/_head0.ftl"/>
  <#include "/_head1.ftl"/> 
-           <div class="row">
-              <div class="text-center"><h1>网关列表</h1></div><hr>
+ 
            <form class="form-inline" action="" method="POST">
+           <div class="text-center"><h1>网关列表</h1></div><hr>
+           <div class="row">
               <div class="form-group col-md-4">   
                 <div>
                   <b>设备名称</b>
                  <input type="text" class="form-control" id="name" name="name" placeholder="设备名称">
                 </div>
               </div>
+              
               <div class="form-group col-md-4">
                 <div>
                   <b>城市</b>
                  <input type="text" class="form-control" id="code" name="code" placeholder="城市">
                 </div>
               </div>
+              
               <div class="form-group col-md-4">
                 <div>
                   <b>城市代码</b>
@@ -24,33 +27,39 @@
           </div>
           
            <div class="row">
+           
               <div class="form-group col-md-4">   
                 <div>
                   <b>客户</b>
                  <input type="text" class="form-control" id="name" name="name" placeholder="客户">
                 </div>
               </div>
+              
               <div class="form-group col-md-4">
                 <div>
                   <b>服务商</b>
                  <input type="text" class="form-control" id="code" name="code" placeholder="服务商">
                 </div>
               </div>
+              
               <div class="form-group col-md-4">
                 <div>
                   <b>安装商</b>
                  <input type="text" class="form-control" id="code" name="code" placeholder="安装商">
                 </div>
               </div>
+              
           </div>
           
            <div class="row">
+           
               <div class="form-group col-md-4">   
                 <div>
                   <b>安装员</b>
                  <input type="text" class="form-control" id="name" name="name" placeholder="安装员">
                 </div>
               </div>
+              
               <div class="form-group col-md-4">
                 <div>
                   <b>网关ID</b>
@@ -61,8 +70,8 @@
                    <button type="submit" class="btn btn-default" style="width:28%;">搜索</button>
               </div>
             
-            </form>
           </div>
+            </form>
           <hr>
 
               <button style="float: right;" type="submit" class="btn btn-default">新增</button>

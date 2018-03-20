@@ -43,7 +43,7 @@ public class OrganizationService {
 	 * @throws MyArgumentNullException 
 	 */
 	public void add(OrgAddVO as) throws MyArgumentNullException {
-		if (!FormUtils.checkNull(as)) // 必填项为空时
+		if (!FormUtils.checkOrgNull(as)) // 必填项为空时
 			throw new MyArgumentNullException("必填字段不能为空!");
 		OrganizationPO org = new OrganizationPO();
 
@@ -67,7 +67,7 @@ public class OrganizationService {
 				as.getCspostal());
 		// 服务商总公司联系人
 		PersonPO csPerson = new PersonPO(as.getCspname(), as.getCspphonenumber(), as.getCspemail(), as.getCspfax());
-		EmployeePO emp = new EmployeePO(as.getLoginname(), as.getPassword(), as.getQuestion(), as.getAnswer(),
+		EmployeePO emp = new EmployeePO(as.getLoginname(), FormUtils.encrypt(as.getPassword()), as.getQuestion(),FormUtils.encrypt(as.getAnswer()),
 				new Date());
 
 		Integer aId = null;// 公司地址id
