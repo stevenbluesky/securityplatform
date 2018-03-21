@@ -10,4 +10,5 @@ import cn.com.isurpass.house.po.CityPO;
 @Repository
 public interface CityDAO extends CrudRepository<CityPO,Integer>{
 	List<CityPO> findByProvinceid(Integer provinceid);
+	CityPO findByCityid(Integer id);
 }

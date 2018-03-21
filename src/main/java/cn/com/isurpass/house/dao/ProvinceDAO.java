@@ -11,4 +11,5 @@ import cn.com.isurpass.house.po.ProvincePO;
 //@SuppressWarnings("unchecked")
 public interface ProvinceDAO extends CrudRepository<ProvincePO,Integer>/* extends BaseDAO */{
 	List<ProvincePO> findByCountryid(Integer countryid);
+	ProvincePO findByProvinceid(Integer id);
 }

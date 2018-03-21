@@ -10,7 +10,7 @@ package cn.com.isurpass.house.vo;
 public class OrgAddVO {
 
 	private Integer parentorgid; // 所属安装商的名称
-	
+
 	private String name;// *
 	private String code;// *
 	private String country;// *

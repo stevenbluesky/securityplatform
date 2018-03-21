@@ -8,92 +8,62 @@
               <div class="text-center"><h1>录入电话卡信息</h1></div>
              
               <div  class="form-group">
-                <label for="name"  class="col-sm-2 control-label">姓</label>
+                <label for="name"  class="col-sm-2 control-label">序列号</label>
                 <div class="col-sm-10">
-                 <input type="text" class="form-control" id="name" name="name" placeholder="姓">
+                 <input type="text" class="form-control" id="name" name="name" placeholder="序列号">
                 </div>
               </div>
               <div  class="form-group">
-                <label for="code"  class="col-sm-2 control-label">名</label>
+                <label for="code"  class="col-sm-2 control-label">型号</label>
                 <div class="col-sm-10">
-                 <input type="text" class="form-control" id="code" name="code" placeholder="名">
+                 <input type="text" class="form-control" id="code" name="code" placeholder="型号">
                 </div>
               </div>
               <div  class="form-group">
-                <label for="answer"  class="col-sm-2 control-label">身份证</label>
+                <label for="answer"  class="col-sm-2 control-label">硬件版本</label>
                 <div class="col-sm-10">
-                 <input type="text" class="form-control" id="answer" name="answer" placeholder="身份证">
-               </div>
-              </div>
-             <div  class="form-group">
-                <label for="gender"  class="col-sm-2 control-label">性别</label>
-                <div class="col-sm-10">
-               <select name="gender" class="selectpicker" title="选择性别">
-                      <option value="1">男</option>
-                      <option value="2">女</option>
-                      <option value="3">LGBT</option>
-                    </select>
-                </div>
-              </div>
-              <div  class="form-group">
-                <label for="code"  class="col-sm-2 control-label">电话</label>
-                <div class="col-sm-10">
-                 <input type="text" class="form-control" id="code" name="code" placeholder="电话">
-                </div>
-              </div>
-              <div  class="form-group">
-                <label for="answer"  class="col-sm-2 control-label">邮箱</label>
-                <div class="col-sm-10">
-                 <input type="text" class="form-control" id="answer" name="answer" placeholder="邮箱">
+                 <input type="text" class="form-control" id="answer" name="answer" placeholder="硬件版本">
                </div>
               </div>
               <div  class="form-group">
-                <label for="name"  class="col-sm-2 control-label">传真</label>
+                <label for="name"  class="col-sm-2 control-label">Rate Plan</label>
                 <div class="col-sm-10">
-                 <input type="text" class="form-control" id="name" name="name" placeholder="传真">
+                 <input type="text" class="form-control" id="name" name="name" placeholder="Rate Plan">
+                </div>
+              </div>
+              <div  cla
+              ss="form-group">
+                <label for="code"  class="col-sm-2 control-label">Activation Date</label>
+                <div class="col-sm-10">
+                 <input type="text" class="form-control" id="code" name="code" placeholder="Activation Date">
                 </div>
               </div>
               
-                <div  class="form-group">
-                <label for="address"  class="col-sm-2 control-label">地址</label>
+              <div  class="form-group">
+                <label for="answer"  class="col-sm-2 control-label">First programmed On</label>
                 <div class="col-sm-10">
-                 <div class="row text-left">
-                 
-                  <div class="col-sm-4">
-                    <select name="country" id="country" class="selectpicker" title="选择国家">
-                    </select>
-                  </div>
-                  
-                  <div class="col-sm-4">
-                    <select id="province" name="province" class="selectpicker" title="选择省份">
-                    </select>
-                  </div>
-                  
-                  <div class="col-sm-4">
-                    <select id="city" name="city" class="selectpicker" title="选择城市">                          
-                    </select>
-                  </div>
-              	 </div>
+                 <input type="text" class="form-control" id="answer" name="answer" placeholder="First programmed On">
                </div>
               </div>
               
               <div  class="form-group">
-                <label for="code"  class="col-sm-2 control-label">详细地址</label>
+                <label for="name"  class="col-sm-2 control-label">Last Programmed On</label>
                 <div class="col-sm-10">
-                 <input type="text" class="form-control" id="code" name="code" placeholder="详细地址">
+                 <input type="text" class="form-control" id="name" name="name" placeholder="Last Programmed On">
                 </div>
               </div>
+              
               <div  class="form-group">
-                <label for="answer"  class="col-sm-2 control-label">网关编号</label>
+                <label for="code"  class="col-sm-2 control-label">Last Saved On</label>
                 <div class="col-sm-10">
-                 <input type="text" class="form-control" id="answer" name="answer" placeholder="网关编号">
-               </div>
-               </div>
-               
+                 <input type="text" class="form-control" id="code" name="code" placeholder="Last Saved On">
+                </div>
+              </div>
+              
               <div  class="form-group">
-                <label for="answer"  class="col-sm-2 control-label">电话卡号</label>
+                <label for="answer"  class="col-sm-2 control-label">Dealer</label>
                 <div class="col-sm-10">
-                 <input type="text" class="form-control" id="answer" name="answer" placeholder="电话卡号">
+                 <input type="text" class="form-control" id="answer" name="answer" placeholder="Dealer">
                </div>
               </div>
               
@@ -115,5 +85,4 @@
       $("form").submit(function(e){
 	});
     </script>
-	<script src="../static/js/addressController.js"></script>
 <#include "/_foot0.ftl"/>

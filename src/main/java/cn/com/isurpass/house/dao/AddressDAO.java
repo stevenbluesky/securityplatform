@@ -8,7 +8,6 @@ import cn.com.isurpass.house.po.AddressPO;
 @Repository
 @SuppressWarnings("unchecked")
 public interface AddressDAO extends CrudRepository<AddressPO,Integer>/* extends BaseDAO */{
-	String findCityByAddressid(Integer officeaddressid);
-	
+	AddressPO findByAddressid(Integer addressid);
 	AddressPO save(AddressPO address);
 }

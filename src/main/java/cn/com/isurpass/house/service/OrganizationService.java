@@ -12,9 +12,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import cn.com.isurpass.house.dao.AddressDAO;
+import cn.com.isurpass.house.dao.CityDAO;
+import cn.com.isurpass.house.dao.CountryDAO;
 import cn.com.isurpass.house.dao.EmployeeDAO;
 import cn.com.isurpass.house.dao.OrganizationDAO;
 import cn.com.isurpass.house.dao.PersonDAO;
+import cn.com.isurpass.house.dao.ProvinceDAO;
 import cn.com.isurpass.house.exception.MyArgumentNullException;
 import cn.com.isurpass.house.po.AddressPO;
 import cn.com.isurpass.house.po.EmployeePO;
@@ -36,6 +39,12 @@ public class OrganizationService {
 	AddressDAO ad;
 	@Autowired
 	EmployeeDAO ed;
+	@Autowired
+	CountryDAO country;
+	@Autowired
+	ProvinceDAO province;
+	@Autowired
+	CityDAO city;
 
 	/**
 	 * 添加一个机构
@@ -54,23 +63,26 @@ public class OrganizationService {
 			Integer ametaId = od.findByOrgtype(Constants.ORGTYPE_AMETA).get(0).getOrganizationid();// 取 Ameta 的机构id
 			as.setParentorgid(ametaId);
 		}
-
+		
 		// 公司地址
-		AddressPO address = new AddressPO(as.getCountry(), as.getProvince(), as.getCity(), as.getDetailaddress(),
-				as.getPostal());
+		AddressPO address = new AddressPO(as.getCountry(), as.getProvince(), as.getCity(), as.getDetailaddress(),as.getPostal());
 		// 公司账务地址
-		AddressPO bAddress = new AddressPO(as.getBcountry(), as.getBprovince(), as.getBcity(), as.getBdetailaddress(),
+		AddressPO bAddress = new AddressPO(as.getBcountry(),as.getBprovince(), as.getBcity(),as.getBdetailaddress(),
 				as.getBpostal());
 		// 服务商联系人
 		PersonPO sPerson = new PersonPO(as.getSname(), as.getSphonenumber(), as.getSemail(), as.getSfax());
 		// 总公司地址
-		AddressPO csAddress = new AddressPO(as.getCscountry(), as.getCsprovince(), as.getCscity(), "",
+		AddressPO csAddress = new AddressPO(as.getCscountry(),as.getCsprovince(), as.getCscity(), "",
 				as.getCspostal());
 		// 服务商总公司联系人
 		PersonPO csPerson = new PersonPO(as.getCspname(), as.getCspphonenumber(), as.getCspemail(), as.getCspfax());
 		EmployeePO emp = new EmployeePO(as.getLoginname(), FormUtils.encrypt(as.getPassword()), as.getQuestion(),FormUtils.encrypt(as.getAnswer()),
 				new Date());
 
+		System.out.println(address.toString());
+		System.out.println(bAddress.toString());
+		System.out.println(csAddress.toString());
+		
 		Integer aId = null;// 公司地址id
 		Integer csAId = null;
 		Integer bAId = null;
@@ -122,13 +134,15 @@ public class OrganizationService {
 			OrgListVO orgVO = new OrgListVO();
 			orgVO.setOrganizationid(o.getOrganizationid());
 			orgVO.setName(o.getName());
-			if (o.getOfficeaddressid() != null)
-				orgVO.setCity(ad.findCityByAddressid((o.getOfficeaddressid())));
+			if (o.getOfficeaddressid() != null) {
+				orgVO.setCity(ad.findByAddressid(o.getOfficeaddressid()).getCity());
+			}
 			else
 				orgVO.setCity("-");
 			orgVO.setCode(o.getCode());
 			orgVO.setStatus(o.getStatus());
 			list.add(orgVO);
+//			System.out.println(list.toString()+"fff");
 		});
 		map.put("rows", list);
 		return map;

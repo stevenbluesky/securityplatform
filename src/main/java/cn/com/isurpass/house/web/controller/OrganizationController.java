@@ -73,14 +73,15 @@ public class OrganizationController {
 	@RequestMapping("supplierJsonList")
 	@ResponseBody
 	public Map<String, Object> supplierJsonList(PageResult pr) {
-		Pageable pageable = new PageRequest(pr.getPage(),pr.getRows(),Sort.Direction.ASC,"organizationid");
+		Pageable pageable = PageRequest.of(pr.getPage()-1,pr.getRows(),Sort.Direction.ASC,"organizationid");
 		return ss.listOrgByType(pageable, Constants.ORGTYPE_SUPPLIER);
 	}
 
 	@RequestMapping("installerJsonList")
 	@ResponseBody
 	public Map<String, Object> installerJsonList(PageResult pr) {
-		Pageable pageable = new PageRequest(pr.getPage(),pr.getRows(),Sort.Direction.ASC,"organizationid");
+		Pageable pageable = PageRequest.of(pr.getPage(),pr.getRows(),Sort.Direction.ASC,"organizationid");
+		
 		return ss.listOrgByType(pageable, Constants.ORGTYPE_INSTALLER);
 	}
 

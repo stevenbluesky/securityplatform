@@ -11,4 +11,5 @@ import cn.com.isurpass.house.po.CountryPO;
 //@SuppressWarnings("unchecked")
 public interface CountryDAO extends CrudRepository<CountryPO,Integer>{
 	List<CountryPO> findAll();
+	CountryPO findByCountryid(Integer id);
 }

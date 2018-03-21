@@ -10,28 +10,26 @@ public class FormUtils {
 
 	/**
 	 * 如果需要验证的几个表单值都有值,返回true; 否则返回false
+	 * 
 	 * @param as
 	 * @return
 	 */
 	public static boolean checkOrgNull(OrgAddVO as) {
-		if(FormUtils.checkNUll(as.getName())&&FormUtils.checkNUll(as.getCode())
-				&&FormUtils.checkNUll(as.getCountry())
-				&&FormUtils.checkNUll(as.getProvince())
-				&&FormUtils.checkNUll(as.getCity())
-				&&FormUtils.checkNUll(as.getLoginname())
-				&&FormUtils.checkNUll(as.getPassword()))
+		if (FormUtils.checkNUll(as.getName()) && FormUtils.checkNUll(as.getCode()) && as.getCountry() != null
+				&& as.getProvince() != null && as.getCity() != null && FormUtils.checkNUll(as.getLoginname())
+				&& FormUtils.checkNUll(as.getPassword()))
 			return true;
 		return false;
 	}
-	
-	
+
 	/**
 	 * 
 	 * 判断一个对象中的属性是否为 null 或者为 "", 要注意的是,对象的属性只能为引用数据类型
+	 * 
 	 * @param obj
 	 * @return
 	 */
-	public static boolean isEmpty(Object obj){
+	public static boolean isEmpty(Object obj) {
 		for (Field f : obj.getClass().getDeclaredFields()) {
 			f.setAccessible(true);
 			try {
@@ -46,7 +44,7 @@ public class FormUtils {
 		}
 		return true;
 	}
-	
+
 	/**
 	 * 将一个实体类中的属性赋值到另一个对象中(AddPO -> OrgPO)
 	 */
@@ -56,31 +54,33 @@ public class FormUtils {
 		org.setStatus(1);
 		org.setCentralstationname(as.getCsname());
 		org.setCreatetime(new Date());
-//		org.setOrgtype(1);//0:Ameta 1:服务商 2:安装商
-		if(as.getParentorgid() == null)
+		// org.setOrgtype(1);//0:Ameta 1:服务商 2:安装商
+		if (as.getParentorgid() == null)
 			org.setOrgtype(Constants.ORGTYPE_SUPPLIER);
 		else
 			org.setOrgtype(Constants.ORGTYPE_INSTALLER);
 	}
-	
+
 	/**
 	 * 判断一个字符串是否为空(值为 null 或者长度为 0)<br>
 	 * 为空时返回 false, 不为空时返回 true
+	 * 
 	 * @return
 	 */
-	public static boolean checkNUll(String str) {
-		if (str == null || str.length() == 0)
+	public static boolean checkNUll(String string) {
+		if (string == null || string.length() == 0)
 			return false;
 		return true;
 	}
-	
+
 	/**
 	 * 通过 MD5 和盐生成加密的字符串
+	 * 
 	 * @param psw
 	 * @return
 	 */
 	public static String encrypt(String psw) {
 		String pswSalt = "/@JWZH@/";
-		return MD5Utils.MD5(psw+pswSalt);
+		return MD5Utils.MD5(psw + pswSalt);
 	}
 }

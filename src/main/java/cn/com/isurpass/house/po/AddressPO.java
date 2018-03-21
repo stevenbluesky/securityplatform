@@ -112,4 +112,12 @@ public class AddressPO {
 	public void setPhonenumber(String phonenumber) {
 		this.phonenumber = phonenumber;
 	}
+
+	@Override
+	public String toString() {
+		return "AddressPO [addressid=" + addressid + ", country=" + country + ", province=" + province + ", city="
+				+ city + ", detailaddress=" + detailaddress + ", postal=" + postal + ", fax=" + fax + ", phonenumber="
+				+ phonenumber + "]";
+	}
+	
 }

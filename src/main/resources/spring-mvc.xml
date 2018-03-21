@@ -48,7 +48,6 @@
 		<property name="useCodeAsDefaultMessage" value="true" />
 	</bean>
 
-
 	<!-- 配置freeMarker的模板路径 -->
 	<bean
 		class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
