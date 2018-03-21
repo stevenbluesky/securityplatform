@@ -29,6 +29,5 @@ public interface OrganizationDAO extends CrudRepository<OrganizationPO,Integer>{
 	@Query("select new OrganizationPO(organizationid,name) from OrganizationPO")
 	List<OrganizationPO> findAllOrgSelect();
 	
-	Integer findOrgtypeByOrganizationid(Integer organizationid);
-	String findOrganizationnameByOrganizationid(Integer organizationid);
+	OrganizationPO findByOrganizationid(Integer organizationid);
 }

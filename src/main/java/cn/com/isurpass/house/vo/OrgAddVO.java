@@ -13,16 +13,16 @@ public class OrgAddVO {
 
 	private String name;// *
 	private String code;// *
-	private String country;// *
-	private String province;// *
-	private String city;// *
+	private Integer country;// *
+	private Integer province;// *
+	private Integer city;// *
 	private String detailaddress;
 	private String postal;
 
 	// 公司账务地址
-	private String bcountry;
-	private String bprovince;
-	private String bcity;
+	private Integer bcountry;
+	private Integer bprovince;
+	private Integer bcity;
 	private String bdetailaddress;
 	private String bpostal;
 
@@ -34,9 +34,9 @@ public class OrgAddVO {
 
 	// 服务商总公司
 	private String csname;
-	private String cscountry;
-	private String csprovince;
-	private String cscity;
+	private Integer cscountry;
+	private Integer csprovince;
+	private Integer cscity;
 	private String cspostal;
 
 	// 服务商总公司联系人
@@ -75,27 +75,27 @@ public class OrgAddVO {
 		this.code = code;
 	}
 
-	public String getCountry() {
+	public Integer getCountry() {
 		return country;
 	}
 
-	public void setCountry(String country) {
+	public void setCountry(Integer country) {
 		this.country = country;
 	}
 
-	public String getProvince() {
+	public Integer getProvince() {
 		return province;
 	}
 
-	public void setProvince(String province) {
+	public void setProvince(Integer province) {
 		this.province = province;
 	}
 
-	public String getCity() {
+	public Integer getCity() {
 		return city;
 	}
 
-	public void setCity(String city) {
+	public void setCity(Integer city) {
 		this.city = city;
 	}
 
@@ -115,27 +115,27 @@ public class OrgAddVO {
 		this.postal = postal;
 	}
 
-	public String getBcountry() {
+	public Integer getBcountry() {
 		return bcountry;
 	}
 
-	public void setBcountry(String bcountry) {
+	public void setBcountry(Integer bcountry) {
 		this.bcountry = bcountry;
 	}
 
-	public String getBprovince() {
+	public Integer getBprovince() {
 		return bprovince;
 	}
 
-	public void setBprovince(String bprovince) {
+	public void setBprovince(Integer bprovince) {
 		this.bprovince = bprovince;
 	}
 
-	public String getBcity() {
+	public Integer getBcity() {
 		return bcity;
 	}
 
-	public void setBcity(String bcity) {
+	public void setBcity(Integer bcity) {
 		this.bcity = bcity;
 	}
 
@@ -195,27 +195,27 @@ public class OrgAddVO {
 		this.csname = csname;
 	}
 
-	public String getCscountry() {
+	public Integer getCscountry() {
 		return cscountry;
 	}
 
-	public void setCscountry(String cscountry) {
+	public void setCscountry(Integer cscountry) {
 		this.cscountry = cscountry;
 	}
 
-	public String getCsprovince() {
+	public Integer getCsprovince() {
 		return csprovince;
 	}
 
-	public void setCsprovince(String csprovince) {
+	public void setCsprovince(Integer csprovince) {
 		this.csprovince = csprovince;
 	}
 
-	public String getCscity() {
+	public Integer getCscity() {
 		return cscity;
 	}
 
-	public void setCscity(String cscity) {
+	public void setCscity(Integer cscity) {
 		this.cscity = cscity;
 	}
 

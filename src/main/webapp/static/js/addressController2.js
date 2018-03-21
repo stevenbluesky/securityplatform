@@ -10,7 +10,7 @@ function getbcountry() {
 		success : function(data) {
 			var str = "<option value=''></option>";
 			for (var i = 0; i < data.length; i++) {
-				str += '<option value=' + data[i].countryname + '>'
+				str += '<option value=' + data[i].countryid + '>'
 						+ data[i].countryname + '</option>'
 			}
 			$("#bcountry").html(str);
@@ -24,12 +24,12 @@ $("#bcountry").change(
 			var countryid = $("#bcountry").val();
 			$.ajax({
 				type : "get",
-				url : "../address/getProvince?countryname=" + countryname,
+				url : "../address/getProvince?countryid=" + countryid,
 				async : true,
 				success : function(data) {
 					var str = "<option value=''></option>";
 					for (var i = 0; i < data.length; i++) {
-						str += '<option value=' + data[i].provincename + '>'
+						str += '<option value=' + data[i].provinceid + '>'
 								+ data[i].provincename + '</option>'
 					}
 					$("#bprovince").html(str);
@@ -45,12 +45,12 @@ $("#bprovince").change(
 			var provinceid = $("#bprovince").val();
 			$.ajax({
 				type : "get",
-				url : "../address/getCity?provincename=" + provincename,
+				url : "../address/getCity?provinceid=" + provinceid,
 				async : true,
 				success : function(data) {
 					var str = "<option value=''></option>";
 					for (var i = 0; i < data.length; i++) {
-						str += '<option value=' + data[i].cityname + '>'
+						str += '<option value=' + data[i].cityid + '>'
 								+ data[i].cityname + '</option>'
 					}
 					$("#bcity").html(str);
@@ -70,7 +70,7 @@ function getcscountry() {
 		success : function(data) {
 			var str = "<option value=''></option>";
 			for (var i = 0; i < data.length; i++) {
-				str += '<option value=' + data[i].countryname + '>'
+				str += '<option value=' + data[i].countryid + '>'
 						+ data[i].countryname + '</option>'
 			}
 			$("#cscountry").html(str);
@@ -86,12 +86,12 @@ $("#cscountry").change(
 			var countryid = $("#cscountry").val();
 			$.ajax({
 				type : "get",
-				url : "../address/getProvince?countryname=" + countryname,
+				url : "../address/getProvince?countryid=" + countryid,
 				async : true,
 				success : function(data) {
 					var str = "<option value=''></option>";
 					for (var i = 0; i < data.length; i++) {
-						str += '<option value=' + data[i].provincename + '>'
+						str += '<option value=' + data[i].provinceid + '>'
 								+ data[i].provincename + '</option>'
 					}
 					$("#csprovince").html(str);
@@ -107,12 +107,12 @@ $("#csprovince").change(
 			var provinceid = $("#csprovince").val();
 			$.ajax({
 				type : "get",
-				url : "../address/getCity?provincename=" + provincename,
+				url : "../address/getCity?provinceid=" + provinceid,
 				async : true,
 				success : function(data) {
 					var str = "<option value=''></option>";
 					for (var i = 0; i < data.length; i++) {
-						str += '<option value=' + data[i].cityname + '>'
+						str += '<option value=' + data[i].cityid + '>'
 								+ data[i].cityname + '</option>'
 					}
 					$("#cscity").html(str);

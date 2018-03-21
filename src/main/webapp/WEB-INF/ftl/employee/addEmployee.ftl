@@ -114,6 +114,7 @@
                 <label for="gender"  class="col-sm-2 control-label">性别</label>
                 <div class="col-sm-10">
                <select name="gender" class="selectpicker" title="选择性别">
+                      <option value="">请选择性别</option>
                       <option value="0">女</option>
                       <option value="1">男</option>
                       <option value="2">LGBT</option>

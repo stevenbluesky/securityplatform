@@ -1,11 +1,16 @@
 package cn.com.isurpass.house.dao;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import cn.com.isurpass.house.po.EmployeePO;
+import cn.com.isurpass.house.po.OrganizationPO;
 
 @Repository
 public interface EmployeeDAO extends CrudRepository<EmployeePO,Integer>{
@@ -18,7 +23,8 @@ public interface EmployeeDAO extends CrudRepository<EmployeePO,Integer>{
 		return (List<EmployeePO>) getSession().createCriteria(EmployeePO.class).setFirstResult(pr.getStart())
 				.setMaxResults(pr.getRows()).list();
 	}*/
-	
+
+	List<EmployeePO> findByOrganizationidAndCodeAndStatus(Integer orgid,String code,Integer status);
 	long count();
 	/*public Integer getTotal() {
 		Number count = (Number) getSession()

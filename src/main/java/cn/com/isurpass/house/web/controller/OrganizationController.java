@@ -3,6 +3,8 @@ package cn.com.isurpass.house.web.controller;
 import java.util.List;
 import java.util.Map;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -42,6 +44,7 @@ public class OrganizationController {
 	 * @return
 	 */
 	//TODO 这个方法到时候可以改成直接跳转或者是返回Json数据,如果返回json数据的话,前端就要通过Ajax提交,而不是通过 form 的 action 属性提交
+	@Transactional
 	@RequestMapping("add")
 	@ResponseBody
 	public JsonResult add(OrgAddVO as) {
@@ -80,7 +83,7 @@ public class OrganizationController {
 	@RequestMapping("installerJsonList")
 	@ResponseBody
 	public Map<String, Object> installerJsonList(PageResult pr) {
-		Pageable pageable = PageRequest.of(pr.getPage(),pr.getRows(),Sort.Direction.ASC,"organizationid");
+		Pageable pageable = PageRequest.of(pr.getPage()-1,pr.getRows(),Sort.Direction.ASC,"organizationid");
 		
 		return ss.listOrgByType(pageable, Constants.ORGTYPE_INSTALLER);
 	}

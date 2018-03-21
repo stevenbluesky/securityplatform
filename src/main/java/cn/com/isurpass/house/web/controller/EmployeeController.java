@@ -36,7 +36,7 @@ public class EmployeeController {
 	@RequestMapping("employeeJsonList")
 	@ResponseBody
 	public Map<String, Object> employeeJsonList(PageResult pr) {
-		Pageable pageable = new PageRequest(pr.getPage(),pr.getRows(),Sort.Direction.ASC,"employeeid");
+		Pageable pageable = PageRequest.of(pr.getPage(),pr.getRows(),Sort.Direction.ASC,"employeeid");
 		return es.listAllEmployee(pageable);
 	}
 	
@@ -48,7 +48,7 @@ public class EmployeeController {
 		} catch (MyArgumentNullException e) {
 			return new JsonResult(-1,e.getMessage());
 		} catch (RuntimeException e) {
-//			e.printStackTrace();
+			e.printStackTrace();
 			return new JsonResult(-1,"出错啦~");
 		}
 		return new JsonResult(1,"success");

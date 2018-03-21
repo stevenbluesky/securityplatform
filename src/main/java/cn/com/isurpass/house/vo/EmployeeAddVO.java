@@ -22,9 +22,9 @@ public class EmployeeAddVO {
 	private String email;
 	private String fax;
 
-	private String country;
-	private String province;
-	private String city;
+	private Integer country;
+	private Integer province;
+	private Integer city;
 	private String detailaddress;
 
 	public Integer getOrganizationid() {
@@ -155,27 +155,28 @@ public class EmployeeAddVO {
 		this.email = email;
 	}
 
-	public String getCountry() {
+
+	public Integer getCountry() {
 		return country;
 	}
 
-	public void setCountry(String country) {
+	public void setCountry(Integer country) {
 		this.country = country;
 	}
 
-	public String getProvince() {
+	public Integer getProvince() {
 		return province;
 	}
 
-	public void setProvince(String province) {
+	public void setProvince(Integer province) {
 		this.province = province;
 	}
 
-	public String getCity() {
+	public Integer getCity() {
 		return city;
 	}
 
-	public void setCity(String city) {
+	public void setCity(Integer city) {
 		this.city = city;
 	}
 
