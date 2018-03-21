@@ -11,7 +11,8 @@ public class ControllerExceptionHandler {
 
 	@ExceptionHandler(RuntimeException.class)
 	@ResponseBody
-	public JsonResult runtimeExceptionHandler() {
+	public JsonResult runtimeExceptionHandler(Exception e) {
+		e.printStackTrace();
 		return new JsonResult(-1,"出错啦~");
 	}
 }

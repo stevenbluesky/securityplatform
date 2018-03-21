@@ -21,6 +21,7 @@ import cn.com.isurpass.house.dao.PhonecarduserDAO;
 import cn.com.isurpass.house.dao.ProvinceDAO;
 import cn.com.isurpass.house.dao.UserDAO;
 import cn.com.isurpass.house.po.AddressPO;
+import cn.com.isurpass.house.po.CityPO;
 import cn.com.isurpass.house.po.PersonPO;
 import cn.com.isurpass.house.po.PhonecardUserPO;
 import cn.com.isurpass.house.po.UserPO;
@@ -71,12 +72,13 @@ public class UserService {
 			address.setCountry(country.findByCountryid(u.getCountry()).getCountryname());
 		if (u.getProvince() != null)
 			address.setProvince(province.findByProvinceid(u.getProvince()).getProvincename());
-		if (u.getCity() != null)
-			address.setCity(city.findByCityid(u.getCity()).getCityname());
-		if (!FormUtils.isEmpty(address)) {
-			addressid = ad.save(address).getAddressid();
+		if (u.getCity() != null) {
+			CityPO c = city.findByCityid(u.getCity());
+			address.setCity(c.getCityname());
+			user.setCitycode(c.getCitycode());
 		}
-
+		if (!FormUtils.isEmpty(address))
+			addressid = ad.save(address).getAddressid();
 		PersonPO person = new PersonPO();
 		person.setFirstname(u.getFirstname());
 		person.setLastname(u.getLastname());
@@ -116,7 +118,8 @@ public class UserService {
 			user.setName(u.getName());
 			user.setPhonenumber(personPO.getPhonenumber());
 			user.setCity(adrs.getCity());
-			user.setSuppliername(od.findByOrganizationid(u.getOrganizationid()).getName());
+			if (od.findByOrganizationid(u.getOrganizationid()) != null)
+				user.setSuppliername(od.findByOrganizationid(u.getOrganizationid()).getName());
 
 			list.add(user);
 			// System.out.println(list.toString()+"fff");

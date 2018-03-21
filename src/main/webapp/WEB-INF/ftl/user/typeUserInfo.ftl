@@ -131,16 +131,16 @@ $(document).ready(function() {
             validating: 'glyphicon glyphicon-refresh'
         },
         fields: {
-            firstname: {
-                message: 'The loginname is not valid',
+            phonenumber: {
+                message: 'The phonenumber is not valid',
                 validators: {
                     notEmpty: {
-                        message: 'The loginname is required and cannot be empty'
+                        message: 'The phonenumber is required and cannot be empty'
                     },
                     stringLength: {
                         min: 4,
                         max: 30,
-                        message: 'The loginname must be more than 4 and less than 30 characters long'
+                        message: 'The phonenumber must be more than 4 and less than 30 characters long'
                     },
                     regexp: {
                         regexp: /^[a-zA-Z0-9_\.]+$/,

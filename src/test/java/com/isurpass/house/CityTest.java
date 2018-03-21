@@ -27,8 +27,8 @@ public class CityTest {
 		cityDAO.save(city);*/
 		ProvincePO pp = new ProvincePO();
 		pp.setCountryid(2);
-		pp.setProvinceabbreviation("X");
-		pp.setProvincename("嘻嘻");
+		pp.setProvinceabbreviation("H");
+		pp.setProvincename("哈哈");
 		pd.save(pp);
 	}
 }

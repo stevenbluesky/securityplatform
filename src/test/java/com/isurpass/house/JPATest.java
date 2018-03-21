@@ -2,8 +2,6 @@ package com.isurpass.house;
 
 import java.util.List;
 
-import javax.swing.text.StyleConstants.ColorConstants;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +22,7 @@ public class JPATest {
 
 	@Autowired
 	OrganizationDAO org;
+	
 	@Test
 	public void testOrg() {
 		List<OrganizationPO> list = org.findAllOrgSelect();
@@ -35,7 +34,7 @@ public class JPATest {
 	@Test
 	public void testPage() {
 		//@PageableDefault(value = 15, sort = { "id" }, direction = Sort.Direction.DESC) Pageable pageable
-		Pageable pageable = new PageRequest(0,3, Sort.Direction.ASC,"organizationid");
+		Pageable pageable = PageRequest.of(0,3, Sort.Direction.ASC,"organizationid");
 		Page<OrganizationPO> list = org.findByOrgtype(pageable,Constants.ORGTYPE_INSTALLER);
 		list.forEach(o ->{
 			System.out.println(o.toString());
