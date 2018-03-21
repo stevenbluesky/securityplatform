@@ -17,7 +17,7 @@ import cn.com.isurpass.house.util.PageResult;
 import cn.com.isurpass.house.vo.EmployeeAddVO;
 
 @Controller
-@RequestMapping("/employee")
+@RequestMapping("employee")
 public class EmployeeController {
 
 	@Autowired

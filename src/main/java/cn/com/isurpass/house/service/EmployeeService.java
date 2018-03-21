@@ -56,8 +56,8 @@ public class EmployeeService {
 				&& !FormUtils.checkNUll(emp.getCode()))// 是安装员且code为空时
 			throw new MyArgumentNullException("安装员必须要有员工代码!");
 
-		if (emp.getCode() != null && ed
-				.findByOrganizationidAndCodeAndStatus(emp.getOrganizationid(), emp.getCode(), Constants.STATUS_DELETED)
+		if (emp.getCode() != null && !ed
+				.findByOrganizationidAndCodeAndStatusNot(emp.getOrganizationid(), emp.getCode(), Constants.STATUS_DELETED)
 				.isEmpty())
 			throw new MyArgumentNullException("员工代码不能重复!");
 
@@ -122,6 +122,14 @@ public class EmployeeService {
 		});
 		map.put("rows", list);
 		return map;
+	}
+
+	public EmployeePO findByLoginname(String loginname) {
+		return ed.findByLoginname(loginname);
+	}
+
+	public EmployeePO login(String loginname, String password) {
+		return ed.findByLoginnameAndPassword(loginname, password);
 	}
 
 }

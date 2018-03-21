@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+                http://www.springframework.org/schema/context
+                 http://www.springframework.org/schema/context/spring-context-3.2.xsd
+                http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+                 http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+	<!-- shiro-all.jar filterChainDefinitions：apache shiro通过filterChainDefinitions参数来分配链接的过滤， 
+		资源过滤有常用的以下几个参数： authc 表示需要认证的链接 perms[/url] 表示该链接需要拥有对应的资源/权限才能访问 roles[admin] 
+		表示需要对应的角色才能访问 perms[admin:url] 表示需要对应角色的资源才能访问 -->
+	<!-- <context:annotation-config /> <context:component-scan base-package="cf.zhul" 
+		/> -->
+	<bean id="myShiroRealm" class="cn.com.isurpass.house.shiro.MyShiroUtil"></bean>
+	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+		<property name="realm" ref="myShiroRealm"></property>
+		<property name="cacheManager" ref="cacheManager" />
+	</bean>
+	
+<!-- 	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean"> -->
+	<bean id="shiroFilter" class="cn.com.isurpass.house.shiro.ShiroFilterFactoryBeanWrapper">
+		<property name="securityManager" ref="securityManager" />
+		<property name="loginUrl" value="/login" />
+		<!-- 认证成功统一跳转到first.action，建议不配置，shiro认证成功自动到上一个请求路径-->
+		<!-- <property name="successUrl" value="/login22" /> -->
+		<property name="unauthorizedUrl" value="/403" />
+		<property name="filterChainDefinitions">
+			<value>
+				/index = anon
+				/index1.jsp = authc
+				/index.jsp = anon
+				/success.jsp = authc
+					<!-- 表示需要认证才能访问的页面 -->
+				/home = authc, perms[/home]  <!-- perms 表示需要该权限才能访问的页面 -->
+			</value>
+		</property>
+	</bean>
+
+	<!-- shiro缓存管理器开始 -->
+	<bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
+		<property name="cacheManager" ref="ehCacheManager" />
+	</bean>
+	<bean id="ehCacheManager"
+		class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+		<property name="configLocation" value="classpath:ehcache.xml" />
+		<property name="shared" value="true"></property>
+	</bean>
+	<!-- 
+	<bean
+		class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"
+		depends-on="lifecycleBeanPostProcessor" /> -->
+<!-- 	<aop:config proxy-target-class="true"/>   -->
+	<bean
+		class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+		<property name="securityManager" ref="securityManager" />
+	</bean>
+</beans>

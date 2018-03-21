@@ -20,7 +20,7 @@ public class EmployeeTest {
 	
 	@Test
 	public void test() {
-		List<EmployeePO> list = emp.findByOrganizationidAndCodeAndStatus(1,"ff",9);
+		List<EmployeePO> list = emp.findByOrganizationidAndCodeAndStatusNot(1,"ff",9);
 		list.forEach(e -> System.out.println(e.toString()));
 	}
 }
