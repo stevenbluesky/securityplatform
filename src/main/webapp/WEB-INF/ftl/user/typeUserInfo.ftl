@@ -8,27 +8,27 @@
               <div class="text-center"><h1>录入用户信息</h1></div>
              
               <div  class="form-group">
-                <label for="name"  class="col-sm-2 control-label">姓</label>
+                <label for="firstname"  class="col-sm-2 control-label">姓</label>
                 <div class="col-sm-10">
-                 <input type="text" class="form-control" id="name" name="name" placeholder="姓">
+                 <input type="text" class="form-control" id="firstname" name="firstname" placeholder="姓">
                 </div>
               </div>
               <div  class="form-group">
-                <label for="code"  class="col-sm-2 control-label">名</label>
+                <label for="lastname"  class="col-sm-2 control-label">名</label>
                 <div class="col-sm-10">
-                 <input type="text" class="form-control" id="code" name="code" placeholder="名">
+                 <input type="text" class="form-control" id="lastname" name="lastname" placeholder="名">
                 </div>
               </div>
               <div  class="form-group">
-                <label for="answer"  class="col-sm-2 control-label">身份证</label>
+                <label for="ssn"  class="col-sm-2 control-label">身份证</label>
                 <div class="col-sm-10">
-                 <input type="text" class="form-control" id="answer" name="answer" placeholder="身份证">
+                 <input type="text" class="form-control" id="ssn" name="ssn" placeholder="身份证">
                </div>
               </div>
              <div  class="form-group">
                 <label for="gender"  class="col-sm-2 control-label">性别</label>
                 <div class="col-sm-10">
-               <select name="gender" class="selectpicker" title="选择性别">
+               <select id="gender" name="gender" class="selectpicker" title="选择性别">
                       <option value="">选择性别</option>
                       <option value="0">女</option>
                       <option value="1">男</option>
@@ -37,21 +37,21 @@
                 </div>
               </div>
               <div  class="form-group">
-                <label for="code"  class="col-sm-2 control-label">电话</label>
+                <label for="phonenumber"  class="col-sm-2 control-label">电话</label>
                 <div class="col-sm-10">
-                 <input type="text" class="form-control" id="code" name="code" placeholder="电话">
+                 <input type="text" class="form-control" id="phonenumber" name="phonenumber" placeholder="电话">
                 </div>
               </div>
               <div  class="form-group">
-                <label for="answer"  class="col-sm-2 control-label">邮箱</label>
+                <label for="email"  class="col-sm-2 control-label">邮箱</label>
                 <div class="col-sm-10">
-                 <input type="text" class="form-control" id="answer" name="answer" placeholder="邮箱">
+                 <input type="text" class="form-control" id="email" name="email" placeholder="邮箱">
                </div>
               </div>
               <div  class="form-group">
-                <label for="name"  class="col-sm-2 control-label">传真</label>
+                <label for="fax"  class="col-sm-2 control-label">传真</label>
                 <div class="col-sm-10">
-                 <input type="text" class="form-control" id="name" name="name" placeholder="传真">
+                 <input type="text" class="form-control" id="fax" name="fax" placeholder="传真">
                 </div>
               </div>
               
@@ -79,22 +79,29 @@
               </div>
               
               <div  class="form-group">
-                <label for="code"  class="col-sm-2 control-label">详细地址</label>
+                <label for="detailaddress"  class="col-sm-2 control-label">详细地址</label>
                 <div class="col-sm-10">
-                 <input type="text" class="form-control" id="code" name="code" placeholder="详细地址">
+                 <input type="text" class="form-control" id="detailaddress" name="detailaddress" placeholder="详细地址">
                 </div>
               </div>
               <div  class="form-group">
-                <label for="answer"  class="col-sm-2 control-label">网关编号</label>
+                <label for="codepostfix"  class="col-sm-2 control-label">用户代码后缀</label>
                 <div class="col-sm-10">
-                 <input type="text" class="form-control" id="answer" name="answer" placeholder="网关编号">
+                 <input type="text" class="form-control" id="codepostfix" name="codepostfix" placeholder="用户代码后缀">
+                </div>
+              </div>
+              
+              <div  class="form-group">
+                <label for="deviceid"  class="col-sm-2 control-label">网关编号</label>
+                <div class="col-sm-10">
+                 <input type="text" class="form-control" id="deviceid" name="deviceid" placeholder="网关编号">
                </div>
                </div>
                
               <div  class="form-group">
-                <label for="answer"  class="col-sm-2 control-label">电话卡号</label>
+                <label for="phonecardid"  class="col-sm-2 control-label">电话卡号</label>
                 <div class="col-sm-10">
-                 <input type="text" class="form-control" id="answer" name="answer" placeholder="电话卡号">
+                 <input type="text" class="form-control" id="phonecardid" name="phonecardid" placeholder="电话卡号">
                </div>
               </div>
               
@@ -124,7 +131,7 @@ $(document).ready(function() {
             validating: 'glyphicon glyphicon-refresh'
         },
         fields: {
-            loginname: {
+            firstname: {
                 message: 'The loginname is not valid',
                 validators: {
                     notEmpty: {
@@ -177,7 +184,7 @@ $(document).ready(function() {
 $("#btn-submit").click(function () {
         $("#defaultForm").bootstrapValidator('validate');//提交验证  
         if ($("#defaultForm").data('bootstrapValidator').isValid()) {//获取验证结果，如果成功，执行下面代码  
-            var url= "../employee/add";       
+            var url= "../user/add";       
                 $.ajax({
                     type: "POST",
                     dataType: "html",

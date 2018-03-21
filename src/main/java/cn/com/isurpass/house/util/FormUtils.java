@@ -24,10 +24,10 @@ public class FormUtils {
 
 	/**
 	 * 
-	 * 判断一个对象中的属性是否为 null 或者为 "", 要注意的是,对象的属性只能为引用数据类型
+	 * 判断一个对象中的属性是否为 null 或者为 "", 要注意的是,对象的属性只能为引用数据类型.
 	 * 
 	 * @param obj
-	 * @return
+	 * @return 为空返回true,不为空返回false
 	 */
 	public static boolean isEmpty(Object obj) {
 		for (Field f : obj.getClass().getDeclaredFields()) {

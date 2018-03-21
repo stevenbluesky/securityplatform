@@ -8,24 +8,23 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-
 @Entity
 @Table(name = "phonecarduser")
 public class PhonecardUserPO {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer phonecarduserbingingid;
+	private Integer phonecarduserbindingid;
 	private Integer phonecardid;
 	private Integer userid;
 	private Date createtime;
 
-	public Integer getPhonecarduserbingingid() {
-		return phonecarduserbingingid;
+	public Integer getPhonecarduserbindingid() {
+		return phonecarduserbindingid;
 	}
 
-	public void setPhonecarduserbingingid(Integer phonecarduserbingingid) {
-		this.phonecarduserbingingid = phonecarduserbingingid;
+	public void setPhonecarduserbindingid(Integer phonecarduserbindingid) {
+		this.phonecarduserbindingid = phonecarduserbindingid;
 	}
 
 	public Integer getPhonecardid() {

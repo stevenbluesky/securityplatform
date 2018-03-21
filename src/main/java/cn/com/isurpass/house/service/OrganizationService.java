@@ -6,12 +6,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import cn.com.isurpass.house.dao.AddressDAO;
 import cn.com.isurpass.house.dao.CityDAO;
@@ -54,7 +53,7 @@ public class OrganizationService {
 	 * @param as
 	 * @throws MyArgumentNullException
 	 */
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	public void add(OrgAddVO as) throws MyArgumentNullException {
 		if (!FormUtils.checkOrgNull(as)) // 必填项为空时
 			throw new MyArgumentNullException("必填字段不能为空!");

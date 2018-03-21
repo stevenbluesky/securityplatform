@@ -9,4 +9,5 @@ import cn.com.isurpass.house.po.PersonPO;
 public interface PersonDAO extends CrudRepository<PersonPO,Integer>/* extends BaseDAO*/{
 
 	PersonPO save(PersonPO person);
+	PersonPO findByPersonid(Integer personid);
 }
