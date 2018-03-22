@@ -11,17 +11,17 @@
               <div class="text-left"><h4>安装商信息</h4></div>
               
               <div  class="form-group">
-                <label for="parentorgid"  class="col-sm-2 control-label">所属安装商</label>
+                <label for="parentorgid"  class="col-sm-2 control-label">所属服务商商</label>
                 <div class="col-sm-10">
-               		<select id="parentorgid" name="parentorgid" class="selectpicker" data-live-search="true" title="选择安装商">
+               		<select id="parentorgid" name="parentorgid" class="selectpicker" data-live-search="true" title="选择服务商">
                     </select>
                 </div>
               </div>
                
               <div  class="form-group">
-                <label for="name"  class="col-sm-2 control-label"><@spring.message code="label.supplier.officename"/>*</label>
+                <label for="name"  class="col-sm-2 control-label"><@spring.message code="label.orgname"/>*</label>
                 <div class="col-sm-10">
-                 <input type="text" class="form-control" id="name" name="name" placeholder="<@spring.message code="label.supplier.officename"/>">
+                 <input type="text" class="form-control" id="name" name="name" placeholder="<@spring.message code="label.orgname"/>">
                 </div>
               </div>
               

@@ -100,7 +100,7 @@ public class OrganizationController {
 	@RequestMapping("listAllSupplier")
 	@ResponseBody
 	public List<OrganizationPO> listAllInstaller() {
-		return ss.listOrgSelectByType(Constants.ORGTYPE_INSTALLER);
+		return ss.listOrgSelectByType(Constants.ORGTYPE_SUPPLIER);
 	}
 
 	@RequestMapping("listAllOrgSelect")
