@@ -28,18 +28,18 @@
           </div>
           <hr>
 
-              <button style="float: right;" type="submit" class="btn btn-default">新增</button>
+              <button onclick="window.location.href='addEmployeePage'" style="float: right;" type="submit" class="btn btn-default">新增</button>
           
 <table id="table" data-toggle="table">
     <thead>
         <tr>
-            <th data-field="id">ID</th><!-- 页面会吃掉一行, i don't know why.. -->
+            <th data-field=""></th>
             <th data-field="name">姓名</th>
             <th data-field="parentOrgName">所属机构</th>
             <th data-field="code">员工代码</th>
-            <th data-field="status">状态</th>
+            <th data-field="status" data-formatter="formatter_status">状态</th>
             <th data-field="employeeroleid">权限</th>
-            <th data-field="operate">操作</th>
+            <th data-field="operate" data-formatter="formatter_op">操作</th>
         </tr>
     </thead>
 </table>
@@ -96,6 +96,20 @@
           EditViewById(id, 'view');
       }
 });
+
+function formatter_status(value,row,index){
+	if(value==1)
+		return "正常";
+	if(value==0)
+		return "未生效";
+	if(value==0)
+		return "冻结";
+	if(value==9)
+		return "删除";
+}
+function formatter_op(value,row,index){
+	return "<button class='btn btn-default btn-xs'>操作</button>";
+}
     </script>
 
 <#include "/_foot1.ftl"/>

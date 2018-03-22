@@ -57,7 +57,7 @@ public class OrganizationService {
 	public void add(OrgAddVO as) throws MyArgumentNullException {
 		if (!FormUtils.checkOrgNull(as)) // 必填项为空时
 			throw new MyArgumentNullException("必填字段不能为空!");
-		
+
 		OrganizationPO org = new OrganizationPO();
 		FormUtils.copyO2O(org, as);// 将一些机构的属性复制到 org 中
 
@@ -66,7 +66,7 @@ public class OrganizationService {
 			as.setParentorgid(ametaId);
 		}
 
-		//以下这些值可能为空,因此需要进行NPE判断
+		// 以下这些值可能为空,因此需要进行NPE判断
 		String countryname = null;
 		String provincename = null;
 		String cityname = null;
@@ -147,8 +147,10 @@ public class OrganizationService {
 
 		emp.setOrganizationid(orgId);
 		emp.setStatus(1);
-		if (!FormUtils.isEmpty(emp))// 管理员不为空..由于此方法一开始就对管理员账号不存在的情况进行了处理,所以此处管理员对象是肯定存在的.
+		if (!FormUtils.isEmpty(emp)) {// 管理员不为空..由于此方法一开始就对管理员账号不存在的情况进行了处理,所以此处管理员对象是肯定存在的.
+			//TODO 现在数据库里面 Loginname 是unique类型的,要文档上面意思是不同的机构可以有相同的loginname,所以这里要判断一下同机构中的loginname,并去掉数据库里面的unique索引
 			ed.save(emp);
+		}
 	}
 
 	/**
@@ -205,6 +207,13 @@ public class OrganizationService {
 
 	public List<OrganizationPO> listAllOrgSelect() {
 		return od.findAllOrgSelect();
+	}
+
+	public boolean validCode(String code) {
+		OrganizationPO org = od.findByCode(code);
+		if(org == null)
+			return true;
+		return false;
 	}
 
 }

@@ -115,6 +115,7 @@ public class UserService {
 			PersonPO personPO = pd.findByPersonid(u.getPersonid());
 			AddressPO adrs = ad.findByAddressid(personPO.getAddressid());
 			UserInfoListVO user = new UserInfoListVO();
+			user.setUserid(u.getUserid());
 			user.setName(u.getName());
 			user.setPhonenumber(personPO.getPhonenumber());
 			user.setCity(adrs.getCity());

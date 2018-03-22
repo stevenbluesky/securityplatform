@@ -300,7 +300,21 @@ $(document).ready(function() {
                 validators: {
                     notEmpty: {
                         message: 'The code is required and cannot be empty'
-                    }
+                    },
+                    remote: {
+                        url: 'validCode',
+                        message: 'The code is not available',
+                        delay : 2000,
+                        type: 'POST',
+						 /**自定义提交数据，默认值提交当前input value
+						  *  data: function(validator) {
+						       return {
+						           password: $('[name="passwordNameAttributeInYourForm"]').val(),
+						           whatever: $('[name="whateverNameAttributeInYourForm"]').val()
+						       };
+						    }
+						  */
+                    } 
                 }
             }
         }

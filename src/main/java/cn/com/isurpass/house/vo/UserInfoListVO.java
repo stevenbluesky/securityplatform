@@ -1,11 +1,19 @@
 package cn.com.isurpass.house.vo;
 
 public class UserInfoListVO {
+	private Integer userid;
 	private String name;
 	private String phonenumber;
 	private String city;
 	private String suppliername;
 	private Integer status;
+	
+	public Integer getUserid() {
+		return userid;
+	}
+	public void setUserid(Integer userid) {
+		this.userid = userid;
+	}
 	public String getName() {
 		return name;
 	}

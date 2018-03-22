@@ -1,5 +1,6 @@
 package cn.com.isurpass.house.web.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -87,6 +88,15 @@ public class OrganizationController {
 		return ss.listOrgByType(pageable, Constants.ORGTYPE_INSTALLER);
 	}
 
+	
+	@RequestMapping("validCode")
+	@ResponseBody
+	public Map<String,Boolean> validCode(String code) {
+		Map<String,Boolean> map = new HashMap<>();
+		map.put("valid", ss.validCode(code));
+		return map;
+	}
+	
 	@RequestMapping("listAllSupplier")
 	@ResponseBody
 	public List<OrganizationPO> listAllInstaller() {

@@ -51,12 +51,13 @@
           </div>
           <hr>
 
- <button style="float: right;" type="submit" class="btn btn-default">新增</button>
+ <button onclick="window.location.href='typeUserInfo'" style="float: right;" type="submit" class="btn btn-default">新增</button>
           
 <table id="table" data-toggle="table">
     <thead>
         <tr>
-            <th data-field="id">ID</th><!-- 页面会吃掉一行, i don't know why.. -->
+            <th data-field=""></th>
+            <th data-field="userid">ID</th>
             <th data-field="name">姓名</th>
             <th data-field="organizationid">电话</th>
             <th data-field="status">城市</th>
@@ -90,7 +91,7 @@
       minimumCountColumns: 2,             //最少允许的列数
       clickToSelect: true,                //是否启用点击选中行
       //height: 500,                      //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
-      uniqueId: "id",                     //每一行的唯一标识，一般为主键列
+      uniqueId: "userid",                     //每一行的唯一标识，一般为主键列
       showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
       cardView: false,                    //是否显示详细视图
       detailView: false,                  //是否显示父子表
@@ -115,8 +116,9 @@
           alert("数据加载失败！");
       },
       onDblClickRow: function (row, $element) {
-          var id = row.ID;
-          EditViewById(id, 'view');
+          var id = row.userid;
+          alert(id);
+          
       }
 });
     </script>

@@ -27,7 +27,7 @@
           </div>
           <hr>
 
-              <button style="float: right;" type="submit" class="btn btn-default">新增</button>
+              <button onclick="window.location.href='addInstallerPage'" style="float: right;" type="submit" class="btn btn-default">新增</button>
           
 <table id="table" data-toggle="table">
     <thead>
