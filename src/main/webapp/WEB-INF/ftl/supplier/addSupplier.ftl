@@ -10,33 +10,33 @@
               <div class="text-left"><h4>服务商信息</h4></div>
               
               <div  class="form-group">
-                <label for="name"  class="col-sm-2 control-label"><@spring.message code="label.supplier.officename"/>*</label>
+                <label for="name"  class="col-sm-2 control-label"><@spring.message code="label.orgname"/>*</label>
                 <div class="col-sm-10">
-                 <input type="text" class="form-control" id="name" name="name" placeholder="<@spring.message code="label.supplier.officename"/>">
+                 <input type="text" class="form-control" id="name" name="name" placeholder="<@spring.message code="label.orgname"/>">
                 </div>
               </div>
               
               <div  class="form-group">
-                <label for="code"  class="col-sm-2 control-label">公司代码*</label>
+                <label for="code"  class="col-sm-2 control-label"><@spring.message code="label.orgcode"/>*</label>
                 <div class="col-sm-10">
-                 <input type="text" class="form-control" id="code" name="code" placeholder="公司代码">
+                 <input type="text" class="form-control" id="code" name="code" placeholder="<@spring.message code="label.orgcode"/>">
                 </div>
               </div>
              
               <div  class="form-group">
-                <label for="country"  class="col-sm-2 control-label">公司地址*</label>
+                <label for="country"  class="col-sm-2 control-label"><@spring.message code="label.orgaddress"/>*</label>
                 <div class="col-sm-10">
                  <div class="row text-left">
                   <div class="col-sm-4">
-                    <select name="country" id="country" class="selectpicker" title="选择国家">
+                    <select name="country" id="country" class="selectpicker" title="<@spring.message code="label.choosecountry"/>">
                     </select>
                   </div>
                   <div class="col-sm-4">
-                    <select id="province" name="province" class="selectpicker" title="选择省份">
+                    <select id="province" name="province" class="selectpicker" title="<@spring.message code="label.chooseprovince"/>">
                     </select>
                   </div>
                   <div class="col-sm-4">
-                    <select id="city" name="city" class="selectpicker" title="选择城市">                          
+                    <select id="city" name="city" class="selectpicker" title="<@spring.message code="label.choosecity"/>">                          
                     </select>
                   </div>
                </div>
@@ -44,33 +44,33 @@
               </div>
               
               <div  class="form-group">
-                <label for="detailaddress"  class="col-sm-2 control-label">详细地址</label>
+                <label for="detailaddress"  class="col-sm-2 control-label"><@spring.message code="label.detailaddress"/></label>
                 <div class="col-sm-10">
-                 <input type="text" class="form-control" id="detailaddress" name="detailaddress" placeholder="详细地址">
+                 <input type="text" class="form-control" id="detailaddress" name="detailaddress" placeholder="<@spring.message code="label.detailaddress"/>">
                </div>
               </div>
               
               <div  class="form-group">
-                <label for="postal"  class="col-sm-2 control-label">公司邮编</label>
+                <label for="postal"  class="col-sm-2 control-label"><@spring.message code="label.orgpostal"/></label>
                 <div class="col-sm-10">
-                 <input type="text" class="form-control" id="postal" name="postal" placeholder="公司邮编">
+                 <input type="text" class="form-control" id="postal" name="postal" placeholder="<@spring.message code="label.orgpostal"/>">
                </div>
               </div>
               
               <div  class="form-group">
-                <label for="bcountry"  class="col-sm-2 control-label">公司账务地址</label>
+                <label for="bcountry"  class="col-sm-2 control-label"><@spring.message code="label.borgaddress"/></label>
                 <div class="col-sm-10">
                  <div class="row text-left">
                   <div class="col-sm-4">
-                    <select name="bcountry" id="bcountry" class="selectpicker" title="选择国家">
+                    <select name="bcountry" id="bcountry" class="selectpicker" title="<@spring.message code="label.choosecountry"/>">
                     </select>
                   </div>
                   <div class="col-sm-4">
-                    <select id="bprovince" name="bprovince" class="selectpicker" title="选择省份">
+                    <select id="bprovince" name="bprovince" class="selectpicker" title="<@spring.message code="label.chooseprovince"/>">
                     </select>
                   </div>
                   <div class="col-sm-4">
-                    <select id="bcity" name="bcity" class="selectpicker" title="选择城市">                          
+                    <select id="bcity" name="bcity" class="selectpicker" title="<@spring.message code="label.choosecity"/>">                          
                     </select>
                   </div>
                </div>
@@ -78,71 +78,71 @@
               </div>
               
               <div  class="form-group">
-                <label for="bdetailaddress"  class="col-sm-2 control-label">账务详细地址</label>
+                <label for="bdetailaddress"  class="col-sm-2 control-label"><@spring.message code="label.bdetailaddress"/></label>
                 <div class="col-sm-10">
-                 <input type="text" class="form-control" name="bdetailaddress" id="bdetailaddress" placeholder="账务详细地址">
+                 <input type="text" class="form-control" name="bdetailaddress" id="bdetailaddress" placeholder="<@spring.message code="label.bdetailaddress"/>">
                </div>
               </div>
               <div  class="form-group">
-                <label for="bpostal"  class="col-sm-2 control-label">公司账务邮编</label>
+                <label for="bpostal"  class="col-sm-2 control-label"><@spring.message code="label.borgpostal"/></label>
                 <div class="col-sm-10">
-                 <input type="text" class="form-control" name="bpostal" id="bpostal" placeholder="公司账务邮编">
+                 <input type="text" class="form-control" name="bpostal" id="bpostal" placeholder="<@spring.message code="label.borgpostal"/>">
                </div>
               </div>
 
-              <div class="text-left"><h4>服务商联系人</h4></div>
+              <div class="text-left"><h4><@spring.message code="label.supplierperson"/></h4></div>
               
               <div  class="form-group">
-                <label for="sname"  class="col-sm-2 control-label">姓名</label>
+                <label for="sname"  class="col-sm-2 control-label"><@spring.message code="label.name"/></label>
                 <div class="col-sm-10">
-                 <input type="text" class="form-control" id="sname" name="sname" placeholder="姓名">
+                 <input type="text" class="form-control" id="sname" name="sname" placeholder="<@spring.message code="label.name"/>">
                </div>
               </div>
               
               <div  class="form-group">
-                <label for="sphonenumber"  class="col-sm-2 control-label">电话</label>
+                <label for="sphonenumber"  class="col-sm-2 control-label"><@spring.message code="label.phonenumber"/></label>
                 <div class="col-sm-10">
-                 <input type="text" class="form-control" id="sphonenumber" name="sphonenumber" placeholder="电话">
+                 <input type="text" class="form-control" id="sphonenumber" name="sphonenumber" placeholder="<@spring.message code="label.phonenumber"/>">
                </div>
               </div>
               
               <div  class="form-group">
-                <label for="sfax"  class="col-sm-2 control-label">传真</label>
+                <label for="sfax"  class="col-sm-2 control-label"><@spring.message code="label.fax"/></label>
                 <div class="col-sm-10">
-                 <input type="text" class="form-control" id="sfax" name="sfax" placeholder="传真">
+                 <input type="text" class="form-control" id="sfax" name="sfax" placeholder="<@spring.message code="label.fax"/>">
                </div>               
                </div>
                
               <div  class="form-group">
-                <label for="semail"  class="col-sm-2 control-label">邮箱</label>
+                <label for="semail"  class="col-sm-2 control-label"><@spring.message code="label.email"/></label>
                 <div class="col-sm-10">
-                 <input type="text" class="form-control" id="semail" name="semail" placeholder="邮箱">
+                 <input type="text" class="form-control" id="semail" name="semail" placeholder="<@spring.message code="label.email"/>">
                </div>
               </div>
 
-              <div class="text-left"><h4>服务商总公司</h4></div>
+              <div class="text-left"><h4><@spring.message code="label.sparentrorg"/></h4></div>
               
               <div  class="form-group">
-                <label for="csname"  class="col-sm-2 control-label">总公司名称</label>
+                <label for="csname"  class="col-sm-2 control-label"><@spring.message code="label.parentrorgname"/></label>
                 <div class="col-sm-10">
-                 <input type="text" class="form-control" id="csname" name="csname" placeholder="总公司名称">
+                 <input type="text" class="form-control" id="csname" name="csname" placeholder="<@spring.message code="label.parentrorgname"/>">
                </div>
               </div>
                
               <div  class="form-group">
-                <label for="cscountry"  class="col-sm-2 control-label">总公司地址</label>
+                <label for="cscountry"  class="col-sm-2 control-label"><@spring.message code="label.parentrorgaddress"/></label>
                 <div class="col-sm-10">
                  <div class="row text-left">
                   <div class="col-sm-4">
-                    <select name="cscountry" id="cscountry" class="selectpicker" title="选择国家">
+                    <select name="cscountry" id="cscountry" class="selectpicker" title="<@spring.message code="label.choosecountry"/>">
                     </select>
                   </div>
                   <div class="col-sm-4">
-                    <select id="csprovince" name="csprovince" class="selectpicker" title="选择省份">
+                    <select id="csprovince" name="csprovince" class="selectpicker" title="<@spring.message code="label.chooseprovince"/>">
                     </select>
                   </div>
                   <div class="col-sm-4">
-                    <select id="cscity" name="cscity" class="selectpicker" title="选择城市">                          
+                    <select id="cscity" name="cscity" class="selectpicker" title="<@spring.message code="label.choosecity"/>">                          
                     </select>
                   </div>
                </div>
@@ -150,84 +150,84 @@
               </div>
               
               <div  class="form-group">
-                <label for="cspostal"  class="col-sm-2 control-label">总公司邮编</label>
+                <label for="cspostal"  class="col-sm-2 control-label"><@spring.message code="label.parentorgpostal"/></label>
                 <div class="col-sm-10">
-                 <input type="text" class="form-control" id="cspostal" name="cspostal" placeholder="总公司邮编">
+                 <input type="text" class="form-control" id="cspostal" name="cspostal" placeholder="<@spring.message code="label.parentorgpostal"/>">
                </div>               
                </div>
                
-               <div class="text-left"><h4>服务商总公司联系人</h4></div>
+               <div class="text-left"><h4><@spring.message code="label.sparentorgperson"/></h4></div>
                
               <div  class="form-group">
-                <label for="cspname"  class="col-sm-2 control-label">姓名</label>
+                <label for="cspname"  class="col-sm-2 control-label"><@spring.message code="label.name"/></label>
                 <div class="col-sm-10">
-                 <input type="text" class="form-control" id="cspname" name="cspname" placeholder="姓名">
+                 <input type="text" class="form-control" id="cspname" name="cspname" placeholder="<@spring.message code="label.name"/>">
                </div>
               </div>
               
               <div  class="form-group">
-                <label for="cspphonenumber"  class="col-sm-2 control-label">电话</label>
+                <label for="cspphonenumber"  class="col-sm-2 control-label"><@spring.message code="label.phonenumber"/></label>
                 <div class="col-sm-10">
-                 <input type="text" class="form-control" id="cspphonenumber" name="cspphonenumber" placeholder="电话">
+                 <input type="text" class="form-control" id="cspphonenumber" name="cspphonenumber" placeholder="<@spring.message code="label.phonenumber"/>">
                </div>
               </div>
               
               <div  class="form-group">
-                <label for="cspfax"  class="col-sm-2 control-label">传真</label>
+                <label for="cspfax"  class="col-sm-2 control-label"><@spring.message code="label.fax"/></label>
                 <div class="col-sm-10">
-                 <input type="text" class="form-control" id="cspfax" name="cspfax" placeholder="传真">
+                 <input type="text" class="form-control" id="cspfax" name="cspfax" placeholder="<@spring.message code="label.fax"/>">
                </div>
                </div>  
                           
               <div  class="form-group">
-                <label for="cspemail"  class="col-sm-2 control-label">邮箱</label>
+                <label for="cspemail"  class="col-sm-2 control-label"><@spring.message code="label.email"/></label>
                 <div class="col-sm-10">
-                 <input type="text" class="form-control" id="cspemail" name="cspemail" placeholder="邮箱">
+                 <input type="text" class="form-control" id="cspemail" name="cspemail" placeholder="<@spring.message code="label.email"/>">
                </div>
               </div>
                
-               <div class="text-left"><h4>管理员账号</h4></div>
+               <div class="text-left"><h4><@spring.message code="label.admin"/></h4></div>
                
               <div  class="form-group">
-                <label for="loginname"  class="col-sm-2 control-label">登录名*</label>
+                <label for="loginname"  class="col-sm-2 control-label"><@spring.message code="label.loginname"/>*</label>
                 <div class="col-sm-10">
-                 <input type="text" class="form-control" id="loginname" name="loginname" placeholder="登录名">
+                 <input type="text" class="form-control" id="loginname" name="loginname" placeholder="<@spring.message code="label.loginname"/>">
                </div>
               </div>
               
               <div  class="form-group">
-                <label for="password"  class="col-sm-2 control-label">密码*</label>
+                <label for="password"  class="col-sm-2 control-label"><@spring.message code="label.password"/>*</label>
                 <div class="col-sm-10">
-                 <input type="password" class="form-control" id="password" name="password" placeholder="密码">
+                 <input type="password" class="form-control" id="password" name="password" placeholder="<@spring.message code="label.password"/>">
                </div>
               </div>
               
               <div  class="form-group">
-                <label for="repassword"  class="col-sm-2 control-label">确认密码*</label>
+                <label for="repassword"  class="col-sm-2 control-label"><@spring.message code="label.repassword"/>*</label>
                 <div class="col-sm-10">
-                 <input type="password" class="form-control" id="repassword" name="repassword" placeholder="确认密码">
+                 <input type="password" class="form-control" id="repassword" name="repassword" placeholder="<@spring.message code="label.repassword"/>">
                </div>
                </div>  
                          
               <div  class="form-group">
-                <label for="question"  class="col-sm-2 control-label">密码问题</label>
+                <label for="question"  class="col-sm-2 control-label"><@spring.message code="label.pquestion"/></label>
                 <div class="col-sm-10">
-                 <input type="text" class="form-control" id="question" name="question" placeholder="密码问题">
+                 <input type="text" class="form-control" id="question" name="question" placeholder="<@spring.message code="label.pquestion"/>">
                </div>
               </div>
               
               <div  class="form-group">
-                <label for="answer"  class="col-sm-2 control-label">密码答案</label>
+                <label for="answer"  class="col-sm-2 control-label"><@spring.message code="label.panswer"/></label>
                 <div class="col-sm-10">
-                 <input type="text" class="form-control" id="answer" name="answer" placeholder="密码答案">
+                 <input type="text" class="form-control" id="answer" name="answer" placeholder="<@spring.message code="label.panswer"/>">
                </div>
               </div>
              
-              <div class="text-left"><h4>服务商权限</h4></div>
+              <div class="text-left"><h4><@spring.message code="label.sprivilege"/></h4></div>
               
               <div class="row">
 	              <div class="col-sm-4"></div>
-	              <div class="col-sm-8"><button id="btn-submit" type="submit" class="btn btn-default" style="width:100px;	">提交</button></div>
+	              <div class="col-sm-8"><button id="btn-submit" type="submit" class="btn btn-default" style="width:100px;	"><@spring.message code="label.submit"/></button></div>
               </div>
         </form>
         </div>
@@ -339,7 +339,7 @@ $("#btn-submit").click(function () {
                      }
                 });
         }else{
-        	alert("必填字段不能为空!");
+        	alert("<@spring.message code="label.nullstrexception"/>");
         }
     });
     

@@ -37,7 +37,7 @@
             <th data-field="name">姓名</th>
             <th data-field="parentOrgName">所属机构</th>
             <th data-field="code">员工代码</th>
-            <th data-field="status" data-formatter="formatter_status">状态</th>
+            <th data-field="status" data-formatter='formatter_status'>状态</th>
             <th data-field="employeeroleid">权限</th>
             <th data-field="operate" data-formatter="formatter_op">操作</th>
         </tr>
@@ -97,20 +97,6 @@
       }
 });
 
-function formatter_status(value,row,index){
-	if(value==1)
-		return "正常";
-	if(value==0)
-		return "未生效";
-	if(value==0)
-		return "冻结";
-	if(value==9)
-		return "删除";
-}
-function formatter_op(value,row,index){
-	return "<button class='btn btn-default btn-xs'>操作</button>";
-}
     </script>
-
 <#include "/_foot1.ftl"/>
 <#include "/_foot0.ftl"/>

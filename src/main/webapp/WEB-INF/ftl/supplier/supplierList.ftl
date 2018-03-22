@@ -38,8 +38,8 @@
             <th data-field="name">名称</th>
             <th data-field="code">代码</th>
             <th data-field="city">城市</th>
-            <th data-field="status">状态</th>
-            <th data-field="operate">操作</th>
+            <th data-field="status" data-formatter="formatter_status">状态</th>
+            <th data-field="operate" data-formatter="formatter_op">操作</th>
         </tr>
     </thead>
 </table>
@@ -93,10 +93,12 @@
       },
       onDblClickRow: function (row, $element) {
           var id = row.id;
-          EditViewById(id, 'view');
       }
 });
-    </script>
 
+function xixi(){
+	alert("131223");
+}
+    </script>
 <#include "/_foot1.ftl"/>
 <#include "/_foot0.ftl"/>

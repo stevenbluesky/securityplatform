@@ -25,15 +25,15 @@
   </head>
   <body>
     	<div class="row">
-  		<div class="col-md-10">
+	  		<div class="col-md-10">
+	  		</div>
+	  		<div class="col-md-2">
+	  			<h3>欢迎你,${emp.loginname}</h3>
+	  			<br>
+	  			<br>
+	  			<br>
+	  		</div>
   		</div>
-  		<div class="col-md-2">
-  			<h3>欢迎你,${emp.loginname}</h3>
-  			<br>
-  			<br>
-  			<br>
-  		</div>
-  	</div>
  	<div class="row">
 	  	<div id="wrap" class="col-md-2">
 				<div class="container">
@@ -48,7 +48,6 @@
   		<div  class="col-md-10"  style="height: 800px;">
 		    <iframe class="embed-responsive-item" id="right" name="right" frameborder="0" src="org/supplierList" style="height: 100%;width: 100%;"></iframe> 
   		</div>
-  		
    </div>
 
  <script src="static/js/bootstrap-treeview.min.js"></script>

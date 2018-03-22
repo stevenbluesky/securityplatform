@@ -39,10 +39,10 @@ var jsontree = [
     nodes: [
       {
         text: "新增员工",
-		href: 'employee/employeeList'
+		href: 'employee/addEmployeePage'
       }
     ],
-	href:'employee/addEmployeePage'
+	href:'employee/employeeList'
   },
   {
     text: "网关列表",
