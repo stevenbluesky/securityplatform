@@ -17,7 +17,7 @@ import cn.com.isurpass.house.po.EmployeePO;
 import cn.com.isurpass.house.service.EmployeeService;
 
 /**
- * 权限认证
+ * 权限认证 reaml
  * 
  * @author jwzh
  *
@@ -70,11 +70,11 @@ public class MyShiroUtil extends AuthorizingRealm {
 	 * SimpleAuthenticationInfo类）
 	 */
 	@Override
-	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) {
-		UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
+	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token0) {
+		UsernamePasswordToken token = (UsernamePasswordToken) token0;//取得token
 		EmployeePO emp = es.login(token.getUsername(), String.valueOf(token.getPassword()));
 		if (emp != null) {
-			return new SimpleAuthenticationInfo(emp.getLoginname(), emp.getPassword(), getName());
+			return new SimpleAuthenticationInfo(emp, emp.getPassword(), getName());
 		}
 		return null;
 	}

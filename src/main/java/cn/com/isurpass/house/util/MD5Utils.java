@@ -3,7 +3,13 @@ package cn.com.isurpass.house.util;
 import java.security.MessageDigest;
 
 public class MD5Utils {
-	public final static String MD5(String s) {
+	
+	/** 
+	 * 这仅仅只是一个MD5加密的算法,不建议使用它.如果要对密码进行加密,请使用 FormUtils::encrypt .
+	 * @param s
+	 * @return
+	 */
+	final static String MD5(String s) {
 		char hexDigits[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
 		try {
 			byte[] btInput = s.getBytes();

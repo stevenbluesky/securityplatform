@@ -13,12 +13,13 @@
 		表示需要对应的角色才能访问 perms[admin:url] 表示需要对应角色的资源才能访问 -->
 	<!-- <context:annotation-config /> <context:component-scan base-package="cf.zhul" 
 		/> -->
+		
 	<bean id="myShiroRealm" class="cn.com.isurpass.house.shiro.MyShiroUtil"></bean>
 	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
 		<property name="realm" ref="myShiroRealm"></property>
 		<property name="cacheManager" ref="cacheManager" />
 	</bean>
-	
+
 <!-- 	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean"> -->
 	<bean id="shiroFilter" class="cn.com.isurpass.house.shiro.ShiroFilterFactoryBeanWrapper">
 		<property name="securityManager" ref="securityManager" />
@@ -28,7 +29,7 @@
 		<property name="unauthorizedUrl" value="/403" />
 		<property name="filterChainDefinitions">
 			<value>
-				/index = anon
+				/index = authc
 				/index1.jsp = authc
 				/index.jsp = anon
 				/success.jsp = authc

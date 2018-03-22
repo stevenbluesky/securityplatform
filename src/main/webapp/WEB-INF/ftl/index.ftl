@@ -25,8 +25,13 @@
   </head>
   <body>
     	<div class="row">
-  		<div class="col-md-12">
-  			<br><br><br>
+  		<div class="col-md-10">
+  		</div>
+  		<div class="col-md-2">
+  			<h3>欢迎你,${emp.loginname}</h3>
+  			<br>
+  			<br>
+  			<br>
   		</div>
   	</div>
  	<div class="row">

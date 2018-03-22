@@ -33,7 +33,7 @@
  	<div class="row">
   		<div class="col-md-3"></div>
   		<div class="col-md-6">
-			 <form id="defaultForm" action="login/login	" method="POST">
+			 <form id="defaultForm" method="POST">
 			 <br>
 			 <br>
 			 <br>
@@ -69,7 +69,7 @@
                 <img class="img-responsive" src="static/img/code.jpg" style="height:100px;"/>
               </div>
               </div>
-              <button type="submit" class="btn btn-default  btn-lg" style="float:right;">登录</button>
+              <button type="submit" id="btn-submit" class="btn btn-default  btn-lg" style="float:right;">登录</button>
        		 </form>
         </div>
 
@@ -113,9 +113,35 @@ $(document).ready(function() {
             }
         }
     });
-
-  
 });
+
+$("#btn-submit").click(function () {
+        $("#defaultForm").bootstrapValidator('validate');//提交验证  
+        if ($("#defaultForm").data('bootstrapValidator').isValid()) {//获取验证结果，如果成功，执行下面代码  
+            var url= "login/login";       
+                $.ajax({
+                    type: "POST",
+                    dataType: "html",
+                    url: url,
+                    data: $('#defaultForm').serialize(),
+                    success: function (data) {
+						var data = $.parseJSON(data);
+                   	 	//alert(data.status+data.msg);
+                    	if(data.status == 1){
+                    		window.location.href='index';
+                    	}else{
+                    		alert(data.msg);
+                    	}
+                    },
+                    error: function(data) {
+                        alert("error:"+data.responseText);
+                     }
+                });
+        }else{
+        	alert("必填字段不能为空!");
+        }
+});
+
 </script>
 
 <#include "_foot0.ftl"/>
