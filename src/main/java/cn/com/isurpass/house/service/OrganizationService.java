@@ -160,8 +160,8 @@ public class OrganizationService {
 	 */
 	public Map<String, Object> listOrgByType(Pageable pageable, Integer orgType) {
 		Map<String, Object> map = new HashMap<>();
-		map.put("total", od.count());
 		Page<OrganizationPO> orgList = od.findByOrgtype(pageable, orgType);
+		map.put("total", orgList.getTotalElements());
 		List<OrgListVO> list = new ArrayList<>();
 		orgList.forEach(o -> {
 			OrgListVO orgVO = new OrgListVO();
