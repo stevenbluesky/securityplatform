@@ -21,7 +21,7 @@
     .form-group>div{
     	margin-bottom:10px;
     }
-</style>
+	</style>
   </head>
   <body>
     	<div class="row">
@@ -35,64 +35,22 @@
   		</div>
   	</div>
  	<div class="row">
-  		<div id="wrap" class="col-md-2">
-  			<div class="tree well">
-        <ul>
-            <li>
-              <i class="icon-folder-open"></i> <a style="text-decoration:none;" href="org/supplierList" target="right">服务商列表</a>
-                <ul>
-                    <li></i> <a style="text-decoration:none;" href="org/addSupplierPage" target="right">新增服务商</a></li>
-                </ul>
-            </li>
-            <li>
-              <i class="icon-folder-open"></i> <a style="text-decoration:none;" href="employee/employeeList" target="right">员工列表</a>
-                <ul>
-                    <li></i> <a style="text-decoration:none;" href="employee/addEmployeePage" target="right">新增员工</a></li>
-                </ul>
-            </li>
-            <li>
-              <i class="icon-folder-open"></i> <a style="text-decoration:none;" href="org/installerList" target="right">安装商列表</a>
-                <ul>
-                    <li></i> <a style="text-decoration:none;" href="org/addInstallerPage" target="right">新增安装商</a></li>
-                </ul>
-            </li>
-            <li>
-              <i class="icon-folder-open"></i> <a style="text-decoration:none;" href="gateway/gatewayList" target="right">网关列表</a>
-                <ul>
-                    <li></i> <a style="text-decoration:none;" href="gateway/typeGatewayInfo" target="right">录入网关信息</a></li>
-                    <li></i> <a style="text-decoration:none;" href="gateway/gatewayDetail" target="right">网关详情</a></li>
-                </ul>
-            </li>
-            <li>
-              <i class="icon-folder-open"></i> <a style="text-decoration:none;" href="device/deviceList" target="right">设备列表</a>
-                <ul>
-                    <li></i> <a style="text-decoration:none;" href="device/deviceDetail" target="right">设备详情</a></li>
-                </ul>
-            </li>
-            <li>
-              <i class="icon-folder-open"></i> <a style="text-decoration:none;" href="phonecard/phonecardList" target="right">电话卡列表</a>
-                <ul>
-                    <li></i> <a style="text-decoration:none;" href="phonecard/typePhonecardInfo" target="right">录入电话卡信息</a></li>
-                </ul>
-            </li>
-            <li>
-              <i class="icon-folder-open"></i> <a style="text-decoration:none;" href="user/userList" target="right">用户列表</a>
-                <ul>
-                    <li></i> <a style="text-decoration:none;" href="user/typeUserInfo" target="right">录入用户信息</a></li>
-                </ul>
-            </li>
-            <li>
-              <i class="icon-folder-open"></i> <a style="text-decoration:none;" href="phonecard/phonecardList" target="right">电话卡列表</a>
-                <ul>
-                    <li></i> <a style="text-decoration:none;" href="phonecard/typePhonecardInfo" target="right">录入电话卡信息</a></li>
-                </ul>
-            </li>
-        </ul>
-        <br><br><br>
-  		</div>
-    </div>
+	  	<div id="wrap" class="col-md-2">
+				<div class="container">
+				      <div class="row">
+				        <div class="col-sm-3">
+				          <div id="treeview12" class=""></div>
+				        </div>
+				      </div>
+				    </div>
+   		</div>
+    
   		<div  class="col-md-10"  style="height: 800px;">
 		    <iframe class="embed-responsive-item" id="right" name="right" frameborder="0" src="org/supplierList" style="height: 100%;width: 100%;"></iframe> 
   		</div>
+  		
    </div>
+
+ <script src="static/js/bootstrap-treeview.min.js"></script>
+ <script src="static/js/jstree.js"></script>
 <#include "_foot0.ftl"/>
