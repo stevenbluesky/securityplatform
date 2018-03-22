@@ -63,7 +63,7 @@
               <div  class="form-group">
                 <label for="captchacode" class="col-sm-2 control-label">验证码</label>
                 <div class="col-sm-6">
-                <input type="text" class="form-control" id="code" name="code" placeholder="验证码 ">
+                <input type="text" class="form-control" id="captchacode" name="captchacode" placeholder="验证码 ">
                 </div>
                 <div class="col-sm-4">
                 <img class="img-responsive" src="static/img/code.jpg" style="height:100px;"/>

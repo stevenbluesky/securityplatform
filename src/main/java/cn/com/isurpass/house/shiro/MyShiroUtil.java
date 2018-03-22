@@ -13,8 +13,11 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.alibaba.fastjson.JSON;
+
 import cn.com.isurpass.house.po.EmployeePO;
 import cn.com.isurpass.house.service.EmployeeService;
+import cn.com.isurpass.house.vo.LoginVO;
 
 /**
  * 权限认证 reaml
@@ -72,7 +75,9 @@ public class MyShiroUtil extends AuthorizingRealm {
 	@Override
 	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token0) {
 		UsernamePasswordToken token = (UsernamePasswordToken) token0;//取得token
-		EmployeePO emp = es.login(token.getUsername(), String.valueOf(token.getPassword()));
+
+		LoginVO login = JSON.parseObject(token.getUsername(),LoginVO.class);
+ 		EmployeePO emp = es.login(login.getLoginname(), String.valueOf(token.getPassword()),login.getCode());
 		if (emp != null) {
 			return new SimpleAuthenticationInfo(emp, emp.getPassword(), getName());
 		}

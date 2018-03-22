@@ -13,10 +13,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSON;
+
 import cn.com.isurpass.house.po.EmployeePO;
 import cn.com.isurpass.house.result.JsonResult;
 import cn.com.isurpass.house.service.EmployeeService;
 import cn.com.isurpass.house.util.FormUtils;
+import cn.com.isurpass.house.vo.LoginVO;
 
 @Controller
 @RequestMapping("login")
@@ -27,12 +30,12 @@ public class LoginController {
 
 	@RequestMapping("login")
 	@ResponseBody
-	public JsonResult pageLogin(String loginname, String password, HttpServletResponse response,
+	public JsonResult pageLogin(LoginVO login, HttpServletResponse response,
 			HttpServletRequest request) {
 		try {
 			SecurityUtils.getSecurityManager().logout(SecurityUtils.getSubject());
 			// 生成令牌,以便 reaml 里面进行认证
-			UsernamePasswordToken token = new UsernamePasswordToken(loginname, FormUtils.encrypt(password));
+			UsernamePasswordToken token = new UsernamePasswordToken(JSON.toJSONString(login), FormUtils.encrypt(login.getPassword()));
 			Subject subject = SecurityUtils.getSubject();
 			// 加载 reaml 进行认证登录
 			subject.login(token);

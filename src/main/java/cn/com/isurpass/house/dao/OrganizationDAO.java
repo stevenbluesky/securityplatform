@@ -30,4 +30,5 @@ public interface OrganizationDAO extends CrudRepository<OrganizationPO,Integer>{
 	List<OrganizationPO> findAllOrgSelect();
 	
 	OrganizationPO findByOrganizationid(Integer organizationid);
+	OrganizationPO findByCode(String code);
 }

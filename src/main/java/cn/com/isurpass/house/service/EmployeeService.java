@@ -22,6 +22,7 @@ import cn.com.isurpass.house.dao.ProvinceDAO;
 import cn.com.isurpass.house.exception.MyArgumentNullException;
 import cn.com.isurpass.house.po.AddressPO;
 import cn.com.isurpass.house.po.EmployeePO;
+import cn.com.isurpass.house.po.OrganizationPO;
 import cn.com.isurpass.house.po.PersonPO;
 import cn.com.isurpass.house.util.Constants;
 import cn.com.isurpass.house.util.FormUtils;
@@ -56,9 +57,8 @@ public class EmployeeService {
 				&& !FormUtils.checkNUll(emp.getCode()))// 是安装员且code为空时
 			throw new MyArgumentNullException("安装员必须要有员工代码!");
 
-		if (emp.getCode() != null && !ed
-				.findByOrganizationidAndCodeAndStatusNot(emp.getOrganizationid(), emp.getCode(), Constants.STATUS_DELETED)
-				.isEmpty())
+		if (emp.getCode() != null && !ed.findByOrganizationidAndCodeAndStatusNot(emp.getOrganizationid(), emp.getCode(),
+				Constants.STATUS_DELETED).isEmpty())
 			throw new MyArgumentNullException("员工代码不能重复!");
 
 		EmployeePO empPO = new EmployeePO();
@@ -107,8 +107,8 @@ public class EmployeeService {
 	}
 
 	public Map<String, Object> listAllEmployee(Pageable pageable) {
-		//只显示对应的服务商所具有权限的安装商,如果是ameta,则可以看见所有的
-		
+		// 只显示对应的服务商所具有权限的安装商,如果是ameta,则可以看见所有的
+
 		Map<String, Object> map = new HashMap<>();
 		map.put("total", ed.count());
 		Page<EmployeePO> empList = ed.findAll(pageable);
@@ -119,7 +119,7 @@ public class EmployeeService {
 			emp.setEmployeeid(e.getEmployeeid());
 			emp.setCode(e.getCode());
 			emp.setStatus(e.getStatus());
-			if(od.findByOrganizationid(e.getOrganizationid())!=null)
+			if (od.findByOrganizationid(e.getOrganizationid()) != null)
 				emp.setParentOrgName(od.findByOrganizationid(e.getOrganizationid()).getName());
 			list.add(emp);
 		});
@@ -133,6 +133,16 @@ public class EmployeeService {
 
 	public EmployeePO login(String loginname, String password) {
 		return ed.findByLoginnameAndPassword(loginname, password);
+	}
+
+	public EmployeePO login(String loginname, String password, String code0) {
+		OrganizationPO org = null;
+		System.out.println(od.findByCode(code0));
+		if ((org = od.findByCode(code0)) != null) {
+			return ed.findByLoginnameAndPasswordAndOrganizationid(loginname, password, org.getOrganizationid());
+		}else {
+			return null;
+		}
 	}
 
 }

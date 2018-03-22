@@ -34,4 +34,6 @@ public interface EmployeeDAO extends CrudRepository<EmployeePO,Integer>{
 	EmployeePO findByLoginname(String loginname);
 
 	EmployeePO findByLoginnameAndPassword(String loginname, String password);
+
+	EmployeePO findByLoginnameAndPasswordAndOrganizationid(String loginname, String password, Integer organizationid);
 }
