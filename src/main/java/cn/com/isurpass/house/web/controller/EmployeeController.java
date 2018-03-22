@@ -36,7 +36,7 @@ public class EmployeeController {
 	@RequestMapping("employeeJsonList")
 	@ResponseBody
 	public Map<String, Object> employeeJsonList(PageResult pr) {
-		Pageable pageable = PageRequest.of(pr.getPage(),pr.getRows(),Sort.Direction.ASC,"employeeid");
+		Pageable pageable = PageRequest.of(pr.getPage()-1,pr.getRows(),Sort.Direction.ASC,"employeeid");
 		return es.listAllEmployee(pageable);
 	}
 	

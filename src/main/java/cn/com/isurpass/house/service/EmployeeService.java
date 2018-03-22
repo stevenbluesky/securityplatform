@@ -107,6 +107,8 @@ public class EmployeeService {
 	}
 
 	public Map<String, Object> listAllEmployee(Pageable pageable) {
+		//只显示对应的服务商所具有权限的安装商,如果是ameta,则可以看见所有的
+		
 		Map<String, Object> map = new HashMap<>();
 		map.put("total", ed.count());
 		Page<EmployeePO> empList = ed.findAll(pageable);
@@ -117,7 +119,8 @@ public class EmployeeService {
 			emp.setEmployeeid(e.getEmployeeid());
 			emp.setCode(e.getCode());
 			emp.setStatus(e.getStatus());
-			emp.setParentOrgName(od.findByOrganizationid(e.getOrganizationid()).getName());
+			if(od.findByOrganizationid(e.getOrganizationid())!=null)
+				emp.setParentOrgName(od.findByOrganizationid(e.getOrganizationid()).getName());
 			list.add(emp);
 		});
 		map.put("rows", list);
