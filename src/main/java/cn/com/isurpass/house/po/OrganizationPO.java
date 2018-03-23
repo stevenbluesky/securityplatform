@@ -27,7 +27,6 @@ public class OrganizationPO {
 	private String centralstationname;
 	private Integer csaddressid;
 	private Integer cscontactid;
-	private Date createtime;
 
 	
 	public OrganizationPO() {
@@ -145,20 +144,4 @@ public class OrganizationPO {
 		this.cscontactid = cscontactid;
 	}
 
-	public Date getCreatetime() {
-		return createtime;
-	}
-
-	public void setCreatetime(Date createtime) {
-		this.createtime = createtime;
-	}
-
-	@Override
-	public String toString() {
-		return "OrganizationPO [organizationid=" + organizationid + ", code=" + code + ", citycode=" + citycode
-				+ ", name=" + name + ", parentorgid=" + parentorgid + ", orgtype=" + orgtype + ", status=" + status
-				+ ", officeaddressid=" + officeaddressid + ", billingaddressid=" + billingaddressid + ", contactid="
-				+ contactid + ", centralstationname=" + centralstationname + ", csaddressid=" + csaddressid
-				+ ", cscontactid=" + cscontactid + ", createtime=" + createtime + "]";
-	}
 }

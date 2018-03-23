@@ -17,7 +17,6 @@ public class GatewayPO {
 	private String model;
 	private String firmwareversion;
 	private Integer battery; // 0:离线 1:在线
-	private Date createtime;
 
 	public String getDeviceid() {
 		return deviceid;
@@ -65,14 +64,6 @@ public class GatewayPO {
 
 	public void setBattery(Integer battery) {
 		this.battery = battery;
-	}
-
-	public Date getCreatetime() {
-		return createtime;
-	}
-
-	public void setCreatetime(Date createtime) {
-		this.createtime = createtime;
 	}
 
 }

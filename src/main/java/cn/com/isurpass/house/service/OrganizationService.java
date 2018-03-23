@@ -110,7 +110,7 @@ public class OrganizationService {
 		// 服务商总公司联系人
 		PersonPO csPerson = new PersonPO(as.getCspname(), as.getCspphonenumber(), as.getCspemail(), as.getCspfax());
 		EmployeePO emp = new EmployeePO(as.getLoginname(), FormUtils.encrypt(as.getPassword()), as.getQuestion(),
-				FormUtils.encrypt(as.getAnswer()), new Date());
+				FormUtils.encrypt(as.getAnswer()));
 
 		System.out.println(address.toString());
 		System.out.println(bAddress.toString());
@@ -215,5 +215,13 @@ public class OrganizationService {
 			return true;
 		return false;
 	}
-
+	
+	public List<Integer> findParentOrgid(Integer id,List<Integer> list){
+		OrganizationPO org = od.findByOrganizationid(id);
+		if(org.getParentorgid() != null) {
+			list.add(org.getParentorgid());
+			findParentOrgid(org.getParentorgid(),list);
+		}
+		return list;
+	}
 }

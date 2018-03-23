@@ -59,10 +59,10 @@
             <th data-field=""></th>
             <th data-field="userid">ID</th>
             <th data-field="name">姓名</th>
-            <th data-field="organizationid">电话</th>
-            <th data-field="status">城市</th>
-            <th data-field="">服务商</th>
-            <th data-field="">状态</th>
+            <th data-field="phonenumber">电话</th>
+            <th data-field="city">城市</th>
+            <th data-field="suppliername">服务商</th>
+            <th data-field="status">状态</th>
             <th data-field="operate">操作</th>
         </tr>
     </thead>

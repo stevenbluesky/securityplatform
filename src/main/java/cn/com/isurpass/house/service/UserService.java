@@ -1,7 +1,6 @@
 package cn.com.isurpass.house.service;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import cn.com.isurpass.house.dao.AddressDAO;
 import cn.com.isurpass.house.dao.CityDAO;
 import cn.com.isurpass.house.dao.CountryDAO;
+import cn.com.isurpass.house.dao.GatewayuserDAO;
 import cn.com.isurpass.house.dao.OrganizationDAO;
 import cn.com.isurpass.house.dao.PersonDAO;
 import cn.com.isurpass.house.dao.PhonecarduserDAO;
@@ -26,6 +26,7 @@ import cn.com.isurpass.house.dao.UserDAO;
 import cn.com.isurpass.house.po.AddressPO;
 import cn.com.isurpass.house.po.CityPO;
 import cn.com.isurpass.house.po.EmployeePO;
+import cn.com.isurpass.house.po.GatewayUserPO;
 import cn.com.isurpass.house.po.PersonPO;
 import cn.com.isurpass.house.po.PhonecardUserPO;
 import cn.com.isurpass.house.po.UserPO;
@@ -55,6 +56,8 @@ public class UserService {
 	PhonecarduserDAO pcud;
 	@Autowired
 	EmployeeService emps;
+	@Autowired
+	GatewayuserDAO gd;
 
 	@Transactional(rollbackFor = Exception.class)
 	public void add(UserAddVO u, HttpServletRequest request) {
@@ -73,7 +76,6 @@ public class UserService {
 			user.setInstallerorgid(empp.getInstallerorgid());
 			user.setInstallerid(empp.getInstallerid());
 		}
-		user.setCreatetime(new Date());
 		user.setCodepostfix(u.getCodepostfix());
 		user.setUsercode("ameta" + u.getPhonenumber());
 
@@ -106,10 +108,16 @@ public class UserService {
 
 		user.setPersonid(personid);
 		UserPO userSave = ud.save(user);
+		if(u.getDeviceid()!= null) {
+			GatewayUserPO gateway = new GatewayUserPO();
+			gateway.setDeviceid(u.getDeviceid());
+			gateway.setUserid(userSave.getUserid());
+			gd.save(gateway);
+		}
+		
 		if (u.getPhonecardid() != null) {
 			PhonecardUserPO pcup = new PhonecardUserPO();
 			pcup.setUserid(userSave.getUserid());
-			pcup.setCreatetime(new Date());
 			pcup.setPhonecardid(1);
 			pcud.save(pcup);
 		}
@@ -120,6 +128,7 @@ public class UserService {
 		Map<String, Object> map = new HashMap<>();
 
 		// TODO 先要判断目前登陆的是哪角色,服务商|安装商|ameta 然后查询相应的数据(如果是 ameta 则查询所有的)..对应的总数也要进行相应的改变
+		
 		map.put("total", ud.count());
 		Page<UserPO> userList = ud.findAll(pageable);
 		List<UserInfoListVO> list = new ArrayList<>();

@@ -53,7 +53,6 @@ public class FormUtils {
 		org.setCode(as.getCode());
 		org.setStatus(1);
 		org.setCentralstationname(as.getCsname());
-		org.setCreatetime(new Date());
 		// org.setOrgtype(1);//0:Ameta 1:服务商 2:安装商
 		if (as.getParentorgid() == null)
 			org.setOrgtype(Constants.ORGTYPE_SUPPLIER);

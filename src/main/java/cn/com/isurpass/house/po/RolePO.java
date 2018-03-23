@@ -18,7 +18,6 @@ public class RolePO {
 	private String name;
 	private Integer organizationid;
 	private Integer status;// 1:正常 2:冻结 9:删除
-	private Date createtime;
 
 	public Integer getRoleid() {
 		return roleid;
@@ -50,14 +49,6 @@ public class RolePO {
 
 	public void setStatus(Integer status) {
 		this.status = status;
-	}
-
-	public Date getCreatetime() {
-		return createtime;
-	}
-
-	public void setCreatetime(Date createtime) {
-		this.createtime = createtime;
 	}
 
 }

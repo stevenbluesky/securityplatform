@@ -1,6 +1,9 @@
 package cn.com.isurpass.house.web.controller;
 
+import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -27,30 +30,32 @@ public class EmployeeController {
 	public String addEmployeePage() {
 		return "employee/addEmployee";
 	}
-	
+
 	@RequestMapping("employeeList")
 	public String employeeList() {
 		return "employee/employeeList";
 	}
-	
+
 	@RequestMapping("employeeJsonList")
 	@ResponseBody
-	public Map<String, Object> employeeJsonList(PageResult pr) {
-		Pageable pageable = PageRequest.of(pr.getPage()-1,pr.getRows(),Sort.Direction.ASC,"employeeid");
-		return es.listAllEmployee(pageable);
+	public Map<String, Object> employeeJsonList(PageResult pr, HttpServletRequest request) {
+		Pageable pageable = PageRequest.of(pr.getPage() - 1, pr.getRows(), Sort.Direction.ASC, "employeeid");
+		Map<String, Object> map = es.listEmployee(pageable, request);
+		return map;
+
 	}
-	
+
 	@RequestMapping("add")
 	@ResponseBody
 	public JsonResult addEmployee(EmployeeAddVO emp) {
 		try {
 			es.add(emp);
 		} catch (MyArgumentNullException e) {
-			return new JsonResult(-1,e.getMessage());
+			return new JsonResult(-1, e.getMessage());
 		} catch (RuntimeException e) {
 			e.printStackTrace();
-			return new JsonResult(-1,"出错啦~");
+			return new JsonResult(-1, "出错啦~");
 		}
-		return new JsonResult(1,"success");
+		return new JsonResult(1, "success");
 	}
 }

@@ -33,6 +33,7 @@ public class ZwaveDeviceService {
 		Integer orgid = 1;
 		
 		//如果角色是机构,通过机构查找,如果角色是安装员,通过安装员查找
+		
 		// 机构查找用户,用户查找网关,网关查找设备
 		//下面代码是通过机构查找
 		List<UserPO> userList = us.findUser(orgid);

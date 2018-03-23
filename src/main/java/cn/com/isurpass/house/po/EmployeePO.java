@@ -26,20 +26,17 @@ public class EmployeePO {
 	private Integer personid;
 	private Integer addressid;
 	private Date expiredate;
-	private Date createtime;
 
-	
 	public EmployeePO() {
 		super();
 	}
 
-	public EmployeePO(String loginname, String password, String question, String answer,Date createtime) {
+	public EmployeePO(String loginname, String password, String question, String answer) {
 		super();
 		this.loginname = loginname;
 		this.password = password;
 		this.question = question;
 		this.answer = answer;
-		this.createtime = createtime;
 	}
 
 	public EmployeePO(Integer employeeid, String loginname, String code, String name, String password,
@@ -58,7 +55,6 @@ public class EmployeePO {
 		this.personid = personid;
 		this.addressid = addressid;
 		this.expiredate = expiredate;
-		this.createtime = createtime;
 	}
 
 	public Integer getEmployeeid() {
@@ -157,12 +153,12 @@ public class EmployeePO {
 		this.expiredate = expiredate;
 	}
 
-	public Date getCreatetime() {
-		return createtime;
-	}
-
-	public void setCreatetime(Date createtime) {
-		this.createtime = createtime;
+	@Override
+	public String toString() {
+		return "EmployeePO [employeeid=" + employeeid + ", loginname=" + loginname + ", code=" + code + ", name=" + name
+				+ ", password=" + password + ", organizationid=" + organizationid + ", question=" + question
+				+ ", answer=" + answer + ", status=" + status + ", personid=" + personid + ", addressid=" + addressid
+				+ ", expiredate=" + expiredate + "]";
 	}
 
 }

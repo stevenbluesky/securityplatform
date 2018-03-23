@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -47,6 +49,8 @@ public class EmployeeService {
 	PersonDAO pd;
 	@Autowired
 	OrganizationDAO od;
+	@Autowired
+	OrganizationService os;
 
 	@Transactional(rollbackFor = Exception.class)
 	public void add(EmployeeAddVO emp) throws MyArgumentNullException {
@@ -85,7 +89,6 @@ public class EmployeeService {
 		empPO.setAnswer(FormUtils.encrypt(emp.getAnswer()));
 		empPO.setStatus(emp.getStatus());
 		empPO.setExpiredate(new Date());
-		empPO.setCreatetime(new Date());
 		empPO.setOrganizationid(emp.getOrganizationid());
 		empPO.setName(emp.getLastname() + " " + emp.getFirstname());
 
@@ -107,9 +110,43 @@ public class EmployeeService {
 		ed.save(empPO);
 	}
 
-	public Map<String, Object> listAllEmployee(Pageable pageable) {
+	public Map<String, Object> listEmployee(Pageable pageable, HttpServletRequest request) {
 		// 只显示对应的服务商所具有权限的安装商,如果是ameta,则可以看见所有的
+		// 首先判断当前登录的员工角色,
+		// 如果角色是员工,over.
+		// 如果是安装商,再通过员工的机构id查询所有属于它的员工,
+		// 如果是服务商,则查询它的所有的安装商,通过服务商,安装商id list查询其所有的员工
+		// 如果是ameta,直接查询所有的员工
 
+		// 另一种办法,首先判断当前登录的员工角色,如果角色是员工,over.
+		// 通过当前员工的机构id,查询此机构是否具有父机构,如果有,查询其父机构id.这样遍历取此机构所有
+		EmployeePO emp = (EmployeePO)request.getSession().getAttribute("emp");
+		
+		List<Integer> list0 = new ArrayList<>();
+		Map<String, Object> map = new HashMap<>();
+		List<Integer> list = os.findParentOrgid(emp.getOrganizationid(), list0);
+		list.add(emp.getOrganizationid());
+//		System.out.println(list);
+		Page<EmployeePO> empList = ed.findByOrganizationidIn(pageable,list);
+		map.put("total", empList.getTotalElements());
+		List<EmployeeListVO> listt = new ArrayList<>();
+		empList.forEach(e -> {
+			EmployeeListVO empv = new EmployeeListVO();
+			empv.setName(e.getName());
+			empv.setEmployeeid(e.getEmployeeid());
+			empv.setCode(e.getCode());
+			empv.setStatus(e.getStatus());
+			if (od.findByOrganizationid(e.getOrganizationid()) != null)
+				empv.setParentOrgName(od.findByOrganizationid(e.getOrganizationid()).getName());
+			listt.add(empv);
+		});
+		map.put("rows", listt);
+		return map;
+	}
+
+	public Map<String, Object> listAllEmployee(Pageable pageable,HttpServletRequest request) {
+		EmployeePO em = (EmployeePO)request.getSession().getAttribute("emp");
+//		System.out.println(em.toString());
 		Map<String, Object> map = new HashMap<>();
 		map.put("total", ed.count());
 		Page<EmployeePO> empList = ed.findAll(pageable);
@@ -138,16 +175,17 @@ public class EmployeeService {
 
 	public EmployeePO login(String loginname, String password, String code0) {
 		OrganizationPO org = null;
-//		System.out.println(od.findByCode(code0));
+		// System.out.println(od.findByCode(code0));
 		if ((org = od.findByCode(code0)) != null) {
 			return ed.findByLoginnameAndPasswordAndOrganizationid(loginname, password, org.getOrganizationid());
-		}else {
+		} else {
 			return null;
 		}
 	}
-	
+
 	/**
 	 * 查询一个employee的所有父类机构id
+	 * 
 	 * @param emp
 	 * @return
 	 */
@@ -155,11 +193,11 @@ public class EmployeeService {
 		EmployeeParentOrgIdVO empp = new EmployeeParentOrgIdVO();
 		empp.setInstallerid(emp.getEmployeeid());
 		OrganizationPO org0 = od.findByOrganizationid(emp.getOrganizationid());
-		if(org0 != null) {
+		if (org0 != null) {
 			empp.setInstallerorgid(org0.getOrganizationid());
-			if(org0.getParentorgid() != null)//parentid的对象不为空,说明org0是一个安装商,emp是安装商员工
+			if (org0.getParentorgid() != null)// parentid的对象不为空,说明org0是一个安装商,emp是安装商员工
 				empp.setOrganizationid(org0.getParentorgid());
-			else//说明Org0是一个服务商
+			else// 说明Org0是一个服务商
 				empp.setOrganizationid(org0.getOrganizationid());
 		}
 		return empp;

@@ -1,7 +1,5 @@
 package cn.com.isurpass.house.po;
 
-import java.util.Date;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -17,7 +15,6 @@ public class EmployeeRolePO {
 	private Integer employeeroleid;
 	private Integer employeeid;
 	private Integer roleid;
-	private Date createtime;
 
 	public Integer getEmployeeroleid() {
 		return employeeroleid;
@@ -42,13 +39,4 @@ public class EmployeeRolePO {
 	public void setRoleid(Integer roleid) {
 		this.roleid = roleid;
 	}
-
-	public Date getCreatetime() {
-		return createtime;
-	}
-
-	public void setCreatetime(Date createtime) {
-		this.createtime = createtime;
-	}
-
 }

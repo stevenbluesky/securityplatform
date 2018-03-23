@@ -17,7 +17,6 @@ public class OrgRolePO {
 	private Integer orgprivilegeid;
 	private Integer privilegeid;
 	private Integer status;
-	private Date createtime;
 
 	public Integer getOrgprivilegeid() {
 		return orgprivilegeid;
@@ -41,14 +40,6 @@ public class OrgRolePO {
 
 	public void setStatus(Integer status) {
 		this.status = status;
-	}
-
-	public Date getCreatetime() {
-		return createtime;
-	}
-
-	public void setCreatetime(Date createtime) {
-		this.createtime = createtime;
 	}
 
 }

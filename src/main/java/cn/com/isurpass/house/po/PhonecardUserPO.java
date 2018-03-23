@@ -17,7 +17,6 @@ public class PhonecardUserPO {
 	private Integer phonecarduserbindingid;
 	private Integer phonecardid;
 	private Integer userid;
-	private Date createtime;
 
 	public Integer getPhonecarduserbindingid() {
 		return phonecarduserbindingid;
@@ -43,11 +42,4 @@ public class PhonecardUserPO {
 		this.userid = userid;
 	}
 
-	public Date getCreatetime() {
-		return createtime;
-	}
-
-	public void setCreatetime(Date createtime) {
-		this.createtime = createtime;
-	}
 }
