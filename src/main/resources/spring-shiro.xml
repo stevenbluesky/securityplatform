@@ -30,11 +30,11 @@
 		<property name="filterChainDefinitions">
 			<value>
 				/index = authc
-				/index1.jsp = authc
-				/index.jsp = anon
+				/org/supplierList = authc
 				/success.jsp = authc
 					<!-- 表示需要认证才能访问的页面 -->
 				/home = authc, perms[/home]  <!-- perms 表示需要该权限才能访问的页面 -->
+				/** = anon
 			</value>
 		</property>
 	</bean>

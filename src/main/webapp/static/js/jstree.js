@@ -73,10 +73,10 @@ var jsontree = [
     nodes: [
       {
         text: "录入用户信息",
-		href: 'user/userList'
+		href: 'user/typeUserInfo'
       }
     ],
-	href:'user/typeUserInfo'
+	href:'user/userList'
   },
   {
     text: "电话卡列表",

@@ -15,9 +15,12 @@
 	</context:component-scan>
 
 	<!-- 使用注解开发，不用配置controller，需要配置一个组件扫描器 -->
-	<mvc:annotation-driven />
+	<mvc:annotation-driven >
+		<!-- spring mvc会自动去掉路径最后面 小数点后面的东西,这样会使shiro在特定情况下出现一些问题,因此通过以下设置使mvc不忽略小数点 -->
+		<mvc:path-matching registered-suffixes-only="true"/>
+	</mvc:annotation-driven>
 	<mvc:default-servlet-handler />
-
+	
 	<!-- i18n配置 -->
 	<bean id="localeResolver"
 		class="org.springframework.web.servlet.i18n.SessionLocaleResolver" />
@@ -47,7 +50,8 @@
 		<!-- 如果没有找到国际化key值 默认输出key -->
 		<property name="useCodeAsDefaultMessage" value="true" />
 	</bean>
-
+	
+	
 	<!-- 配置freeMarker的模板路径 -->
 	<bean
 		class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">

@@ -2,6 +2,8 @@ package cn.com.isurpass.house.web.controller;
 
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -25,9 +27,9 @@ public class UserController {
 	
 	@RequestMapping("add")
 	@ResponseBody
-	public JsonResult addUserInfo(UserAddVO user) {
+	public JsonResult addUserInfo(UserAddVO user,HttpServletRequest request) {
 		try {
-			us.add(user);
+			us.add(user,request);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new JsonResult(-1,"出错啦~");

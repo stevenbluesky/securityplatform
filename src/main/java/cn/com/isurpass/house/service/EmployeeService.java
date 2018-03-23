@@ -28,6 +28,7 @@ import cn.com.isurpass.house.util.Constants;
 import cn.com.isurpass.house.util.FormUtils;
 import cn.com.isurpass.house.vo.EmployeeAddVO;
 import cn.com.isurpass.house.vo.EmployeeListVO;
+import cn.com.isurpass.house.vo.EmployeeParentOrgIdVO;
 
 @Service
 public class EmployeeService {
@@ -137,12 +138,31 @@ public class EmployeeService {
 
 	public EmployeePO login(String loginname, String password, String code0) {
 		OrganizationPO org = null;
-		System.out.println(od.findByCode(code0));
+//		System.out.println(od.findByCode(code0));
 		if ((org = od.findByCode(code0)) != null) {
 			return ed.findByLoginnameAndPasswordAndOrganizationid(loginname, password, org.getOrganizationid());
 		}else {
 			return null;
 		}
+	}
+	
+	/**
+	 * 查询一个employee的所有父类机构id
+	 * @param emp
+	 * @return
+	 */
+	public EmployeeParentOrgIdVO findEmpParentOrgid(EmployeePO emp) {
+		EmployeeParentOrgIdVO empp = new EmployeeParentOrgIdVO();
+		empp.setInstallerid(emp.getEmployeeid());
+		OrganizationPO org0 = od.findByOrganizationid(emp.getOrganizationid());
+		if(org0 != null) {
+			empp.setInstallerorgid(org0.getOrganizationid());
+			if(org0.getParentorgid() != null)//parentid的对象不为空,说明org0是一个安装商,emp是安装商员工
+				empp.setOrganizationid(org0.getParentorgid());
+			else//说明Org0是一个服务商
+				empp.setOrganizationid(org0.getOrganizationid());
+		}
+		return empp;
 	}
 
 }

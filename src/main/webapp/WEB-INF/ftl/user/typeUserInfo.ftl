@@ -105,7 +105,7 @@
                </div>
               </div>
               
-              <div id="msg" class="text-center">fsdafasd</div>
+              <div id="msg" class="text-center"></div>
               <div class="row text-center">
 	              <div class="col-sm-6"><button id="btn-submit" type="submit" class="btn btn-default" style="width:25%;">提交</button></div>
 	              <div class="col-sm-6"><button type="reset" class="btn btn-default" style="width:25%;">重置</button></div>

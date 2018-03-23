@@ -233,7 +233,11 @@
               </div>
              
               <div class="text-left"><h4>安装商权限</h4></div>
-              
+              <div name="ck" class="checkbox">
+			    <label>
+			      <input type="checkbox">请打勾
+			    </label>
+			  </div>
               <div class="row">
 	              <div class="col-sm-4"></div>
 	              <div class="col-sm-8"><button id="btn-submit" type="submit" class="btn btn-default" style="width:100px;	">提交</button></div>

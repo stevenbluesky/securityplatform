@@ -6,6 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,10 +25,12 @@ import cn.com.isurpass.house.dao.ProvinceDAO;
 import cn.com.isurpass.house.dao.UserDAO;
 import cn.com.isurpass.house.po.AddressPO;
 import cn.com.isurpass.house.po.CityPO;
+import cn.com.isurpass.house.po.EmployeePO;
 import cn.com.isurpass.house.po.PersonPO;
 import cn.com.isurpass.house.po.PhonecardUserPO;
 import cn.com.isurpass.house.po.UserPO;
 import cn.com.isurpass.house.util.FormUtils;
+import cn.com.isurpass.house.vo.EmployeeParentOrgIdVO;
 import cn.com.isurpass.house.vo.UserAddVO;
 import cn.com.isurpass.house.vo.UserInfoListVO;
 
@@ -48,19 +53,26 @@ public class UserService {
 	OrganizationDAO od;
 	@Autowired
 	PhonecarduserDAO pcud;
+	@Autowired
+	EmployeeService emps;
 
 	@Transactional(rollbackFor = Exception.class)
-	public void add(UserAddVO u) {
+	public void add(UserAddVO u, HttpServletRequest request) {
 		UserPO user = new UserPO();
 		user.setLoginname(u.getPhonenumber());
 		user.setName(u.getFirstname() + " " + u.getLastname());
 		user.setCitycode("");
 
-		// TODO 以下三个值通过安装员的session来给值
-		user.setOrganizationid(0);
-		user.setInstallerorgid(0);
-		user.setInstallerid(0);
-
+		EmployeePO emp = (EmployeePO) SecurityUtils.getSubject().getPrincipal();
+		EmployeeParentOrgIdVO empp = emps.findEmpParentOrgid(emp);
+		user.setOrganizationid(1);
+		user.setInstallerorgid(1);
+		user.setInstallerid(1);
+		if (empp != null) {
+			user.setOrganizationid(empp.getOrganizationid());
+			user.setInstallerorgid(empp.getInstallerorgid());
+			user.setInstallerid(empp.getInstallerid());
+		}
 		user.setCreatetime(new Date());
 		user.setCodepostfix(u.getCodepostfix());
 		user.setUsercode("ameta" + u.getPhonenumber());
