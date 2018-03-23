@@ -9,7 +9,7 @@ public class Constants {
 	public static final Integer GENDER_MALE = 1; // 男性
 	public static final Integer GENDER_LGBT = 2; // LGBT
 	
-	public static final Integer STATUS_UNVALIDATED= 0; //未生效
+	public static final Integer STATUS_UNVALID= 0; //未生效
 	public static final Integer STATUS_NORMAL = 1;		//正常
 	public static final Integer STATUS_SUSPENCED = 2;	//冻结
 	public static final Integer STATUS_DELETED = 9;		//删除

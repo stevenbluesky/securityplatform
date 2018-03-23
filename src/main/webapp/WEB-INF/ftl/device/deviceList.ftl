@@ -1,20 +1,23 @@
  <#include "/_head0.ftl"/>
  <#include "/_head1.ftl"/> 
+           <form class="form-inline" action="" method="POST">
            <div class="row">
               <div class="text-center"><h1>设备列表</h1></div><hr>
-           <form class="form-inline" action="" method="POST">
+           
               <div class="form-group col-md-4">   
                 <div>
                   <b>设备名称</b>
                  <input type="text" class="form-control" id="name" name="name" placeholder="设备名称">
                 </div>
               </div>
+              
               <div class="form-group col-md-4">
                 <div>
                   <b>城市</b>
                  <input type="text" class="form-control" id="code" name="code" placeholder="城市">
                 </div>
               </div>
+              
               <div class="form-group col-md-4">
                 <div>
                   <b>城市代码</b>
@@ -43,6 +46,7 @@
                 </div>
               </div>
           </div>
+          
            <div class="row">
               <div class="form-group col-md-4">   
                 <div>
@@ -67,17 +71,18 @@
 <table id="table" data-toggle="table">
     <thead>
         <tr>
-            <th data-field="id">ID</th><!-- 页面会吃掉一行, i don't know why.. -->
+            <th data-field=""></th>
+            <th data-field="zwavedeviceid" data-visible="false">ID</th>
             <th data-field="name">名称</th>
-            <th data-field="organizationid">设备类型</th>
-            <th data-field="status">告警状态</th>
-            <th data-field="ID">状态</th>
-            <th data-field="">电量</th>
-            <th data-field="">地区</th>
-            <th data-field="">服务商</th>
-            <th data-field="">安装商</th>
-            <th data-field="">安装员</th>
-            <th data-field="">用户</th>
+            <th data-field="devicetype" data-formatter='formatter_devicetype'>设备类型</th>
+            <th data-field="warningstatuses">告警状态</th>
+            <th data-field="status" data-formatter='formatter_devicestatus'>状态</th>
+            <th data-field="battery">电量</th>
+            <th data-field="city">地区</th>
+            <th data-field="organizationname">服务商</th>
+            <th data-field="installerorgname">安装商</th>
+            <th data-field="installername">安装员</th>
+            <th data-field="username">用户</th>
         </tr>
     </thead>
 </table>
@@ -86,7 +91,7 @@
     </div>
     <script type="text/javascript">
       $('#table').bootstrapTable({
-      url: 'employeeJsonList',
+      url: 'deviceJsonList',
       method: 'GET',                      //请求方式（*）
       //toolbar: '#toolbar',              //工具按钮用哪个容器
       striped: true,                      //是否显示行间隔色
@@ -105,7 +110,7 @@
       minimumCountColumns: 2,             //最少允许的列数
       clickToSelect: true,                //是否启用点击选中行
       //height: 500,                      //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
-      uniqueId: "id",                     //每一行的唯一标识，一般为主键列
+      uniqueId: "zwavedeviceid",                     //每一行的唯一标识，一般为主键列
       showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
       cardView: false,                    //是否显示详细视图
       detailView: false,                  //是否显示父子表
@@ -130,8 +135,10 @@
           alert("数据加载失败！");
       },
       onDblClickRow: function (row, $element) {
-          var id = row.ID;
-          EditViewById(id, 'view');
+	        //console.log(value);
+			//console.log(row);
+			//console.log(index);
+			window.location.href='deviceDetail?zwavedeviceid='+row.zwavedeviceid;
       }
 });
     </script>

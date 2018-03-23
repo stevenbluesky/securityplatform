@@ -92,7 +92,6 @@
       },
       onDblClickRow: function (row, $element) {
           var id = row.ID;
-          EditViewById(id, 'view');
       }
 });
     </script>

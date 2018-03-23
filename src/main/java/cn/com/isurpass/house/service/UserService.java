@@ -140,4 +140,10 @@ public class UserService {
 		map.put("rows", list);
 		return map;
 	}
+	
+	public List<UserPO> findUser(Integer orgid){
+		//TODO 先要判断角色,然后查找相应的机构.
+		List<UserPO> userList = ud.findByOrganizationid(orgid);
+		return userList;
+	}
 }

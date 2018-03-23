@@ -45,7 +45,7 @@ public class LoginController {
 		} catch (UnavailableSecurityManagerException e) {
 			e.printStackTrace();
 			return new JsonResult(-1, "登录失败");
-		} catch (AuthenticationException e) {
+ 		} catch (AuthenticationException e) {
 			e.printStackTrace();
 			return new JsonResult(-1, "登录失败");
 		}

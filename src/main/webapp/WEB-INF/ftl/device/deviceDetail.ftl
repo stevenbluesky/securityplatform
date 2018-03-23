@@ -11,22 +11,35 @@
               <br>
               <div class="row">
 			        <div class="col-md-4"></div>
+			        <#if zwave??>
 			        <div class="col-md-3">
-				        <p>名称</p>
-				        <p>网关ID</p>
-				        <p>业务状态</p>
-				        <p>用户</p>
-				        <p>安装时间 </p>
+				        <p>设备名称</p>
+				        <p>服务商</p>
+				        <p>告警状态</p>
+				        <p>设备状态 </p>
 				        <p>操作</p>
 			        </div>
 			        <div class="col-md-3">
-				        <p>8645</p>
-				        <p>iRemote700500000xxxx</p>
-				        <p>正常</p>
-				        <p>afdfasd</p>
-				        <p>afdfasd</p>
-				        <p><button type="submit" class="btn btn-default" style="width:28%;">关闭</button></p>
+			      	    
+					        <p>${zwave.devicename}</p>
+					        <p>${zwave.suppliename}</p>
+					        <p>${zwave.warningstatuses}</p>
+					        <p>
+					        	<#if zwave.status==255>
+					        		开
+					        	<#elseif zwave.status==0>
+					        		关
+					        	<#else>
+					        		${zwave.status}
+					        	</#if>
+					        </p>
+					        <p><button type="submit" class="btn btn-default" style="width:28%;">关闭</button></p>
 			        </div>
+			        <#else>
+			         <div class="col-md-6"">
+			         	<h3>请先在设备列表里面选择一个设备...</h3>
+			         </div>
+			        </#if>
 			        <div class="col-md-1"></div>
               </div>
         </div>
