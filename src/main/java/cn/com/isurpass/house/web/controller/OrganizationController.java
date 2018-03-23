@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,6 +75,7 @@ public class OrganizationController {
 	 * @param pr
 	 * @return
 	 */
+	//只有ameta可以访问
 	@RequestMapping("supplierJsonList")
 	@ResponseBody
 	public Map<String, Object> supplierJsonList(PageResult pr) {
@@ -82,10 +84,10 @@ public class OrganizationController {
 	}
 	@RequestMapping("installerJsonList")
 	@ResponseBody
-	public Map<String, Object> installerJsonList(PageResult pr) {
+	public Map<String, Object> installerJsonList(PageResult pr,HttpServletRequest request) {
 		Pageable pageable = PageRequest.of(pr.getPage()-1,pr.getRows(),Sort.Direction.ASC,"organizationid");
 		
-		return ss.listOrgByType(pageable, Constants.ORGTYPE_INSTALLER);
+		return ss.listChirldOrg(pageable,request);
 	}
 
 	

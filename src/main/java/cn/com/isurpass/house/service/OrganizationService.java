@@ -1,10 +1,11 @@
 package cn.com.isurpass.house.service;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,6 +17,7 @@ import cn.com.isurpass.house.dao.AddressDAO;
 import cn.com.isurpass.house.dao.CityDAO;
 import cn.com.isurpass.house.dao.CountryDAO;
 import cn.com.isurpass.house.dao.EmployeeDAO;
+import cn.com.isurpass.house.dao.EmployeeroleDAO;
 import cn.com.isurpass.house.dao.OrganizationDAO;
 import cn.com.isurpass.house.dao.PersonDAO;
 import cn.com.isurpass.house.dao.ProvinceDAO;
@@ -181,7 +183,32 @@ public class OrganizationService {
 		map.put("rows", list);
 		return map;
 	}
-
+	
+	public Map<String, Object> listChirldOrg(Pageable pageable,HttpServletRequest request) {
+		
+		//角色为服务商的员工才可以访问
+		//先取员工的机构id,再通过机构id查询其机构下所有的安装商,
+		EmployeePO emp = (EmployeePO)request.getSession().getAttribute("emp");
+		Page<OrganizationPO> orgList = od.findByParentorgidIn(pageable,emp.getOrganizationid());
+		Map<String, Object> map = new HashMap<>();
+		map.put("total", orgList.getTotalElements());
+		List<OrgListVO> list = new ArrayList<>();
+		orgList.forEach(o -> {
+			OrgListVO orgVO = new OrgListVO();
+			orgVO.setOrganizationid(o.getOrganizationid());
+			orgVO.setName(o.getName());
+			if (o.getOfficeaddressid() != null) {
+				orgVO.setCity(ad.findByAddressid(o.getOfficeaddressid()).getCity());
+			} else
+				orgVO.setCity("-");
+			orgVO.setCode(o.getCode());
+			orgVO.setStatus(o.getStatus());
+			list.add(orgVO);
+			// System.out.println(list.toString()+"fff");
+		});
+		map.put("rows", list);
+		return map;
+	}
 	/**
 	 * 通过机构类型列出所有的机构
 	 * 

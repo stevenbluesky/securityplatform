@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50556
 File Encoding         : 65001
 
-Date: 2018-03-19 20:31:57
+Date: 2018-03-23 18:54:17
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -29,26 +29,16 @@ CREATE TABLE `address` (
   `fax` varchar(128) DEFAULT NULL,
   `phonenumber` varchar(128) DEFAULT NULL,
   PRIMARY KEY (`addressid`)
-) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=89 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of address
 -- ----------------------------
-INSERT INTO `address` VALUES ('26', '1', '1', '1', '公司详细地址', '434109', null, null);
-INSERT INTO `address` VALUES ('27', '1', '1', '3', '', '0000020', null, null);
-INSERT INTO `address` VALUES ('28', '1', '1', '2', '账务详细地址fff', '公司账务邮编', null, null);
-INSERT INTO `address` VALUES ('29', '1', '1', '1', 'address', '901233', null, null);
-INSERT INTO `address` VALUES ('30', '1', '1', '3', '', '', null, null);
-INSERT INTO `address` VALUES ('31', '1', '1', '2', 'detailaddress', '909123', null, null);
-INSERT INTO `address` VALUES ('32', '1', '1', '1', '详细', '邮编', null, null);
-INSERT INTO `address` VALUES ('33', '1', '1', '3', '', 'fdsafd', null, null);
-INSERT INTO `address` VALUES ('34', '1', '1', '3', '详细', '邮编', null, null);
-INSERT INTO `address` VALUES ('41', '1', '1', '1', '详细', '邮编', null, null);
-INSERT INTO `address` VALUES ('42', '1', '1', '3', '', 'fdsafd', null, null);
-INSERT INTO `address` VALUES ('43', '1', '1', '3', '详细', '邮编', null, null);
-INSERT INTO `address` VALUES ('47', '1', '1', '3', '', '', null, null);
-INSERT INTO `address` VALUES ('48', '1', '1', '1', '', '', null, null);
-INSERT INTO `address` VALUES ('49', '1', '1', '2', '', '', null, null);
+INSERT INTO `address` VALUES ('83', '中国', '湖北省', '恩施', '湖北民族', '00001', null, null);
+INSERT INTO `address` VALUES ('84', '中国', '湖北省', '荆州', '', '00003', null, null);
+INSERT INTO `address` VALUES ('85', '中国', '湖北省', '武汉', '账务地址', '00002', null, null);
+INSERT INTO `address` VALUES ('87', '中国', '湖北省', '荆州', '23123', null, null, null);
+INSERT INTO `address` VALUES ('88', '中国', '湖北省', '荆州', '详细地址', null, null, null);
 
 -- ----------------------------
 -- Table structure for city
@@ -108,26 +98,15 @@ CREATE TABLE `employee` (
   `personid` int(9) DEFAULT NULL,
   `addressid` int(11) DEFAULT NULL,
   `expiredate` datetime DEFAULT NULL,
-  `createtime` datetime NOT NULL,
+  `createtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`employeeid`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of employee
 -- ----------------------------
-INSERT INTO `employee` VALUES ('2', 'zhulei', null, 'name', 'zhuleif1', '9', '密码问题f', '密码答案f', '1', null, null, null, '2018-03-19 11:39:38');
-INSERT INTO `employee` VALUES ('3', 'zhulei', null, 'name1', 'zhuleif1x', '11', '密码问题f', '密码答案f', '1', null, null, null, '2018-03-19 11:47:27');
-INSERT INTO `employee` VALUES ('4', 'zhuleif', null, 'name2', 'zhuleif1x', '13', '密码问题f', '密码答案f', '1', null, null, null, '2018-03-19 11:49:16');
-INSERT INTO `employee` VALUES ('5', 'ameta', null, 'name3', 'psw', '14', 'q1', 'a1', '1', null, null, null, '2018-03-19 11:58:28');
-INSERT INTO `employee` VALUES ('6', 'zhulei', null, 'name4', 'zhulei', '17', 'q2', 'a2', '1', null, null, null, '2018-03-19 15:48:29');
-INSERT INTO `employee` VALUES ('7', 'zhulei', null, 'name5', 'zhuleif', '20', 'q2', 'a2', '1', null, null, null, '2018-03-19 15:49:12');
-INSERT INTO `employee` VALUES ('8', 'zhulll', null, 'name7', 'zfff', '21', '', '', '1', null, null, null, '2018-03-19 16:57:45');
-INSERT INTO `employee` VALUES ('9', 'asdff', '', ' name8', 'adsf', '15', '', '', '1', '33', null, '2018-03-19 19:40:29', '2018-03-19 19:40:29');
-INSERT INTO `employee` VALUES ('10', 'asdff', '', ' name9', 'asdf', '15', '', '', '1', '34', null, '2018-03-19 19:54:14', '2018-03-19 19:54:14');
-INSERT INTO `employee` VALUES ('11', 'asdffff', 'xx', ' name10', 'asdf', '15', '', '', '1', '35', null, '2018-03-19 19:56:51', '2018-03-19 19:56:51');
-INSERT INTO `employee` VALUES ('12', 'zhulei3', '888', 'zhulei', 'zhule', '17', '', '', '1', '36', null, '2018-03-19 20:27:37', '2018-03-19 20:27:37');
-INSERT INTO `employee` VALUES ('13', 'zzzzzz', '', 'zhu lei', '123123', '11', '', '', '1', '37', null, '2018-03-19 20:28:57', '2018-03-19 20:28:57');
-INSERT INTO `employee` VALUES ('14', 'zzzzzz', '', 'zhu lei', '123123f', '11', '', '', '1', '38', null, '2018-03-19 20:29:51', '2018-03-19 20:29:51');
+INSERT INTO `employee` VALUES ('28', 'admin', 'adsfs', 'zhu lei', 'CE7375F74003DA76FEED139DAEF052D6', '44', 'q', 'B3181C56CA06AE2C25DD5C456607BBB8', '1', '56', '82', '2018-03-21 20:25:34', '2018-03-23 18:52:55');
+INSERT INTO `employee` VALUES ('29', 'login', null, null, 'CE7375F74003DA76FEED139DAEF052D6', '44', 'q', '6E445E61E07FB97A6EAB2E577F1F62CE', '1', null, null, null, '2018-03-22 17:16:16');
 
 -- ----------------------------
 -- Table structure for employeerole
@@ -137,13 +116,14 @@ CREATE TABLE `employeerole` (
   `employeeroleid` int(11) NOT NULL AUTO_INCREMENT,
   `employeeid` int(11) NOT NULL,
   `roleid` int(11) NOT NULL,
-  `createtime` datetime NOT NULL,
+  `createtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`employeeroleid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of employeerole
 -- ----------------------------
+INSERT INTO `employeerole` VALUES ('1', '28', '1', '2018-03-23 13:36:04');
 
 -- ----------------------------
 -- Table structure for gateway
@@ -154,16 +134,16 @@ CREATE TABLE `gateway` (
   `name` varchar(128) DEFAULT NULL,
   `status` int(9) NOT NULL COMMENT '0:离线 1:在线',
   `model` varchar(128) DEFAULT NULL,
-  `firmvareversion` varchar(128) DEFAULT NULL,
   `battery` int(9) DEFAULT NULL,
-  `createtime` datetime NOT NULL,
-  `firmwareversion` varchar(255) DEFAULT NULL,
+  `createtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `firmwareversion` varchar(128) DEFAULT NULL,
   PRIMARY KEY (`deviceid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of gateway
 -- ----------------------------
+INSERT INTO `gateway` VALUES ('iRemote8005000000001', '8005001', '1', '001-1', '98', '2018-03-23 11:50:05', '0.0.1');
 
 -- ----------------------------
 -- Table structure for gatewaybinding
@@ -175,13 +155,16 @@ CREATE TABLE `gatewaybinding` (
   `organizationid` int(9) NOT NULL,
   `bindingtype` int(9) NOT NULL COMMENT '1:绑定服务商 2.绑定安装商',
   `status` int(9) NOT NULL COMMENT '1:正常 2:冻结',
-  `createtime` datetime NOT NULL,
+  `createtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`gatewaybindingid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of gatewaybinding
 -- ----------------------------
+INSERT INTO `gatewaybinding` VALUES ('1', 'iRemote8005000000001', '1', '1', '1', '2018-03-23 11:51:17');
+INSERT INTO `gatewaybinding` VALUES ('2', 'iRemote8005000000001', '2', '1', '1', '2018-03-23 17:31:12');
+INSERT INTO `gatewaybinding` VALUES ('3', 'iRemote8005000000001', '44', '1', '1', '2018-03-23 17:31:35');
 
 -- ----------------------------
 -- Table structure for gatewayuser
@@ -191,13 +174,14 @@ CREATE TABLE `gatewayuser` (
   `gatewayuserbindingid` int(11) NOT NULL AUTO_INCREMENT,
   `deviceid` varchar(64) NOT NULL,
   `userid` int(11) NOT NULL,
-  `createtime` datetime NOT NULL,
+  `createtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`gatewayuserbindingid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of gatewayuser
 -- ----------------------------
+INSERT INTO `gatewayuser` VALUES ('1', 'iRemote8005000000001', '10', '2018-03-23 11:51:41');
 
 -- ----------------------------
 -- Table structure for operationlog
@@ -210,7 +194,7 @@ CREATE TABLE `operationlog` (
   `requestdata` varchar(2048) NOT NULL,
   `resutl` varchar(255) NOT NULL,
   `description` varchar(1024) NOT NULL,
-  `createtime` datetime NOT NULL,
+  `createtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `result` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`operationlogid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -237,23 +221,18 @@ CREATE TABLE `organization` (
   `centralstationname` varchar(255) DEFAULT NULL,
   `csaddressid` int(11) DEFAULT NULL,
   `cscontactid` int(11) DEFAULT NULL,
-  `createtime` datetime NOT NULL,
+  `createtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`organizationid`),
   UNIQUE KEY `name` (`name`),
   UNIQUE KEY `code` (`code`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of organization
 -- ----------------------------
-INSERT INTO `organization` VALUES ('11', '公司代码2', null, '公司名称13', '11', '1', '1', '20', '22', '17', '总公司名称', '21', '18', '2018-03-19 11:47:27');
-INSERT INTO `organization` VALUES ('13', '公司代码3', null, '公司名称00', '11', '1', '1', '26', '28', '21', '总公司名称', '27', '22', '2018-03-19 11:49:16');
-INSERT INTO `organization` VALUES ('14', '000001', null, 'ameta', '11', '0', '1', '29', '31', '23', 'AmetaOne', '30', '24', '2018-03-19 11:58:28');
-INSERT INTO `organization` VALUES ('15', '123123', null, '1231', '13', '2', '1', null, null, null, null, null, null, '2018-03-19 14:54:13');
-INSERT INTO `organization` VALUES ('16', '3432', null, '132', '14', '2', '1', null, null, null, null, null, null, '2018-03-19 14:54:35');
-INSERT INTO `organization` VALUES ('17', '代码132', null, '132安装商', null, '2', '1', '32', '34', '25', 'fuwus', '33', '26', '2018-03-19 15:48:29');
-INSERT INTO `organization` VALUES ('20', '代码1322', null, '132安装商f', null, '2', '1', '41', '43', '31', 'fuwus', '42', '32', '2018-03-19 15:49:12');
-INSERT INTO `organization` VALUES ('21', 'lesss', null, 'less', null, '1', '1', '47', '49', null, '', '48', null, '2018-03-19 16:57:45');
+INSERT INTO `organization` VALUES ('1', '001', null, 'ameta', null, '0', '1', '53', '55', '39', 'AMETA CO.', '54', '40', '2018-03-20 09:37:08');
+INSERT INTO `organization` VALUES ('2', '002', null, 'supplier', '1', '1', '1', '83', '85', null, 'supplier', '84', '58', '2018-03-23 18:51:15');
+INSERT INTO `organization` VALUES ('44', '003', null, 'ameta2', '2', '2', '1', '83', '85', null, 'AMETA2', '84', '58', '2018-03-23 18:51:13');
 
 -- ----------------------------
 -- Table structure for orgrole
@@ -263,7 +242,7 @@ CREATE TABLE `orgrole` (
   `orgprivilegeid` int(11) NOT NULL AUTO_INCREMENT,
   `roleid` int(11) NOT NULL,
   `privilegeid` int(11) NOT NULL,
-  `createtime` datetime NOT NULL,
+  `createtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `status` int(11) DEFAULT NULL,
   PRIMARY KEY (`orgprivilegeid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -289,29 +268,15 @@ CREATE TABLE `person` (
   `fax` varchar(128) DEFAULT NULL,
   `addressid` int(9) DEFAULT NULL,
   PRIMARY KEY (`personid`)
-) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of person
 -- ----------------------------
-INSERT INTO `person` VALUES ('13', 'zhul', null, null, null, null, null, '18071723', '759366@qq.com', '1803975', null);
-INSERT INTO `person` VALUES ('14', '服务商姓名', null, null, null, null, null, '服务商电话', '服务商邮箱', '服务商传真', null);
-INSERT INTO `person` VALUES ('17', 'zhul', null, null, null, null, null, '18071723', '759366@qq.com', '1803975', null);
-INSERT INTO `person` VALUES ('18', '服务商姓名', null, null, null, null, null, '服务商电话', '服务商邮箱', '服务商传真', null);
-INSERT INTO `person` VALUES ('21', 'zhul', null, null, null, null, null, '18071723', '759366@qq.com', '1803975', null);
-INSERT INTO `person` VALUES ('22', 'z服务商姓名', null, null, null, null, null, 'z服务商电话', 'z服务商邮箱', 'z服务商传真', null);
-INSERT INTO `person` VALUES ('23', 'z', null, null, null, null, null, '1238034234', '7@q.com', '1398734798', null);
-INSERT INTO `person` VALUES ('24', 'az', null, null, null, null, null, '12347', 'z@q.com', '14987324', null);
-INSERT INTO `person` VALUES ('25', 'zzz', null, null, null, null, null, 'zzz', '2@q.c', 'zzz', null);
-INSERT INTO `person` VALUES ('26', 'zhul', null, null, null, null, null, 'zhuk', '8@q.com', 'zhul', null);
-INSERT INTO `person` VALUES ('31', 'zzz', null, null, null, null, null, 'zzz', '2@q.c', 'zzz', null);
-INSERT INTO `person` VALUES ('32', 'zhul', null, null, null, null, null, 'zhuk', '8@q.com', 'zhul', null);
-INSERT INTO `person` VALUES ('33', ' ', '', '0', '', '', '', '', '', '', null);
-INSERT INTO `person` VALUES ('34', ' ', '', '0', '', '', '', '', '', '', null);
-INSERT INTO `person` VALUES ('35', ' ', '', '0', '', '', '', '', '', '', null);
-INSERT INTO `person` VALUES ('36', ' ', '', '0', '', '', '', '', '', '', null);
-INSERT INTO `person` VALUES ('37', 'zhu lei', '', '1', '', 'lei', 'zhu', '', '', '', null);
-INSERT INTO `person` VALUES ('38', 'zhu lei', '', '1', '', 'lei', 'zhu', '', '', '', null);
+INSERT INTO `person` VALUES ('57', '朱磊', null, null, null, null, null, '180', '759@q.com', '1801', null);
+INSERT INTO `person` VALUES ('58', '总公司', null, null, null, null, null, '1801', '8@q.com', '1802', null);
+INSERT INTO `person` VALUES ('60', 'zhul lei', '2313', '1', null, 'zhul', 'lei', '1232', '123123', '2321', '87');
+INSERT INTO `person` VALUES ('61', '姓 名', '421024199', '1', null, '姓', '名', '18071272', '871329@qq.com', '12312313', '88');
 
 -- ----------------------------
 -- Table structure for phonecard
@@ -347,14 +312,15 @@ CREATE TABLE `phonecarduser` (
   `phonecarduserbindingid` int(11) NOT NULL AUTO_INCREMENT,
   `phonecardid` int(11) NOT NULL,
   `userid` int(11) NOT NULL,
-  `createtime` datetime NOT NULL,
-  `phonecarduserbingingid` int(11) NOT NULL,
+  `createtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`phonecarduserbindingid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of phonecarduser
 -- ----------------------------
+INSERT INTO `phonecarduser` VALUES ('4', '1', '10', '2018-03-22 20:06:38');
+INSERT INTO `phonecarduser` VALUES ('5', '1', '11', '2018-03-23 17:25:40');
 
 -- ----------------------------
 -- Table structure for privilege
@@ -382,7 +348,7 @@ CREATE TABLE `province` (
   `provincename` varchar(255) NOT NULL,
   `provinceabbreviation` varchar(255) NOT NULL,
   PRIMARY KEY (`provinceid`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of province
@@ -391,6 +357,11 @@ INSERT INTO `province` VALUES ('1', '1', '湖北省', '鄂');
 INSERT INTO `province` VALUES ('2', '2', '纽约', 'NY');
 INSERT INTO `province` VALUES ('3', '1', '湖南省', '湘');
 INSERT INTO `province` VALUES ('4', '1', '广东省', '粤');
+INSERT INTO `province` VALUES ('5', '1', '四川省', '川');
+INSERT INTO `province` VALUES ('6', '1', '北京市', 'X');
+INSERT INTO `province` VALUES ('7', '1', '江西省', 'G');
+INSERT INTO `province` VALUES ('8', '1', '广西省', '桂');
+INSERT INTO `province` VALUES ('9', '1', '云南省', '云');
 
 -- ----------------------------
 -- Table structure for role
@@ -401,13 +372,17 @@ CREATE TABLE `role` (
   `name` varchar(255) NOT NULL,
   `organizationid` int(9) NOT NULL,
   `status` int(9) NOT NULL COMMENT '1:正常 2.冻结 9.删除',
-  `createtime` datetime NOT NULL,
+  `createtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`roleid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of role
 -- ----------------------------
+INSERT INTO `role` VALUES ('1', 'ameta', '1', '1', '2018-03-23 13:31:48');
+INSERT INTO `role` VALUES ('2', '服务商', '2', '1', '2018-03-23 13:32:44');
+INSERT INTO `role` VALUES ('3', '安装商', '3', '1', '2018-03-23 13:33:00');
+INSERT INTO `role` VALUES ('4', '安装员', '4', '1', '2018-03-23 13:33:17');
 
 -- ----------------------------
 -- Table structure for roleprivilege
@@ -417,13 +392,30 @@ CREATE TABLE `roleprivilege` (
   `roleprivilegeid` int(11) NOT NULL AUTO_INCREMENT,
   `roleid` int(11) NOT NULL,
   `privilegeid` int(11) NOT NULL,
-  `createtime` datetime NOT NULL,
+  `createtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`roleprivilegeid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of roleprivilege
 -- ----------------------------
+
+-- ----------------------------
+-- Table structure for systemparameter
+-- ----------------------------
+DROP TABLE IF EXISTS `systemparameter`;
+CREATE TABLE `systemparameter` (
+  `systemparameterid` int(11) NOT NULL,
+  `intvalue` int(11) DEFAULT NULL,
+  `paramkey` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `stringvalue` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  PRIMARY KEY (`systemparameterid`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- ----------------------------
+-- Records of systemparameter
+-- ----------------------------
+INSERT INTO `systemparameter` VALUES ('0', '679504', 'lastSynId', null);
 
 -- ----------------------------
 -- Table structure for user
@@ -439,14 +431,16 @@ CREATE TABLE `user` (
   `codepostfix` varchar(128) NOT NULL,
   `usercode` varchar(128) NOT NULL,
   `personid` int(9) NOT NULL,
-  `createtime` datetime NOT NULL,
+  `createtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `installerid` int(11) DEFAULT NULL,
   PRIMARY KEY (`userid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
+INSERT INTO `user` VALUES ('10', '1232', 'zhul lei', '1', '1', '1', '12312312', 'ameta1232', '60', '2018-03-22 20:06:38', '28');
+INSERT INTO `user` VALUES ('11', '18071272', '姓 名', '1', '44', '2', 'JWZH', 'ameta18071272', '61', '2018-03-23 17:25:39', '28');
 
 -- ----------------------------
 -- Table structure for zwavedevice
@@ -461,10 +455,13 @@ CREATE TABLE `zwavedevice` (
   `status` int(9) DEFAULT NULL,
   `statuses` varchar(128) DEFAULT NULL,
   `warningstatuses` varchar(128) DEFAULT NULL,
-  `createtime` datetime NOT NULL,
+  `createtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`zwavedeviceid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of zwavedevice
 -- ----------------------------
+INSERT INTO `zwavedevice` VALUES ('11541', 'iRemote8005000000001', '门磁', '4', '80', null, null, null, '2018-03-23 17:21:35');
+INSERT INTO `zwavedevice` VALUES ('11542', 'iRemote8005000000001', 'hw', '6', '100', '255', null, '[255]', '2018-03-23 17:21:35');
+INSERT INTO `zwavedevice` VALUES ('11544', 'iRemote8005000000001', '漏水', '2', '100', null, null, '[255]', '2018-03-23 17:21:36');

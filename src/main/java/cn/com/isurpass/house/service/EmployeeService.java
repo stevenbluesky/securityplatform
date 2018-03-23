@@ -110,7 +110,10 @@ public class EmployeeService {
 		ed.save(empPO);
 	}
 
+	
 	public Map<String, Object> listEmployee(Pageable pageable, HttpServletRequest request) {
+		//角色不要在里面判断,可以在方法上加上权限注解.(如,管理员才可以访问)
+		
 		// 只显示对应的服务商所具有权限的安装商,如果是ameta,则可以看见所有的
 		// 首先判断当前登录的员工角色,
 		// 如果角色是员工,over.
@@ -144,8 +147,7 @@ public class EmployeeService {
 		return map;
 	}
 
-	public Map<String, Object> listAllEmployee(Pageable pageable,HttpServletRequest request) {
-		EmployeePO em = (EmployeePO)request.getSession().getAttribute("emp");
+	public Map<String, Object> listAllEmployee(Pageable pageable) {
 //		System.out.println(em.toString());
 		Map<String, Object> map = new HashMap<>();
 		map.put("total", ed.count());
