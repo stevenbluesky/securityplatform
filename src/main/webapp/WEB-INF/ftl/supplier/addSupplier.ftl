@@ -4,9 +4,9 @@
         <div class="col-md-1"></div>
         <div class="col-md-10">
           <form id="defaultForm">
-              <div class="text-center"><h1>新增服务商</h1></div>
+              <div class="text-center"><h1><@spring.message code="label.addsupplier"/></h1></div>
 
-              <div class="text-left"><h4>服务商信息</h4></div>
+              <div class="text-left"><h4><@spring.message code="label.supplierinfo"/></h4></div>
               
               <div  class="form-group">
                 <label for="name"  class="col-sm-2 control-label"><@spring.message code="label.orgname"/>*</label>

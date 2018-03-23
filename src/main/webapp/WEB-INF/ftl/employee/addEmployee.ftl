@@ -5,61 +5,61 @@
         <div class="col-md-10">
           <form id="defaultForm" method="POST">
           
-              <div class="text-center"><h1>新增员工</h1></div>
+              <div class="text-center"><h1><@spring.message code="label.addsupplier"/></h1></div>
 
-              <div class="text-left"><h4>账号信息</h4></div>
+              <div class="text-left"><h4><@spring.message code="label.employeeinfo"/></h4></div>
               <div  class="form-group">
-                <label for="organizationid"  class="col-sm-2 control-label">所属机构</label>
+                <label for="organizationid"  class="col-sm-2 control-label"><@spring.message code="label.parentorg"/></label>
                 <div class="col-sm-10">
-               <select name="organizationid" id="organizationid" class="selectpicker" data-live-search="true" title="选择机构">
+               <select name="organizationid" id="organizationid" class="selectpicker" data-live-search="true" title="<@spring.message code="label.chooseorg"/>">
                     </select>
                 </div>
               </div>
               
               <div  class="form-group">
-                <label for="loginname"  class="col-sm-2 control-label">登录名</label>
+                <label for="loginname"  class="col-sm-2 control-label"><@spring.message code="label.loginname"/></label>
                 <div class="col-sm-10">
-                 <input type="text" class="form-control" id="loginname" name="loginname" placeholder="登录名">
+                 <input type="text" class="form-control" id="loginname" name="loginname" placeholder="<@spring.message code="label.loginname"/>">
                 </div>
               </div>
               
               <div  class="form-group">
-                <label for="password" class="col-sm-2 control-label">密码</label>
+                <label for="password" class="col-sm-2 control-label"><@spring.message code="label.password"/></label>
                 <div class="col-sm-10">
-                <input type="password" class="form-control" id="password" maxlength='16' name="password" placeholder="密码">
+                <input type="password" class="form-control" id="password" maxlength='16' name="password" placeholder="<@spring.message code="label.password"/>">
                 </div>
               </div>
               
               <div  class="form-group">
-                <label  for="repassword" class="col-sm-2 control-label">确认密码</label>
+                <label  for="repassword" class="col-sm-2 control-label"><@spring.message code="label.repassword"/></label>
                 <div class="col-sm-10">
-                <input type="password" class="form-control" id="repassword" maxlength='16' name="repassword" placeholder="重新输入密码">
+                <input type="password" class="form-control" id="repassword" maxlength='16' name="repassword" placeholder="<@spring.message code="label.repassword"/>">
                 </div>
               </div>
               
               <div  class="form-group">
-                <label for="question"  class="col-sm-2 control-label">密码问题</label>
+                <label for="question"  class="col-sm-2 control-label"><@spring.message code="label.pquestion"/></label>
                 <div class="col-sm-10">
-                 <input type="text" class="form-control" id="question" name="question" placeholder="密码问题">
+                 <input type="text" class="form-control" id="question" name="question" placeholder="<@spring.message code="label.pquestion"/>">
                </div>
               </div>
               
               <div  class="form-group">
-                <label for="answer"  class="col-sm-2 control-label">密码答案</label>
+                <label for="answer"  class="col-sm-2 control-label"><@spring.message code="label.panswer"/></label>
                 <div class="col-sm-10">
-                 <input type="text" class="form-control" id="answer" name="answer" placeholder="密码答案">
+                 <input type="text" class="form-control" id="answer" name="answer" placeholder="<@spring.message code="label.panswer"/>">
                </div>
               </div>
               
               <div  class="form-group">
-                <label for="code"  class="col-sm-2 control-label">员工代码</label>
+                <label for="code"  class="col-sm-2 control-label"><@spring.message code="label.empcode"/></label>
                 <div class="col-sm-10">
-                 <input type="text" class="form-control" id="code" name="code" placeholder="如果是新增安装员,请填写员工代码">
+                 <input type="text" class="form-control" id="code" name="code" placeholder="<@spring.message code="label.ifnewinstallerpleaseinputcode"/>">
                </div>
               </div>
               
               <div  class="form-group">
-                <label for="expiredate"  class="col-sm-2 control-label" data-date="1979-09-16T05:25:07Z" data-date-format="dd MM yyyy - HH:ii p" data-link-field="dtp_input1">失效日期</label>
+                <label for="expiredate"  class="col-sm-2 control-label" data-date="1979-09-16T05:25:07Z" data-date-format="dd MM yyyy - HH:ii p" data-link-field="dtp_input1"><@spring.message code="label.expiredate"/></label>
 		                <div class="col-sm-3 input-group date form_datetime">
 		                  <input class="form-control" size="16" name="expiredate" type="text" value="" readonly>
 		                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
@@ -69,97 +69,97 @@
                </div>
             
               <div  class="form-group">
-                <label for="status"  class="col-sm-2 control-label">状态</label>
+                <label for="status"  class="col-sm-2 control-label"><@spring.message code="label.status"/></label>
                 <div class="col-sm-10">
-             	   <select id="status" name="status" class="selectpicker" title="选择状态">
-                      <option value="1">生效</option>
-                      <option value="0">未生效</option>
-                      <option value="2">冻结</option>
-                      <option value="3">删除</option>
+             	   <select id="status" name="status" class="selectpicker" title="<@spring.message code="label.choosestatus"/>">
+                      <option value="1"><@spring.message code="label.unvalid"/></option>
+                      <option value="0"><@spring.message code="label.valid"/></option>
+                      <option value="2"><@spring.message code="label.suspenced"/></option>
+                      <option value="3"><@spring.message code="label.delete"/></option>
                    </select>
                 </div>
               </div>
               
-              <div class="text-left"><h4>员工权限</h4></div><hr>
+              <div class="text-left"><h4><@spring.message code="label.empprivilege"/></h4></div><hr>
               
-              <div class="text-left"><h4>个人信息</h4></div>
+              <div class="text-left"><h4><@spring.message code="label.personinfo"/></h4></div>
               
               <div  class="form-group">
-                <label for="lastname"  class="col-sm-2 control-label">姓</label>
+                <label for="lastname"  class="col-sm-2 control-label"><@spring.message code="label.firstname"/></label>
                 <div class="col-sm-10">
-                 <input type="text" class="form-control" id="lastname" name="lastname" placeholder="姓">
+                 <input type="text" class="form-control" id="lastname" name="lastname" placeholder="<@spring.message code="label.firstname"/>">
                </div>
               </div>
               <div  class="form-group">
-                <label for="firstname"  class="col-sm-2 control-label">名</label>
+                <label for="firstname"  class="col-sm-2 control-label"><@spring.message code="label.lastname"/></label>
                 <div class="col-sm-10">
-                 <input type="text" class="form-control" id="firstname" name="firstname" placeholder="名">
-               </div>
-              </div>
-              
-              <div  class="form-group">
-                <label for="title"  class="col-sm-2 control-label">头衔</label>
-                <div class="col-sm-10">
-                 <input type="text" class="form-control" id="title" name="title" placeholder="头衔">
+                 <input type="text" class="form-control" id="firstname" name="firstname" placeholder="<@spring.message code="label.lastname"/>">
                </div>
               </div>
               
               <div  class="form-group">
-	                <label for="ssn"  class="col-sm-2 control-label">身份证</label>
+                <label for="title"  class="col-sm-2 control-label"><@spring.message code="label.ptitle"/></label>
+                <div class="col-sm-10">
+                 <input type="text" class="form-control" id="title" name="title" placeholder="<@spring.message code="label.ptitle"/>">
+               </div>
+              </div>
+              
+              <div  class="form-group">
+	                <label for="ssn"  class="col-sm-2 control-label"><@spring.message code="label.ssn"/></label>
 	                <div class="col-sm-10">
-	                 <input type="text" class="form-control" id="ssn" name="ssn" placeholder="身份证">
+	                 <input type="text" class="form-control" id="ssn" name="ssn" placeholder="<@spring.message code="label.ssn"/>">
 	               </div>
                </div>   
               <div  class="form-group">
-                <label for="gender"  class="col-sm-2 control-label">性别</label>
+                <label for="gender"  class="col-sm-2 control-label"><@spring.message code="label.gender"/></label>
                 <div class="col-sm-10">
-               <select name="gender" class="selectpicker" title="选择性别">
-                      <option value="">请选择性别</option>
-                      <option value="0">女</option>
-                      <option value="1">男</option>
+               <select name="gender" class="selectpicker" title="<@spring.message code="label.choosegender"/>">
+                      <option value=""><@spring.message code="label.choosegender"/></option>
+                      <option value="0"><@spring.message code="label.female"/></option>
+                      <option value="1"><@spring.message code="label.male"/></option>
                       <option value="2">LGBT</option>
                     </select>
                 </div>
               </div>
               
                <div  class="form-group">
-                <label for="phonenumber"  class="col-sm-2 control-label">电话</label>
+                <label for="phonenumber"  class="col-sm-2 control-label"><@spring.message code="label.phonenumber"/></label>
                 <div class="col-sm-10">
-                 <input type="text" class="form-control" id="phonenumber" name="phonenumber" placeholder="Email">
+                 <input type="text" class="form-control" id="phonenumber" name="phonenumber" placeholder="<@spring.message code="label.phonenumber"/>">
                </div>
               </div>
               
                <div  class="form-group">
-                <label for="email"  class="col-sm-2 control-label">邮箱</label>
+                <label for="email"  class="col-sm-2 control-label"><@spring.message code="label.email"/></label>
                 <div class="col-sm-10">
-                 <input type="text" class="form-control" id="email" name="email" placeholder="Email">
+                 <input type="text" class="form-control" id="email" name="email" placeholder="<@spring.message code="label.email"/>">
                </div>
               </div>
               
                <div  class="form-group">
-                <label for="fax"  class="col-sm-2 control-label">传真</label>
+                <label for="fax"  class="col-sm-2 control-label"><@spring.message code="label.fax"/></label>
                 <div class="col-sm-10">
-                 <input type="text" class="form-control" id="fax" name="fax" placeholder="Email">
+                 <input type="text" class="form-control" id="fax" name="fax" placeholder="<@spring.message code="label.fax"/>">
                </div>
               </div> 
   
               <div  class="form-group">
-                <label for="address"  class="col-sm-2 control-label">地址</label>
+                <label for="address"  class="col-sm-2 control-label"><@spring.message code="label.chooseaddress"/></label>
                 <div class="col-sm-10">
                  <div class="row text-left">
                  
                   <div class="col-sm-4">
-                    <select name="country" id="country" class="selectpicker" title="选择国家">
+                    <select name="country" id="country" class="selectpicker" title="<@spring.message code="label.choosecountry"/>">
                     </select>
                   </div>
                   
                   <div class="col-sm-4">
-                    <select id="province" name="province" class="selectpicker" title="选择省份">
+                    <select id="province" name="province" class="selectpicker" title="<@spring.message code="label.chooseprovince"/>">
                     </select>
                   </div>
                   
                   <div class="col-sm-4">
-                    <select id="city" name="city" class="selectpicker" title="选择城市">                          
+                    <select id="city" name="city" class="selectpicker" title="<@spring.message code="label.address"/>">                          
                     </select>
                   </div>
               	 </div>
@@ -167,15 +167,15 @@
               </div>
               
                <div  class="form-group">
-                <label for="detailaddress"  class="col-sm-2 control-label">详细地址</label>
+                <label for="detailaddress"  class="col-sm-2 control-label"><@spring.message code="label.detailaddress"/></label>
                 <div class="col-sm-10">
-                 <input type="text" class="form-control" id="detailaddress" name="detailaddress" placeholder="详细地址">
+                 <input type="text" class="form-control" id="detailaddress" name="detailaddress" placeholder="<@spring.message code="label.detailaddress"/>">
                </div>
               </div>
               
               <div class="row">
 	              <div class="col-sm-4"></div>
-	              <div class="col-sm-8"><button id="btn-submit" type="submit" class="btn btn-default" style="width:100px;	">提交</button></div>
+	              <div class="col-sm-8"><button id="btn-submit" type="submit" class="btn btn-default" style="width:100px;	"><@spring.message code="label.submit"/></button></div>
               </div>
               
         </form>
@@ -267,7 +267,7 @@ $("#btn-submit").click(function () {
                      }
                 });
         }else{
-        	alert("必填字段不能为空!");
+        	alert(lan.notempty);
         }
 });
 
