@@ -24,8 +24,7 @@
 
                 <div class="form-group">
                     <label for="name"
-                           class="col-sm-2 control-label"><@spring.message code="label.orgname"/><@spring.message code="label.orgname"/>
-                        *</label>
+                           class="col-sm-2 control-label"><@spring.message code="label.orgname"/>*</label>
                     <div class="col-sm-10">
                         <input type="text" class="form-control" id="name" name="name"
                                placeholder="<@spring.message code="label.orgname"/>">

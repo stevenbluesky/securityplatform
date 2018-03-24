@@ -47,9 +47,9 @@ public class EmployeeController {
 
 	@RequestMapping("add")
 	@ResponseBody
-	public JsonResult addEmployee(EmployeeAddVO emp) {
+	public JsonResult addEmployee(EmployeeAddVO emp,HttpServletRequest request) {
 		try {
-			es.add(emp);
+			es.add(emp,request);
 		} catch (MyArgumentNullException e) {
 			return new JsonResult(-1, e.getMessage());
 		} catch (RuntimeException e) {

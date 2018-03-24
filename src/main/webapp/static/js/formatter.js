@@ -10,7 +10,9 @@ function formatter_status(value,row,index){
 }
 
 function formatter_op(value,row,index){
-	return "<button class='btn btn-default btn-xs' id='btn1' onclick='xixi()'>操作</button>";
+	var name = row.name;
+	console.log(name);
+	return "<button class='btn btn-default btn-xs' id='btn1' onclick=xixi("+name+")>操作</button>";
 }
 function formatter_devicetype(value,row,index){
 	if(row.devicetype == '4'){

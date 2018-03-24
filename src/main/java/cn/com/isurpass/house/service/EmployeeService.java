@@ -52,33 +52,51 @@ public class EmployeeService {
     @Autowired
     OrganizationService os;
 
-    @Transactional(rollbackFor = Exception.class)
-    public void add(EmployeeAddVO emp) throws MyArgumentNullException {
-        if (emp.getOrganizationid() == null || !FormUtils.checkNUll(emp.getLoginname())
-                || !FormUtils.checkNUll(emp.getPassword()))
-            throw new MyArgumentNullException("必填字段不能为空!");
+    /*
+    * 判断一个员工登录用户名在其机构下是否已经被注册,如果被注册返回true
+    * */
+    public boolean isRegister(Integer orgid,String loginname){
+        EmployeePO emp = ed.findByOrganizationidAndLoginname(orgid, loginname);
+        if (emp != null) {
+            return true;
+        }
+        return false;
+    }
 
+    @Transactional(rollbackFor = Exception.class)
+    public void add(EmployeeAddVO emp, HttpServletRequest request) throws MyArgumentNullException {
+        if (!FormUtils.checkNUll(emp.getLoginname()) || !FormUtils.checkNUll(emp.getPassword()))
+            throw new MyArgumentNullException("必填字段不能为空!");
+        EmployeePO emp1 = (EmployeePO) request.getSession().getAttribute("emp");
+        if (emp.getOrganizationid() == null) {//如果没有传入机构id,说明这是服务商在进行添加
+            emp.setOrganizationid(emp1.getOrganizationid());
+        }
+        if (isRegister(emp.getOrganizationid(), emp.getLoginname())) {//被注册了
+            throw new MyArgumentNullException("用户已经被注册了..")
+        }
         if (od.findByOrganizationid(emp.getOrganizationid()).getOrgtype() == Constants.ORGTYPE_INSTALLER
                 && !FormUtils.checkNUll(emp.getCode()))// 是安装员且code为空时
             throw new MyArgumentNullException("安装员必须要有员工代码!");
-
-        if (emp.getCode() != null && !ed.findByOrganizationidAndCodeAndStatusNot(emp.getOrganizationid(), emp.getCode(),
+//        System.out.println(FormUtils.checkNUll(emp.getCode()) + "==================");
+        if (FormUtils.checkNUll(emp.getCode()) && !ed.findByOrganizationidAndCodeAndStatusNot(emp.getOrganizationid(), emp.getCode(),
                 Constants.STATUS_DELETED).isEmpty())
-            throw new MyArgumentNullException("员工代码不能重复!");
+            throw new MyArgumentNullException("员工代码不能重复.!");
 
         EmployeePO empPO = new EmployeePO();
-        PersonPO personPO = new PersonPO();
 
         // ID => name
         String countryname = null;
         String provincename = null;
         String cityname = null;
-        if (emp.getCountry() != null)
+        if (emp.getCountry() != null) {
             countryname = country.findByCountryid(emp.getCountry()).getCountryname();
-        if (emp.getProvince() != null)
+        }
+        if (emp.getProvince() != null) {
             provincename = province.findByProvinceid(emp.getProvince()).getProvincename();
-        if (emp.getCity() != null)
+        }
+        if (emp.getCity() != null) {
             cityname = city.findByCityid(emp.getCity()).getCityname();
+        }
 
         AddressPO addressPO = new AddressPO(countryname, provincename, cityname, emp.getDetailaddress(), null);
 
@@ -91,21 +109,16 @@ public class EmployeeService {
         empPO.setExpiredate(new Date());
         empPO.setOrganizationid(emp.getOrganizationid());
         empPO.setName(emp.getLastname() + " " + emp.getFirstname());
-
-        personPO.setName(emp.getLastname() + " " + emp.getFirstname());
-        personPO.setSsn(emp.getSsn());
-        personPO.setGender(emp.getGender());
-        personPO.setTitle(emp.getTitle());
-        personPO.setFirstname(emp.getFirstname());
-        personPO.setLastname(emp.getLastname());
-        personPO.setPhonenumber(emp.getPhonenumber());
-        personPO.setEmail(emp.getEmail());
-        personPO.setFax(emp.getFax());
-
-        if (!FormUtils.isEmpty(addressPO))
-            empPO.setAddressid(ad.save(addressPO).getAddressid());
-        if (!FormUtils.isEmpty(personPO))
+//        System.out.println(emp);
+        if (FormUtils.checkNUll(emp.getLastname()) || FormUtils.checkNUll(emp.getFirstname()) || FormUtils.checkNUll(emp.getSsn())
+                || FormUtils.checkNUll(emp.getSsn()) || emp.getGender() != null || FormUtils.checkNUll(emp.getTitle())) {
+            PersonPO personPO = new PersonPO(emp.getLastname() + " " + emp.getFirstname(), emp.getSsn(), emp.getGender(), emp.getTitle(), emp.getFirstname(), emp.getLastname(),
+                    emp.getPhonenumber(), emp.getEmail(), emp.getFax());
             empPO.setPersonid(pd.save(personPO).getPersonid());
+        }
+        if (!FormUtils.isEmpty(addressPO)) {
+            empPO.setAddressid(ad.save(addressPO).getAddressid());
+        }
 
         ed.save(empPO);
     }
@@ -141,7 +154,6 @@ public class EmployeeService {
             map.put("rows", listt);
             return map;
         }
-
     }
 
     public Map<String, Object> listAllEmployee(Pageable pageable) {

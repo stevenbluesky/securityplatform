@@ -95,6 +95,10 @@
           var id = row.ID;
       }
 });
+      function xixi(s){
+          // alert(x);
+            console.log(s);
+      }
 
     </script>
 <#include "/_foot1.ftl"/>

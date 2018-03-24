@@ -36,7 +36,6 @@ public class PersonPO {
 		this.fax = fax;
 	}
 
-
 	public PersonPO(Integer personid, String name, String ssn, Integer gender, String title, String firstname,
 			String lastname, String phonenumber, String email, String fax, Integer addressid) {
 		super();
@@ -51,6 +50,18 @@ public class PersonPO {
 		this.email = email;
 		this.fax = fax;
 		this.addressid = addressid;
+	}
+
+	public PersonPO(String name, String ssn, Integer gender, String title, String firstname, String lastname, String phonenumber, String email, String fax) {
+		this.name= name;
+		this.ssn = ssn;
+		this.gender = gender;
+		this.title =title;
+		this.firstname =firstname;
+		this.lastname = lastname;
+		this.phonenumber =	phonenumber;
+		this.email	=email;
+		this.fax =	 fax;
 	}
 
 	public Integer getPersonid() {
