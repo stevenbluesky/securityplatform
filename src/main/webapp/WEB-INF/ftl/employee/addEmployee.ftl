@@ -5,7 +5,7 @@
         <div class="col-md-10">
           <form id="defaultForm" method="POST">
           
-              <div class="text-center"><h1><@spring.message code="label.addsupplier"/></h1></div>
+              <div class="text-center"><h1><@spring.message code="label.addemployee"/></h1></div>
 
               <div class="text-left"><h4><@spring.message code="label.employeeinfo"/></h4></div>
               <#if emp.organizationid == 1>
