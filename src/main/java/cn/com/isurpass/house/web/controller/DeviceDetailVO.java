@@ -31,5 +31,11 @@ public class DeviceDetailVO {
 		this.status = status;
 	}
 
+	public boolean getOpen() {
+		if(this.status == null) {
+			return false;
+		}
+		return this.status == 255;
+	}
 
 }

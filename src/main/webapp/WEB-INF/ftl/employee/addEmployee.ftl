@@ -8,6 +8,7 @@
               <div class="text-center"><h1><@spring.message code="label.addsupplier"/></h1></div>
 
               <div class="text-left"><h4><@spring.message code="label.employeeinfo"/></h4></div>
+              <#if emp.organizationid == 1>
               <div  class="form-group">
                 <label for="organizationid"  class="col-sm-2 control-label"><@spring.message code="label.parentorg"/></label>
                 <div class="col-sm-10">
@@ -15,7 +16,7 @@
                     </select>
                 </div>
               </div>
-              
+              </#if>
               <div  class="form-group">
                 <label for="loginname"  class="col-sm-2 control-label"><@spring.message code="label.loginname"/></label>
                 <div class="col-sm-10">
@@ -72,8 +73,8 @@
                 <label for="status"  class="col-sm-2 control-label"><@spring.message code="label.status"/></label>
                 <div class="col-sm-10">
              	   <select id="status" name="status" class="selectpicker" title="<@spring.message code="label.choosestatus"/>">
-                      <option value="1"><@spring.message code="label.unvalid"/></option>
-                      <option value="0"><@spring.message code="label.valid"/></option>
+                      <option value="1"><@spring.message code="label.valid"/></option>
+                      <option value="0"><@spring.message code="label.unvalid"/></option>
                       <option value="2"><@spring.message code="label.suspenced"/></option>
                       <option value="3"><@spring.message code="label.delete"/></option>
                    </select>
@@ -85,15 +86,15 @@
               <div class="text-left"><h4><@spring.message code="label.personinfo"/></h4></div>
               
               <div  class="form-group">
-                <label for="lastname"  class="col-sm-2 control-label"><@spring.message code="label.firstname"/></label>
+                <label for="lastname"  class="col-sm-2 control-label"><@spring.message code="label.lastname"/></label>
                 <div class="col-sm-10">
-                 <input type="text" class="form-control" id="lastname" name="lastname" placeholder="<@spring.message code="label.firstname"/>">
+                 <input type="text" class="form-control" id="lastname" name="lastname" placeholder="<@spring.message code="label.lastname"/>">
                </div>
               </div>
               <div  class="form-group">
-                <label for="firstname"  class="col-sm-2 control-label"><@spring.message code="label.lastname"/></label>
+                <label for="firstname"  class="col-sm-2 control-label"><@spring.message code="label.firstname"/></label>
                 <div class="col-sm-10">
-                 <input type="text" class="form-control" id="firstname" name="firstname" placeholder="<@spring.message code="label.lastname"/>">
+                 <input type="text" class="form-control" id="firstname" name="firstname" placeholder="<@spring.message code="label.firstname"/>">
                </div>
               </div>
               

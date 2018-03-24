@@ -46,14 +46,28 @@ public class OrganizationController {
 	 * @return
 	 */
 	//TODO 这个方法到时候可以改成直接跳转或者是返回Json数据,如果返回json数据的话,前端就要通过Ajax提交,而不是通过 form 的 action 属性提交
-	@Transactional
 	@RequestMapping("add")
 	@ResponseBody
-	public JsonResult add(OrgAddVO as) {
+	public JsonResult add(OrgAddVO as,HttpServletRequest request) {
 		//TODO 由于页面选择地区的js代码会默认选择一个国家,所以必须要填完所有地址选择框,而有时候用户不想选择总公司等的地址,这时就无法正常添加.可以在地区列表第一行加一个空的选项
 //		System.out.println(as.toString());
 		try {
-			ss.add(as);
+			ss.add(as,request);
+		} catch (MyArgumentNullException e) {
+			return new JsonResult(-1,e.getMessage());
+		}catch(RuntimeException e) {
+			e.printStackTrace();
+			return new JsonResult(-1,"出错啦~");
+		}
+		return new JsonResult(1,"success");
+	}
+	
+	@RequestMapping("addInstallerorg")
+	@ResponseBody
+	public JsonResult addInstallerorg(OrgAddVO as,HttpServletRequest request) {
+		//TODO 由于页面选择地区的js代码会默认选择一个国家,所以必须要填完所有地址选择框,而有时候用户不想选择总公司等的地址,这时就无法正常添加.可以在地区列表第一行加一个空的选项
+		try {
+			ss.addByOrgtype(as,Constants.ORGTYPE_INSTALLER,request);
 		} catch (MyArgumentNullException e) {
 			return new JsonResult(-1,e.getMessage());
 		}catch(RuntimeException e) {

@@ -20,27 +20,29 @@
 				        <p>操作</p>
 			        </div>
 			        <div class="col-md-3">
-			      	    
-					        <p>${zwave.devicename}</p>
-					        <p>${zwave.suppliename}</p>
-					        <p>${zwave.warningstatuses}</p>
+					        <p>${(zwave.devicename)!'无'}</p>
+					        <p>${(zwave.suppliename)!'无'}</p>
+					        <p>${(zwave.warningstatuses)!'无'}</p>
 					        <p>
-					        	<#if zwave.status==255>
-					        		开
-					        	<#elseif zwave.status==0>
-					        		关
-					        	<#else>
-					        		${zwave.status}
-					        	</#if>
+					        ${zwave.open}
+						        <#if (zwave.status)??>
+						        	<#if (zwave.status)==255>
+						        		开
+						        	<#elseif (zwave.status)==0>
+						        		关 
+						        	<#else>
+						        		无
+					       			</#if>
+							   </#if>
 					        </p>
-					        <p><button type="submit" class="btn btn-default" style="width:28%;">关闭</button></p>
+					        <p><button type="submit" class="btn btn-default" style="width:28%">关闭</button></p>
 			        </div>
 			        <#else>
 			         <div class="col-md-6"">
 			         	<h3>请先在设备列表里面选择一个设备...</h3>
 			         </div>
 			        </#if>
-			        <div class="col-md-1"></div>
+			        <div class="col-md-2"></div>
               </div>
         </div>
         <div class="col-md-1"></div>

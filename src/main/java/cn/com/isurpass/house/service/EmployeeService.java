@@ -110,10 +110,9 @@ public class EmployeeService {
 		ed.save(empPO);
 	}
 
-	
 	public Map<String, Object> listEmployee(Pageable pageable, HttpServletRequest request) {
-		//角色不要在里面判断,可以在方法上加上权限注解.(如,管理员才可以访问)
-		
+		// 角色不要在里面判断,可以在方法上加上权限注解.(如,管理员才可以访问)
+
 		// 只显示对应的服务商所具有权限的安装商,如果是ameta,则可以看见所有的
 		// 首先判断当前登录的员工角色,
 		// 如果角色是员工,over.
@@ -123,32 +122,37 @@ public class EmployeeService {
 
 		// 另一种办法,首先判断当前登录的员工角色,如果角色是员工,over.
 		// 通过当前员工的机构id,查询此机构是否具有父机构,如果有,查询其父机构id.这样遍历取此机构所有
-		EmployeePO emp = (EmployeePO)request.getSession().getAttribute("emp");
-		
+		EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
+
 		List<Integer> list0 = new ArrayList<>();
 		Map<String, Object> map = new HashMap<>();
-		List<Integer> list = os.findParentOrgid(emp.getOrganizationid(), list0);
-		list.add(emp.getOrganizationid());
-//		System.out.println(list);
-		Page<EmployeePO> empList = ed.findByOrganizationidIn(pageable,list);
-		map.put("total", empList.getTotalElements());
-		List<EmployeeListVO> listt = new ArrayList<>();
-		empList.forEach(e -> {
-			EmployeeListVO empv = new EmployeeListVO();
-			empv.setName(e.getName());
-			empv.setEmployeeid(e.getEmployeeid());
-			empv.setCode(e.getCode());
-			empv.setStatus(e.getStatus());
-			if (od.findByOrganizationid(e.getOrganizationid()) != null)
-				empv.setParentOrgName(od.findByOrganizationid(e.getOrganizationid()).getName());
-			listt.add(empv);
-		});
-		map.put("rows", listt);
-		return map;
+		if (os.isAdmin(emp.getOrganizationid())) {
+			return listAllEmployee(pageable);
+		} else {
+			List<Integer> list = os.findParentOrgid(emp.getOrganizationid(), list0);
+			list.add(emp.getOrganizationid());
+			// System.out.println(list);
+			Page<EmployeePO> empList = ed.findByOrganizationidIn(pageable, list);
+			map.put("total", empList.getTotalElements());
+			List<EmployeeListVO> listt = new ArrayList<>();
+			empList.forEach(e -> {
+				EmployeeListVO empv = new EmployeeListVO();
+				empv.setName(e.getName());
+				empv.setEmployeeid(e.getEmployeeid());
+				empv.setCode(e.getCode());
+				empv.setStatus(e.getStatus());
+				if (od.findByOrganizationid(e.getOrganizationid()) != null)
+					empv.setParentOrgName(od.findByOrganizationid(e.getOrganizationid()).getName());
+				listt.add(empv);
+			});
+			map.put("rows", listt);
+			return map;
+		}
+
 	}
 
 	public Map<String, Object> listAllEmployee(Pageable pageable) {
-//		System.out.println(em.toString());
+		// System.out.println(em.toString());
 		Map<String, Object> map = new HashMap<>();
 		map.put("total", ed.count());
 		Page<EmployeePO> empList = ed.findAll(pageable);

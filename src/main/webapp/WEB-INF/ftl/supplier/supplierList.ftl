@@ -2,44 +2,44 @@
  <#include "/_head1.ftl"/>
         
                   <div class="row">
-              <div class="text-center"><h1>服务商列表</h1></div><hr>
+              <div class="text-center"><h1><@spring.message code="label.supplierlist"/></h1></div><hr>
            <form class="form-inline" action="" method="POST">
               <div class="form-group col-md-3">   
                 <div>
-                  <b>名称</b>
-                 <input type="text" class="form-control" id="name" name="name" placeholder="名称">
+                  <b><@spring.message code="label.pname"/></b>
+                 <input type="text" class="form-control" id="name" name="name" placeholder="<@spring.message code="label.pname"/>">
                 </div>
               </div>
               <div class="form-group col-md-3">
                 <div>
-                  <b>城市</b>
-                 <input type="text" class="form-control" id="code" name="code" placeholder="城市">
+                  <b><@spring.message code="label.city"/></b>
+                 <input type="text" class="form-control" id="citycode" name="citycode" placeholder="<@spring.message code="label.city"/>">
                 </div>
               </div>
               <div class="form-group col-md-3">
                 <div>
-                  <b>城市代码</b>
-                 <input type="text" class="form-control" id="code" name="code" placeholder="城市代码">
+                  <b><@spring.message code="label.citycode"/></b>
+                 <input type="text" class="form-control" id="code" name="code" placeholder="<@spring.message code="label.citycode"/>">
                 </div>
               </div>
               <div class=" col-md-3">
-              <button type="submit" class="btn btn-default">搜索</button></div>
+              <button type="submit" class="btn btn-default"><@spring.message code="label.search"/></button></div>
             </form>
           </div>
           <hr>
 
-              <button onclick="window.location.href='addSupplierPage'" style="float: right;" type="submit" class="btn btn-default">新增</button>
+              <button onclick="window.location.href='addSupplierPage'" style="float: right;" type="submit" class="btn btn-default"><@spring.message code="label.addnew"/></button>
           
 <table id="table" data-toggle="table">
     <thead>
         <tr>
             <th data-field="id">ID</th><!-- 页面会吃掉一行, i don't know why.. -->
             <!--<th data-field="organizationid">ID</th>-->
-            <th data-field="name">名称</th>
-            <th data-field="code">代码</th>
-            <th data-field="city">城市</th>
-            <th data-field="status" data-formatter="formatter_status">状态</th>
-            <th data-field="operate" data-formatter="formatter_op">操作</th>
+            <th data-field="name"><@spring.message code="label.pname"/></th>
+            <th data-field="code"><@spring.message code="label.code"/></th>
+            <th data-field="city"><@spring.message code="label.city"/></th>
+            <th data-field="status" data-formatter="formatter_status"><@spring.message code="label.status"/></th>
+            <th data-field="operate" data-formatter="formatter_op"><@spring.message code="label.operate"/></th>
         </tr>
     </thead>
 </table>
@@ -89,7 +89,7 @@
       onLoadSuccess: function () {
       },
       onLoadError: function () {
-          alert("数据加载失败！");
+          //alert(lan.loaderror);
       },
       onDblClickRow: function (row, $element) {
           var id = row.id;

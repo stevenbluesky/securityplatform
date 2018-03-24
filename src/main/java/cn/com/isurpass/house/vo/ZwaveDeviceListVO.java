@@ -19,7 +19,7 @@ public class ZwaveDeviceListVO {
 	}
 
 	public void setZwavedeviceid(Integer zwavedeviceid) {
-		this.zwavedeviceid = zwavedeviceid;
+			this.zwavedeviceid = zwavedeviceid;
 	}
 
 	public String getName() {

@@ -5,7 +5,6 @@
              
     <persistence-unit name="house" transaction-type="RESOURCE_LOCAL">
 
-		
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect"/>
 

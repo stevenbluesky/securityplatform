@@ -17,7 +17,6 @@ import cn.com.isurpass.house.dao.AddressDAO;
 import cn.com.isurpass.house.dao.CityDAO;
 import cn.com.isurpass.house.dao.CountryDAO;
 import cn.com.isurpass.house.dao.EmployeeDAO;
-import cn.com.isurpass.house.dao.EmployeeroleDAO;
 import cn.com.isurpass.house.dao.OrganizationDAO;
 import cn.com.isurpass.house.dao.PersonDAO;
 import cn.com.isurpass.house.dao.ProvinceDAO;
@@ -55,17 +54,45 @@ public class OrganizationService {
 	 * @param as
 	 * @throws MyArgumentNullException
 	 */
+	public void add(OrgAddVO as, HttpServletRequest request) throws MyArgumentNullException {
+		addByOrgtype(as, Constants.ORGTYPE_SUPPLIER, request);
+	}
+
 	@Transactional(rollbackFor = Exception.class)
-	public void add(OrgAddVO as) throws MyArgumentNullException {
+	public void addByOrgtype(OrgAddVO as, Integer orgtype, HttpServletRequest request) throws MyArgumentNullException {
 		if (!FormUtils.checkOrgNull(as)) // 必填项为空时
 			throw new MyArgumentNullException("必填字段不能为空!");
-
+		EmployeePO emp0 = (EmployeePO) request.getSession().getAttribute("emp");
 		OrganizationPO org = new OrganizationPO();
-		FormUtils.copyO2O(org, as);// 将一些机构的属性复制到 org 中
 
-		if (as.getParentorgid() == null) {// 没有填写上级机构id,则表明这是一个服务商
-			Integer ametaId = od.findByOrgtype(Constants.ORGTYPE_AMETA).get(0).getOrganizationid();// 取 Ameta 的机构id
-			as.setParentorgid(ametaId);
+		org.setName(as.getName());
+		org.setCode(as.getCode());
+		org.setStatus(1);
+		org.setCentralstationname(as.getCsname());
+
+		// FormUtils.copyO2O(org, as);// 将一些机构的属性复制到 org 中
+
+		// if (as.getParentorgid() == null) {// 没有填写上级机构id,则表明这是一个服务商
+		// Integer ametaId =
+		// od.findByOrgtype(Constants.ORGTYPE_AMETA).get(0).getOrganizationid();// 取
+		// Ameta 的机构id
+		// as.setParentorgid(ametaId);
+		// }
+		// 不能这么判断,事实上,服务商新增安装商时也是不填上级机构的id(默认为服务商的id)
+
+		if (Constants.ORGTYPE_SUPPLIER.equals(orgtype)) {// 如果是添加服务商
+			org.setParentorgid(od.findByOrgtype(Constants.ORGTYPE_AMETA).get(0).getOrganizationid());
+			org.setOrgtype(Constants.ORGTYPE_SUPPLIER);
+		}
+		if (Constants.ORGTYPE_INSTALLER.equals(orgtype)) {// 安装商
+			// org.setParentorgid(emp0.getOrganizationid());
+			org.setOrgtype(Constants.ORGTYPE_INSTALLER);
+			if (as.getParentorgid() != null) {// 不为空,ameta在进行添加//要进行当前用户是否是ameta员工的判断
+				org.setParentorgid(as.getParentorgid());
+
+			} else {
+				org.setParentorgid(emp0.getOrganizationid());
+			}
 		}
 
 		// 以下这些值可能为空,因此需要进行NPE判断
@@ -150,7 +177,8 @@ public class OrganizationService {
 		emp.setOrganizationid(orgId);
 		emp.setStatus(1);
 		if (!FormUtils.isEmpty(emp)) {// 管理员不为空..由于此方法一开始就对管理员账号不存在的情况进行了处理,所以此处管理员对象是肯定存在的.
-			//TODO 现在数据库里面 Loginname 是unique类型的,要文档上面意思是不同的机构可以有相同的loginname,所以这里要判断一下同机构中的loginname,并去掉数据库里面的unique索引
+			// TODO 现在数据库里面 Loginname
+			// 是unique类型的,要文档上面意思是不同的机构可以有相同的loginname,所以这里要判断一下同机构中的loginname,并去掉数据库里面的unique索引
 			ed.save(emp);
 		}
 	}
@@ -183,13 +211,13 @@ public class OrganizationService {
 		map.put("rows", list);
 		return map;
 	}
-	
-	public Map<String, Object> listChirldOrg(Pageable pageable,HttpServletRequest request) {
-		
-		//角色为服务商的员工才可以访问
-		//先取员工的机构id,再通过机构id查询其机构下所有的安装商,
-		EmployeePO emp = (EmployeePO)request.getSession().getAttribute("emp");
-		Page<OrganizationPO> orgList = od.findByParentorgidIn(pageable,emp.getOrganizationid());
+
+	public Map<String, Object> listChirldOrg(Pageable pageable, HttpServletRequest request) {
+
+		// 角色为服务商的员工才可以访问
+		// 先取员工的机构id,再通过机构id查询其机构下所有的安装商,
+		EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
+		Page<OrganizationPO> orgList = od.findByParentorgidIn(pageable, emp.getOrganizationid());
 		Map<String, Object> map = new HashMap<>();
 		map.put("total", orgList.getTotalElements());
 		List<OrgListVO> list = new ArrayList<>();
@@ -209,6 +237,7 @@ public class OrganizationService {
 		map.put("rows", list);
 		return map;
 	}
+
 	/**
 	 * 通过机构类型列出所有的机构
 	 * 
@@ -238,17 +267,31 @@ public class OrganizationService {
 
 	public boolean validCode(String code) {
 		OrganizationPO org = od.findByCode(code);
-		if(org == null)
+		if (org == null)
 			return true;
 		return false;
 	}
-	
-	public List<Integer> findParentOrgid(Integer id,List<Integer> list){
+
+	public List<Integer> findParentOrgid(Integer id, List<Integer> list) {
 		OrganizationPO org = od.findByOrganizationid(id);
-		if(org.getParentorgid() != null) {
+		if (org.getParentorgid() != null) {
 			list.add(org.getParentorgid());
-			findParentOrgid(org.getParentorgid(),list);
+			findParentOrgid(org.getParentorgid(), list);
 		}
 		return list;
+	}
+
+	/**
+	 * 通过机构id判断它是否是ameta
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public boolean isAdmin(Integer id) {
+		OrganizationPO org = od.findByOrganizationid(id);
+		if (org != null) {
+			return org.getOrgtype() == Constants.ORGTYPE_AMETA;
+		}
+		return false;
 	}
 }

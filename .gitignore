@@ -1,5 +1,4 @@
-/.metadata/
-/.settings/
-/target/
-.project
-.classpath
+/*
+!.gitignore
+!/src/
+!pom.xml

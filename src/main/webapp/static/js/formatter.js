@@ -14,19 +14,19 @@ function formatter_op(value,row,index){
 }
 function formatter_devicetype(value,row,index){
 	if(row.devicetype == '4'){
-		return "门磁";
+		return lan.doorlock;
 	}
 	if(row.devicetype == '2'){
-		return "漏水传感器";
+		return lan.leaksensor;
 	}
 	if(row.devicetype == '6'){
-		return "移动感应器";
+		return lan.PyroelectricSensors;
 	}
 	if(row.devicetype == '11'){
-		return "插座";
+		return lan.socket0;
 	}
 	if(row.devicetype == '46'){
-		return "调色灯";
+		return lan.Coloringlamp;
 	}
 	//console.log(row);
 	return row.devicetype;
@@ -34,10 +34,10 @@ function formatter_devicetype(value,row,index){
 
 function formatter_devicestatus(value,row,index){
 	if(row.status == '0'){
-		return "关";
+		return lan.close;
 	}
 	if(row.status == '255'){
-		return "开";
+		return lan.open;
 	}
 	return row.status;
 }

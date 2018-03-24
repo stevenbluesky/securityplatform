@@ -18,6 +18,7 @@ import com.alibaba.fastjson.JSON;
 import cn.com.isurpass.house.po.EmployeePO;
 import cn.com.isurpass.house.result.JsonResult;
 import cn.com.isurpass.house.service.EmployeeService;
+import cn.com.isurpass.house.service.OrganizationService;
 import cn.com.isurpass.house.util.FormUtils;
 import cn.com.isurpass.house.vo.LoginVO;
 
@@ -27,6 +28,8 @@ public class LoginController {
 
 	@Autowired
 	EmployeeService emps;
+	@Autowired
+	OrganizationService os;
 
 	@RequestMapping("login")
 	@ResponseBody
@@ -41,6 +44,8 @@ public class LoginController {
 			subject.login(token);
 			EmployeePO emp = (EmployeePO) subject.getPrincipal();// 获取登录成功的用户对象(以前是直接去service里面查)
 			request.getSession().setAttribute("emp", emp);
+			//TODO 这里可以加一个当前员工角色的字段返回到前端,可以很容易的进行内容的显隐
+			request.getSession().setAttribute("admin", os.isAdmin(emp.getOrganizationid()));
 			return new JsonResult(1, "success");
 		} catch (UnavailableSecurityManagerException e) {
 			e.printStackTrace();
