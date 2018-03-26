@@ -20,7 +20,7 @@ public class AddressPO {
 	private String postal;
 	private String fax;
 	private String phonenumber;
-	
+
 	public AddressPO() {
 		super();
 	}

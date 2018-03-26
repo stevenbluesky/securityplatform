@@ -48,16 +48,20 @@ public class EmployeeService {
     @Autowired
     PersonDAO pd;
     @Autowired
+    PersonService ps;
+    @Autowired
     OrganizationDAO od;
     @Autowired
     OrganizationService os;
-
+    @Autowired
+    AddressService as;
     /*
-    * 判断一个员工登录用户名在其机构下是否已经被注册,如果被注册返回true
-    * */
-    public boolean isRegister(Integer orgid,String loginname){
-        EmployeePO emp = ed.findByOrganizationidAndLoginname(orgid, loginname);
-        if (emp != null) {
+     * 判断一个员工登录用户名在其机构下是否已经被注册,如果被注册返回true
+     * */
+
+    public boolean isRegister(Integer orgid, String loginname) {
+        List<EmployeePO> list = ed.findByOrganizationidAndLoginname(orgid, loginname);
+        if (!list.isEmpty()) {
             return true;
         }
         return false;
@@ -72,7 +76,7 @@ public class EmployeeService {
             emp.setOrganizationid(emp1.getOrganizationid());
         }
         if (isRegister(emp.getOrganizationid(), emp.getLoginname())) {//被注册了
-            throw new MyArgumentNullException("用户已经被注册了..")
+            throw new MyArgumentNullException("用户名已存在!");
         }
         if (od.findByOrganizationid(emp.getOrganizationid()).getOrgtype() == Constants.ORGTYPE_INSTALLER
                 && !FormUtils.checkNUll(emp.getCode()))// 是安装员且code为空时
@@ -139,12 +143,12 @@ public class EmployeeService {
 
         List<Integer> list0 = new ArrayList<>();
         Map<String, Object> map = new HashMap<>();
-        if (os.isAdmin(emp.getOrganizationid())) {
+        if (os.isAdmin(emp.getOrganizationid())) {//如果是ameta返回所有的员工信息
             return listAllEmployee(pageable);
         } else {
-            List<Integer> list = os.findParentOrgid(emp.getOrganizationid(), list0);
+            List<Integer> list = os.findChildrenOrgid(emp.getOrganizationid(), list0);
             list.add(emp.getOrganizationid());
-            // System.out.println(list);
+//            System.out.println(list+"fdsf");
             Page<EmployeePO> empList = ed.findByOrganizationidIn(pageable, list);
             map.put("total", empList.getTotalElements());
             List<EmployeeListVO> listt = new ArrayList<>();
@@ -218,4 +222,25 @@ public class EmployeeService {
         return empp;
     }
 
+    /**
+     * 返回一个 employeeAddVO对象的所有信息
+     * @param id
+     * @return
+     */
+    public EmployeeAddVO getEmployeeVOInfo(Integer id) {
+        EmployeeAddVO emp = new EmployeeAddVO();
+        EmployeePO empPO = ed.findByEmployeeid(id);
+        emp.setLoginname(empPO.getLoginname());
+        emp.setPassword(empPO.getPassword());
+        emp.setQuestion(empPO.getQuestion());
+        emp.setCode(empPO.getCode());
+        emp.setExpiredate(empPO.getExpiredate());
+        emp.setStatus(empPO.getStatus());
+
+        ps.findPeronInfo(empPO.getPersonid(),emp);
+        as.findAddressInfo(empPO.getAddressid(),emp);
+//        OrganizationPO orgPO = od.findByOrganizationid(empPO.getOrganizationid());
+        emp.setOrganizationid(empPO.getOrganizationid());
+        return emp;
+    }
 }

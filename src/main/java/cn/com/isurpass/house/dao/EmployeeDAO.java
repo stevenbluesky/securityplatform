@@ -30,7 +30,7 @@ public interface EmployeeDAO extends CrudRepository<EmployeePO,Integer>{
 			return count.intValue();
 		return 0;
 	}*/
-	EmployeePO findByOrganizationidAndLoginname(Integer id,Strig loginname);
+	List<EmployeePO> findByOrganizationidAndLoginname(Integer id,String loginname);
 	EmployeePO findByLoginname(String loginname);
 	EmployeePO findByEmployeeid(Integer id);
 	EmployeePO findByLoginnameAndPassword(String loginname, String password);

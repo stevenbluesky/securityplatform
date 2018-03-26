@@ -47,10 +47,14 @@ public class OrganizationService {
 	ProvinceDAO province;
 	@Autowired
 	CityDAO city;
+    @Autowired
+    AddressService as;
+    @Autowired
+    PersonService ps;
 
 	/**
 	 * 添加一个机构
-	 * 
+	 *
 	 * @param as
 	 * @throws MyArgumentNullException
 	 */
@@ -185,8 +189,8 @@ public class OrganizationService {
 
 	/**
 	 * 通过分页形式返回指定类型的机构列表
-	 * 
-	 * @param pr
+	 *
+	 * @param pageable
 	 * @param orgType
 	 * @return
 	 */
@@ -240,7 +244,7 @@ public class OrganizationService {
 
 	/**
 	 * 通过机构类型列出所有的机构
-	 * 
+	 *
 	 * @return
 	 */
 	public List<OrganizationPO> listOrgByType(Integer orgType) {
@@ -249,7 +253,7 @@ public class OrganizationService {
 
 	/**
 	 * 与 listOrgByTyep 不同的是此方法只返回 organizationid 和 name.
-	 * 
+	 *
 	 * @param orgType
 	 * @return
 	 */
@@ -273,7 +277,8 @@ public class OrganizationService {
 	}
 
 	public List<Integer> findParentOrgid(Integer id, List<Integer> list) {
-		OrganizationPO org = od.findByOrganizationid(id);
+		OrganizationPO org = od.findByOrganizationid(id);//
+		od.findByParentorgid(org.getOrganizationid());
 		if (org.getParentorgid() != null) {
 			list.add(org.getParentorgid());
 			findParentOrgid(org.getParentorgid(), list);
@@ -281,9 +286,22 @@ public class OrganizationService {
 		return list;
 	}
 
+    public List<Integer> findChildrenOrgid(Integer id, List<Integer> list) {
+        List<OrganizationPO> orgList = od.findByParentorgid(id);
+        if (orgList == null) {
+            list.add(id);
+             return list;
+        }
+        orgList.forEach(o ->{
+            list.add(o.getOrganizationid());
+            findChildrenOrgid(o.getOrganizationid(),list);
+        });
+        return list;
+
+    }
 	/**
 	 * 通过机构id判断它是否是ameta
-	 * 
+	 *
 	 * @param id
 	 * @return
 	 */
@@ -294,4 +312,22 @@ public class OrganizationService {
 		}
 		return false;
 	}
+
+    public OrgAddVO getOrganizationVOInfo(Integer organizationid) {
+        OrgAddVO org = new OrgAddVO();
+        OrganizationPO orgPO = od.findByOrganizationid(organizationid);
+        org.setName(orgPO.getName());
+        org.setCode(orgPO.getCode());
+        org.setCsname(orgPO.getCentralstationname());
+//        AddressPO addressInfo = as.findAddressInfo(orgPO.getOfficeaddressid());
+//        AddressPO baddressInfo = as.findAddressInfo(orgPO.getBillingaddressid());
+//        AddressPO csaddressInfo = as.findAddressInfo(orgPO.getCsaddressid());
+//        PersonPO peronInfo = ps.findPeronInfo(orgPO.getContactid());
+//        PersonPO bPersonInfo = ps.findPeronInfo(orgPO.getCscontactid());
+
+        as.findAddressInfo(orgPO,org);
+        ps.findPersonInfo(orgPO, org);
+        System.out.println(org.toString());
+        return org;
+    }
 }

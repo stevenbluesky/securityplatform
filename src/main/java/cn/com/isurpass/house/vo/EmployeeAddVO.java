@@ -4,7 +4,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
-public class EmployeeAddVO {
+public class EmployeeAddVO{
 
     private Integer Organizationid;
     private String loginname;
@@ -29,6 +29,33 @@ public class EmployeeAddVO {
     private Integer province;
     private Integer city;
     private String detailaddress;
+    private String countryname;
+    private String provincename;
+    private String cityname;
+
+    public String getCountryname() {
+        return countryname;
+    }
+
+    public void setCountryname(String countryname) {
+        this.countryname = countryname;
+    }
+
+    public String getProvincename() {
+        return provincename;
+    }
+
+    public void setProvincename(String provincename) {
+        this.provincename = provincename;
+    }
+
+    public String getCityname() {
+        return cityname;
+    }
+
+    public void setCityname(String cityname) {
+        this.cityname = cityname;
+    }
 
     public Integer getOrganizationid() {
         return Organizationid;

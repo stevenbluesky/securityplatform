@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.com.isurpass.house.exception.MyArgumentNullException;
@@ -38,6 +39,7 @@ public class OrganizationController {
 	@Autowired
 	OrganizationService ss;
 
+
 	/**
 	 * 添加服务商
 	 * @param name
@@ -51,6 +53,7 @@ public class OrganizationController {
 	public JsonResult add(OrgAddVO as,HttpServletRequest request) {
 		//TODO 由于页面选择地区的js代码会默认选择一个国家,所以必须要填完所有地址选择框,而有时候用户不想选择总公司等的地址,这时就无法正常添加.可以在地区列表第一行加一个空的选项
 //		System.out.println(as.toString());
+		//noinspection Duplicates
 		try {
 			ss.add(as,request);
 		} catch (MyArgumentNullException e) {
@@ -126,7 +129,13 @@ public class OrganizationController {
 	}
 
 	@RequestMapping("addSupplierPage")
-	public String addSupplier() {
+	public String addSupplier(@RequestParam(required = false)Integer organizationid, HttpServletRequest request) {
+        if (organizationid != null) {
+            request.getSession().setAttribute("orgInfo",ss.getOrganizationVOInfo(organizationid));
+        }else {
+            //清除empInfo session
+            request.getSession().setAttribute("orgInfo", null);
+        }
 		return "supplier/addSupplier";
 	}
 
@@ -136,7 +145,13 @@ public class OrganizationController {
 	}
 
 	@RequestMapping("addInstallerPage")
-	public String addInstallerPage() {
+	public String addInstallerPage(@RequestParam(required = false)Integer organizationid, HttpServletRequest request) {
+		if (organizationid != null) {
+			request.getSession().setAttribute("orgInfo",ss.getOrganizationVOInfo(organizationid));
+		}else {
+			//清除empInfo session
+			request.getSession().setAttribute("orgInfo", null);
+		}
 		return "installer/addInstaller";
 	}
 
