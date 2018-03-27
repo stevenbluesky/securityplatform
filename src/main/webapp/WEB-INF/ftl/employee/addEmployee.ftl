@@ -183,6 +183,7 @@
                             <div class="col-sm-4">
                                 <select name="country" id="country" class="selectpicker"
                                         title="<@spring.message code="label.choosecountry"/>">
+                                    <option value="1">afadfds</option>
                                 </select>
                             </div>
 

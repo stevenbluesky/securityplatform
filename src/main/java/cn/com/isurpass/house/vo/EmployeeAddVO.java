@@ -4,8 +4,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
-public class EmployeeAddVO{
+public class EmployeeAddVO {
 
+    private Integer modify;
     private Integer Organizationid;
     private String loginname;
     private String password;
@@ -37,6 +38,14 @@ public class EmployeeAddVO{
     private Integer personid;
     private Integer addressid;
     private Integer createtime;
+
+    public Integer getModify() {
+        return modify;
+    }
+
+    public void setModify(Integer modify) {
+        this.modify = modify;
+    }
 
     public Integer getEmployeeid() {
         return employeeid;

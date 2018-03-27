@@ -15,9 +15,9 @@ function getCountry() {
 						+ data[i].countryname + '</option>'
 			}
 			$("#country").html(str);
-
 			$("#country").selectpicker('refresh');
 
+            alert($("#coutry").html());
 		}
 	});
 }
@@ -44,7 +44,7 @@ $("#country").change(
 
 $("#province").change(
 		function() {
-			var provinceid = $("#province").val();
+var provinceid = $("#province").val();
 			$.ajax({
 				type : "get",
 				url : "../address/getCity?provinceid=" + provinceid,
