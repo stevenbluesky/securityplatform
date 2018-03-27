@@ -69,7 +69,7 @@
                 <img class="img-responsive" src="static/img/code.jpg" style="height:100px;"/>
               </div>
               </div>
-              <button type="submit" id="btn-submit" class="btn btn-default  btn-lg" style="float:right;">登录</button>
+              <button id="btn-submit" class="btn btn-default  btn-lg" style="float:right;">登录</button>
        		 </form>
         </div>
 

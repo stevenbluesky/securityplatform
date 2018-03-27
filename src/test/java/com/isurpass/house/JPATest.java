@@ -40,4 +40,9 @@ public class JPATest {
 			System.out.println(o.toString());
 		});
 	}
+	@Test
+	public void test(){
+		OrganizationPO org0 = org.findByOrganizationid(1);
+		System.out.println(org0.getOrganizationid());
+	}
 }

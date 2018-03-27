@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import cn.com.isurpass.house.util.Encrypt;
 import cn.com.isurpass.house.vo.LoginVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -177,8 +178,9 @@ public class OrganizationService {
         AddressPO csAddress = new AddressPO(csCountryname, csProvincename, csCityname, "", as.getCspostal());
         // 服务商总公司联系人
         PersonPO csPerson = new PersonPO(as.getCspname(), as.getCspphonenumber(), as.getCspemail(), as.getCspfax());
-        EmployeePO emp = new EmployeePO(as.getLoginname(), FormUtils.encrypt(as.getPassword()), as.getQuestion(),
-                FormUtils.encrypt(as.getAnswer()));
+//        EmployeePO emp = new EmployeePO(as.getLoginname(), FormUtils.encrypt(as.getPassword()), as.getQuestion(),FormUtils.encrypt(as.getAnswer()));
+        EmployeePO emp = new EmployeePO(as.getLoginname(), Encrypt.encrypt(as.getLoginname(),as.getPassword(),as.getCode()), as.getQuestion(),Encrypt.encrypt(as.getLoginname(),as.getAnswer(),as.getCode()));
+
 
         System.out.println(address.toString());
         System.out.println(bAddress.toString());

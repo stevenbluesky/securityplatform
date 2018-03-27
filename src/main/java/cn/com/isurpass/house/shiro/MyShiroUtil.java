@@ -75,11 +75,10 @@ public class MyShiroUtil extends AuthorizingRealm {
 	@Override
 	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token0) {
 		UsernamePasswordToken token = (UsernamePasswordToken) token0;//取得token
-
 		LoginVO login = JSON.parseObject(token.getUsername(),LoginVO.class);
  		EmployeePO emp = es.login(login.getLoginname(), String.valueOf(token.getPassword()),login.getCode());
 		if (emp != null) {
-			return new SimpleAuthenticationInfo(emp, emp.getPassword(), getName());
+			return new SimpleAuthenticationInfo(emp, String.valueOf(token.getPassword()), getName());
 		}
 		return null;
 	}

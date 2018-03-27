@@ -38,7 +38,7 @@ public class LoginController {
 		try {
 			SecurityUtils.getSecurityManager().logout(SecurityUtils.getSubject());
 			// 生成令牌,以便 reaml 里面进行认证
-			UsernamePasswordToken token = new UsernamePasswordToken(JSON.toJSONString(login), FormUtils.encrypt(login.getPassword()));
+			UsernamePasswordToken token = new UsernamePasswordToken(JSON.toJSONString(login), login.getPassword());
 			Subject subject = SecurityUtils.getSubject();
 			// 加载 reaml 进行认证登录
 			subject.login(token);

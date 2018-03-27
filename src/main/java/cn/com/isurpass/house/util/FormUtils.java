@@ -75,12 +75,14 @@ public class FormUtils {
 
 	/**
 	 * 通过 MD5 和盐生成加密的字符串
-	 * 
+	 * @Deprecated 请使用Encrypt类中的方法
 	 * @param psw
 	 * @return
 	 */
+	@Deprecated
 	public static String encrypt(String psw) {
 		String pswSalt = "/@JWZH@/";
 		return MD5Utils.MD5(psw + pswSalt);
 	}
+
 }

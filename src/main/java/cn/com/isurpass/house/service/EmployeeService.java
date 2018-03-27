@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import cn.com.isurpass.house.util.Encrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -137,9 +138,12 @@ public class EmployeeService {
 
         empPO.setLoginname(emp.getLoginname());
         empPO.setCode(emp.getCode());
-        empPO.setPassword(FormUtils.encrypt(emp.getPassword()));// 加密
+        Encrypt svr = new Encrypt();
+//        empPO.setPassword(FormUtils.encrypt(emp.getPassword()));// 加密
+        empPO.setPassword(svr.encrypt(emp.getLoginname(), emp.getPassword(), emp.getCode()));
         empPO.setQuestion(emp.getQuestion());
-        empPO.setAnswer(FormUtils.encrypt(emp.getAnswer()));
+//        empPO.setAnswer(FormUtils.encrypt(emp.getAnswer()));
+        empPO.setAnswer(svr.encrypt(emp.getLoginname(), emp.getAnswer(), emp.getCode()));
         empPO.setStatus(emp.getStatus());
         empPO.setExpiredate(new Date());
         empPO.setOrganizationid(emp.getOrganizationid());
@@ -151,7 +155,7 @@ public class EmployeeService {
             empPO.setAddressid(addressid);
         }
         if (FormUtils.checkNUll(emp.getLastname()) || FormUtils.checkNUll(emp.getFirstname()) || FormUtils.checkNUll(emp.getSsn())
-                 || FormUtils.checkNUll(emp.getSsn()) || emp.getGender() != null || FormUtils.checkNUll(emp.getTitle())) {
+                || FormUtils.checkNUll(emp.getSsn()) || emp.getGender() != null || FormUtils.checkNUll(emp.getTitle())) {
             PersonPO personPO = new PersonPO(emp.getLastname() + " " + emp.getFirstname(), emp.getSsn(), emp.getGender(), emp.getTitle(), emp.getFirstname(), emp.getLastname(),
                     emp.getPhonenumber(), emp.getEmail(), emp.getFax());
             personPO.setAddressid(addressid);
@@ -224,6 +228,14 @@ public class EmployeeService {
         return ed.findByLoginname(loginname);
     }
 
+    /**
+     * 不要使用此方法,ameta登录时也请传入code来进行密码校验
+     *
+     * @param loginname
+     * @param password
+     * @return
+     */
+    @Deprecated
     public EmployeePO login(String loginname, String password) {
         return ed.findByLoginnameAndPassword(loginname, password);
     }
@@ -232,10 +244,17 @@ public class EmployeeService {
         OrganizationPO org = null;
         // System.out.println(od.findByCode(code0));
         if ((org = od.findByCode(code0)) != null) {
-            return ed.findByLoginnameAndPasswordAndOrganizationid(loginname, password, org.getOrganizationid());
+            List<EmployeePO> empList = ed.findByOrganizationidAndLoginname(org.getOrganizationid(), loginname);
+            for (int i = 0;!empList.isEmpty() && i < empList.size(); i++) {
+                if (Encrypt.check(loginname, password, code0, empList.get(i).getPassword())) {
+                    return empList.get(i);
+                }
+            }
+//            return ed.findByLoginnameAndPasswordAndOrganizationid(loginname, password, org.getOrganizationid());
         } else {
             return null;
         }
+        return null;
     }
 
     /**
