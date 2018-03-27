@@ -2,6 +2,7 @@ package cn.com.isurpass.house.dao;
 
 import java.util.List;
 
+import cn.com.isurpass.house.po.EmployeePO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
@@ -20,10 +21,10 @@ public interface OrganizationDAO extends CrudRepository<OrganizationPO,Integer>{
 	List<OrganizationPO> findByOrgtype(Integer orgtype);
 	Page<OrganizationPO> findByOrgtype(Pageable pageable, Integer orgtype);
 	long count();
-	Integer getParentorgidByName(String name);
+	OrganizationPO findByName(String name);
 	List<OrganizationPO> findAll();
 	
-	@Query("select new OrganizationPO(organizationid,name) from OrganizationPO o where o.orgtype = :orgtype")
+	@Query(value = "select new OrganizationPO(organizationid,name) from OrganizationPO o where o.orgtype = :orgtype")
 	List<OrganizationPO> findAllOrgSelect(@Param("orgtype") Integer orgtype);
 	
 	@Query("select new OrganizationPO(organizationid,name) from OrganizationPO")
@@ -34,4 +35,5 @@ public interface OrganizationDAO extends CrudRepository<OrganizationPO,Integer>{
 	OrganizationPO findByCode(String code);
 
     List<OrganizationPO> findByParentorgid(Integer id);
+
 }

@@ -5,8 +5,11 @@
         <div class="col-md-1"></div>
         <div class="col-md-10">
             <form id="defaultForm" method="POST">
-
-                <div class="text-center"><h1><@spring.message code="label.addinstaller"/></h1></div>
+                <#if orgInfo??>
+                    <div class="text-center"><h1><@spring.message code="label.modifyinstaller"/></h1></div>
+                <#else>
+                    <div class="text-center"><h1><@spring.message code="label.addinstaller"/></h1></div>
+                </#if>
 
                 <div class="text-left"><h4><@spring.message code="label.installerinfo"/></h4></div>
 
@@ -67,7 +70,8 @@
                     <label for="detailaddress"
                            class="col-sm-2 control-label"><@spring.message code="label.detailaddress"/></label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="detailaddress" name="detailaddress" value="${(orgInfo.address.detailaddress)!}"
+                        <input type="text" class="form-control" id="detailaddress" name="detailaddress"
+                               value="${(orgInfo.address.detailaddress)!}"
                                placeholder="<@spring.message code="label.detailaddress"/>">
                     </div>
                 </div>
@@ -75,7 +79,8 @@
                 <div class="form-group">
                     <label for="postal" class="col-sm-2 control-label"><@spring.message code="label.orgpostal"/></label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="postal" name="postal" value="${(orgInfo.address.postal)!}"
+                        <input type="text" class="form-control" id="postal" name="postal"
+                               value="${(orgInfo.address.postal)!}"
                                placeholder="<@spring.message code="label.orgpostal"/>">
                     </div>
                 </div>
@@ -108,7 +113,8 @@
                     <label for="bdetailaddress"
                            class="col-sm-2 control-label"><@spring.message code="label.bdetailaddress"/></label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" name="bdetailaddress" id="bdetailaddress" value="${(orgInfo.baddress.detailaddress)!}"
+                        <input type="text" class="form-control" name="bdetailaddress" id="bdetailaddress"
+                               value="${(orgInfo.baddress.detailaddress)!}"
                                placeholder="<@spring.message code="label.bdetailaddress"/>">
                     </div>
                 </div>
@@ -116,7 +122,8 @@
                     <label for="bpostal"
                            class="col-sm-2 control-label"><@spring.message code="label.borgpostal"/></label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" name="bpostal" id="bpostal" value="${(orgInfo.baddress.postal)!}"
+                        <input type="text" class="form-control" name="bpostal" id="bpostal"
+                               value="${(orgInfo.baddress.postal)!}"
                                placeholder="<@spring.message code="label.borgpostal"/>">
                     </div>
                 </div>
@@ -135,7 +142,8 @@
                     <label for="sphonenumber"
                            class="col-sm-2 control-label"><@spring.message code="label.phonenumber"/></label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="sphonenumber" name="sphonenumber" value="${(orgInfo.sphonenumber)!}"
+                        <input type="text" class="form-control" id="sphonenumber" name="sphonenumber"
+                               value="${(orgInfo.sphonenumber)!}"
                                placeholder="<@spring.message code="label.phonenumber"/>">
                     </div>
                 </div>
@@ -195,7 +203,8 @@
                     <label for="cspostal"
                            class="col-sm-2 control-label"><@spring.message code="label.parentInstallerpostal"/></label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="cspostal" name="cspostal" value="${(orgInfo.csaddress.postal)!}"
+                        <input type="text" class="form-control" id="cspostal" name="cspostal"
+                               value="${(orgInfo.csaddress.postal)!}"
                                placeholder="<@spring.message code="label.parentInstallerpostal"/>">
                     </div>
                 </div>
@@ -205,7 +214,8 @@
                 <div class="form-group">
                     <label for="cspname" class="col-sm-2 control-label"><@spring.message code="label.name"/></label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="cspname" name="cspname" value="${(orgInfo.cspname)!}"
+                        <input type="text" class="form-control" id="cspname" name="cspname"
+                               value="${(orgInfo.cspname)!}"
                                placeholder="<@spring.message code="label.name"/>">
                     </div>
                 </div>
@@ -214,7 +224,8 @@
                     <label for="cspphonenumber"
                            class="col-sm-2 control-label"><@spring.message code="label.phonenumber"/></label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="cspphonenumber" name="cspphonenumber" value="${(orgInfo.cspphonenumber)!}"
+                        <input type="text" class="form-control" id="cspphonenumber" name="cspphonenumber"
+                               value="${(orgInfo.cspphonenumber)!}"
                                placeholder="<@spring.message code="label.phonenumber"/>">
                     </div>
                 </div>
@@ -230,7 +241,8 @@
                 <div class="form-group">
                     <label for="cspemail" class="col-sm-2 control-label"><@spring.message code="label.email"/></label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="cspemail" name="cspemail" value="${(orgInfo.cspemail)!}"
+                        <input type="text" class="form-control" id="cspemail" name="cspemail"
+                               value="${(orgInfo.cspemail)!}"
                                placeholder="<@spring.message code="label.email"/>">
                     </div>
                 </div>
@@ -241,7 +253,8 @@
                     <label for="loginname" class="col-sm-2 control-label"><@spring.message code="label.loginname"/>
                         *</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="loginname" name="loginname" value="${(orgInfo.loginname)!}"
+                        <input type="text" class="form-control" id="loginname" name="loginname"
+                               value="${(orgInfo.loginname)!}"
                                placeholder="<@spring.message code="label.loginname"/>">
                     </div>
                 </div>
@@ -268,7 +281,8 @@
                     <label for="question"
                            class="col-sm-2 control-label"><@spring.message code="label.pquestion"/></label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="question" name="question" value="${(orgInfo.question)!}"
+                        <input type="text" class="form-control" id="question" name="question"
+                               value="${(orgInfo.question)!}"
                                placeholder="<@spring.message code="label.pquestion"/>">
                     </div>
                 </div>
@@ -290,7 +304,7 @@
                 <div class="row">
                     <div class="col-sm-4"></div>
                     <div class="col-sm-8">
-                        <button id="btn-submit" type="submit" class="btn btn-default"
+                        <button id="btn-submit" class="btn btn-default"
                                 style="width:100px;"><@spring.message code="label.submit"/>
                         </button>
                     </div>
@@ -382,6 +396,7 @@
             $.ajax({
                 type: "POST",
                 dataType: "html",
+                async: false,
                 url: url,
                 data: $('#defaultForm').serialize(),
                 success: function (data) {

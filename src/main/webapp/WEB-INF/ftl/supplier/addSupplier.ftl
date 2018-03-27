@@ -4,7 +4,11 @@
         <div class="col-md-1"></div>
         <div class="col-md-10">
           <form id="defaultForm">
-              <div class="text-center"><h1><@spring.message code="label.addsupplier"/></h1></div>
+               <#if orgInfo??>
+                    <div class="text-center"><h1><@spring.message code="label.modifysupplier"/></h1></div>
+               <#else>
+                    <div class="text-center"><h1><@spring.message code="label.addsupplier"/></h1></div>
+               </#if>
 
               <div class="text-left"><h4><@spring.message code="label.supplierinfo"/></h4></div>
               
@@ -226,7 +230,7 @@
               
               <div class="row">
 	              <div class="col-sm-4"></div>
-	              <div class="col-sm-8"><button id="btn-submit" type="submit" class="btn btn-default" style="width:100px;	"><@spring.message code="label.submit"/></button></div>
+	              <div class="col-sm-8"><button id="btn-submit" class="btn btn-default" style="width:100px;	"><@spring.message code="label.submit"/></button></div>
               </div>
         </form>
         </div>
@@ -327,6 +331,7 @@ $("#btn-submit").click(function () {
                 $.ajax({
                     type: "POST",
                     dataType: "html",
+                    async:false,
                     url: url,
                     data: $('#defaultForm').serialize(),
                     success: function (data) {

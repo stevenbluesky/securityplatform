@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 @SuppressWarnings("Duplicates")
 @Service
 public class PersonService {
-
+//TODO 代码整合
     @Autowired
     PersonDAO pd;
 
@@ -34,6 +34,7 @@ public class PersonService {
                 emp.setPhonenumber(person.getPhonenumber());
                 emp.setEmail(person.getEmail());
                 emp.setFax(person.getFax());
+                emp.setPersonid(person.getPersonid());
             }
         }
     }
@@ -59,6 +60,7 @@ public class PersonService {
 
     public void findPersonInfo(OrganizationPO orgPO, OrgAddVO org) {
         if (orgPO.getContactid() != null) {
+            org.setContactid(orgPO.getContactid());
             PersonPO person = pd.findByPersonid(orgPO.getContactid());
             if (person != null) {
                 org.setSname(person.getName());
@@ -68,6 +70,7 @@ public class PersonService {
             }
         }
         if (orgPO.getCscontactid() != null) {
+            org.setCscontactid(orgPO.getCscontactid());
             PersonPO person = pd.findByPersonid(orgPO.getCscontactid());
             if (person != null) {
                 org.setCspname(person.getName());

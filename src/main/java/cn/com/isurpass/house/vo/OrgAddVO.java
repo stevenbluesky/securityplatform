@@ -56,6 +56,62 @@ public class OrgAddVO {
     private String question;
     private String answer;
 
+    private Integer officeaddressid;
+    private Integer billingaddressid;
+    private Integer contactid;
+    private Integer csaddressid;
+    private Integer cscontactid;
+    private Integer Orgtype;
+
+    public Integer getOrgtype() {
+        return Orgtype;
+    }
+
+    public void setOrgtype(Integer orgtype) {
+        Orgtype = orgtype;
+    }
+
+    public Integer getOfficeaddressid() {
+        return officeaddressid;
+    }
+
+    public void setOfficeaddressid(Integer officeaddressid) {
+        this.officeaddressid = officeaddressid;
+    }
+
+    public Integer getBillingaddressid() {
+        return billingaddressid;
+    }
+
+    public void setBillingaddressid(Integer billingaddressid) {
+        this.billingaddressid = billingaddressid;
+    }
+
+    public Integer getContactid() {
+        return contactid;
+    }
+
+    public void setContactid(Integer contactid) {
+        this.contactid = contactid;
+    }
+
+
+    public Integer getCsaddressid() {
+        return csaddressid;
+    }
+
+    public void setCsaddressid(Integer csaddressid) {
+        this.csaddressid = csaddressid;
+    }
+
+    public Integer getCscontactid() {
+        return cscontactid;
+    }
+
+    public void setCscontactid(Integer cscontactid) {
+        this.cscontactid = cscontactid;
+    }
+
     public AddressPO getBaddress() {
         return baddress;
     }
@@ -330,14 +386,47 @@ public class OrgAddVO {
 
     @Override
     public String toString() {
-        return "AddSupplierVO [name=" + name + ", code=" + code + ", country=" + country + ", province=" + province
-                + ", city=" + city + ", detailaddress=" + detailaddress + ", postal=" + postal + ", bcountry="
-                + bcountry + ", bprovince=" + bprovince + ", bcity=" + bcity + ", bdetailaddress=" + bdetailaddress
-                + ", bpostal=" + bpostal + ", sname=" + sname + ", sphonenumber=" + sphonenumber + ", sfax=" + sfax
-                + ", semail=" + semail + ", csname=" + csname + ", cscountry=" + cscountry + ", csprovince="
-                + csprovince + ", cscity=" + cscity + ", cspostal=" + cspostal + ", cspname=" + cspname
-                + ", cspphonenumber=" + cspphonenumber + ", cspfax=" + cspfax + ", cspemail=" + cspemail
-                + ", loginname=" + loginname + ", password=" + password + ", question=" + question + ", answer="
-                + answer + "]";
+        return "OrgAddVO{" +
+                "orgnizationid=" + orgnizationid +
+                ", address=" + address +
+                ", parentorgid=" + parentorgid +
+                ", name='" + name + '\'' +
+                ", code='" + code + '\'' +
+                ", country=" + country +
+                ", province=" + province +
+                ", city=" + city +
+                ", detailaddress='" + detailaddress + '\'' +
+                ", postal='" + postal + '\'' +
+                ", baddress=" + baddress +
+                ", bcountry=" + bcountry +
+                ", bprovince=" + bprovince +
+                ", bcity=" + bcity +
+                ", bdetailaddress='" + bdetailaddress + '\'' +
+                ", bpostal='" + bpostal + '\'' +
+                ", sname='" + sname + '\'' +
+                ", sphonenumber='" + sphonenumber + '\'' +
+                ", sfax='" + sfax + '\'' +
+                ", semail='" + semail + '\'' +
+                ", csaddress=" + csaddress +
+                ", csname='" + csname + '\'' +
+                ", cscountry=" + cscountry +
+                ", csprovince=" + csprovince +
+                ", cscity=" + cscity +
+                ", cspostal='" + cspostal + '\'' +
+                ", cspname='" + cspname + '\'' +
+                ", cspphonenumber='" + cspphonenumber + '\'' +
+                ", cspfax='" + cspfax + '\'' +
+                ", cspemail='" + cspemail + '\'' +
+                ", loginname='" + loginname + '\'' +
+                ", password='" + password + '\'' +
+                ", question='" + question + '\'' +
+                ", answer='" + answer + '\'' +
+                ", officeaddressid=" + officeaddressid +
+                ", billingaddressid=" + billingaddressid +
+                ", contactid=" + contactid +
+                ", csaddressid=" + csaddressid +
+                ", cscontactid=" + cscontactid +
+                ", Orgtype=" + Orgtype +
+                '}';
     }
 }

@@ -10,7 +10,7 @@
               <div class="text-center"><h1><@spring.message code="label.addemployee"/></h1></div>
               </#if>
                 <div class="text-left"><h4><@spring.message code="label.employeeinfo"/></h4></div>
-              <#if emp.organizationid == 1>
+              <#if emp?? && emp.organizationid == 1>
               <div class="form-group">
                   <label for="organizationid"
                          class="col-sm-2 control-label"><@spring.message code="label.parentorg"/></label>
@@ -214,7 +214,7 @@
                 <div class="row">
                     <div class="col-sm-4"></div>
                     <div class="col-sm-8">
-                        <button id="btn-submit" type="submit" class="btn btn-default"
+                        <button id="btn-submit" class="btn btn-default"
                                 style="width:100px;	"><@spring.message code="label.submit"/></button>
                     </div>
                 </div>
@@ -297,11 +297,16 @@
             $.ajax({
                 type: "POST",
                 dataType: "html",
+                async: false,
                 url: url,
                 data: $('#defaultForm').serialize(),
                 success: function (data) {
                     var strresult = data;
-                    alert(strresult);
+                    var jsonObj = eval('(' + strresult + ')');
+                    if (jsonObj['status'] == 1) {
+                        alert("success");
+                        window.location.href = "employeeList";
+                    }
                 },
                 error: function (data) {
                     alert("error:" + data.responseText);

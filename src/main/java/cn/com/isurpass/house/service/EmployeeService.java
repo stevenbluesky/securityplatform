@@ -55,10 +55,32 @@ public class EmployeeService {
     OrganizationService os;
     @Autowired
     AddressService as;
+
+    public void changeStatus(Integer empid, Integer status) {
+        EmployeePO emp = ed.findByEmployeeid(empid);
+        switch (status) {
+            case 0:
+                emp.setStatus(Constants.STATUS_UNVALID);
+                break;
+            case 1:
+                emp.setStatus(Constants.STATUS_NORMAL);
+                break;
+            case 2:
+                emp.setStatus(Constants.STATUS_SUSPENCED);
+                break;
+            case 9:
+                emp.setStatus(Constants.STATUS_DELETED);
+                break;
+            default:
+                emp.setStatus(Constants.STATUS_NORMAL);
+                break;
+        }
+        ed.save(emp);
+    }
+
     /*
      * 判断一个员工登录用户名在其机构下是否已经被注册,如果被注册返回true
      * */
-
     public boolean isRegister(Integer orgid, String loginname) {
         List<EmployeePO> list = ed.findByOrganizationidAndLoginname(orgid, loginname);
         if (!list.isEmpty()) {
@@ -71,18 +93,23 @@ public class EmployeeService {
     public void add(EmployeeAddVO emp, HttpServletRequest request) throws MyArgumentNullException {
         if (!FormUtils.checkNUll(emp.getLoginname()) || !FormUtils.checkNUll(emp.getPassword()))
             throw new MyArgumentNullException("必填字段不能为空!");
-        EmployeePO emp1 = (EmployeePO) request.getSession().getAttribute("emp");
-        if (emp.getOrganizationid() == null) {//如果没有传入机构id,说明这是服务商在进行添加
-            emp.setOrganizationid(emp1.getOrganizationid());
+        EmployeePO emp1 = (EmployeePO) request.getSession().getAttribute("emp");//当前登录用户
+        EmployeeAddVO empInfo = (EmployeeAddVO) request.getSession().getAttribute("empInfo");//修改员工时才会存在的员工session
+        if (emp.getOrganizationid() == null) {//如果没有传入机构id
+            if (empInfo != null) {//修改
+                emp.setOrganizationid(empInfo.getOrganizationid());
+            } else {//说明这是安装商在进行添加
+                emp.setOrganizationid(emp1.getOrganizationid());
+            }
         }
-        if (isRegister(emp.getOrganizationid(), emp.getLoginname())) {//被注册了
+        if (empInfo == null && isRegister(emp.getOrganizationid(), emp.getLoginname())) {//被注册了
             throw new MyArgumentNullException("用户名已存在!");
         }
-        if (od.findByOrganizationid(emp.getOrganizationid()).getOrgtype() == Constants.ORGTYPE_INSTALLER
+        if ((od.findByOrganizationid(emp.getOrganizationid()).getOrgtype() == Constants.ORGTYPE_INSTALLER)
                 && !FormUtils.checkNUll(emp.getCode()))// 是安装员且code为空时
             throw new MyArgumentNullException("安装员必须要有员工代码!");
 //        System.out.println(FormUtils.checkNUll(emp.getCode()) + "==================");
-        if (FormUtils.checkNUll(emp.getCode()) && !ed.findByOrganizationidAndCodeAndStatusNot(emp.getOrganizationid(), emp.getCode(),
+        if (empInfo == null && FormUtils.checkNUll(emp.getCode()) && !ed.findByOrganizationidAndCodeAndStatusNot(emp.getOrganizationid(), emp.getCode(),
                 Constants.STATUS_DELETED).isEmpty())
             throw new MyArgumentNullException("员工代码不能重复.!");
 
@@ -103,6 +130,10 @@ public class EmployeeService {
         }
 
         AddressPO addressPO = new AddressPO(countryname, provincename, cityname, emp.getDetailaddress(), null);
+        if (empInfo != null) {
+            addressPO.setAddressid(empInfo.getAddressid());
+            empPO.setEmployeeid(empInfo.getEmployeeid());
+        }
 
         empPO.setLoginname(emp.getLoginname());
         empPO.setCode(emp.getCode());
@@ -114,16 +145,21 @@ public class EmployeeService {
         empPO.setOrganizationid(emp.getOrganizationid());
         empPO.setName(emp.getLastname() + " " + emp.getFirstname());
 //        System.out.println(emp);
+        Integer addressid = null;
+        if (!FormUtils.isEmpty(addressPO)) {
+            addressid = ad.save(addressPO).getAddressid();
+            empPO.setAddressid(addressid);
+        }
         if (FormUtils.checkNUll(emp.getLastname()) || FormUtils.checkNUll(emp.getFirstname()) || FormUtils.checkNUll(emp.getSsn())
-                || FormUtils.checkNUll(emp.getSsn()) || emp.getGender() != null || FormUtils.checkNUll(emp.getTitle())) {
+                 || FormUtils.checkNUll(emp.getSsn()) || emp.getGender() != null || FormUtils.checkNUll(emp.getTitle())) {
             PersonPO personPO = new PersonPO(emp.getLastname() + " " + emp.getFirstname(), emp.getSsn(), emp.getGender(), emp.getTitle(), emp.getFirstname(), emp.getLastname(),
                     emp.getPhonenumber(), emp.getEmail(), emp.getFax());
+            personPO.setAddressid(addressid);
+            if (empInfo != null) {
+                personPO.setPersonid(empInfo.getPersonid());
+            }
             empPO.setPersonid(pd.save(personPO).getPersonid());
         }
-        if (!FormUtils.isEmpty(addressPO)) {
-            empPO.setAddressid(ad.save(addressPO).getAddressid());
-        }
-
         ed.save(empPO);
     }
 
@@ -224,6 +260,7 @@ public class EmployeeService {
 
     /**
      * 返回一个 employeeAddVO对象的所有信息
+     *
      * @param id
      * @return
      */
@@ -236,11 +273,11 @@ public class EmployeeService {
         emp.setCode(empPO.getCode());
         emp.setExpiredate(empPO.getExpiredate());
         emp.setStatus(empPO.getStatus());
-
-        ps.findPeronInfo(empPO.getPersonid(),emp);
-        as.findAddressInfo(empPO.getAddressid(),emp);
+        ps.findPeronInfo(empPO.getPersonid(), emp);
+        as.findAddressInfo(empPO.getAddressid(), emp);
 //        OrganizationPO orgPO = od.findByOrganizationid(empPO.getOrganizationid());
         emp.setOrganizationid(empPO.getOrganizationid());
+        emp.setEmployeeid(empPO.getEmployeeid());
         return emp;
     }
 }

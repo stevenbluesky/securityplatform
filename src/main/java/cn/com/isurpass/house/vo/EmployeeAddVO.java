@@ -33,6 +33,43 @@ public class EmployeeAddVO{
     private String provincename;
     private String cityname;
 
+    private Integer employeeid;
+    private Integer personid;
+    private Integer addressid;
+    private Integer createtime;
+
+    public Integer getEmployeeid() {
+        return employeeid;
+    }
+
+    public void setEmployeeid(Integer employeeid) {
+        this.employeeid = employeeid;
+    }
+
+    public Integer getPersonid() {
+        return personid;
+    }
+
+    public void setPersonid(Integer personid) {
+        this.personid = personid;
+    }
+
+    public Integer getAddressid() {
+        return addressid;
+    }
+
+    public void setAddressid(Integer addressid) {
+        this.addressid = addressid;
+    }
+
+    public Integer getCreatetime() {
+        return createtime;
+    }
+
+    public void setCreatetime(Integer createtime) {
+        this.createtime = createtime;
+    }
+
     public String getCountryname() {
         return countryname;
     }

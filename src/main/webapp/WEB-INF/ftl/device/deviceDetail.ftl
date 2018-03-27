@@ -24,7 +24,7 @@
 					        <p>${(zwave.suppliename)!'无'}</p>
 					        <p>${(zwave.warningstatuses)!'无'}</p>
 					        <p>
-					        ${zwave.open}
+					        ${(zwave.open)!}
 						        <#if (zwave.status)??>
 						        	<#if (zwave.status)==255>
 						        		开

@@ -39,14 +39,12 @@ public class OrganizationController {
 	@Autowired
 	OrganizationService ss;
 
-
-	/**
-	 * 添加服务商
-	 * @param name
-	 * @param code
-	 * @param country
-	 * @return
-	 */
+    /**
+     * 添加服务商
+     * @param as
+     * @param request
+     * @return
+     */
 	//TODO 这个方法到时候可以改成直接跳转或者是返回Json数据,如果返回json数据的话,前端就要通过Ajax提交,而不是通过 form 的 action 属性提交
 	@RequestMapping("add")
 	@ResponseBody
@@ -107,7 +105,6 @@ public class OrganizationController {
 		return ss.listChirldOrg(pageable,request);
 	}
 
-	
 	@RequestMapping("validCode")
 	@ResponseBody
 	public Map<String,Boolean> validCode(String code) {
@@ -132,10 +129,9 @@ public class OrganizationController {
 	public String addSupplier(@RequestParam(required = false)Integer organizationid, HttpServletRequest request) {
         if (organizationid != null) {
             request.getSession().setAttribute("orgInfo",ss.getOrganizationVOInfo(organizationid));
-        }else {
-            //清除empInfo session
-            request.getSession().setAttribute("orgInfo", null);
-        }
+        }else{
+        	request.getSession().setAttribute("orgInfo",null);
+		}
 		return "supplier/addSupplier";
 	}
 
@@ -147,6 +143,7 @@ public class OrganizationController {
 	@RequestMapping("addInstallerPage")
 	public String addInstallerPage(@RequestParam(required = false)Integer organizationid, HttpServletRequest request) {
 		if (organizationid != null) {
+//		    request.setAttribute("orgInfo",ss.getOrganizationVOInfo(organizationid));
 			request.getSession().setAttribute("orgInfo",ss.getOrganizationVOInfo(organizationid));
 		}else {
 			//清除empInfo session

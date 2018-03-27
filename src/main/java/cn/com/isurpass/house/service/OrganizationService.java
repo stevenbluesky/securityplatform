@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import cn.com.isurpass.house.vo.LoginVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,285 +34,326 @@ import cn.com.isurpass.house.vo.OrgListVO;
 @Service
 public class OrganizationService {
 
-	@Autowired
-	OrganizationDAO od;
-	@Autowired
-	PersonDAO pd;
-	@Autowired
-	AddressDAO ad;
-	@Autowired
-	EmployeeDAO ed;
-	@Autowired
-	CountryDAO country;
-	@Autowired
-	ProvinceDAO province;
-	@Autowired
-	CityDAO city;
+    @Autowired
+    OrganizationDAO od;
+    @Autowired
+    PersonDAO pd;
+    @Autowired
+    AddressDAO ad;
+    @Autowired
+    EmployeeDAO ed;
+    @Autowired
+    CountryDAO country;
+    @Autowired
+    ProvinceDAO province;
+    @Autowired
+    CityDAO city;
     @Autowired
     AddressService as;
     @Autowired
     PersonService ps;
 
-	/**
-	 * 添加一个机构
-	 *
-	 * @param as
-	 * @throws MyArgumentNullException
-	 */
-	public void add(OrgAddVO as, HttpServletRequest request) throws MyArgumentNullException {
-		addByOrgtype(as, Constants.ORGTYPE_SUPPLIER, request);
-	}
+    /**
+     * 通过指定员工id和要切换成的方法进行状态的改变
+     *
+     * @param orgid
+     * @param status
+     */
+    public void changeStatus(Integer orgid, Integer status) {
+        OrganizationPO org = od.findByOrganizationid(orgid);
+        switch (status) {
+            case 0:
+                org.setStatus(Constants.STATUS_UNVALID);
+                break;
+            case 1:
+                org.setStatus(Constants.STATUS_NORMAL);
+                break;
+            case 2:
+                org.setStatus(Constants.STATUS_SUSPENCED);
+                break;
+            case 9:
+                org.setStatus(Constants.STATUS_DELETED);
+                break;
+            default:
+                org.setStatus(Constants.STATUS_NORMAL);
+                break;
+        }
+        od.save(org);
+    }
 
-	@Transactional(rollbackFor = Exception.class)
-	public void addByOrgtype(OrgAddVO as, Integer orgtype, HttpServletRequest request) throws MyArgumentNullException {
-		if (!FormUtils.checkOrgNull(as)) // 必填项为空时
-			throw new MyArgumentNullException("必填字段不能为空!");
-		EmployeePO emp0 = (EmployeePO) request.getSession().getAttribute("emp");
-		OrganizationPO org = new OrganizationPO();
+    /**
+     * 添加一个机构
+     *
+     * @param as
+     * @throws MyArgumentNullException
+     */
+    public void add(OrgAddVO as, HttpServletRequest request) throws MyArgumentNullException {
+        addByOrgtype(as, Constants.ORGTYPE_SUPPLIER, request);
+    }
 
-		org.setName(as.getName());
-		org.setCode(as.getCode());
-		org.setStatus(1);
-		org.setCentralstationname(as.getCsname());
+    @Transactional(rollbackFor = Exception.class)
+    public void addByOrgtype(OrgAddVO as, Integer orgtype, HttpServletRequest request) throws MyArgumentNullException {
+        if (!FormUtils.checkOrgNull(as)) // 必填项为空时
+            throw new MyArgumentNullException("必填字段不能为空!");
+        EmployeePO emp0 = (EmployeePO) request.getSession().getAttribute("emp");
+        OrgAddVO orgInfo = (OrgAddVO) request.getSession().getAttribute("orgInfo");
+        OrganizationPO org = new OrganizationPO();
 
-		// FormUtils.copyO2O(org, as);// 将一些机构的属性复制到 org 中
+        org.setName(as.getName());
+        org.setCode(as.getCode());
+        org.setStatus(1);
+        org.setCentralstationname(as.getCsname());
 
-		// if (as.getParentorgid() == null) {// 没有填写上级机构id,则表明这是一个服务商
-		// Integer ametaId =
-		// od.findByOrgtype(Constants.ORGTYPE_AMETA).get(0).getOrganizationid();// 取
-		// Ameta 的机构id
-		// as.setParentorgid(ametaId);
-		// }
-		// 不能这么判断,事实上,服务商新增安装商时也是不填上级机构的id(默认为服务商的id)
+        // FormUtils.copyO2O(org, as);// 将一些机构的属性复制到 org 中
 
-		if (Constants.ORGTYPE_SUPPLIER.equals(orgtype)) {// 如果是添加服务商
-			org.setParentorgid(od.findByOrgtype(Constants.ORGTYPE_AMETA).get(0).getOrganizationid());
-			org.setOrgtype(Constants.ORGTYPE_SUPPLIER);
-		}
-		if (Constants.ORGTYPE_INSTALLER.equals(orgtype)) {// 安装商
-			// org.setParentorgid(emp0.getOrganizationid());
-			org.setOrgtype(Constants.ORGTYPE_INSTALLER);
-			if (as.getParentorgid() != null) {// 不为空,ameta在进行添加//要进行当前用户是否是ameta员工的判断
-				org.setParentorgid(as.getParentorgid());
+        // if (as.getParentorgid() == null) {// 没有填写上级机构id,则表明这是一个服务商
+        // Integer ametaId =
+        // od.findByOrgtype(Constants.ORGTYPE_AMETA).get(0).getOrganizationid();// 取
+        // Ameta 的机构id
+        // as.setParentorgid(ametaId);
+        // }
+        // 不能这么判断,事实上,服务商新增安装商时也是不填上级机构的id(默认为服务商的id)
 
-			} else {
-				org.setParentorgid(emp0.getOrganizationid());
-			}
-		}
+        if (orgInfo != null) {//不为空说明在进行修改操作
+            org.setParentorgid(orgInfo.getParentorgid());
+            org.setOrgtype(orgInfo.getOrgtype());
+        } else {
+            if (Constants.ORGTYPE_SUPPLIER.equals(orgtype)) {// 如果是添加服务商
+                org.setParentorgid(od.findByOrgtype(Constants.ORGTYPE_AMETA).get(0).getOrganizationid());
+                org.setOrgtype(Constants.ORGTYPE_SUPPLIER);
+            }
+            if (Constants.ORGTYPE_INSTALLER.equals(orgtype)) {// 安装商
+                // org.setParentorgid(emp0.getOrganizationid());
+                org.setOrgtype(Constants.ORGTYPE_INSTALLER);
+                if (as.getParentorgid() != null) {// 不为空,ameta在进行添加//要进行当前用户是否是ameta员工的判断
+                    org.setParentorgid(as.getParentorgid());
 
-		// 以下这些值可能为空,因此需要进行NPE判断
-		String countryname = null;
-		String provincename = null;
-		String cityname = null;
-		String bCountryname = null;
-		String bProvincename = null;
-		String bCityname = null;
-		String csCountryname = null;
-		String csProvincename = null;
-		String csCityname = null;
+                } else {
+                    org.setParentorgid(emp0.getOrganizationid());
+                }
+            }
+        }
 
-		if (as.getCountry() != null)
-			countryname = country.findByCountryid(as.getCountry()).getCountryname();
-		if (as.getProvince() != null)
-			provincename = province.findByProvinceid(as.getProvince()).getProvincename();
-		if (as.getCity() != null)
-			cityname = city.findByCityid(as.getCity()).getCityname();
+        // 以下这些值可能为空,因此需要进行NPE判断
+        String countryname = null;
+        String provincename = null;
+        String cityname = null;
+        String bCountryname = null;
+        String bProvincename = null;
+        String bCityname = null;
+        String csCountryname = null;
+        String csProvincename = null;
+        String csCityname = null;
 
-		if (as.getBcountry() != null)
-			bCountryname = country.findByCountryid(as.getBcountry()).getCountryname();
-		if (as.getBprovince() != null)
-			bProvincename = province.findByProvinceid(as.getBprovince()).getProvincename();
-		if (as.getBcity() != null)
-			bCityname = city.findByCityid(as.getBcity()).getCityname();
+        if (as.getCountry() != null)
+            countryname = country.findByCountryid(as.getCountry()).getCountryname();
+        if (as.getProvince() != null)
+            provincename = province.findByProvinceid(as.getProvince()).getProvincename();
+        if (as.getCity() != null)
+            cityname = city.findByCityid(as.getCity()).getCityname();
 
-		if (as.getCscountry() != null)
-			csCountryname = country.findByCountryid(as.getCscountry()).getCountryname();
-		if (as.getCsprovince() != null)
-			csProvincename = province.findByProvinceid(as.getCsprovince()).getProvincename();
-		if (as.getCscity() != null)
-			csCityname = city.findByCityid(as.getCscity()).getCityname();
+        if (as.getBcountry() != null)
+            bCountryname = country.findByCountryid(as.getBcountry()).getCountryname();
+        if (as.getBprovince() != null)
+            bProvincename = province.findByProvinceid(as.getBprovince()).getProvincename();
+        if (as.getBcity() != null)
+            bCityname = city.findByCityid(as.getBcity()).getCityname();
 
-		// 公司地址
-		AddressPO address = new AddressPO(countryname, provincename, cityname, as.getDetailaddress(), as.getPostal());
-		// 公司账务地址
-		AddressPO bAddress = new AddressPO(bCountryname, bProvincename, bCityname, as.getBdetailaddress(),
-				as.getBpostal());
-		// 服务商联系人
-		PersonPO sPerson = new PersonPO(as.getSname(), as.getSphonenumber(), as.getSemail(), as.getSfax());
-		// 总公司地址
-		AddressPO csAddress = new AddressPO(csCountryname, csProvincename, csCityname, "", as.getCspostal());
-		// 服务商总公司联系人
-		PersonPO csPerson = new PersonPO(as.getCspname(), as.getCspphonenumber(), as.getCspemail(), as.getCspfax());
-		EmployeePO emp = new EmployeePO(as.getLoginname(), FormUtils.encrypt(as.getPassword()), as.getQuestion(),
-				FormUtils.encrypt(as.getAnswer()));
+        if (as.getCscountry() != null)
+            csCountryname = country.findByCountryid(as.getCscountry()).getCountryname();
+        if (as.getCsprovince() != null)
+            csProvincename = province.findByProvinceid(as.getCsprovince()).getProvincename();
+        if (as.getCscity() != null)
+            csCityname = city.findByCityid(as.getCscity()).getCityname();
 
-		System.out.println(address.toString());
-		System.out.println(bAddress.toString());
-		System.out.println(csAddress.toString());
+        // 公司地址
+        AddressPO address = new AddressPO(countryname, provincename, cityname, as.getDetailaddress(), as.getPostal());
+        // 公司账务地址
+        AddressPO bAddress = new AddressPO(bCountryname, bProvincename, bCityname, as.getBdetailaddress(),
+                as.getBpostal());
+        // 服务商联系人
+        PersonPO sPerson = new PersonPO(as.getSname(), as.getSphonenumber(), as.getSemail(), as.getSfax());
+        // 总公司地址
+        AddressPO csAddress = new AddressPO(csCountryname, csProvincename, csCityname, "", as.getCspostal());
+        // 服务商总公司联系人
+        PersonPO csPerson = new PersonPO(as.getCspname(), as.getCspphonenumber(), as.getCspemail(), as.getCspfax());
+        EmployeePO emp = new EmployeePO(as.getLoginname(), FormUtils.encrypt(as.getPassword()), as.getQuestion(),
+                FormUtils.encrypt(as.getAnswer()));
 
-		Integer aId = null;// 公司地址id
-		Integer csAId = null;
-		Integer bAId = null;
-		Integer sPId = null;
-		Integer csPId = null;
+        System.out.println(address.toString());
+        System.out.println(bAddress.toString());
+        System.out.println(csAddress.toString());
 
-		if (!FormUtils.isEmpty(address))
-			aId = ad.save(address).getAddressid();
-		if (!FormUtils.isEmpty(csAddress))
-			csAId = ad.save(csAddress).getAddressid();
-		if (!FormUtils.isEmpty(bAddress))
-			bAId = ad.save(bAddress).getAddressid();
-		if (!FormUtils.isEmpty(sPerson)) // 服务商联系人不为空
-			sPId = pd.save(sPerson).getAddressid();
-		if (!FormUtils.isEmpty(csPerson)) {// 服务商总公司联系人不为空
-			csPId = pd.save(csPerson).getPersonid();
-			org.setParentorgid(od.getParentorgidByName(as.getCsname()));
-		}
+        if (orgInfo != null) {
+            address.setAddressid(orgInfo.getOfficeaddressid());
+            bAddress.setAddressid(orgInfo.getBillingaddressid());
+            csAddress.setAddressid(orgInfo.getCsaddressid());
+            sPerson.setPersonid(orgInfo.getContactid());
+            csPerson.setPersonid(orgInfo.getCscontactid());
+        }
 
-		// 取到各分支方法返回的主键id后将其存入 org 对象中,然后再进行保存
-		org.setOfficeaddressid(aId);
-		org.setBillingaddressid(csAId);
-		org.setCsaddressid(csAId);
-		org.setBillingaddressid(bAId);
-		org.setContactid(sPId);
-		org.setCscontactid(csPId);
+        Integer aId = null;// 公司地址id
+        Integer csAId = null;
+        Integer bAId = null;
+        Integer sPId = null;
+        Integer csPId = null;
 
-		Integer orgId = od.save(org).getOrganizationid();
+        if (!FormUtils.isEmpty(address))
+            aId = ad.save(address).getAddressid();
+        if (!FormUtils.isEmpty(csAddress))
+            csAId = ad.save(csAddress).getAddressid();
+        if (!FormUtils.isEmpty(bAddress))
+            bAId = ad.save(bAddress).getAddressid();
+        if (!FormUtils.isEmpty(sPerson)) // 服务商联系人不为空
+            sPId = pd.save(sPerson).getPersonid();
+        if (!FormUtils.isEmpty(csPerson)) {// 服务商总公司联系人不为空
+            csPId = pd.save(csPerson).getPersonid();
+        }
+//        od.findByName(as.getCsname());
 
-		emp.setOrganizationid(orgId);
-		emp.setStatus(1);
-		if (!FormUtils.isEmpty(emp)) {// 管理员不为空..由于此方法一开始就对管理员账号不存在的情况进行了处理,所以此处管理员对象是肯定存在的.
-			// TODO 现在数据库里面 Loginname
-			// 是unique类型的,要文档上面意思是不同的机构可以有相同的loginname,所以这里要判断一下同机构中的loginname,并去掉数据库里面的unique索引
-			ed.save(emp);
-		}
-	}
+        // 取到各分支方法返回的主键id后将其存入 org 对象中,然后再进行保存
+        org.setOfficeaddressid(aId);
+        org.setBillingaddressid(csAId);
+        org.setCsaddressid(csAId);
+        org.setBillingaddressid(bAId);
+        org.setContactid(sPId);
+        org.setCscontactid(csPId);
 
-	/**
-	 * 通过分页形式返回指定类型的机构列表
-	 *
-	 * @param pageable
-	 * @param orgType
-	 * @return
-	 */
-	public Map<String, Object> listOrgByType(Pageable pageable, Integer orgType) {
-		Map<String, Object> map = new HashMap<>();
-		Page<OrganizationPO> orgList = od.findByOrgtype(pageable, orgType);
-		map.put("total", orgList.getTotalElements());
-		List<OrgListVO> list = new ArrayList<>();
-		orgList.forEach(o -> {
-			OrgListVO orgVO = new OrgListVO();
-			orgVO.setOrganizationid(o.getOrganizationid());
-			orgVO.setName(o.getName());
-			if (o.getOfficeaddressid() != null) {
-				orgVO.setCity(ad.findByAddressid(o.getOfficeaddressid()).getCity());
-			} else
-				orgVO.setCity("-");
-			orgVO.setCode(o.getCode());
-			orgVO.setStatus(o.getStatus());
-			list.add(orgVO);
-			// System.out.println(list.toString()+"fff");
-		});
-		map.put("rows", list);
-		return map;
-	}
+        if (orgInfo != null) {
+            org.setOrganizationid(orgInfo.getOrgnizationid());
+        }
+        Integer orgId = od.save(org).getOrganizationid();
+        if (orgInfo == null) {
+            emp.setOrganizationid(orgId);
+            emp.setStatus(1);
+            if (!FormUtils.isEmpty(emp)) {// 管理员不为空..由于此方法一开始就对管理员账号不存在的情况进行了处理,所以此处管理员对象是肯定存在的.
+                // TODO 现在数据库里面 Loginname
+                // 是unique类型的,要文档上面意思是不同的机构可以有相同的loginname,所以这里要判断一下同机构中的loginname,并去掉数据库里面的unique索引
+                ed.save(emp);
+            }
+        }
+    }
 
-	public Map<String, Object> listChirldOrg(Pageable pageable, HttpServletRequest request) {
+    /**
+     * 通过分页形式返回指定类型的机构列表
+     *
+     * @param pageable
+     * @param orgType
+     * @return
+     */
+    public Map<String, Object> listOrgByType(Pageable pageable, Integer orgType) {
+        Map<String, Object> map = new HashMap<>();
+        Page<OrganizationPO> orgList = od.findByOrgtype(pageable, orgType);
+        map.put("total", orgList.getTotalElements());
+        List<OrgListVO> list = new ArrayList<>();
+        setProperties(orgList, list);
+        map.put("rows", list);
+        return map;
+    }
 
-		// 角色为服务商的员工才可以访问
-		// 先取员工的机构id,再通过机构id查询其机构下所有的安装商,
-		EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
-		Page<OrganizationPO> orgList = od.findByParentorgidIn(pageable, emp.getOrganizationid());
-		Map<String, Object> map = new HashMap<>();
-		map.put("total", orgList.getTotalElements());
-		List<OrgListVO> list = new ArrayList<>();
-		orgList.forEach(o -> {
-			OrgListVO orgVO = new OrgListVO();
-			orgVO.setOrganizationid(o.getOrganizationid());
-			orgVO.setName(o.getName());
-			if (o.getOfficeaddressid() != null) {
-				orgVO.setCity(ad.findByAddressid(o.getOfficeaddressid()).getCity());
-			} else
-				orgVO.setCity("-");
-			orgVO.setCode(o.getCode());
-			orgVO.setStatus(o.getStatus());
-			list.add(orgVO);
-			// System.out.println(list.toString()+"fff");
-		});
-		map.put("rows", list);
-		return map;
-	}
+    public Map<String, Object> listChirldOrg(Pageable pageable, HttpServletRequest request) {
+        // 角色为服务商的员工才可以访问
+        // 先取员工的机构id,再通过机构id查询其机构下所有的安装商,
+        EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
+        Page<OrganizationPO> orgList = od.findByParentorgidIn(pageable, emp.getOrganizationid());
+        Map<String, Object> map = new HashMap<>();
+        map.put("total", orgList.getTotalElements());
+        List<OrgListVO> list = new ArrayList<>();
+        setProperties(orgList, list);
+        map.put("rows", list);
+        return map;
+    }
 
-	/**
-	 * 通过机构类型列出所有的机构
-	 *
-	 * @return
-	 */
-	public List<OrganizationPO> listOrgByType(Integer orgType) {
-		return od.findByOrgtype(orgType);
-	}
+    private void setProperties(Page<OrganizationPO> orgList, List<OrgListVO> list) {
+        orgList.forEach(o -> {
+            OrgListVO orgVO = new OrgListVO();
+            orgVO.setOrganizationid(o.getOrganizationid());
+            orgVO.setName(o.getName());
+            if (o.getOfficeaddressid() != null) {
+                AddressPO addresspo = ad.findByAddressid(o.getOfficeaddressid());
+                if (addresspo != null) {
+                    orgVO.setCity(addresspo.getCity());
+                }
+            } else
+                orgVO.setCity("-");
+            orgVO.setCode(o.getCode());
+            orgVO.setStatus(o.getStatus());
+            list.add(orgVO);
+            // System.out.println(list.toString()+"fff");
+        });
+    }
 
-	/**
-	 * 与 listOrgByTyep 不同的是此方法只返回 organizationid 和 name.
-	 *
-	 * @param orgType
-	 * @return
-	 */
-	public List<OrganizationPO> listOrgSelectByType(Integer orgType) {
-		return od.findAllOrgSelect(orgType);
-	}
+    /**
+     * 通过机构类型列出所有的机构
+     *
+     * @return
+     */
+    public List<OrganizationPO> listOrgByType(Integer orgType) {
+        return od.findByOrgtype(orgType);
+    }
 
-	public List<OrganizationPO> listAllOrg() {
-		return od.findAll();
-	}
+    /**
+     * 与 listOrgByTyep 不同的是此方法只返回 organizationid 和 name.
+     *
+     * @param orgType
+     * @return
+     */
+    public List<OrganizationPO> listOrgSelectByType(Integer orgType) {
+        return od.findAllOrgSelect(orgType);
+    }
 
-	public List<OrganizationPO> listAllOrgSelect() {
-		return od.findAllOrgSelect();
-	}
+    public List<OrganizationPO> listAllOrg() {
+        return od.findAll();
+    }
 
-	public boolean validCode(String code) {
-		OrganizationPO org = od.findByCode(code);
-		if (org == null)
-			return true;
-		return false;
-	}
+    public List<OrganizationPO> listAllOrgSelect() {
+        return od.findAllOrgSelect();
+    }
 
-	public List<Integer> findParentOrgid(Integer id, List<Integer> list) {
-		OrganizationPO org = od.findByOrganizationid(id);//
-		od.findByParentorgid(org.getOrganizationid());
-		if (org.getParentorgid() != null) {
-			list.add(org.getParentorgid());
-			findParentOrgid(org.getParentorgid(), list);
-		}
-		return list;
-	}
+    public boolean validCode(String code) {
+        OrganizationPO org = od.findByCode(code);
+        if (org == null)
+            return true;
+        return false;
+    }
+
+    public List<Integer> findParentOrgid(Integer id, List<Integer> list) {
+        OrganizationPO org = od.findByOrganizationid(id);//
+        od.findByParentorgid(org.getOrganizationid());
+        if (org.getParentorgid() != null) {
+            list.add(org.getParentorgid());
+            findParentOrgid(org.getParentorgid(), list);
+        }
+        return list;
+    }
 
     public List<Integer> findChildrenOrgid(Integer id, List<Integer> list) {
         List<OrganizationPO> orgList = od.findByParentorgid(id);
         if (orgList == null) {
             list.add(id);
-             return list;
+            return list;
         }
-        orgList.forEach(o ->{
+        orgList.forEach(o -> {
             list.add(o.getOrganizationid());
-            findChildrenOrgid(o.getOrganizationid(),list);
+            findChildrenOrgid(o.getOrganizationid(), list);
         });
         return list;
 
     }
-	/**
-	 * 通过机构id判断它是否是ameta
-	 *
-	 * @param id
-	 * @return
-	 */
-	public boolean isAdmin(Integer id) {
-		OrganizationPO org = od.findByOrganizationid(id);
-		if (org != null) {
-			return org.getOrgtype() == Constants.ORGTYPE_AMETA;
-		}
-		return false;
-	}
+
+    /**
+     * 通过机构id判断它是否是ameta
+     *
+     * @param id
+     * @return
+     */
+    public boolean isAdmin(Integer id) {
+        OrganizationPO org = od.findByOrganizationid(id);
+        if (org != null) {
+            return org.getOrgtype() == Constants.ORGTYPE_AMETA;
+        }
+        return false;
+    }
 
     public OrgAddVO getOrganizationVOInfo(Integer organizationid) {
         OrgAddVO org = new OrgAddVO();
@@ -319,13 +361,15 @@ public class OrganizationService {
         org.setName(orgPO.getName());
         org.setCode(orgPO.getCode());
         org.setCsname(orgPO.getCentralstationname());
+        org.setOrgtype(orgPO.getOrgtype());
+        org.setOrgnizationid(orgPO.getOrganizationid());
+        org.setParentorgid(orgPO.getParentorgid());
 //        AddressPO addressInfo = as.findAddressInfo(orgPO.getOfficeaddressid());
 //        AddressPO baddressInfo = as.findAddressInfo(orgPO.getBillingaddressid());
 //        AddressPO csaddressInfo = as.findAddressInfo(orgPO.getCsaddressid());
 //        PersonPO peronInfo = ps.findPeronInfo(orgPO.getContactid());
 //        PersonPO bPersonInfo = ps.findPeronInfo(orgPO.getCscontactid());
-
-        as.findAddressInfo(orgPO,org);
+        as.findAddressInfo(orgPO, org);
         ps.findPersonInfo(orgPO, org);
         System.out.println(org.toString());
         return org;

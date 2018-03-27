@@ -51,18 +51,22 @@ public class AddressService {
                 emp.setCountryname(addresspo.getCountry());
                 emp.setProvincename(addresspo.getProvince());
                 emp.setDetailaddress(addresspo.getDetailaddress());
+                emp.setAddressid(addresspo.getAddressid());
             }
         }
     }
 
     public void findAddressInfo(OrganizationPO orgPO, OrgAddVO org) {
         if (orgPO.getOfficeaddressid() != null) {
+            org.setOfficeaddressid(orgPO.getOfficeaddressid());
             org.setAddress(ad.findByAddressid(orgPO.getOfficeaddressid()));
         }
         if (orgPO.getBillingaddressid() != null) {
+            org.setBillingaddressid(orgPO.getBillingaddressid());
             org.setBaddress(ad.findByAddressid(orgPO.getBillingaddressid()));
         }
         if (orgPO.getCsaddressid() != null) {
+            org.setCsaddressid(orgPO.getCsaddressid());
             org.setCsaddress(ad.findByAddressid(orgPO.getCsaddressid()));
         }
     }

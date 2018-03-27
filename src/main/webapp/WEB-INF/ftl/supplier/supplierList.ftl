@@ -110,7 +110,7 @@
                 {
                     "click #btn1": function (e, value, row, index) {
                         // alert(row.name);
-                        window.location.href = "addInstallerPage?organizationid=" + row.organizationid;
+                        window.location.href = "addSupplierPage?organizationid=" + row.organizationid;
                     }
                 };
 

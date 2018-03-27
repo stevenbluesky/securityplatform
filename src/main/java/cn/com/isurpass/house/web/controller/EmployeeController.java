@@ -30,6 +30,7 @@ public class EmployeeController {
     @RequestMapping("addEmployeePage")
     public String addEmployeePage(@RequestParam(required = false)Integer id, HttpServletRequest request) {
         if (id != null) {
+//            request.setAttribute("empInfo",es.getEmployeeVOInfo(id));
             request.getSession().setAttribute("empInfo",es.getEmployeeVOInfo(id));
         }else {
             //清除empInfo session
@@ -59,6 +60,7 @@ public class EmployeeController {
         try {
             es.add(emp, request);
         } catch (MyArgumentNullException e) {
+            e.printStackTrace();
             return new JsonResult(-1, e.getMessage());
         } catch (RuntimeException e) {
             e.printStackTrace();
