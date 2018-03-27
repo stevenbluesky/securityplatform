@@ -31,11 +31,16 @@ public class DeviceDetailVO {
 		this.status = status;
 	}
 
-	public boolean getOpen() {
+	public boolean getStatusopen() {
 		if(this.status == null) {
 			return false;
 		}
 		return this.status == 255;
 	}
-
+	public boolean getWarningstatusesopen(){
+        if (this.warningstatuses == null) {
+            return false;
+        }
+        return this.warningstatuses == "[255]";
+    }
 }
