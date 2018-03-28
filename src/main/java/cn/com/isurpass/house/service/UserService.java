@@ -135,13 +135,19 @@ public class UserService {
 		map.put("total", ud.count());
 		Page<UserPO> userList = ud.findAll(pageable);
 		List<UserInfoListVO> list = new ArrayList<>();
+        if (userList == null) {
+            return null;
+        }
 		userList.forEach(u -> {
 			PersonPO personPO = pd.findByPersonid(u.getPersonid());
-			AddressPO adrs = ad.findByAddressid(personPO.getAddressid());
-			UserInfoListVO user = new UserInfoListVO();
-			user.setUserid(u.getUserid());
-			user.setName(u.getName());
-			user.setPhonenumber(personPO.getPhonenumber());
+            UserInfoListVO user = new UserInfoListVO();
+            AddressPO adrs = null;
+            if(personPO != null) {
+               adrs = ad.findByAddressid(personPO.getAddressid());
+                user.setPhonenumber(personPO.getPhonenumber());
+            }
+            user.setUserid(u.getUserid());
+            user.setName(u.getName());
 			if (adrs != null) {
 				user.setCity(adrs.getCity());
 			}

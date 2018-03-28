@@ -99,6 +99,9 @@ public class GatewayuserService {
 		return findOrgBydeviceid(deviceid).getName();
 	}
 	public String findInstallerOrgnameBydeviceId(String deviceid) {
+        if (findInstallOrgBydeviceid(deviceid) == null) {
+            return null;
+        }
 		return findInstallOrgBydeviceid(deviceid).getName();
 	}
 
