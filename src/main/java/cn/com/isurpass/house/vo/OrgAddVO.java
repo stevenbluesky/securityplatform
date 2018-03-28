@@ -10,7 +10,7 @@ import cn.com.isurpass.house.po.AddressPO;
  */
 public class OrgAddVO {
 
-    private Integer orgnizationid;
+    private Integer organizationid;
 
     private AddressPO address;
     private Integer parentorgid; // 所属安装商的名称
@@ -136,12 +136,12 @@ public class OrgAddVO {
         this.address = address;
     }
 
-    public Integer getOrgnizationid() {
-        return orgnizationid;
+    public Integer getOrganizationid() {
+        return organizationid;
     }
 
-    public void setOrgnizationid(Integer orgnizationid) {
-        this.orgnizationid = orgnizationid;
+    public void setOrganizationid(Integer organizationid) {
+        this.organizationid = organizationid;
     }
 
     public Integer getParentorgid() {
@@ -387,7 +387,7 @@ public class OrgAddVO {
     @Override
     public String toString() {
         return "OrgAddVO{" +
-                "orgnizationid=" + orgnizationid +
+                "orgnizationid=" + organizationid +
                 ", address=" + address +
                 ", parentorgid=" + parentorgid +
                 ", name='" + name + '\'' +

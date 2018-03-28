@@ -5,13 +5,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import javax.servlet.http.HttpServletRequest;
 
+import cn.com.isurpass.house.po.*;
 import cn.com.isurpass.house.util.Encrypt;
 import cn.com.isurpass.house.vo.LoginVO;
+import cn.com.isurpass.house.vo.OrgSearchVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,10 +30,6 @@ import cn.com.isurpass.house.dao.OrganizationDAO;
 import cn.com.isurpass.house.dao.PersonDAO;
 import cn.com.isurpass.house.dao.ProvinceDAO;
 import cn.com.isurpass.house.exception.MyArgumentNullException;
-import cn.com.isurpass.house.po.AddressPO;
-import cn.com.isurpass.house.po.EmployeePO;
-import cn.com.isurpass.house.po.OrganizationPO;
-import cn.com.isurpass.house.po.PersonPO;
 import cn.com.isurpass.house.util.Constants;
 import cn.com.isurpass.house.util.FormUtils;
 import cn.com.isurpass.house.vo.OrgAddVO;
@@ -104,7 +107,6 @@ public class OrganizationService {
         org.setCode(as.getCode());
         org.setStatus(1);
         org.setCentralstationname(as.getCsname());
-
         // FormUtils.copyO2O(org, as);// 将一些机构的属性复制到 org 中
 
         // if (as.getParentorgid() == null) {// 没有填写上级机构id,则表明这是一个服务商
@@ -150,9 +152,11 @@ public class OrganizationService {
             countryname = country.findByCountryid(as.getCountry()).getCountryname();
         if (as.getProvince() != null)
             provincename = province.findByProvinceid(as.getProvince()).getProvincename();
-        if (as.getCity() != null)
-            cityname = city.findByCityid(as.getCity()).getCityname();
-
+        if (as.getCity() != null) {
+            CityPO c = city.findByCityid(as.getCity());
+            org.setCitycode(c.getCitycode());
+            cityname = c.getCityname();
+        }
         if (as.getBcountry() != null)
             bCountryname = country.findByCountryid(as.getBcountry()).getCountryname();
         if (as.getBprovince() != null)
@@ -222,7 +226,7 @@ public class OrganizationService {
         org.setCscontactid(csPId);
 
         if (orgInfo != null) {
-            org.setOrganizationid(orgInfo.getOrgnizationid());
+            org.setOrganizationid(orgInfo.getOrganizationid());
         }
         Integer orgId = od.save(org).getOrganizationid();
         if (orgInfo == null) {
@@ -369,7 +373,7 @@ public class OrganizationService {
         org.setCode(orgPO.getCode());
         org.setCsname(orgPO.getCentralstationname());
         org.setOrgtype(orgPO.getOrgtype());
-        org.setOrgnizationid(orgPO.getOrganizationid());
+        org.setOrganizationid(orgPO.getOrganizationid());
         org.setParentorgid(orgPO.getParentorgid());
 //        AddressPO addressInfo = as.findAddressInfo(orgPO.getOfficeaddressid());
 //        AddressPO baddressInfo = as.findAddressInfo(orgPO.getBillingaddressid());
@@ -380,5 +384,25 @@ public class OrganizationService {
         ps.findPersonInfo(orgPO, org);
         System.out.println(org.toString());
         return org;
+    }
+
+    public Page<OrganizationPO> search(OrgSearchVO search){
+        if(FormUtils.isEmpty(search)){
+            return null;
+        }
+        String name = "";
+        String city = "";
+        if (search.getName() != null) {
+            name = search.getName();
+        }
+        if(search.getCity() != null){
+            city = search.getCity();
+        }
+        if (search.getCitycode() == null) {
+//            od.findByNameLikeAndCityLike("%"+name+"%","%"+city+"%");
+        }else{
+//            od.findByNameLike
+        }
+        return null;
     }
 }

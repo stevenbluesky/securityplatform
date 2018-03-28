@@ -5,6 +5,7 @@
         <div class="col-md-10">
             <form id="defaultForm">
                <#if orgInfo??>
+                    <input id="orgid" type="hidden" value="${(orgInfo.organizationid)!}"/>
                     <div class="text-center"><h1><@spring.message code="label.modifysupplier"/></h1></div>
                <#else>
                     <div class="text-center"><h1><@spring.message code="label.addsupplier"/></h1></div>
@@ -302,6 +303,7 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
+        // alert($("#orgid").val() == null);
         $('#defaultForm').bootstrapValidator({
             //       live: 'disabled',
             message: 'This value is not valid',
@@ -383,6 +385,11 @@
     });
 
     $("#btn-submit").click(function () {
+        if($("#orgid").val() != null) {
+            $("#defaultForm").bootstrapValidator('removeField','loginname');
+            $("#defaultForm").bootstrapValidator('removeField','password');
+            $("#defaultForm").bootstrapValidator('removeField','repassword');
+        }
         $("#defaultForm").bootstrapValidator('validate');//提交验证
         if ($("#defaultForm").data('bootstrapValidator').isValid()) {//获取验证结果，如果成功，执行下面代码
             var url = "../org/add";
