@@ -61,6 +61,9 @@ public class UserService {
 
 	@Transactional(rollbackFor = Exception.class)
 	public void add(UserAddVO u, HttpServletRequest request) {
+        if (gd.findByDeviceid(u.getDeviceid()) != null) {
+            throw new RuntimeException("此网关已经绑定了用户");
+        }
 		UserPO user = new UserPO();
 		user.setLoginname(u.getPhonenumber());
 		user.setName(u.getFirstname() + " " + u.getLastname());
@@ -151,9 +154,12 @@ public class UserService {
 		map.put("rows", list);
 		return map;
 	}
-	
+
+	//判断当前的是服务商还是安装商
 	public List<UserPO> findUser(Integer orgid){
+
 		//TODO 先要判断角色,然后查找相应的机构.
+
 		List<UserPO> userList = ud.findByOrganizationid(orgid);
 		return userList;
 	}

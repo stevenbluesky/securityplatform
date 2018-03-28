@@ -32,8 +32,10 @@ public interface OrganizationDAO extends CrudRepository<OrganizationPO,Integer>{
 	
 	OrganizationPO findByOrganizationid(Integer organizationid);
 	Page<OrganizationPO> findByParentorgidIn(Pageable pageable,Integer id);
+
 	OrganizationPO findByCode(String code);
 
     List<OrganizationPO> findByParentorgid(Integer id);
 
+	Page<OrganizationPO> findByOrgtypeAndParentorgidIn(Pageable pageable, Integer orgtypeInstaller, Integer organizationid);
 }

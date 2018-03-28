@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import cn.com.isurpass.house.service.ZwaveDeviceService;
 import cn.com.isurpass.house.util.PageResult;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Controller
 @RequestMapping("device")
 public class DeviceController {
@@ -23,9 +25,9 @@ public class DeviceController {
 	
 	@RequestMapping("deviceJsonList")
 	@ResponseBody
-	public Map<String, Object> deviceJsonList(PageResult pr){
+	public Map<String, Object> deviceJsonList(PageResult pr, HttpServletRequest request){
 		Pageable pageable = PageRequest.of(pr.getPage()-1,pr.getRows(),Sort.Direction.ASC,"zwavedeviceid");
-		return ds.listDevice(pageable);
+		return ds.listDevice(pageable,request);
 	} 
 	
 	@RequestMapping("deviceList")

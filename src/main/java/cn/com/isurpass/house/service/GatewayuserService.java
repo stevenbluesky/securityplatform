@@ -3,7 +3,9 @@ package cn.com.isurpass.house.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.com.isurpass.house.po.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import cn.com.isurpass.house.dao.CityDAO;
@@ -11,10 +13,6 @@ import cn.com.isurpass.house.dao.EmployeeDAO;
 import cn.com.isurpass.house.dao.GatewayuserDAO;
 import cn.com.isurpass.house.dao.OrganizationDAO;
 import cn.com.isurpass.house.dao.UserDAO;
-import cn.com.isurpass.house.po.EmployeePO;
-import cn.com.isurpass.house.po.GatewayUserPO;
-import cn.com.isurpass.house.po.OrganizationPO;
-import cn.com.isurpass.house.po.UserPO;
 
 @Service
 public class GatewayuserService {
@@ -48,6 +46,9 @@ public class GatewayuserService {
 	 */
 	public UserPO findUserBydeviceid(String deviceid) {
 		GatewayUserPO gu = gd.findByDeviceid(deviceid);
+        if (gu == null) {
+            return null;
+        }
 		Integer userid = gu.getUserid();
 		UserPO user = ud.findByUserid(userid);
 		return user;
@@ -83,6 +84,9 @@ public class GatewayuserService {
 	}
 	
 	public String findInstallernameBydeviceid(String deviceid) {
+        if (findInstallerByDeviceid(deviceid) == null) {
+            return null;
+        }
 		return findInstallerByDeviceid(deviceid).getName();
 	}
 
@@ -112,4 +116,19 @@ public class GatewayuserService {
 		gupo.forEach(g -> gid.add(g.getDeviceid()));
 		return gid;
 	}
+
+    /**
+     * 过滤zdevicelist,只显示与用户绑定了的zdevicelist
+     * @param zdevicelist
+     */
+    public List<String> filterDevice(List<ZwaveDevicePO> zdevicelist) {
+        List<String> list0 = new ArrayList<>();
+        List<String> list1 = new ArrayList<>();
+        zdevicelist.forEach(z->list1.add(z.getDeviceid()));
+        List<GatewayUserPO> list = gd.findByDeviceidIn(list1);
+        if (!list.isEmpty()){
+            list.forEach( l-> list0.add(l.getDeviceid()));
+        }
+        return list0;
+    }
 }

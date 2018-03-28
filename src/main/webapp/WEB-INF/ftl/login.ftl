@@ -1,3 +1,4 @@
+<#import "/spring.ftl" as spring />
 <!DOCTYPE html>
 <html lang="zh-CN">
   <head>
@@ -63,7 +64,7 @@
               <div  class="form-group">
                 <label for="captchacode" class="col-sm-2 control-label"><@spring.message code='label.captchcode'/></label>
                 <div class="col-sm-6">
-                <input type="text" class="form-control" id="captchacode" name="captchacode" placeholder="<@spring.message code='label.captchacode'/> ">
+                <input type="text" class="form-control" id="captchacode" name="captchacode" placeholder="<@spring.message code='label.captchcode'/> ">
                 </div>
                 <div class="col-sm-4">
                 <img class="img-responsive" src="static/img/code.jpg" style="height:100px;"/>

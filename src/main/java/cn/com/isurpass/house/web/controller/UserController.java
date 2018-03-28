@@ -29,10 +29,13 @@ public class UserController {
 	@ResponseBody
 	public JsonResult addUserInfo(UserAddVO user,HttpServletRequest request) {
 		try {
-			us.add(user,request);
+			us.add(user, request);
+		} catch (RuntimeException e) {
+			e.printStackTrace();
+			return new JsonResult(-1, e.getMessage());
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new JsonResult(-1,"出错啦~");
+			return new JsonResult(-1, "出错啦~");
 		}
 		return new JsonResult(1,"添加成功");
 	}

@@ -102,7 +102,7 @@ public class OrganizationController {
 	public Map<String, Object> installerJsonList(PageResult pr,HttpServletRequest request) {
 		Pageable pageable = PageRequest.of(pr.getPage()-1,pr.getRows(),Sort.Direction.ASC,"organizationid");
 		
-		return ss.listChirldOrg(pageable,request);
+		return ss.listInstallerOrg(pageable,request);
 	}
 
 	@RequestMapping("validCode")

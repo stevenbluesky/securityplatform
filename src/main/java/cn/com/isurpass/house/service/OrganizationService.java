@@ -179,7 +179,7 @@ public class OrganizationService {
         // 服务商总公司联系人
         PersonPO csPerson = new PersonPO(as.getCspname(), as.getCspphonenumber(), as.getCspemail(), as.getCspfax());
 //        EmployeePO emp = new EmployeePO(as.getLoginname(), FormUtils.encrypt(as.getPassword()), as.getQuestion(),FormUtils.encrypt(as.getAnswer()));
-        EmployeePO emp = new EmployeePO(as.getLoginname(), Encrypt.encrypt(as.getLoginname(),as.getPassword(),as.getCode()), as.getQuestion(),Encrypt.encrypt(as.getLoginname(),as.getAnswer(),as.getCode()));
+        EmployeePO emp = new EmployeePO(as.getLoginname(), Encrypt.encrypt(as.getLoginname(), as.getPassword(), as.getCode()), as.getQuestion(), Encrypt.encrypt(as.getLoginname(), as.getAnswer(), as.getCode()));
 
 
         System.out.println(address.toString());
@@ -253,11 +253,16 @@ public class OrganizationService {
         return map;
     }
 
-    public Map<String, Object> listChirldOrg(Pageable pageable, HttpServletRequest request) {
+    public Map<String, Object> listInstallerOrg(Pageable pageable, HttpServletRequest request) {
         // 角色为服务商的员工才可以访问
         // 先取员工的机构id,再通过机构id查询其机构下所有的安装商,
         EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
-        Page<OrganizationPO> orgList = od.findByParentorgidIn(pageable, emp.getOrganizationid());
+        Page<OrganizationPO> orgList = null;
+        if (isAdmin(emp.getOrganizationid())) {
+            orgList = od.findByOrgtype(pageable, Constants.ORGTYPE_INSTALLER);
+        } else {
+            orgList = od.findByOrgtypeAndParentorgidIn(pageable, Constants.ORGTYPE_INSTALLER, emp.getOrganizationid());
+        }
         Map<String, Object> map = new HashMap<>();
         map.put("total", orgList.getTotalElements());
         List<OrgListVO> list = new ArrayList<>();
