@@ -38,38 +38,38 @@
 			 <br>
 			 <br>
 			 <br>
-              <div class="text-center" style="margin-bottom:70px;"><h1>Ameta安防管理平台</h1></div>
+              <div class="text-center" style="margin-bottom:70px;"><h1><@spring.message code='label.logintitle'/></h1></div>
               <div class="form-group">
-                <label for="code"  class="col-sm-2 control-label">机构代码</label>
+                <label for="code"  class="col-sm-2 control-label"><@spring.message code='label.organizationcode'/></label>
                 <div class="col-sm-10">
-                 <input type="text" class="form-control" id="code" name="code" placeholder="机构代码" value="1">
+                 <input type="text" class="form-control" id="code" name="code" placeholder="<@spring.message code='label.organizationcode'/>" value="002">
                 </div>
               </div>
               
               <div class="form-group">
-                <label for="loginname"  class="col-sm-2 control-label">账号</label>
+                <label for="loginname"  class="col-sm-2 control-label"><@spring.message code='label.username'/></label>
                 <div class="col-sm-10">
-                 <input type="text" class="form-control" id="loginname" name="loginname" placeholder="账号">
+                 <input type="text" class="form-control" id="loginname" name="loginname" placeholder="<@spring.message code='label.username'/>">
                 </div>
               </div>
               
               <div  class="form-group">
-                <label for="password" class="col-sm-2 control-label">密码</label>
+                <label for="password" class="col-sm-2 control-label"><@spring.message code='label.password'/></label>
                 <div class="col-sm-10">
-                <input type="text" class="form-control" id="password" name="password" placeholder="密码">
+                <input type="text" class="form-control" id="password" name="password" placeholder="<@spring.message code='label.password'/>">
                 </div>
               </div>
               
               <div  class="form-group">
-                <label for="captchacode" class="col-sm-2 control-label">验证码</label>
+                <label for="captchacode" class="col-sm-2 control-label"><@spring.message code='label.captchcode'/></label>
                 <div class="col-sm-6">
-                <input type="text" class="form-control" id="captchacode" name="captchacode" placeholder="验证码 ">
+                <input type="text" class="form-control" id="captchacode" name="captchacode" placeholder="<@spring.message code='label.captchacode'/> ">
                 </div>
                 <div class="col-sm-4">
                 <img class="img-responsive" src="static/img/code.jpg" style="height:100px;"/>
               </div>
               </div>
-              <button id="btn-submit" class="btn btn-default  btn-lg" style="float:right;">登录</button>
+              <button id="btn-submit" class="btn btn-default  btn-lg" style="float:right;"><@spring.message code='label.login'/></button>
        		 </form>
         </div>
 
@@ -138,7 +138,7 @@ $("#btn-submit").click(function () {
                      }
                 });
         }else{
-        	alert("必填字段不能为空!");
+        	alert(lan.loaderror);
         }
 });
 

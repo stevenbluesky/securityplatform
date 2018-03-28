@@ -408,7 +408,7 @@
                 }
             });
         } else {
-            alert("必填字段不能为空!");
+            alert(lan.notempty);
         }
     });
 

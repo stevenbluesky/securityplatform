@@ -1,37 +1,37 @@
 <#include "/_head0.ftl"/>
 <#include "/_head1.ftl"/>
-        
+
           <div class="row">
-              <div class="text-center"><h1>员工列表</h1></div>
+              <div class="text-center"><h1><@spring.message code="label.employeelist"/></h1></div>
               <hr>
               <form class="form-inline" action="" method="POST">
                   <div class="form-group col-md-3">
                       <div>
-                          <b>名称</b>
-                          <input type="text" class="form-control" id="name" name="name" placeholder="名称">
+                          <b><@spring.message code="label.pname"/></b>
+                          <input type="text" class="form-control" id="name" name="name" placeholder="<@spring.message code="label.pname"/>">
                       </div>
                   </div>
                   <div class="form-group col-md-3">
                       <div>
-                          <b>城市</b>
-                          <input type="text" class="form-control" id="code" name="code" placeholder="城市">
+                          <b><@spring.message code="label.city"/></b>
+                          <input type="text" class="form-control" id="code" name="code" placeholder="<@spring.message code="label.city"/>">
                       </div>
                   </div>
                   <div class="form-group col-md-3">
                       <div>
-                          <b>城市代码</b>
-                          <input type="text" class="form-control" id="code" name="code" placeholder="城市代码">
+                          <b><@spring.message code="label.citycode"/></b>
+                          <input type="text" class="form-control" id="code" name="code" placeholder="<@spring.message code="label.citycode"/>">
                       </div>
                   </div>
                   <div class="form-group col-md-3">
-                      <button type="submit" class="btn btn-default">搜索</button>
+                      <button type="submit" class="btn btn-default"><@spring.message code="label.search"/></button>
                   </div>
               </form>
           </div>
           <hr>
 
               <button onclick="window.location.href='addEmployeePage'" style="float: right;" type="submit"
-                      class="btn btn-default">新增
+                      class="btn btn-default"><@spring.message code="label.addnew"/>
               </button>
           
 <table id="table" data-toggle="table">
@@ -39,12 +39,12 @@
     <tr>
         <th data-field=""></th>
         <th data-field="employeeid" data-visible="false">ID</th>
-        <th data-field="name">姓名</th>
-        <th data-field="parentOrgName">所属机构</th>
-        <th data-field="code">员工代码</th>
-        <th data-field="status" data-formatter='formatter_status'>状态</th>
-        <th data-field="employeeroleid">权限</th>
-        <th data-field="operate" data-formatter="formatter_op" data-events="operateEvents">操作</th>
+        <th data-field="name"><@spring.message code="label.name"/></th>
+        <th data-field="parentOrgName"><@spring.message code="label.parentorg"/></th>
+        <th data-field="code"><@spring.message code="label.empcode"/></th>
+        <th data-field="status" data-formatter='formatter_status'><@spring.message code="label.status"/></th>
+        <th data-field="employeeroleid"><@spring.message code="label.privilege"/></th>
+        <th data-field="operate" data-formatter="formatter_op" data-events="operateEvents"><@spring.message code="label.operate"/></th>
     </tr>
     </thead>
 </table>
@@ -94,7 +94,7 @@
             onLoadSuccess: function () {
             },
             onLoadError: function () {
-                alert("数据加载失败！");
+                alert(lan.loaderror);
             },
             onDblClickRow: function (row, $element) {
                 var id = row.ID;

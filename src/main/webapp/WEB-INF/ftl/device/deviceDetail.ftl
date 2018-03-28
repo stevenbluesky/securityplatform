@@ -4,7 +4,7 @@
         <div class="col-md-1"></div>
 
         <div class="col-md-10">
-            <div class="text-center"><h1>设备详情</h1></div>
+            <div class="text-center"><h1><@spring.message code="label.devicedetail"/></h1></div>
             <br>
             <br>
             <br>
@@ -13,25 +13,25 @@
             <div class="col-md-4"></div>
 			        <#if zwave??>
 			        <div class="col-md-3">
-                        <p>设备名称</p>
-                        <p>服务商</p>
-                        <p>告警状态</p>
-                        <p>设备状态 </p>
-                        <p>操作</p>
+                        <p><@spring.message code="label.devicename"/></p>
+                        <p><@spring.message code="label.serviceprovider"/></p>
+                        <p><@spring.message code="label.alarmstatus"/></p>
+                        <p><@spring.message code="label.devicestatus"/> </p>
+                        <p><@spring.message code="label.operate"/></p>
                     </div>
 			        <div class="col-md-3">
-                        <p>${(zwave.devicename)!'无'}</p>
-                        <p>${(zwave.suppliename)!'无'}</p>
-                        <p>${(zwave.warningstatusesopen)? string("开","关")}</p>
-                        <p>${(zwave.statusopen)? string('开','关')}</p>
+                        <p>${(zwave.devicename)!'<@spring.message code="label.none"/>'}</p>
+                        <p>${(zwave.suppliename)!'<@spring.message code="label.none"/>'}</p>
+                        <p><#if zwave.warningstatusesopen?? && zwave.warningstatusesopen == true><@spring.message code='label.open'/><#else><@spring.message code='label.close'/></#if></p>
+                        <p><#if zwave.statusopen?? && zwave.statusopen== true><@spring.message code='label.open'/><#else><@spring.message code='label.close'/></#if></p>
                         <p>
-                            <button type="submit" class="btn btn-default" style="width:28%">关闭</button>
+                            <button type="submit" class="btn btn-default" style="width:28%"><@spring.message code="label.close"/></button>
                         </p>
                     </div>
                     <#else>
 			         <div class="col-md-6"
                         ">
-			         	<h3>请先在设备列表里面选择一个设备...</h3>
+			         	<h3><@spring.message code="label.mustchooseadevice"/></h3>
 			         </div>
                     </#if>
             <div class="col-md-2"></div>
@@ -84,7 +84,7 @@
             onLoadSuccess: function () {
             },
             onLoadError: function () {
-                alert("数据加载失败！");
+                alert(lan.loaderror);
             },
             onDblClickRow: function (row, $element) {
                 var id = row.ID;

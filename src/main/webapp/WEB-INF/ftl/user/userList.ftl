@@ -2,23 +2,23 @@
  <#include "/_head1.ftl"/> 
            <form class="form-inline" action="" method="POST">
            <div class="row">
-              <div class="text-center"><h1>用户列表</h1></div><hr>
+              <div class="text-center"><h1><@spring.message code='label.userlist'/></h1></div><hr>
               <div class="form-group col-md-3">   
                 <div>
-                  <b>姓名</b>
-                 <input type="text" class="form-control" id="name" name="name" placeholder="姓名">
+                  <b><@spring.message code='label.name'/></b>
+                 <input type="text" class="form-control" id="name" name="name" placeholder="<@spring.message code='label.name'/>">
                 </div>
               </div>
               <div class="form-group col-md-3">
                 <div>
-                  <b>城市</b>
-                 <input type="text" class="form-control" id="code" name="code" placeholder="城市">
+                  <b><@spring.message code='label.city'/></b>
+                 <input type="text" class="form-control" id="code" name="code" placeholder="<@spring.message code='label.city'/>">
                 </div>
               </div>
               <div class="form-group col-md-3">
                 <div>
-                  <b>电话</b>
-                 <input type="text" class="form-control" id="code" name="code" placeholder="电话">
+                  <b><@spring.message code='label.phonenumber'/></b>
+                 <input type="text" class="form-control" id="code" name="code" placeholder="<@spring.message code='label.phonenumber'/>">
                 </div>
               </div>
               <div class="form-group col-md-3"></div>
@@ -26,44 +26,44 @@
            <div class="row">
               <div class="form-group col-md-3">   
                 <div>
-                  <b>网关编号</b>
-                 <input type="text" class="form-control" id="name" name="name" placeholder="网关编号">
+                  <b><@spring.message code='label.gatewayID'/></b>
+                 <input type="text" class="form-control" id="name" name="name" placeholder="<@spring.message code='label.gatewayID'/>">
                 </div>
               </div>
               
               <div class="form-group col-md-3">
                 <div>
-                  <b>电话卡号</b>
-                 <input type="text" class="form-control" id="code" name="code" placeholder="电话卡号">
+                  <b><@spring.message code='label.phonecardnumber'/></b>
+                 <input type="text" class="form-control" id="code" name="code" placeholder="<@spring.message code='label.phonecardnumber'/>">
                 </div>
               </div>
               
               <div class="form-group col-md-3">
                 <div>
-                  <b>服务商</b>
-                 <input type="text" class="form-control" id="code" name="code" placeholder="服务商">
+                  <b><@spring.message code='label.serviceprovider'/></b>
+                 <input type="text" class="form-control" id="code" name="code" placeholder="<@spring.message code='label.serviceprovider'/>">
                 </div>
                 </div>
               <div class="form-group col-md-3">
-                   <button type="submit" class="btn btn-default" style="width:28%;">搜索</button>
+                   <button type="submit" class="btn btn-default" style="width:28%;"><@spring.message code='label.search'/></button>
 			  </div>
             </form>
           </div>
           <hr>
 
- <button onclick="window.location.href='typeUserInfo'" style="float: right;" type="submit" class="btn btn-default">新增</button>
+ <button onclick="window.location.href='typeUserInfo'" style="float: right;" type="submit" class="btn btn-default"><@spring.message code='label.addnew'/></button>
           
 <table id="table" data-toggle="table">
     <thead>
         <tr>
             <th data-field=""></th>
             <th data-field="userid">ID</th>
-            <th data-field="name">姓名</th>
-            <th data-field="phonenumber">电话</th>
-            <th data-field="city">城市</th>
-            <th data-field="suppliername">服务商</th>
-            <th data-field="status">状态</th>
-            <th data-field="operate">操作</th>
+            <th data-field="name"><@spring.message code='label.name'/></th>
+            <th data-field="phonenumber"><@spring.message code='label.phonenumber'/></th>
+            <th data-field="city"><@spring.message code='label.city'/></th>
+            <th data-field="suppliername"><@spring.message code='label.serviceprovider'/></th>
+            <th data-field="status"><@spring.message code='label.status'/></th>
+            <th data-field="operate"><@spring.message code='label.operate'/></th>
         </tr>
     </thead>
 </table>
@@ -113,7 +113,7 @@
       onLoadSuccess: function () {
       },
       onLoadError: function () {
-          alert("数据加载失败！");
+          alert(lan.loaderror);
       },
       onDblClickRow: function (row, $element) {
           var id = row.userid;

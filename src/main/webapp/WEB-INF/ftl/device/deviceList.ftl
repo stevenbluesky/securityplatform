@@ -2,26 +2,26 @@
  <#include "/_head1.ftl"/> 
            <form class="form-inline" action="" method="POST">
            <div class="row">
-              <div class="text-center"><h1>设备列表</h1></div><hr>
+              <div class="text-center"><h1><@spring.message code="label.devicelist"/></h1></div><hr>
            
               <div class="form-group col-md-4">   
                 <div>
-                  <b>设备名称</b>
-                 <input type="text" class="form-control" id="name" name="name" placeholder="设备名称">
+                  <b><@spring.message code="label.devicename"/></b>
+                 <input type="text" class="form-control" id="name" name="name" placeholder="<@spring.message code="label.devicename"/>">
                 </div>
               </div>
               
               <div class="form-group col-md-4">
                 <div>
-                  <b>城市</b>
-                 <input type="text" class="form-control" id="code" name="code" placeholder="城市">
+                  <b><@spring.message code="label.city"/></b>
+                 <input type="text" class="form-control" id="code" name="code" placeholder="<@spring.message code="label.city"/>">
                 </div>
               </div>
               
               <div class="form-group col-md-4">
                 <div>
-                  <b>城市代码</b>
-                 <input type="text" class="form-control" id="code" name="code" placeholder="城市代码">
+                  <b><@spring.message code="label.citycode"/></b>
+                 <input type="text" class="form-control" id="code" name="code" placeholder="<@spring.message code="label.citycode"/>">
                 </div>
               </div>
           </div>
@@ -29,20 +29,20 @@
            <div class="row">
               <div class="form-group col-md-4">   
                 <div>
-                  <b>客户</b>
-                 <input type="text" class="form-control" id="name" name="name" placeholder="客户">
+                  <b><@spring.message code="label.customer"/></b>
+                 <input type="text" class="form-control" id="name" name="name" placeholder="<@spring.message code="label.customer"/>">
                 </div>
               </div>
               <div class="form-group col-md-4">
                 <div>
-                  <b>服务商</b>
-                 <input type="text" class="form-control" id="code" name="code" placeholder="服务商">
+                  <b><@spring.message code="label.serviceprovider"/></b>
+                 <input type="text" class="form-control" id="code" name="code" placeholder="<@spring.message code="label.serviceprovider"/>">
                 </div>
               </div>
               <div class="form-group col-md-4">
                 <div>
-                  <b>安装商</b>
-                 <input type="text" class="form-control" id="code" name="code" placeholder="安装商">
+                  <b><@spring.message code="label.installerorg"/></b>
+                 <input type="text" class="form-control" id="code" name="code" placeholder="<@spring.message code="label.installerorg"/>">
                 </div>
               </div>
           </div>
@@ -50,18 +50,18 @@
            <div class="row">
               <div class="form-group col-md-4">   
                 <div>
-                  <b>安装员</b>
-                 <input type="text" class="form-control" id="name" name="name" placeholder="安装员">
+                  <b><@spring.message code="label.installer"/></b>
+                 <input type="text" class="form-control" id="name" name="name" placeholder="<@spring.message code="label.installer"/>">
                 </div>
               </div>
               <div class="form-group col-md-4">
                 <div>
-                  <b>网关ID</b>
-                 <input type="text" class="form-control" id="code" name="code" placeholder="网关ID">
+                  <b><@spring.message code="label.gatewayID"/></b>
+                 <input type="text" class="form-control" id="code" name="code" placeholder="<@spring.message code="label.gatewayID"/>">
                 </div>
               </div>
               <div class="form-group col-md-4">
-                   <button type="submit" class="btn btn-default" style="width:28%;">搜索</button>
+                   <button type="submit" class="btn btn-default" style="width:28%;"><@spring.message code="label.search"/></button>
               </div>
           </div>
           </form>
@@ -73,16 +73,16 @@
         <tr>
             <th data-field=""></th>
             <th data-field="zwavedeviceid" data-visible="false">ID</th>
-            <th data-field="name">名称</th>
-            <th data-field="devicetype" data-formatter='formatter_devicetype'>设备类型</th>
-            <th data-field="warningstatuses">告警状态</th>
-            <th data-field="status" data-formatter='formatter_devicestatus'>状态</th>
-            <th data-field="battery">电量</th>
-            <th data-field="city">地区</th>
-            <th data-field="organizationname">服务商</th>
-            <th data-field="installerorgname">安装商</th>
-            <th data-field="installername">安装员</th>
-            <th data-field="username">用户</th>
+            <th data-field="name"><@spring.message code="label.dname"/></th>
+            <th data-field="devicetype" data-formatter='formatter_devicetype'><@spring.message code="label.devicetype"/></th>
+            <th data-field="warningstatuses"><@spring.message code="label.alarmstatus"/></th>
+            <th data-field="status" data-formatter='formatter_devicestatus'><@spring.message code="label.status"/></th>
+            <th data-field="battery"><@spring.message code="label.energy"/></th>
+            <th data-field="city"><@spring.message code="label.area"/></th>
+            <th data-field="organizationname"><@spring.message code="label.serviceprovider"/></th>
+            <th data-field="installerorgname"><@spring.message code="label.installerorg"/></th>
+            <th data-field="installername"><@spring.message code="label.installer"/></th>
+            <th data-field="username"><@spring.message code="label.user"/></th>
         </tr>
     </thead>
 </table>
@@ -132,7 +132,7 @@
       onLoadSuccess: function () {
       },
       onLoadError: function () {
-          alert("数据加载失败！");
+          alert(lan.loaderror);
       },
       onDblClickRow: function (row, $element) {
 	        //console.log(value);

@@ -1,46 +1,50 @@
 /**
  * 
  */
+
 getCountry();
 
 function getCountry() {
-	$.ajax({
-		type : "get",
-		url : "../address/getCountry",
-		async : true,
-		success : function(data) {
-			var str = "<option value=''></option>";
-			for (var i = 0; i < data.length; i++) {
-				str += '<option value=' + data[i].countryid + '>'
-						+ data[i].countryname + '</option>'
-			}
-			$("#country").html(str);
-			$("#country").selectpicker('refresh');
+    $.ajax({
+        type: "get",
+        url: "../address/getCountry",
+        async: true,
+        success: function (data){
+            /*var str = "<option value='${(orgInfo.sphonenumber)!}'>${(orgInfo.sphonenumber)!}</option>";*/
+            var str = "<option value=''></option>";
+            for (var i = 0; i < data.length; i++) {
+                str += '<option value=' + data[i].countryid + '>'
+                    + data[i].countryname + '</option>'
+            }
+            $("#country").html(str);
+            $("#country").selectpicker('refresh');
 
-            alert($("#coutry").html());
-		}
-	});
+            // alert($("#coutry").html());
+        }
+    });
 }
+
+
 $("#country").change(
-		function() {
-			var countryid = $("#country").val();
-			$.ajax({
-				type : "get",
-				url : "../address/getProvince?countryid=" + countryid,
-				async : true,
-				success : function(data) {
-					var str = "<option value=''></option>";
-					for (var i = 0; i < data.length; i++) {
-						str += '<option value=' + data[i].provinceid + '>'
-								+ data[i].provincename + '</option>'
-					}
-					$("#province").html(str);
+    function() {
+        var countryid = $("#country").val();
+        $.ajax({
+            type : "get",
+            url : "../address/getProvince?countryid=" + countryid,
+            async : true,
+            success : function(data) {
+                var str = "<option value=''></option>";
+                for (var i = 0; i < data.length; i++) {
+                    str += '<option value=' + data[i].provinceid + '>'
+                        + data[i].provincename + '</option>'
+                }
+                $("#province").html(str);
 
-					$("#province").selectpicker('refresh');
+                $("#province").selectpicker('refresh');
 
-				}
-			});
-		});
+            }
+        });
+    });
 
 $("#province").change(
 		function() {

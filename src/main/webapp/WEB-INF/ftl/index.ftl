@@ -31,7 +31,7 @@
     <div class="col-md-10">
     </div>
     <div class="col-md-2">
-        <h3><#if emp?? >欢迎你,${emp.loginname}</#if></h3>
+        <h3><#if emp?? ><@spring.message code='label.welcome'/>,${emp.loginname}</#if></h3>
         <br>
         <br>
         <br>
