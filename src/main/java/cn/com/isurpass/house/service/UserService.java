@@ -139,7 +139,9 @@ public class UserService {
 			user.setUserid(u.getUserid());
 			user.setName(u.getName());
 			user.setPhonenumber(personPO.getPhonenumber());
-			user.setCity(adrs.getCity());
+			if (adrs != null) {
+				user.setCity(adrs.getCity());
+			}
 			if (od.findByOrganizationid(u.getOrganizationid()) != null)
 				user.setSuppliername(od.findByOrganizationid(u.getOrganizationid()).getName());
 
