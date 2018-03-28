@@ -1,17 +1,113 @@
 package cn.com.isurpass.house.web.controller;
 
+import java.util.Map;
+
+import javax.servlet.ServletInputStream;
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+
+import cn.com.isurpass.house.exception.MyArgumentNullException;
+import cn.com.isurpass.house.po.GatewayPO;
+import cn.com.isurpass.house.result.JsonResult;
+import cn.com.isurpass.house.service.GatewayService;
+import cn.com.isurpass.house.util.Constants;
+import cn.com.isurpass.house.util.PageResult;
+import cn.com.isurpass.house.vo.TransferVO;
+import cn.com.isurpass.house.vo.TypeGatewayInfoVO;
 
 @Controller
-@RequestMapping("gateway")
+@RequestMapping("/gateway")
 public class GatewayController {
-
-	@RequestMapping("addGateway")
-	public String addGateway() {
-		return "gateway/addGateway";
+	@Autowired
+	private GatewayService gs;
+	
+	/**
+	 * 录入网关信息
+	 * @param tgi
+	 * @param model
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="add",method = RequestMethod.GET)
+	public ModelAndView add(TypeGatewayInfoVO tgi) {
+		ModelAndView mv = new ModelAndView("gateway/TypeGatewayInfo");
+		mv.addObject("deviceid", tgi.getDeviceid());
+        mv.addObject("model", tgi.getModel());
+        mv.addObject("firmwareversion", tgi.getFirmwareversion());
+		try {
+			gs.add(tgi);		  
+	        mv.addObject("msg", "4"); 
+	        mv.addObject("msgdeviceid",tgi.getDeviceid());
+		} catch (MyArgumentNullException e) {
+			mv.addObject("msg", e.getMessage());  	
+			return mv;
+		} catch (RuntimeException e) {
+			e.printStackTrace();
+			mv.addObject("msg", "3");  	
+			return mv;
+		}
+		return mv;
 	}
 	
+	/**
+	 * 获取网关分页信息
+	 * @param pr
+	 * @return
+	 * http://localhost:8080/house/gateway/gatewayJsonList?name=&cityname=&citycode=&customer=&serviceprovider=&installerorg=&installer=&rows=10&page=2&_=1522138095864
+	 */
+	@RequestMapping("gatewayJsonList")
+	@ResponseBody
+	public Map<String, Object> gatewayJsonList(PageResult pr,String name,String cityname,String citycode,String customer,String serviceprovider,String installerorg,String installer,String deviceid) {
+		Pageable pageable = PageRequest.of(pr.getPage()-1,pr.getRows(),Sort.Direction.ASC,"deviceid");
+		return gs.listGateway(pageable,name,cityname,citycode,customer,serviceprovider,installerorg,installer,deviceid);
+	}
+	/**
+	 * 根据deviceid获取网关详细信息
+	 * @param deviceid
+	 * @return
+	 */
+	@RequestMapping("gatewayDetail")
+	public String gatewayDetail(String deviceid,Model model) {
+		GatewayPO gw = gs.findByDeviceid(deviceid);
+		model.addAttribute("gwd", gw);
+		return "gateway/gatewayDetail";
+	}
+	/**
+	 * 根据操作及id执行更新 
+	 * @param tf
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="update",method = RequestMethod.POST)
+	public String update(@RequestBody TransferVO tf){
+		String hope = tf.getHope();
+		Object[] ids = tf.getIds();
+		try {
+			gs.updateGatewayStatus(hope,ids);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "failed";
+		}
+		return "success";
+	}
+	//页面跳转
 	@RequestMapping("gatewayList")
 	public String gatewayList() {
 		return "gateway/gatewayList";
@@ -22,9 +118,9 @@ public class GatewayController {
 		return "gateway/typeGatewayInfo";
 	}
 	
-	@RequestMapping("gatewayDetail")
-	public String gatewayDetail() {
-		return "gateway/gatewayDetail";
-	}
 	
+	@RequestMapping("addGateway")
+	public String addGateway() {
+		return "gateway/addGateway";
+	}
 }

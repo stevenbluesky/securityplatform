@@ -3,6 +3,8 @@ package cn.com.isurpass.house.po;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -17,6 +19,7 @@ public class GatewayPO {
 	private String model;
 	private String firmwareversion;
 	private Integer battery; // 0:离线 1:在线
+	private Date createtime;
 
 	public String getDeviceid() {
 		return deviceid;
@@ -66,4 +69,18 @@ public class GatewayPO {
 		this.battery = battery;
 	}
 
+	public Date getCreatetime() {
+		return createtime;
+	}
+
+	public void setCreatetime(Date createtime) {
+		this.createtime = createtime;
+	}
+
+	@Override
+	public String toString() {
+		return "GatewayPO [deviceid=" + deviceid + ", name=" + name + ", status=" + status + ", model=" + model
+				+ ", firmwareversion=" + firmwareversion + ", battery=" + battery + ", createtime=" + createtime + "]";
+	}
+	
 }

@@ -1,58 +1,61 @@
 <!-- 网关详情 -->
+<#import "/spring.ftl" as spring />
 <#include "/_head0.ftl"/>
     <div class="row-horizontal">
         <div class="col-md-1"></div>
         
         <div class="col-md-10">
-              <div class="text-center"><h1>网关详情</h1></div>
-              <div class="text-left"><h4>网关信息</h4></div><hr>
+              <div class="text-center"><h2><@spring.message code="label.gatewaydetail"/></h2></div>
+              <div class="text-left"><h4><@spring.message code="label.gatewayinfo"/></h4></div><hr>
               <div class="row">
 			        <div class="col-md-3">
-				        <p>名称</p>
-				        <p>网关ID</p>
-				        <p>业务状态</p>
-				        <p>用户</p>
-				        <p>安装时间 </p>
+				        <p><@spring.message code="label.dname"/></p>
+				        <p><@spring.message code="label.gatewayID"/></p>
+				        <p><@spring.message code="label.businessstatus"/></p>
+				        <p><@spring.message code="label.user"/></p>
+				        <p><@spring.message code="label.installtime"/></p>
+			        </div>
+			       
+			        <div class="col-md-3">
+				        <p><#if (gwd.name)??>${gwd.name}<#else><@spring.message code="label.none"/></#if></p>
+				        <p><#if (gwd.deviceid)??>${gwd.deviceid}<#else><@spring.message code="label.none"/></#if></p>
+				        <p>测试</p>
+				        <p>测试</p>
+				        <p><#if (gwd.createtime)??>${gwd.createtime?string('yyyy-MM-dd')}<#else><@spring.message code="label.none"/></#if></p>
+				         
 			        </div>
 			        <div class="col-md-3">
-				        <p>8645</p>
-				        <p>iRemote700500000xxxx</p>
-				        <p>正常</p>
-				        <p>afdfasd</p>
-				        <p>afdfasd</p>
+				        <p><@spring.message code="label.model"/></p>
+				        <p><@spring.message code="label.firmwareversion"/></p>
+				        <p><@spring.message code="label.devicestatus"/></p>
+				        <p><@spring.message code="label.erector"/></p>
 			        </div>
 			        <div class="col-md-3">
-				        <p>型号</p>
-				        <p>固件版本</p>
-				        <p>设备状态</p>
-				        <p>安装员</p>
-			        </div>
-			        <div class="col-md-3">
-				        <p>qwwq</p>
-				        <p>2.3.5</p>
-				        <p>在线</p>
-				        <p>王五</p>
+				        <p><#if (gwd.model)??>${gwd.model}<#else><@spring.message code="label.none"/></#if></p>
+				        <p><#if (gwd.firmwareversion)??>${gwd.firmwareversion}<#else><@spring.message code="label.none"/></#if></p>
+				        <p><#if (gwd.status)?exists && gwd.status==1><@spring.message code="label.online"/><#elseif (gwd.status)?exists && gwd.status==0><@spring.message code="label.offline"/><#else><@spring.message code="label.unknown"/></#if></p>
+				        <p>测试</p>
 			        </div>
               </div>
               <br>
-              <div class="text-left"><h4>电话卡信息</h4></div><hr>
+              <div class="text-left"><h4><@spring.message code="label.phonecardinfo"/></h4></div><hr>
                <div class="row">
 			        <div class="col-md-3">
-				        <p>序列号</p>
-				        <p>状态</p>
-				        <p>硬件版本</p>
+				        <p><@spring.message code="label.serialnumber"/></p>
+				        <p><@spring.message code="label.status"/></p>
+				        <p><@spring.message code="label.firmwareversion"/></p>
 				        <p>First programmed On</p>
 				        <p>Ordering Date</p>
 			        </div>
 			        <div class="col-md-3">
-				        <p>123142</p>
-				        <p>正常</p>
-				        <p>2.3.5</p>
-				        <p>2018-3-5</p>
-				        <p>2018-3-5</p>
+				        <p>测试</p>
+				        <p>测试</p>
+				        <p>测试</p>
+				        <p>测试</p>
+				        <p>测试</p>
 			        </div>
 			        <div class="col-md-3">
-				        <p>型号</p>
+				        <p><@spring.message code="label.model"/></p>
 				        <p>Rate Plan</p>
 				        <p>Activation Date</p>
 				        <p>Last Programmed On</p>
@@ -70,12 +73,12 @@
 				<table id="table" data-toggle="table">
 				    <thead>
 				        <tr>
-				            <th data-field="id">ID</th><!-- 页面会吃掉一行, i don't know why.. -->
-				            <th data-field="name">名称</th>
-				            <th data-field="code">设备类型</th>
-				            <th data-field="city">告警状态</th>
-				            <th data-field="status">状态</th>
-				            <th data-field="operate">电量</th>
+				            <th data-field="id">ID</th><!--复选框-->
+				            <th data-field="name"><@spring.message code="label.dname"/></th>
+				            <th data-field="code"><@spring.message code="label.devicetype"/></th>
+				            <th data-field="city"><@spring.message code="label.alarmstatus"/></th>
+				            <th data-field="status"><@spring.message code="label.status"/></th>
+				            <th data-field="operate"><@spring.message code="label.energy"/></th>
 				        </tr>
 				    </thead>
 				</table>
@@ -87,7 +90,7 @@
 <!-- JavaScript 部分 -->
     <script type="text/javascript">
       $('#table').bootstrapTable({
-      url: 'supplierJsonList',
+      url: 'gatewayJsonList',
       method: 'GET',                      //请求方式（*）
       //toolbar: '#toolbar',              //工具按钮用哪个容器
       striped: true,                      //是否显示行间隔色
@@ -128,7 +131,7 @@
       onLoadSuccess: function () {
       },
       onLoadError: function () {
-          alert("数据加载失败！");
+          alert('<@spring.message code="label.dataloaderror"/>');
       },
       onDblClickRow: function (row, $element) {
           var id = row.ID;

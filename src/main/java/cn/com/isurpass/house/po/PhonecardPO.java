@@ -8,6 +8,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+
 @Entity
 @Table(name = "phonecard")
 public class PhonecardPO {
@@ -15,17 +18,24 @@ public class PhonecardPO {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer phonecardid;
-	private Integer serialnumber;
-	private String simsn;
+	private String serialnumber;
+	private String model;
 	private Integer status;
 	private String rateplan;
 	private String firmwareversion;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date orderingdate;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date activationdate;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date expiredate;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date reactivationdate;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date firstprogrammedondate;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date lastprogrammedondate;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date lastsavedondate;
 
 	public Integer getPhonecardid() {
@@ -36,20 +46,20 @@ public class PhonecardPO {
 		this.phonecardid = phonecardid;
 	}
 
-	public Integer getSerialnumber() {
+	public String getSerialnumber() {
 		return serialnumber;
 	}
 
-	public void setSerialnumber(Integer serialnumber) {
+	public void setSerialnumber(String serialnumber) {
 		this.serialnumber = serialnumber;
 	}
 
-	public String getSimsn() {
-		return simsn;
+	public String getModel() {
+		return model;
 	}
 
-	public void setSimsn(String simsn) {
-		this.simsn = simsn;
+	public void setModel(String model) {
+		this.model = model;
 	}
 
 	public Integer getStatus() {
@@ -132,4 +142,13 @@ public class PhonecardPO {
 		this.lastsavedondate = lastsavedondate;
 	}
 
+	@Override
+	public String toString() {
+		return "PhonecardPO [phonecardid=" + phonecardid + ", serialnumber=" + serialnumber + ", model=" + model
+				+ ", status=" + status + ", rateplan=" + rateplan + ", firmwareversion=" + firmwareversion
+				+ ", orderingdate=" + orderingdate + ", activationdate=" + activationdate + ", expiredate=" + expiredate
+				+ ", reactivationdate=" + reactivationdate + ", firstprogrammedondate=" + firstprogrammedondate
+				+ ", lastprogrammedondate=" + lastprogrammedondate + ", lastsavedondate=" + lastsavedondate + "]";
+	}
+	
 }

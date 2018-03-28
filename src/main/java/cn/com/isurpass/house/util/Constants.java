@@ -13,4 +13,7 @@ public class Constants {
 	public static final Integer STATUS_NORMAL = 1;		//正常
 	public static final Integer STATUS_SUSPENCED = 2;	//冻结
 	public static final Integer STATUS_DELETED = 9;		//删除
+	
+	public static final Integer STATUS_ONLINE = 1; 		//在线
+	public static final Integer STATUS_OFFLINE = 0 ;	//离线
 }
