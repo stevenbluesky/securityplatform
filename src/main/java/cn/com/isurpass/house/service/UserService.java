@@ -56,6 +56,8 @@ public class UserService {
     GatewayBindingDAO gbd;
     @Autowired
     PhonecarduserDAO pud;
+    @Autowired
+    EmployeeroleDAO erd;
 
     @Transactional(rollbackFor = Exception.class)
     public void add(UserAddVO u, HttpServletRequest request) {
@@ -132,13 +134,30 @@ public class UserService {
 
     }
 
-    public Map<String, Object> listUserInfoByOrgtype(Pageable pageable, Integer orgType) {
+    public  Map<String, Object> listUserInfo(Pageable pageable, HttpServletRequest request) {
+        EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
+        Integer orgtype = od.findByOrganizationid(emp.getOrganizationid()).getOrgtype();
+        if (erd.findByEmployeeid(emp.getEmployeeid()).getRoleid() == 4) {
+            Page<UserPO> userList = ud.findByInstallerid(emp.getEmployeeid(),pageable);
+            return listUserInfo0(pageable,userList);
+        }
+        if (orgtype == Constants.ORGTYPE_AMETA) {
+            Page<UserPO> userList = ud.findAll(pageable);
+            return listUserInfo0(pageable,userList);
+        }
+        if (orgtype == Constants.ORGTYPE_INSTALLER) {
+            Page<UserPO> userList = ud.findByInstallerorgid(emp.getOrganizationid(),pageable);
+            return listUserInfo0(pageable, userList);
+        }
+        if (orgtype == Constants.ORGTYPE_SUPPLIER) {
+            Page<UserPO> userList = ud.findByOrganizationid(emp.getOrganizationid(),pageable);
+            return listUserInfo0(pageable, userList);
+        }
+        return null;
+    }
+    public Map<String, Object> listUserInfo0(Pageable pageable,Page<UserPO> userList) {
         Map<String, Object> map = new HashMap<>();
-
-        // TODO 先要判断目前登陆的是哪角色,服务商|安装商|ameta 然后查询相应的数据(如果是 ameta 则查询所有的)..对应的总数也要进行相应的改变
-
         map.put("total", ud.count());
-        Page<UserPO> userList = ud.findAll(pageable);
         List<UserInfoListVO> list = new ArrayList<>();
         if (userList == null) {
             return null;

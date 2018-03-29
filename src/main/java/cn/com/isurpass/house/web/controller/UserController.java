@@ -43,9 +43,9 @@ public class UserController {
 	
 	@RequestMapping("userInfoJsonList")
 	@ResponseBody
-	public Map<String, Object> userInfoJsonList(PageResult pr) {
+	public Map<String, Object> userInfoJsonList(PageResult pr,HttpServletRequest request) {
 		Pageable pageable = PageRequest.of(pr.getPage()-1,pr.getRows(),Sort.Direction.ASC,"organizationid");
-		return us.listUserInfoByOrgtype(pageable, Constants.ORGTYPE_SUPPLIER);
+		return us.listUserInfo(pageable,request);
 	}
 
 	@RequestMapping("toggleUserStatus0")

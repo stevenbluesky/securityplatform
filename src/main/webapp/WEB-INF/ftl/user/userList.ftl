@@ -129,7 +129,7 @@
             },
             onDblClickRow: function (row, $element) {
                 var id = row.userid;
-                alert(id);
+                // alert(id);
 
             }
         });

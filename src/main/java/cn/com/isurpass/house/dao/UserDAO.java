@@ -18,4 +18,7 @@ public interface UserDAO extends CrudRepository<UserPO,Integer>{
 	List<UserPO> findByInstallerorgid(Integer id);
 	List<UserPO> findByInstallerid(Integer id);
 	List<UserPO> findAll();
+    Page<UserPO> findByInstallerorgid(Integer organizationid, Pageable pageable);
+    Page<UserPO> findByOrganizationid(Integer organizationid, Pageable pageable);
+    Page<UserPO> findByInstallerid(Integer employeeid, Pageable pageable);
 }
