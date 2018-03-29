@@ -1,37 +1,25 @@
 package cn.com.isurpass.house.service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
-import cn.com.isurpass.house.util.Encrypt;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import cn.com.isurpass.house.dao.AddressDAO;
-import cn.com.isurpass.house.dao.CityDAO;
-import cn.com.isurpass.house.dao.CountryDAO;
-import cn.com.isurpass.house.dao.EmployeeDAO;
-import cn.com.isurpass.house.dao.OrganizationDAO;
-import cn.com.isurpass.house.dao.PersonDAO;
-import cn.com.isurpass.house.dao.ProvinceDAO;
+import cn.com.isurpass.house.dao.*;
 import cn.com.isurpass.house.exception.MyArgumentNullException;
 import cn.com.isurpass.house.po.AddressPO;
 import cn.com.isurpass.house.po.EmployeePO;
 import cn.com.isurpass.house.po.OrganizationPO;
 import cn.com.isurpass.house.po.PersonPO;
 import cn.com.isurpass.house.util.Constants;
+import cn.com.isurpass.house.util.Encrypt;
 import cn.com.isurpass.house.util.FormUtils;
 import cn.com.isurpass.house.vo.EmployeeAddVO;
 import cn.com.isurpass.house.vo.EmployeeListVO;
 import cn.com.isurpass.house.vo.EmployeeParentOrgIdVO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.*;
 
 @Service
 public class EmployeeService {
@@ -293,6 +281,18 @@ public class EmployeeService {
         EmployeePO emp = ed.findByEmployeeid(employeeid);
         emp.setStatus(status);
         ed.save(emp);
+    }
+
+    public void toggleEmployeeStatus0(String hope, Object[] ids,HttpServletRequest request) {
+        if ("unsuspence".equals(hope)) {
+            for (Object id : ids) {
+                toggleEmployeeStatus(Integer.valueOf(id.toString()), Constants.STATUS_NORMAL, request);
+            }
+        } else if("suspence".equals(hope)){
+            for (Object id : ids) {
+                toggleEmployeeStatus(Integer.valueOf(id.toString()),Constants.STATUS_SUSPENCED,request);
+            }
+        }
     }
 
     /**

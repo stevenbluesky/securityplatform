@@ -303,10 +303,10 @@
         getCountry(-1);
         changeProvince(1);
         changeCity(1);
-        getbcountryB();
+        getbcountryB(-1);
         changeProvinceB(1);
         changeCityB(1);
-        getcscountry();
+        getcscountry(-1);
         changeProvinceC(1);
         changeCityC(1);
         // alert($("#orgid").val() == null);

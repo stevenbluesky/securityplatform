@@ -4,7 +4,7 @@
                   <div class="row">
                       <div class="text-center"><h1><@spring.message code="label.supplierlist"/></h1></div>
                       <hr>
-                      <form class="form-inline" action="" method="POST">
+                      <form id="searchform" class="form-inline" method="POST">
                           <div class="form-group col-md-3">
                               <div>
                                   <b><@spring.message code="label.pname"/></b>
@@ -15,7 +15,7 @@
                           <div class="form-group col-md-3">
                               <div>
                                   <b><@spring.message code="label.city"/></b>
-                                  <input type="text" class="form-control" id="citycode" name="citycode"
+                                  <input type="text" class="form-control" id="city" name="city"
                                          placeholder="<@spring.message code="label.city"/>">
                               </div>
                           </div>
@@ -23,21 +23,25 @@
                           <div class="form-group col-md-3">
                               <div>
                                   <b><@spring.message code="label.citycode"/></b>
-                                  <input type="text" class="form-control" id="code" name="code"
+                                  <input type="text" class="form-control" id="citycode" name="citycode"
                                          placeholder="<@spring.message code="label.citycode"/>">
                               </div>
                           </div>
                           <div class=" col-md-3">
-                              <button type="submit"
+                              <button id="searchbtn"
                                       class="btn btn-default"><@spring.message code="label.search"/></button>
                           </div>
                       </form>
                   </div>
           <hr>
 
-              <button onclick="window.location.href='addSupplierPage'" style="float: right;" type="submit"
-                      class="btn btn-default"><@spring.message code="label.addnew"/></button>
-          
+            <button style="float: right;" class='btn btn-default'
+                    onclick='toggleOrganizationStatus("unsuspence");'><@spring.message code='label.unsuspence'/></button>
+			<button style="float: right;" class='btn btn-default'
+                    onclick='toggleOrganizationStatus("suspence");'><@spring.message code='label.suspenced'/></button>
+            <button onclick="window.location.href='addSupplierPage'" style="float: right;"
+                    class="btn btn-default"><@spring.message code="label.addnew"/></button>
+
 <table id="table" data-toggle="table">
     <thead>
     <tr>
@@ -71,10 +75,10 @@
             pageNumber: 1,                      //初始化加载第一页，默认第一页,并记录
             pageSize: '10',                     //每页的记录行数（*）
             pageList: [10, 25, 50, 100],        //可供选择的每页的行数（*）
-            search: true,                      //是否显示表格搜索
+            search: false,                      //是否显示表格搜索
             strictSearch: false,
-            showColumns: true,                  //是否显示所有的列（选择显示的列）
-            showRefresh: true,                  //是否显示刷新按钮
+            showColumns: false,                  //是否显示所有的列（选择显示的列）
+            showRefresh: false,                  //是否显示刷新按钮
             minimumCountColumns: 2,             //最少允许的列数
             clickToSelect: true,                //是否启用点击选中行
             //height: 500,                      //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
@@ -113,17 +117,86 @@
                         // alert(row.name);
                         window.location.href = "addSupplierPage?organizationid=" + row.organizationid;
                     },
-                    "click #btn2":function (e, value, row, index) {
-                        toggleStatus(e,value,row,index,'toggleOrganizationStatus',row.organizationid,2);
+                    "click #btn2": function (e, value, row, index) {
+                        toggleStatus(e, value, row, index, 'toggleOrganizationStatus', row.organizationid, 2);
                     },
                     "click #btn3": function (e, value, row, index) {
-                        toggleStatus(e,value,row,index,'toggleOrganizationStatus',row.organizationid,1);
+                        toggleStatus(e, value, row, index, 'toggleOrganizationStatus', row.organizationid, 1);
                     },
                     "click #btn9": function (e, value, row, index) {
-                        toggleStatus(e,value,row,index,'toggleOrganizationStatus',row.organizationid,9);
+                        toggleStatus(e, value, row, index, 'toggleOrganizationStatus', row.organizationid, 9);
                     }
 
                 };
+
+        $("#searchbtn").click(function () {
+            if (1) {//获取验证结果，如果成功，执行下面代码
+                var url = "../org/searchSupplier";
+                $.ajax({
+                    type: "POST",
+                    dataType: "html",
+                    async: false,
+                    url: url,
+                    data: $('#searchform').serialize(),
+                    success: function (data) {
+                        var strresult = data;
+                        alert(strresult);
+                    },
+                    error: function (data) {
+                        alert("error:" + data.responseText);
+                    }
+                });
+            } else {
+                alert("<@spring.message code="label.nullstrexception"/>");
+            }
+        });
+
+
+        // <#--获取复选框选中的列的id数组-->
+        function getCheckedId() {
+            var arr = $("#table").bootstrapTable('getSelections');
+            var ids = [];
+            arr.forEach(function (val, index, arr) {
+                ids[index] = val.organizationid;
+            });
+            return ids;
+        }
+        // $("#table").bootstrapTable('getSelections')[1].organizationid
+        function toggleOrganizationStatus(obj) {
+            var ids = getCheckedId();
+            // alert(checkedIds);
+            if (ids[0] == null || ids[0] =="") {
+                alert("<@spring.message code='label.nochecked'/>");
+                return;
+            }
+            if (obj == "unsuspence") {
+                if (!confirm("<@spring.message code='label.recoverconfirm'/>")) {
+                    return;
+                }
+            }
+            if (obj == "suspence") {
+                if (!confirm("<@spring.message code='label.freezeconfirm'/>")) {
+                    return;
+                }
+            }
+            //异步更新
+            $.ajax({
+                type: 'post',
+                url: '../org/toggleOrganizationStatus0',
+                contentType: 'application/json',
+                traditional: true,
+                data: "{\"hope\":\"" + obj + "\",\"ids\":" + JSON.stringify(ids) + "}",
+                success: function (data) {//返回json结果
+                    alert("<@spring.message code='label.updatesuccess'/>");
+                    $('#table').bootstrapTable('refresh');
+                },
+                error: function () {// 请求失败处理函数
+                    alert("<@spring.message code='label.updatefailed'/>");
+                    $('#table').bootstrapTable('refresh');
+                }
+
+            });
+        }
     </script>
 <#include "/_foot1.ftl"/>
 <#include "/_foot0.ftl"/>

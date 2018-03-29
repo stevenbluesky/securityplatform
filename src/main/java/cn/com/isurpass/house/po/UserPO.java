@@ -24,6 +24,15 @@ public class UserPO {
 	private String codepostfix;
 	private String usercode;
 	private Integer personid;
+	private Integer status;
+	private Date createtime;
+
+	public Integer getStatus() {
+		return status;
+	}
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
 
 	public Integer getUserid() {
 		return userid;
@@ -113,6 +122,6 @@ public class UserPO {
 		this.createtime = createtime;
 	}
 
-	private Date createtime;
+
 
 }

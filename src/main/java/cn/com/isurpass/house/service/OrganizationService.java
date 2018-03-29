@@ -1,9 +1,6 @@
 package cn.com.isurpass.house.service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -16,6 +13,7 @@ import cn.com.isurpass.house.util.Encrypt;
 import cn.com.isurpass.house.vo.LoginVO;
 import cn.com.isurpass.house.vo.OrgSearchVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -390,24 +388,43 @@ public class OrganizationService {
         return org;
     }
 
-    public Page<OrganizationPO> search(OrgSearchVO search) {
+    public Map<String, Object> search(Pageable pageable,OrgSearchVO search,Integer orgtype) {
         if (FormUtils.isEmpty(search)) {
             return null;
         }
         String name = "";
-        String city = "";
+        String city1 = "";
+        String citycode = "";
+        Page<OrganizationPO> orgList= null;
         if (search.getName() != null) {
-            name = search.getName();
+            name= search.getName();
         }
         if (search.getCity() != null) {
-            city = search.getCity();
+            city1= search.getCity();
         }
-        if (search.getCitycode() == null) {
-//            od.findByNameLikeAndCityLike("%"+name+"%","%"+city+"%");
-        } else {
-//            od.findByNameLike
+        if (search.getCitycode() != null) {
+            citycode=search.getCitycode();
         }
-        return null;
+
+        if (search.getCity() == "") {
+            orgList = od.findByNameLikeAndCitycodeLike(pageable,name,citycode);
+        }
+        if (search.getCity()!= ""){
+            //先通过citycode和city查找相似的,再通过返回的List集合中的citycode在organization表中查找
+            List<CityPO> list = city.findByCitycodeLikeAndCitynameLike(citycode, city1);
+            if (list.isEmpty()) {
+                return null;
+            }
+            List<String> list0 = new ArrayList<>();
+            list.forEach(l->list0.add(l.getCitycode()));
+            orgList = od.findByNameLikeAndCitycodeInAndOrgtype(name, list0,orgtype,pageable);
+        }
+        Map<String, Object> map = new HashMap<>();
+        map.put("total", orgList.getTotalElements());
+        List<OrgListVO> list = new ArrayList<>();
+        setProperties(orgList, list);
+        map.put("rows", list);
+        return map;
     }
 
     /**
@@ -448,5 +465,18 @@ public class OrganizationService {
             }
         }
         return false;
+    }
+
+    public void toggleOrganizationStatus0(String hope, Object[] ids,HttpServletRequest request) {
+        if ("unsuspence".equals(hope)) {
+            for (Object id : ids) {
+                toggleOrganizationStatus(Integer.valueOf(id.toString()), Constants.STATUS_NORMAL, request);
+            }
+
+        } else if("suspence".equals(hope)){
+            for (Object id : ids) {
+                toggleOrganizationStatus(Integer.valueOf(id.toString()),Constants.STATUS_SUSPENCED,request);
+            }
+        }
     }
 }

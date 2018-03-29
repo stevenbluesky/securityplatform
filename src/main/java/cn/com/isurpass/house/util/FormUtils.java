@@ -35,7 +35,7 @@ public class FormUtils {
      * @param obj
      * @return 为空返回true, 不为空返回false
      */
-    public static boolean isEmpty(Object obj) {
+public static boolean isEmpty(Object obj) {
         for (Field f : obj.getClass().getDeclaredFields()) {
             f.setAccessible(true);
             try {

@@ -5,11 +5,13 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import cn.com.isurpass.house.vo.TransferVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -81,4 +83,17 @@ public class EmployeeController {
         return new JsonResult(1, "success");
     }
 
+    @RequestMapping("toggleEmployeeStatus0")
+    @ResponseBody
+    public String toggleEmployeeStatus0(@RequestBody TransferVO tf, HttpServletRequest request) {
+        String hope = tf.getHope();
+        Object[] ids = tf.getIds();
+        try {
+            es.toggleEmployeeStatus0(hope, ids, request);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return "fail";
+        }
+        return "success";
+    }
 }

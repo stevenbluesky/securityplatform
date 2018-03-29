@@ -49,7 +49,11 @@ public interface OrganizationDAO extends CrudRepository<OrganizationPO, Integer>
 
     List<OrganizationPO> findByCodeLike(String s);
 
-//    List<OrganizationPO> findByNameLikeAndCityLike(String s, String s1);
+    Page<OrganizationPO> findByCitycode(String citycode, Pageable pageable);
 
-//    List<OrganizationPO> findByCodeLikeAndOrganizationidLike(String s, String s1);
+    Page<OrganizationPO> findByNameLikeAndCitycodeLike(Pageable pageable,String s, String s1);
+
+    Page<OrganizationPO> findByNameLikeAndCitycodeIn(String name, List<String> list0,Pageable pageable);
+
+    Page<OrganizationPO> findByNameLikeAndCitycodeInAndOrgtype(String name, List<String> list0, Integer orgtype, Pageable pageable);
 }

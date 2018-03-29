@@ -32,8 +32,12 @@
                       </form>
                   </div>
           <hr>
-              <button onclick="window.location.href='addInstallerPage'" style="float: right;" type="submit"
-                      class="btn btn-default"><@spring.message code="label.addnew"/></button>
+               <button style="float: right;" class='btn btn-default'
+                       onclick='toggleOrganizationStatus("unsuspence");'><@spring.message code='label.unsuspence'/></button>
+			<button style="float: right;" class='btn btn-default'
+                    onclick='toggleOrganizationStatus("suspence");'><@spring.message code='label.suspenced'/></button>
+            <button onclick="window.location.href='addInstallerPage'" style="float: right;"
+                    class="btn btn-default"><@spring.message code="label.addnew"/></button>
           
 <table id="table" data-toggle="table">
     <thead>
@@ -44,7 +48,8 @@
         <th data-field="code"><@spring.message code="label.code"/></th>
         <th data-field="city"><@spring.message code="label.city"/></th>
         <th data-field="status" data-formatter="formatter_status"><@spring.message code="label.status"/></th>
-        <th data-field="operate" data-formatter="formatter_op" data-events="installeraddEvents"><@spring.message code="label.operate"/></th>
+        <th data-field="operate" data-formatter="formatter_op"
+            data-events="installeraddEvents"><@spring.message code="label.operate"/></th>
     </tr>
     </thead>
 </table>
@@ -65,10 +70,10 @@
             pageNumber: 1,                      //初始化加载第一页，默认第一页,并记录
             pageSize: '10',                     //每页的记录行数（*）
             pageList: [10, 25, 50, 100],        //可供选择的每页的行数（*）
-            search: true,                      //是否显示表格搜索
+            search: false,                      //是否显示表格搜索
             strictSearch: false,
-            showColumns: true,                  //是否显示所有的列（选择显示的列）
-            showRefresh: true,                  //是否显示刷新按钮
+            showColumns: false,                  //是否显示所有的列（选择显示的列）
+            showRefresh: false,                  //是否显示刷新按钮
             minimumCountColumns: 2,             //最少允许的列数
             clickToSelect: true,                //是否启用点击选中行
             //height: 500,                      //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
@@ -105,18 +110,66 @@
                 {
                     "click #btn1": function (e, value, row, index) {
                         // alert(row.name);
-                        window.location.href = "addInstallerPage?organizationid="+row.organizationid;
+                        window.location.href = "addInstallerPage?organizationid=" + row.organizationid;
                     },
-                    "click #btn2":function (e, value, row, index) {
-                        toggleStatus(e,value,row,index,'toggleOrganizationStatus',row.organizationid,2);
+                    "click #btn2": function (e, value, row, index) {
+                        toggleStatus(e, value, row, index, 'toggleOrganizationStatus', row.organizationid, 2);
                     },
                     "click #btn3": function (e, value, row, index) {
-                        toggleStatus(e,value,row,index,'toggleOrganizationStatus',row.organizationid,1);
+                        toggleStatus(e, value, row, index, 'toggleOrganizationStatus', row.organizationid, 1);
                     },
                     "click #btn9": function (e, value, row, index) {
-                        toggleStatus(e,value,row,index,'toggleOrganizationStatus',row.organizationid,9);
+                        toggleStatus(e, value, row, index, 'toggleOrganizationStatus', row.organizationid, 9);
                     }
                 };
+
+
+        // <#--获取复选框选中的列的id数组-->
+        function getCheckedId() {
+            var arr = $("#table").bootstrapTable('getSelections');
+            var ids = [];
+            arr.forEach(function (val, index, arr) {
+                ids[index] = val.organizationid;
+            });
+            return ids;
+        }
+
+        // $("#table").bootstrapTable('getSelections')[1].organizationid
+        function toggleOrganizationStatus(obj) {
+            var ids = getCheckedId();
+            // alert(checkedIds);
+            if (ids[0] == null || ids[0] == "") {
+                alert("<@spring.message code='label.nochecked'/>");
+                return;
+            }
+            if (obj == "unsuspence") {
+                if (!confirm("<@spring.message code='label.recoverconfirm'/>")) {
+                    return;
+                }
+            }
+            if (obj == "suspence") {
+                if (!confirm("<@spring.message code='label.freezeconfirm'/>")) {
+                    return;
+                }
+            }
+            //异步更新
+            $.ajax({
+                type: 'post',
+                url: '../org/toggleOrganizationStatus0',
+                contentType: 'application/json',
+                traditional: true,
+                data: "{\"hope\":\"" + obj + "\",\"ids\":" + JSON.stringify(ids) + "}",
+                success: function (data) {//返回json结果
+                    alert("<@spring.message code='label.updatesuccess'/>");
+                    $('#table').bootstrapTable('refresh');
+                },
+                error: function () {// 请求失败处理函数
+                    alert("<@spring.message code='label.updatefailed'/>");
+                    $('#table').bootstrapTable('refresh');
+                }
+
+            });
+        }
     </script>
 
 <#include "/_foot1.ftl"/>

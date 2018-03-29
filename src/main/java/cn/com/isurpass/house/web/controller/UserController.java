@@ -1,22 +1,23 @@
 package cn.com.isurpass.house.web.controller;
 
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
+import cn.com.isurpass.house.exception.MyArgumentNullException;
+import cn.com.isurpass.house.result.JsonResult;
+import cn.com.isurpass.house.service.UserService;
+import cn.com.isurpass.house.util.Constants;
+import cn.com.isurpass.house.util.PageResult;
+import cn.com.isurpass.house.vo.TransferVO;
+import cn.com.isurpass.house.vo.UserAddVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import cn.com.isurpass.house.result.JsonResult;
-import cn.com.isurpass.house.service.UserService;
-import cn.com.isurpass.house.util.Constants;
-import cn.com.isurpass.house.util.PageResult;
-import cn.com.isurpass.house.vo.UserAddVO;
+import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 @Controller
 @RequestMapping("user")
@@ -46,7 +47,24 @@ public class UserController {
 		Pageable pageable = PageRequest.of(pr.getPage()-1,pr.getRows(),Sort.Direction.ASC,"organizationid");
 		return us.listUserInfoByOrgtype(pageable, Constants.ORGTYPE_SUPPLIER);
 	}
-	
+
+	@RequestMapping("toggleUserStatus0")
+	@ResponseBody
+	public String toggleUserStatus0(@RequestBody TransferVO tf, HttpServletRequest request) {
+		String hope = tf.getHope();
+		Object[] ids = tf.getIds();
+		try {
+			us.toggleUserStatus0(hope, ids, request);
+		} catch (MyArgumentNullException e) {
+			e.printStackTrace();
+			return e.getMessage();
+		} catch (RuntimeException e) {
+			e.printStackTrace();
+			return "fail";
+		}
+		return "success";
+	}
+
 	@RequestMapping("userList")
 	public String userList() {
 		return "user/userList";

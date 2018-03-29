@@ -85,7 +85,7 @@ $("#province").change(function () {
         changeCity(provinceid);
     }
 );
-function getbcountryB() {
+function getbcountryB(num) {
     var str = '';
     if(num==-1){
         str = "<option value=''></option>";
@@ -93,7 +93,7 @@ function getbcountryB() {
     ajaxcountry(str,"#bcountry");
 }
 function changeProvinceB(countryid) {
-    var str ="";
+    var str ="<option value=''></option>";
     ajaxprovince(str,"#bprovince",countryid);
 }
 $("#bcountry").change(function () {
@@ -102,7 +102,7 @@ $("#bcountry").change(function () {
     }
 );
 function changeCityB(provinceid) {
-    var str="";
+    var str="<option value=''></option>";
     ajaxcity(str,"#bcity",provinceid)
 }
 $("#bprovince").change(function () {
@@ -110,7 +110,7 @@ $("#bprovince").change(function () {
         changeCityB(provinceid);
     }
 );
-function getcscountry() {
+function getcscountry(num) {
     var str = '';
     if(num==-1){
         str = "<option value=''></option>";
@@ -118,7 +118,7 @@ function getcscountry() {
     ajaxcountry(str,"#cscountry");
 }
 function changeProvinceC(countryid) {
-    var str = "";
+    var str = "<option value=''></option>";
     ajaxprovince(str,"#csprovince",countryid)
 }
 $("#cscountry").change(function () {
@@ -127,7 +127,7 @@ $("#cscountry").change(function () {
     }
 );
 function changeCityC(provinceid) {
-    var str = "";
+    var str = "<option value=''></option>";
     ajaxcity(str,"#cscity",provinceid)
 }
 $("#csprovince").change(function () {
