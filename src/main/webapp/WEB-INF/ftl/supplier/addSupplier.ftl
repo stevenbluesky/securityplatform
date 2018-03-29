@@ -295,14 +295,20 @@
 
 <!-- JavaScript 部分 -->
 	<script src="../static/js/addressController.js"></script>
-	<script src="../static/js/addressController2.js"></script>
-
-
-<#include "/_foot0.ftl"/>
-
+	<#--<script src="../static/js/addressController2.js"></script>-->
+    <script src="../static/js/validAddress.js"></script>
 
 <script type="text/javascript">
     $(document).ready(function () {
+        getCountry(-1);
+        changeProvince(1);
+        changeCity(1);
+        getbcountryB();
+        changeProvinceB(1);
+        changeCityB(1);
+        getcscountry();
+        changeProvinceC(1);
+        changeCityC(1);
         // alert($("#orgid").val() == null);
         $('#defaultForm').bootstrapValidator({
             //       live: 'disabled',
@@ -385,13 +391,15 @@
     });
 
     $("#btn-submit").click(function () {
-        if($("#orgid").val() != null) {
-            $("#defaultForm").bootstrapValidator('removeField','loginname');
-            $("#defaultForm").bootstrapValidator('removeField','password');
-            $("#defaultForm").bootstrapValidator('removeField','repassword');
+        // alert(validAddressB());
+        if ($("#orgid").val() != null) {
+            $("#defaultForm").bootstrapValidator('removeField', 'loginname');
+            $("#defaultForm").bootstrapValidator('removeField', 'password');
+            $("#defaultForm").bootstrapValidator('removeField', 'repassword');
+            $("#defaultForm").bootstrapValidator('removeField', 'orgcode');
         }
         $("#defaultForm").bootstrapValidator('validate');//提交验证
-        if ($("#defaultForm").data('bootstrapValidator').isValid()) {//获取验证结果，如果成功，执行下面代码
+        if ($("#defaultForm").data('bootstrapValidator').isValid() && validAddressB() && validAddressC()) {//获取验证结果，如果成功，执行下面代码
             var url = "../org/add";
             $.ajax({
                 type: "POST",
@@ -411,5 +419,8 @@
             alert("<@spring.message code="label.nullstrexception"/>");
         }
     });
-    <#--<#include "../static/js/addressController2.js"/>-->
 </script>
+
+<#include "/_foot0.ftl"/>
+
+

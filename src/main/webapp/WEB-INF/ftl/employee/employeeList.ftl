@@ -106,8 +106,19 @@
                     "click #btn1": function (e, value, row, index) {
                         // alert(row.name);
                         window.location.href = "addEmployeePage?id="+row.employeeid;
+                    },
+                    "click #btn2":function (e, value, row, index) {
+                        toggleStatus(e,value,row,index,'toggleEmployeeStatus',row.employeeid,2);
+                    },
+                    "click #btn3": function (e, value, row, index) {
+                        toggleStatus(e,value,row,index,'toggleEmployeeStatus',row.employeeid,1);
+                    },
+                    "click #btn9": function (e, value, row, index) {
+                        toggleStatus(e,value,row,index,'toggleEmployeeStatus',row.employeeid,9);
                     }
+
                 };
+
     </script>
 <#include "/_foot1.ftl"/>
 <#include "/_foot0.ftl"/>

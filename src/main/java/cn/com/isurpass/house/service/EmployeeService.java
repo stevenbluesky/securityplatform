@@ -57,27 +57,6 @@ public class EmployeeService {
     @Autowired
     AddressService as;
 
-    public void changeStatus(Integer empid, Integer status) {
-        EmployeePO emp = ed.findByEmployeeid(empid);
-        switch (status) {
-            case 0:
-                emp.setStatus(Constants.STATUS_UNVALID);
-                break;
-            case 1:
-                emp.setStatus(Constants.STATUS_NORMAL);
-                break;
-            case 2:
-                emp.setStatus(Constants.STATUS_SUSPENCED);
-                break;
-            case 9:
-                emp.setStatus(Constants.STATUS_DELETED);
-                break;
-            default:
-                emp.setStatus(Constants.STATUS_NORMAL);
-                break;
-        }
-        ed.save(emp);
-    }
 
     /*
      * 判断一个员工登录用户名在其机构下是否已经被注册,如果被注册返回true
@@ -258,8 +237,7 @@ public class EmployeeService {
     }
 
     /**
-     * 查询一个employee的所有父类机构id
-     *
+     * 对EmployeeParentOrgIdVO进行查找,填充
      * @param emp
      * @return
      */
@@ -298,5 +276,50 @@ public class EmployeeService {
         emp.setOrganizationid(empPO.getOrganizationid());
         emp.setEmployeeid(empPO.getEmployeeid());
         return emp;
+    }
+
+    /**
+     * 改变用户的状态
+     * @param employeeid
+     * @param status
+     */
+    public void toggleEmployeeStatus(Integer employeeid,Integer status,HttpServletRequest request) {
+        if (status == null) {
+            throw new RuntimeException("status不能为空");
+        }
+        if (!hasProvilege(employeeid, request)) {
+            throw new RuntimeException("无权操作!");
+        }
+        EmployeePO emp = ed.findByEmployeeid(employeeid);
+        emp.setStatus(status);
+        ed.save(emp);
+    }
+
+    /**
+     * 通过要操作的员工id和request判断当前登录的员工是否有权限操作此员工
+     * @param employeeid
+     * @param request
+     * @return
+     */
+    public boolean hasProvilege(Integer employeeid,HttpServletRequest request) {
+     /*   EmployeePO emp = ed.findByEmployeeid(employeeid);
+        OrganizationPO org = od.findByOrganizationid(emp.getOrganizationid());//要操作的员工的机构
+
+        EmployeePO emp1 = (EmployeePO) request.getSession().getAttribute("emp");
+        OrganizationPO org1 = od.findByOrganizationid(emp1.getOrganizationid());
+
+        if (org1.getOrgtype() == Constants.ORGTYPE_AMETA) {//如果登录的员工机构是ameta,直接操作
+            return true;
+
+        } else if(org1.getOrgtype() == Constants.ORGTYPE_SUPPLIER){//员工的机构id必须是他的安装商或者服务商
+            if (org1.getOrganizationid() == org.getOrganizationid() || org1.getOrganizationid() == org.getParentorgid()) {
+                return true;
+            } else if (org1.getOrgtype() == Constants.ORGTYPE_INSTALLER && org.getOrganizationid() == org1.getOrganizationid()) {
+                return true;
+            }
+        }
+        return false;*/
+        EmployeePO emp = ed.findByEmployeeid(employeeid);
+        return os.hasProvilege(emp.getOrganizationid(), request);
     }
 }

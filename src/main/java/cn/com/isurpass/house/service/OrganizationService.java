@@ -97,12 +97,16 @@ public class OrganizationService {
 
     @Transactional(rollbackFor = Exception.class)
     public void addByOrgtype(OrgAddVO as, Integer orgtype, HttpServletRequest request) throws MyArgumentNullException {
-        if (!FormUtils.checkOrgNull(as)) // 必填项为空时
-            throw new MyArgumentNullException("必填字段不能为空!");
         EmployeePO emp0 = (EmployeePO) request.getSession().getAttribute("emp");
         OrgAddVO orgInfo = (OrgAddVO) request.getSession().getAttribute("orgInfo");
-        OrganizationPO org = new OrganizationPO();
+        if (!FormUtils.checkOrgNull(as)) {
+            throw new MyArgumentNullException("必填字段不能为空!");
+        }
+        if (orgInfo== null && !FormUtils.checkLoginNull(as)) {
+            throw new MyArgumentNullException("必填字段不能为空!");
+        }
 
+        OrganizationPO org = new OrganizationPO();
         org.setName(as.getName());
         org.setCode(as.getCode());
         org.setStatus(1);
@@ -386,8 +390,8 @@ public class OrganizationService {
         return org;
     }
 
-    public Page<OrganizationPO> search(OrgSearchVO search){
-        if(FormUtils.isEmpty(search)){
+    public Page<OrganizationPO> search(OrgSearchVO search) {
+        if (FormUtils.isEmpty(search)) {
             return null;
         }
         String name = "";
@@ -395,14 +399,54 @@ public class OrganizationService {
         if (search.getName() != null) {
             name = search.getName();
         }
-        if(search.getCity() != null){
+        if (search.getCity() != null) {
             city = search.getCity();
         }
         if (search.getCitycode() == null) {
 //            od.findByNameLikeAndCityLike("%"+name+"%","%"+city+"%");
-        }else{
+        } else {
 //            od.findByNameLike
         }
         return null;
+    }
+
+    /**
+     * @param id
+     * @param toStatus
+     * @param request
+     */
+    public void toggleOrganizationStatus(Integer id, Integer toStatus, HttpServletRequest request) {
+        if (toStatus == null) {
+            throw new RuntimeException("status不能为空.");
+        }
+        if (!hasProvilege(id, request)) {
+            throw new RuntimeException("无权操作");
+        }
+        OrganizationPO org = od.findByOrganizationid(id);
+        org.setStatus(toStatus);
+        od.save(org);
+    }
+
+    /**
+     * 通过要操作的员工id和request判断当前登录的员工是否有权限操作此机构
+     *
+     * @param organizationid
+     * @param request
+     * @return
+     */
+    public boolean hasProvilege(Integer organizationid, HttpServletRequest request) {
+        OrganizationPO org = od.findByOrganizationid(organizationid);//要操作的员工的机构
+        EmployeePO emp1 = (EmployeePO) request.getSession().getAttribute("emp");
+        OrganizationPO org1 = od.findByOrganizationid(emp1.getOrganizationid());
+        if (org1.getOrgtype() == Constants.ORGTYPE_AMETA) {//如果登录的员工机构是ameta,直接操作
+            return true;
+        } else if (org1.getOrgtype() == Constants.ORGTYPE_SUPPLIER) {//员工的机构id必须是他的安装商或者服务商
+            if (org1.getOrganizationid() == org.getOrganizationid() || org1.getOrganizationid() == org.getParentorgid()) {
+                return true;
+            } else if (org1.getOrgtype() == Constants.ORGTYPE_INSTALLER && org.getOrganizationid() == org1.getOrganizationid()) {
+                return true;
+            }
+        }
+        return false;
     }
 }

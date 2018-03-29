@@ -183,7 +183,6 @@
                             <div class="col-sm-4">
                                 <select name="country" id="country" class="selectpicker"
                                         title="<@spring.message code="label.choosecountry"/>">
-                                    <option value="1">afadfds</option>
                                 </select>
                             </div>
 
@@ -232,6 +231,8 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
+        getCountry(-1);
+
         $('#defaultForm').bootstrapValidator({
             //       live: 'disabled',
             message: 'This value is not valid',
@@ -292,7 +293,9 @@
     });
 
     $("#btn-submit").click(function () {
-
+        /*if($("#orgid").val() != null) {
+            $("#defaultForm").bootstrapValidator('removeField','repassword');
+        }*/
         $("#defaultForm").bootstrapValidator('validate');//提交验证
         if ($("#defaultForm").data('bootstrapValidator').isValid()) {//获取验证结果，如果成功，执行下面代码  
             var url = "../employee/add";
@@ -319,9 +322,9 @@
         }
     });
 
-    getParentOrg();
+    getParentOrg("#organizationid");
 
-    function getParentOrg() {
+    function getParentOrg(s,id) {
         $.ajax({
             type: "get",
             url: "../org/listAllOrgSelect",
@@ -332,7 +335,7 @@
                     str += '<option value=' + data[i].organizationid + '>'
                             + data[i].name + '</option>'
                 }
-                $("#organizationid").html(str);
+                $(s).html(str);
 
                 $("#organizationid").selectpicker('refresh');
 

@@ -68,4 +68,17 @@ public class EmployeeController {
         }
         return new JsonResult(1, "success");
     }
+
+    @RequestMapping("toggleEmployeeStatus")
+    @ResponseBody
+    public JsonResult toggleEmployeeStatus(Integer id,Integer toStatus,HttpServletRequest request){
+        try {
+            es.toggleEmployeeStatus(id,toStatus, request);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return new JsonResult(-1, e.getMessage());
+        }
+        return new JsonResult(1, "success");
+    }
+
 }

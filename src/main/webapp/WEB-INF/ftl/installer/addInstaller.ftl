@@ -6,6 +6,7 @@
         <div class="col-md-10">
             <form id="defaultForm" method="POST">
                 <#if orgInfo??>
+                    <input id="orgid" type="hidden" value="${(orgInfo.organizationid)!}"/>
                     <div class="text-center"><h1><@spring.message code="label.modifyinstaller"/></h1></div>
                 <#else>
                     <div class="text-center"><h1><@spring.message code="label.addinstaller"/></h1></div>
@@ -319,10 +320,21 @@
 
 <!-- JavaScript 部分 -->
 	<script src="../static/js/addressController.js"></script>
-	<script src="../static/js/addressController2.js"></script>
-	
+	<#--<script src="../static/js/addressController2.js"></script>-->
+    <script src="../static/js/validAddress.js"></script>
+
 <script type="text/javascript">
     $(document).ready(function () {
+        getCountry(-1);
+        changeProvince(1);
+        changeCity(1);
+        getbcountryB();
+        changeProvinceB(1);
+        changeCityB(1);
+        getcscountry();
+        changeProvinceC(1);
+        changeCityC(1);
+
         $('#defaultForm').bootstrapValidator({
             //       live: 'disabled',
             message: 'This value is not valid',
@@ -390,8 +402,14 @@
     });
 
     $("#btn-submit").click(function () {
+        if($("#orgid").val() != null) {
+            $("#defaultForm").bootstrapValidator('removeField','loginname');
+            $("#defaultForm").bootstrapValidator('removeField','password');
+            $("#defaultForm").bootstrapValidator('removeField','repassword');
+            $("#defaultForm").bootstrapValidator('removeField','orgcode');
+        }
         $("#defaultForm").bootstrapValidator('validate');//提交验证  
-        if ($("#defaultForm").data('bootstrapValidator').isValid()) {//获取验证结果，如果成功，执行下面代码  
+        if ($("#defaultForm").data('bootstrapValidator').isValid() && validAddressB() && validAddressC()) {//获取验证结果，如果成功，执行下面代码
             var url = "../org/addInstallerorg";
             $.ajax({
                 type: "POST",

@@ -41,7 +41,8 @@
 <table id="table" data-toggle="table">
     <thead>
     <tr>
-        <th data-field="id">ID</th>
+        <th data-field=""></th>
+        <th data-field="organizationid" data-visible="false">ID</th>
         <!--<th data-field="organizationid">ID</th>-->
         <th data-field="name"><@spring.message code="label.pname"/></th>
         <th data-field="code"><@spring.message code="label.code"/></th>
@@ -111,12 +112,18 @@
                     "click #btn1": function (e, value, row, index) {
                         // alert(row.name);
                         window.location.href = "addSupplierPage?organizationid=" + row.organizationid;
+                    },
+                    "click #btn2":function (e, value, row, index) {
+                        toggleStatus(e,value,row,index,'toggleOrganizationStatus',row.organizationid,2);
+                    },
+                    "click #btn3": function (e, value, row, index) {
+                        toggleStatus(e,value,row,index,'toggleOrganizationStatus',row.organizationid,1);
+                    },
+                    "click #btn9": function (e, value, row, index) {
+                        toggleStatus(e,value,row,index,'toggleOrganizationStatus',row.organizationid,9);
                     }
-                };
 
-        function xixi() {
-            alert("131223");
-        }
+                };
     </script>
 <#include "/_foot1.ftl"/>
 <#include "/_foot0.ftl"/>

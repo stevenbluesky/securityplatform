@@ -39,6 +39,17 @@ public class OrganizationController {
 	@Autowired
 	OrganizationService ss;
 
+	@RequestMapping("toggleOrganizationStatus")
+	@ResponseBody
+	public JsonResult toggleOrganizationStatus(Integer id,Integer toStatus,HttpServletRequest request){
+		try {
+			ss.toggleOrganizationStatus(id, toStatus, request);
+		} catch (RuntimeException e) {
+			e.printStackTrace();
+			return new JsonResult(-1, e.getMessage());
+		}
+		return new JsonResult(1, "success");
+	}
     /**
      * 添加服务商
      * @param as
@@ -156,4 +167,5 @@ public class OrganizationController {
 	public String installerList() {
 		return "installer/installerList";
 	}
+
 }

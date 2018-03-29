@@ -1,10 +1,8 @@
 /**
  *
  */
-getCountry();
-changeProvince(1);
-changeCity(1);
-function getCountry() {
+
+function ajaxcountry(str,position) {
     $.ajax({
         type: "get",
         url: "../address/getCountry",
@@ -12,63 +10,128 @@ function getCountry() {
         success: function (data) {
             /*var str = "<option value='${(orgInfo.sphonenumber)!}'>${(orgInfo.sphonenumber)!}</option>";*/
             // var str = "<option value=''></option>";
-            var str = "";
+            // var str = "";
             for (var i = 0; i < data.length; i++) {
                 str += '<option value=' + data[i].countryid + '>'
                     + data[i].countryname + '</option>'
             }
-            $("#country").html(str);
-            $("#country").selectpicker('refresh');
-
+            $(position).html(str);
+            $(position).selectpicker('refresh');
             // alert($("#coutry").html());
         }
     });
 }
-
-function changeProvince(countryid) {
-    // var countryid = $("#country").val();
+function ajaxprovince(str,position,id) {
     $.ajax({
         type: "get",
-        url: "../address/getProvince?countryid=" + countryid,
+        url: "../address/getProvince?countryid=" + id,
         async: true,
         success: function (data) {
-            var str = "";
+            // var str = "";
             for (var i = 0; i < data.length; i++) {
                 str += '<option value=' + data[i].provinceid + '>'
                     + data[i].provincename + '</option>'
             }
-            $("#province").html(str);
-
-            $("#province").selectpicker('refresh');
+            $(position).html(str);
+            $(position).selectpicker('refresh');
 
         }
     });
 }
+function ajaxcity(str,position,id) {
+    $.ajax({
+        type: "get",
+        url: "../address/getCity?provinceid=" + id,
+        async: true,
+        success: function (data) {
+            // var str = "";
+            for (var i = 0; i < data.length; i++) {
+                str += '<option value=' + data[i].cityid + '>'
+                    + data[i].cityname + '</option>'
+            }
+            $(position).html(str);
+
+            $(position).selectpicker('refresh');
+
+        }
+    });
+}
+
+function getCountry(num) {
+    var str = '';
+    if(num==-1){
+        str = "<option value=''></option>";
+    }
+    ajaxcountry(str,"#country");
+}
+
+function changeProvince(countryid) {
+    // var countryid = $("#country").val();
+    var str ="<option value=''></option>";
+    ajaxprovince(str,"#province",countryid);
+}
+
 $("#country").change(function () {
         var countryid = $("#country").val();
         changeProvince(countryid);
     }
 );
 function changeCity(provinceid) {
-    $.ajax({
-        type: "get",
-        url: "../address/getCity?provinceid=" + provinceid,
-        async: true,
-        success: function (data) {
-            var str = "";
-            for (var i = 0; i < data.length; i++) {
-                str += '<option value=' + data[i].cityid + '>'
-                    + data[i].cityname + '</option>'
-            }
-            $("#city").html(str);
-
-            $("#city").selectpicker('refresh');
-
-        }
-    });
+    var str ="<option value=''></option>";
+    ajaxcity(str,"#city",provinceid);
 }
 $("#province").change(function () {
         var provinceid = $("#province").val();
-        changeCity(provinceid)
+        changeCity(provinceid);
+    }
+);
+function getbcountryB() {
+    var str = '';
+    if(num==-1){
+        str = "<option value=''></option>";
+    }
+    ajaxcountry(str,"#bcountry");
+}
+function changeProvinceB(countryid) {
+    var str ="";
+    ajaxprovince(str,"#bprovince",countryid);
+}
+$("#bcountry").change(function () {
+        var countryid = $("#bcountry").val();
+        changeProvinceB(countryid);
+    }
+);
+function changeCityB(provinceid) {
+    var str="";
+    ajaxcity(str,"#bcity",provinceid)
+}
+$("#bprovince").change(function () {
+        var provinceid = $("#bprovince").val();
+        changeCityB(provinceid);
+    }
+);
+function getcscountry() {
+    var str = '';
+    if(num==-1){
+        str = "<option value=''></option>";
+    }
+    ajaxcountry(str,"#cscountry");
+}
+function changeProvinceC(countryid) {
+    var str = "";
+    ajaxprovince(str,"#csprovince",countryid)
+}
+$("#cscountry").change(function () {
+        var countryid = $("#cscountry").val();
+        changeProvinceC(countryid);
+    }
+);
+function changeCityC(provinceid) {
+    var str = "";
+    ajaxcity(str,"#cscity",provinceid)
+}
+$("#csprovince").change(function () {
+        var provinceid = $("#csprovince").val();
+        changeCityC(provinceid);
     }
 );
