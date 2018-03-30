@@ -27,8 +27,8 @@ public class OrganizationPO {
 	private String centralstationname;
 	private Integer csaddressid;
 	private Integer cscontactid;
+	private Date createtime;
 
-	
 	public OrganizationPO() {
 		super();
 	}
@@ -144,4 +144,11 @@ public class OrganizationPO {
 		this.cscontactid = cscontactid;
 	}
 
+	public Date getCreatetime() {
+		return createtime;
+	}
+
+	public void setCreatetime(Date createtime) {
+		this.createtime = createtime;
+	}
 }

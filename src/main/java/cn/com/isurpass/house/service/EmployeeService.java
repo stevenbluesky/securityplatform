@@ -98,11 +98,12 @@ public class EmployeeService {
         }
 
         AddressPO addressPO = new AddressPO(countryname, provincename, cityname, emp.getDetailaddress(), null);
+        empPO.setCreatetime(new Date());
         if (empInfo != null) {
+            empPO.setCreatetime(ed.findByEmployeeid(empInfo.getEmployeeid()).getCreatetime());
             addressPO.setAddressid(empInfo.getAddressid());
             empPO.setEmployeeid(empInfo.getEmployeeid());
         }
-
         empPO.setLoginname(emp.getLoginname());
         empPO.setCode(emp.getCode());
         Encrypt svr = new Encrypt();

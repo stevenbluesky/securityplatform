@@ -17,6 +17,15 @@ public class GatewayUserPO {
 	private Integer gatewayuserbindingid;
 	private String deviceid;
 	private Integer userid;
+	private Date createtime;
+
+	public Date getCreatetime() {
+		return createtime;
+	}
+
+	public void setCreatetime(Date createtime) {
+		this.createtime = createtime;
+	}
 
 	public Integer getGatewayuserbindingid() {
 		return gatewayuserbindingid;

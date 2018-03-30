@@ -96,7 +96,7 @@ public class OrganizationService {
     @Transactional(rollbackFor = Exception.class)
     public void addByOrgtype(OrgAddVO as, Integer orgtype, HttpServletRequest request) throws MyArgumentNullException {
         EmployeePO emp0 = (EmployeePO) request.getSession().getAttribute("emp");
-        OrgAddVO orgInfo = (OrgAddVO) request.getSession().getAttribute("orgInfo");
+        OrgAddVO orgInfo = (OrgAddVO) request.getSession().getAttribute("orgInfo");//修改时才会存在的机构id
         if (!FormUtils.checkOrgNull(as)) {
             throw new MyArgumentNullException("必填字段不能为空!");
         }
@@ -119,7 +119,9 @@ public class OrganizationService {
         // }
         // 不能这么判断,事实上,服务商新增安装商时也是不填上级机构的id(默认为服务商的id)
 
+        org.setCreatetime(new Date());
         if (orgInfo != null) {//不为空说明在进行修改操作
+            org.setCreatetime(od.findByOrganizationid(orgInfo.getOrganizationid()).getCreatetime());
             org.setParentorgid(orgInfo.getParentorgid());
             org.setOrgtype(orgInfo.getOrgtype());
         } else {

@@ -26,6 +26,7 @@ public class EmployeePO {
 	private Integer personid;
 	private Integer addressid;
 	private Date expiredate;
+	private Date createtime;
 
 	public EmployeePO() {
 		super();
@@ -55,6 +56,7 @@ public class EmployeePO {
 		this.personid = personid;
 		this.addressid = addressid;
 		this.expiredate = expiredate;
+		this.createtime=createtime;
 	}
 
 	public Integer getEmployeeid() {
@@ -153,12 +155,30 @@ public class EmployeePO {
 		this.expiredate = expiredate;
 	}
 
-	@Override
-	public String toString() {
-		return "EmployeePO [employeeid=" + employeeid + ", loginname=" + loginname + ", code=" + code + ", name=" + name
-				+ ", password=" + password + ", organizationid=" + organizationid + ", question=" + question
-				+ ", answer=" + answer + ", status=" + status + ", personid=" + personid + ", addressid=" + addressid
-				+ ", expiredate=" + expiredate + "]";
-	}
+    @Override
+    public String toString() {
+        return "EmployeePO{" +
+                "employeeid=" + employeeid +
+                ", loginname='" + loginname + '\'' +
+                ", code='" + code + '\'' +
+                ", name='" + name + '\'' +
+                ", password='" + password + '\'' +
+                ", organizationid=" + organizationid +
+                ", question='" + question + '\'' +
+                ", answer='" + answer + '\'' +
+                ", status=" + status +
+                ", personid=" + personid +
+                ", addressid=" + addressid +
+                ", expiredate=" + expiredate +
+                ", createtime=" + createtime +
+                '}';
+    }
 
+    public Date getCreatetime() {
+        return createtime;
+    }
+
+    public void setCreatetime(Date createtime) {
+        this.createtime = createtime;
+    }
 }

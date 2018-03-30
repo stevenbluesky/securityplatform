@@ -1,4 +1,4 @@
-package cn.com.isurpass.house.web.controller;
+package cn.com.isurpass.house.vo;
 
 public class DeviceDetailVO {
 

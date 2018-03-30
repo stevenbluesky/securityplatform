@@ -1,9 +1,6 @@
 package cn.com.isurpass.house.service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -113,9 +110,9 @@ public class UserService {
         person.setAddressid(addressid);
         person.setEmail(u.getEmail());
         person.setFax(u.getFax());
-        person.setAddressid(addressid);
-        Integer personid = pd.save(person).getPersonid();
+        user.setCreatetime(new Date());
 
+        Integer personid = pd.save(person).getPersonid();
         user.setPersonid(personid);
         UserPO userSave = ud.save(user);
         if (u.getDeviceid() != null) {
