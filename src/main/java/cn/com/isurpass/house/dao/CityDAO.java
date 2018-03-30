@@ -13,6 +13,6 @@ public interface CityDAO extends CrudRepository<CityPO,Integer>{
 	List<CityPO> findByProvinceid(Integer provinceid);
 	CityPO findByCityid(Integer id);
 	CityPO findByCitycode(String citycode);
-
+	List<CityPO> findByCitynameContaining(String cityname);
     List<CityPO> findByCitycodeLikeAndCitynameLike(String citycode, String city1);
 }

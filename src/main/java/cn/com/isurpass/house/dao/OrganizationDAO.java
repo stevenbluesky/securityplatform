@@ -51,9 +51,13 @@ public interface OrganizationDAO extends CrudRepository<OrganizationPO, Integer>
 
     Page<OrganizationPO> findByCitycode(String citycode, Pageable pageable);
 
-    Page<OrganizationPO> findByNameLikeAndCitycodeLike(Pageable pageable,String s, String s1);
+    Page<OrganizationPO> findByNameLikeAndCitycodeLike(Pageable pageable, String s, String s1);
 
-    Page<OrganizationPO> findByNameLikeAndCitycodeIn(String name, List<String> list0,Pageable pageable);
+    Page<OrganizationPO> findByNameLikeAndCitycodeIn(String name, List<String> list0, Pageable pageable);
 
     Page<OrganizationPO> findByNameLikeAndCitycodeInAndOrgtype(String name, List<String> list0, Integer orgtype, Pageable pageable);
+
+    List<OrganizationPO> findByOrgtypeAndNameContainingOrCentralstationnameContaining(Integer orgtypeSupplier,
+                                                                                      String serviceprovider, String serviceprovider2);
+
 }

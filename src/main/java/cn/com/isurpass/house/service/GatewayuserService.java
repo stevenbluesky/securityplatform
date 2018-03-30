@@ -13,6 +13,10 @@ import cn.com.isurpass.house.dao.EmployeeDAO;
 import cn.com.isurpass.house.dao.GatewayuserDAO;
 import cn.com.isurpass.house.dao.OrganizationDAO;
 import cn.com.isurpass.house.dao.UserDAO;
+import cn.com.isurpass.house.po.EmployeePO;
+import cn.com.isurpass.house.po.GatewayUserPO;
+import cn.com.isurpass.house.po.OrganizationPO;
+import cn.com.isurpass.house.po.UserPO;
 
 @Service
 public class GatewayuserService {
@@ -28,15 +32,15 @@ public class GatewayuserService {
     @Autowired
     EmployeeDAO ed;
 
-    /**
-     * 通过网关id获取 使用网关的用户姓名
-     *
-     * @param deviceid
-     * @return
-     */
-    public String findUsernameByDeviceid(String deviceid) {
-        return findUserBydeviceid(deviceid).getName();
-    }
+	/**
+	 * 通过网关id获取 使用网关的用户姓名
+	 * 
+	 * @param deviceid
+	 * @return
+	 */
+	public String findUsernameByDeviceid(String deviceid) {
+		return findUserBydeviceid(deviceid).getName();
+	}
 
     /**
      * 通过网关id获取 使用网关的用户
@@ -45,7 +49,8 @@ public class GatewayuserService {
      * @return
      */
     public UserPO findUserBydeviceid(String deviceid) {
-        GatewayUserPO gu = gd.findByDeviceid(deviceid);
+        List<GatewayUserPO> gulist = gd.findByDeviceid(deviceid);
+        GatewayUserPO gu = gulist.get(0);
         if (gu == null) {
             return null;
         }

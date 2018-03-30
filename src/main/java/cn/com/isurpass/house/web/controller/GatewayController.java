@@ -1,5 +1,6 @@
 package cn.com.isurpass.house.web.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletInputStream;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,10 +27,12 @@ import com.alibaba.fastjson.JSONArray;
 
 import cn.com.isurpass.house.exception.MyArgumentNullException;
 import cn.com.isurpass.house.po.GatewayPO;
+import cn.com.isurpass.house.po.ZwaveDevicePO;
 import cn.com.isurpass.house.result.JsonResult;
 import cn.com.isurpass.house.service.GatewayService;
 import cn.com.isurpass.house.util.Constants;
 import cn.com.isurpass.house.util.PageResult;
+import cn.com.isurpass.house.vo.GatewayDetailVO;
 import cn.com.isurpass.house.vo.TransferVO;
 import cn.com.isurpass.house.vo.TypeGatewayInfoVO;
 
@@ -74,19 +78,31 @@ public class GatewayController {
 	 */
 	@RequestMapping("gatewayJsonList")
 	@ResponseBody
-	public Map<String, Object> gatewayJsonList(PageResult pr,String name,String cityname,String citycode,String customer,String serviceprovider,String installerorg,String installer,String deviceid) {
+	public Map<String, Object> gatewayJsonList(PageResult pr,TypeGatewayInfoVO tgiv) {
 		Pageable pageable = PageRequest.of(pr.getPage()-1,pr.getRows(),Sort.Direction.ASC,"deviceid");
-		return gs.listGateway(pageable,name,cityname,citycode,customer,serviceprovider,installerorg,installer,deviceid);
+		return gs.listGateway(pageable,tgiv);
 	}
+	
+	/*@RequestMapping("gatewayDeviceJsonList")
+	@ResponseBody
+	public Map<String, Object> gatewayDeviceJsonList(PageResult pr,TypeGatewayInfoVO tgiv) {
+		Pageable pageable = PageRequest.of(pr.getPage()-1,pr.getRows(),Sort.Direction.ASC,"deviceid");
+		return gs.listGateway(pageable,tgiv);
+	}*/
 	/**
 	 * 根据deviceid获取网关详细信息
 	 * @param deviceid
 	 * @return
 	 */
+	//@ResponseBody
 	@RequestMapping("gatewayDetail")
 	public String gatewayDetail(String deviceid,Model model) {
-		GatewayPO gw = gs.findByDeviceid(deviceid);
+		if(StringUtils.isEmpty(deviceid)){
+			return null;
+		}
+		GatewayDetailVO gw = gs.findByDeviceid(deviceid);
 		model.addAttribute("gwd", gw);
+		model.addAttribute("gdd", gw.getDevice());
 		return "gateway/gatewayDetail";
 	}
 	/**

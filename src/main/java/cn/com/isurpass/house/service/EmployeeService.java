@@ -1,6 +1,27 @@
 package cn.com.isurpass.house.service;
 
-import cn.com.isurpass.house.dao.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import cn.com.isurpass.house.util.Encrypt;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import cn.com.isurpass.house.dao.AddressDAO;
+import cn.com.isurpass.house.dao.CityDAO;
+import cn.com.isurpass.house.dao.CountryDAO;
+import cn.com.isurpass.house.dao.EmployeeDAO;
+import cn.com.isurpass.house.dao.OrganizationDAO;
+import cn.com.isurpass.house.dao.PersonDAO;
+import cn.com.isurpass.house.dao.ProvinceDAO;
 import cn.com.isurpass.house.exception.MyArgumentNullException;
 import cn.com.isurpass.house.po.AddressPO;
 import cn.com.isurpass.house.po.EmployeePO;
@@ -45,6 +66,27 @@ public class EmployeeService {
     @Autowired
     AddressService as;
 
+    public void changeStatus(Integer empid, Integer status) {
+        EmployeePO emp = ed.findByEmployeeid(empid);
+        switch (status) {
+            case 0:
+                emp.setStatus(Constants.STATUS_UNVALID);
+                break;
+            case 1:
+                emp.setStatus(Constants.STATUS_NORMAL);
+                break;
+            case 2:
+                emp.setStatus(Constants.STATUS_SUSPENCED);
+                break;
+            case 9:
+                emp.setStatus(Constants.STATUS_DELETED);
+                break;
+            default:
+                emp.setStatus(Constants.STATUS_NORMAL);
+                break;
+        }
+        ed.save(emp);
+    }
 
     /*
      * 判断一个员工登录用户名在其机构下是否已经被注册,如果被注册返回true

@@ -21,4 +21,13 @@ public interface UserDAO extends CrudRepository<UserPO,Integer>{
     Page<UserPO> findByInstallerorgid(Integer organizationid, Pageable pageable);
     Page<UserPO> findByOrganizationid(Integer organizationid, Pageable pageable);
     Page<UserPO> findByInstallerid(Integer employeeid, Pageable pageable);
+	List<UserPO> findByCitycodeContaining(String findCode);
+	List<UserPO> findByCitycode(String cl);
+
+
+	List<UserPO> findByInstalleridIn(List<Integer> employeeidlist);
+
+	List<UserPO> findByLoginnameContainingOrNameContaining(String customer, String customer2);
+	List<UserPO> findByUseridIn(List<Integer> useridlist);
+
 }

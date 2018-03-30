@@ -1,37 +1,22 @@
 package cn.com.isurpass.house.service;
 
-import java.util.*;
-
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import javax.servlet.http.HttpServletRequest;
-
-import cn.com.isurpass.house.po.*;
-import cn.com.isurpass.house.util.Encrypt;
-import cn.com.isurpass.house.vo.LoginVO;
-import cn.com.isurpass.house.vo.OrgSearchVO;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import cn.com.isurpass.house.dao.AddressDAO;
-import cn.com.isurpass.house.dao.CityDAO;
-import cn.com.isurpass.house.dao.CountryDAO;
-import cn.com.isurpass.house.dao.EmployeeDAO;
-import cn.com.isurpass.house.dao.OrganizationDAO;
-import cn.com.isurpass.house.dao.PersonDAO;
-import cn.com.isurpass.house.dao.ProvinceDAO;
+import cn.com.isurpass.house.dao.*;
 import cn.com.isurpass.house.exception.MyArgumentNullException;
+import cn.com.isurpass.house.po.*;
 import cn.com.isurpass.house.util.Constants;
+import cn.com.isurpass.house.util.Encrypt;
 import cn.com.isurpass.house.util.FormUtils;
 import cn.com.isurpass.house.vo.OrgAddVO;
 import cn.com.isurpass.house.vo.OrgListVO;
+import cn.com.isurpass.house.vo.OrgSearchVO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.*;
 
 @Service
 public class OrganizationService {
