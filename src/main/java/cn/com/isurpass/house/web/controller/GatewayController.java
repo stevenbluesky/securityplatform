@@ -68,7 +68,7 @@ public class GatewayController {
 		}
 		return mv;
 	}
-	
+
 	/**
 	 * 获取网关分页信息
 	 * @param pr

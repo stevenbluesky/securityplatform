@@ -19,7 +19,6 @@
                                          placeholder="<@spring.message code="label.city"/>">
                               </div>
                           </div>
-                          `
                           <div class="form-group col-md-3">
                               <div>
                                   <b><@spring.message code="label.citycode"/></b>
@@ -28,8 +27,7 @@
                               </div>
                           </div>
                           <div class=" col-md-3">
-                              <button id="searchbtn" type="button"
-                                      class="btn btn-default"><@spring.message code="label.search"/></button>
+                              <button id="searchbtn" class="btn btn-default"><@spring.message code="label.search"/></button>
                           </div>
                       </form>
                   </div>

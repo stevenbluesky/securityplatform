@@ -57,4 +57,10 @@ public class CityTest {
         System.out.println(list.size());
         list.forEach(System.out::println);
     }
+
+    @Test
+    public void testNull() {
+        List<OrganizationPO> byOrgtype = od.findByOrgtype(null);//不能通过null取所有的数据
+        System.out.println(byOrgtype.size());
+    }
 }

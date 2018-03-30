@@ -7,27 +7,26 @@
                           <div class="form-group col-md-3">
                               <div>
                                   <b><@spring.message code="label.pname"/></b>
-                                  <input type="text" class="form-control" id="name" name="name"
+                                  <input type="text" class="form-control" id="searchname" name="searchname"
                                          placeholder="<@spring.message code="label.pname"/>">
                               </div>
                           </div>
                           <div class="form-group col-md-3">
                               <div>
                                   <b><@spring.message code="label.city"/></b>
-                                  <input type="text" class="form-control" id="code" name="code"
+                                  <input type="text" class="form-control" id="searchcity" name="searchcity"
                                          placeholder="<@spring.message code="label.city"/>">
                               </div>
                           </div>
                           <div class="form-group col-md-3">
                               <div>
                                   <b><@spring.message code="label.citycode"/></b>
-                                  <input type="text" class="form-control" id="code" name="code"
+                                  <input type="text" class="form-control" id="searchcitycode" name="searchcitycode"
                                          placeholder="<@spring.message code="label.citycode"/>">
                               </div>
                           </div>
                           <div class=" col-md-3">
-                              <button type="submit"
-                                      class="btn btn-default"><@spring.message code="label.borgpostal"/></button>
+                              <button id="searchbtn" class="btn btn-default"><@spring.message code="label.search"/></button>
                           </div>
                       </form>
                   </div>
@@ -77,7 +76,7 @@
             minimumCountColumns: 2,             //最少允许的列数
             clickToSelect: true,                //是否启用点击选中行
             //height: 500,                      //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
-            uniqueId: "id",                     //每一行的唯一标识，一般为主键列
+            uniqueId: "organizaitonid   ",                     //每一行的唯一标识，一般为主键列
             showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
             cardView: false,                    //是否显示详细视图
             detailView: false,                  //是否显示父子表
@@ -85,6 +84,9 @@
             queryParams: function (params) {
                 //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
                 var temp = {
+                    searchname:$("#searchname").val(),
+                    searchcity:$("#searchcity").val(),
+                    searchcitycode:$("#searchcitycode").val(),
                     rows: params.limit,                         //页面大小
                     page: (params.offset / params.limit) + 1,   //页码
                     sort: params.sort,      //排序列名
@@ -106,6 +108,11 @@
             }
         });
 
+        //当点击搜索按钮后，表格刷新并跳到第一页
+        $("#searchbtn").click(function(){
+            $("#table").bootstrapTable("refreshOptions",{pageNumber:1})
+        });
+
         window.installeraddEvents =
                 {
                     "click #btn1": function (e, value, row, index) {
@@ -122,7 +129,6 @@
                         toggleStatus(e, value, row, index, 'toggleOrganizationStatus', row.organizationid, 9);
                     }
                 };
-
 
         // <#--获取复选框选中的列的id数组-->
         function getCheckedId() {

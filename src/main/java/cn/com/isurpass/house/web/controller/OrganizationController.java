@@ -134,9 +134,11 @@ public class OrganizationController {
 
     @RequestMapping("installerJsonList")
     @ResponseBody
-    public Map<String, Object> installerJsonList(PageResult pr, HttpServletRequest request) {
+    public Map<String, Object> installerJsonList(PageResult pr,OrgSearchVO osv, HttpServletRequest request) {
         Pageable pageable = PageRequest.of(pr.getPage() - 1, pr.getRows(), Sort.Direction.ASC, "organizationid");
-
+        if (!FormUtils.isEmpty(osv)) {//搜索
+            return ss.search(pageable, osv,request);
+        }
         return ss.listInstallerOrg(pageable, request);
     }
 

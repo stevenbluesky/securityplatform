@@ -420,7 +420,7 @@ public class OrganizationService {
             map.put("total", od.countByNameLikeAndCitycodeLike(name, citycode));
             orgList = od.findByNameLikeAndCitycodeLike(pageable, name, citycode);
         }
-        if (search.getSearchcity() != "") {
+        if (search.getSearchcity() != "" && getOrgtypeByReqeust(request) != Constants.ORGTYPE_AMETA) {
             //先通过citycode和city查找相似的,再通过返回的List集合中的citycode在organization表中查找
             List<CityPO> list = city.findByCitycodeLikeAndCitynameLike(citycode, city1);
             if (list.isEmpty()) {
@@ -430,6 +430,15 @@ public class OrganizationService {
             list.forEach(l -> list0.add(l.getCitycode()));
             map.put("total", od.countByNameLikeAndCitycodeInAndOrgtype(name, list0, orgtype));
             orgList = od.findByNameLikeAndCitycodeInAndOrgtype(name, list0, orgtype, pageable);
+        } else {//是ameta,则查询所有的
+            List<CityPO> list = city.findByCitycodeLikeAndCitynameLike(citycode, city1);
+            if (list.isEmpty()) {
+                return null;
+            }
+            List<String> list0 = new ArrayList<>();
+            list.forEach(l -> list0.add(l.getCitycode()));
+            map.put("total", od.countByNameLikeAndCitycodeIn(name, list0));
+            orgList = od.findByNameLikeAndCitycodeIn(name, list0, pageable);
         }
 //        Map<String, Object> map = new HashMap<>();
 //        map.put("total", orgList.getTotalElements());

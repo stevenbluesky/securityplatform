@@ -227,7 +227,6 @@ public class EmployeeService {
         return map;
     }
 
-    @Transactional(readOnly = true)
     private void forEachEmp(List<EmployeeListVO> list, EmployeePO e) {
         EmployeeListVO emp = new EmployeeListVO();
         emp.setName(e.getName());
