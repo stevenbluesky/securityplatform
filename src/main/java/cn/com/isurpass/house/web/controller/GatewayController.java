@@ -49,13 +49,13 @@ public class GatewayController {
 	 */
 	@ResponseBody
 	@RequestMapping(value="add",method = RequestMethod.GET)
-	public ModelAndView add(TypeGatewayInfoVO tgi) {
+	public ModelAndView add(TypeGatewayInfoVO tgi,HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView("gateway/TypeGatewayInfo");
 		mv.addObject("deviceid", tgi.getDeviceid());
         mv.addObject("model", tgi.getModel());
         mv.addObject("firmwareversion", tgi.getFirmwareversion());
 		try {
-			gs.add(tgi);		  
+			gs.add(tgi,request);
 	        mv.addObject("msg", "4"); 
 	        mv.addObject("msgdeviceid",tgi.getDeviceid());
 		} catch (MyArgumentNullException e) {

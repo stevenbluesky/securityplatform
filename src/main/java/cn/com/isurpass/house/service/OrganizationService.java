@@ -338,6 +338,13 @@ public class OrganizationService {
         return list;
     }
 
+    /**
+     * 使用此方法时,返回的list集合里面只有其children机构的id,不包括其本身.<br>
+     * 所以在通过此方法返回服务商的安装商集合来显示数据时,一般还要加上服务商本身的id.
+     * @param id
+     * @param list
+     * @return
+     */
     @Transactional(readOnly = true)
     public List<Integer> findChildrenOrgid(Integer id, List<Integer> list) {
         List<OrganizationPO> orgList = od.findByParentorgid(id);

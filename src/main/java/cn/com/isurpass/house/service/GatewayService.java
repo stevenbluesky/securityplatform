@@ -38,6 +38,8 @@ import cn.com.isurpass.house.util.Constants;
 import cn.com.isurpass.house.vo.GatewayDetailVO;
 import cn.com.isurpass.house.vo.TypeGatewayInfoVO;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Service
 public class GatewayService {
 	@Autowired
@@ -60,14 +62,17 @@ public class GatewayService {
 	private PhonecarduserDAO pud;
 	@Autowired
 	private PhonecardDAO pd;
+	@Autowired
+    private OrganizationService os;
 	/**
 	 * 新增网关信息
 	 * @param tgi
 	 * @throws MyArgumentNullException
 	 */
-	@Transactional
-	public void add(TypeGatewayInfoVO tgi) throws MyArgumentNullException {
-		if (StringUtils.isEmpty(tgi.getDeviceid())|| StringUtils.isEmpty(tgi.getModel()) || StringUtils.isEmpty(tgi.getFirmwareversion())){
+	@Transactional(rollbackFor = Exception.class)
+	public void add(TypeGatewayInfoVO tgi,HttpServletRequest request) throws MyArgumentNullException {
+        EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
+        if (StringUtils.isEmpty(tgi.getDeviceid())|| StringUtils.isEmpty(tgi.getModel()) || StringUtils.isEmpty(tgi.getFirmwareversion())){
 			throw new MyArgumentNullException("1");
 		}
 		GatewayPO gw = gd.findByDeviceid(tgi.getDeviceid());
@@ -81,7 +86,18 @@ public class GatewayService {
 		gwPO.setFirmwareversion(tgi.getFirmwareversion());
 		gwPO.setModel(tgi.getModel());
 		gwPO.setStatus(1);//TODO 暂时默认新增即视为在线状态
-		gd.save(gwPO);
+        gd.save(gwPO);
+
+        if (gbd.findByDeviceid(tgi.getDeviceid()) != null) {
+            throw new MyArgumentNullException("此网关已经绑定过机构");
+        }
+        GatewayBindingPO gbp = new GatewayBindingPO();
+        gbp.setCreatetime(new Date());
+        gbp.setDeviceid(tgi.getDeviceid());
+        gbp.setBindingtype(os.getOrgtypeByReqeust(request));
+        gbp.setOrganizationid(emp.getOrganizationid());
+        gbp.setStatus(1);
+        gbd.save(gbp);
 	}
 	/**
 	 * 根据搜索条件获取网关分页信息列表
@@ -91,7 +107,7 @@ public class GatewayService {
 	 */
 	@Transactional(readOnly = true)
 	public Map<String, Object> listGateway(Pageable pageable, TypeGatewayInfoVO tgiv) {
-		Map<String, Object> map = new HashMap<>();//返回的map
+        Map<String, Object> map = new HashMap<>();//返回的map
 		List<TypeGatewayInfoVO> list = new ArrayList<>();//返回的list对象
 		/*if(StringUtils.isEmpty(tgiv.getCityname())&&StringUtils.isEmpty(tgiv.getCitycode())&&StringUtils.isEmpty(tgiv.getName())&&StringUtils.isEmpty(tgiv.getCustomer())&&StringUtils.isEmpty(tgiv.getServiceprovider())&&StringUtils.isEmpty(tgiv.getInstallerorg())&&StringUtils.isEmpty(tgiv.getInstaller())&&StringUtils.isEmpty(tgiv.getDeviceid())){
 			Page<GatewayPO> gateList = gd.findAll(pageable);

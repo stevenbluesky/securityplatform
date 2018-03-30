@@ -6,6 +6,7 @@ import cn.com.isurpass.house.dao.AddressDAO;
 import cn.com.isurpass.house.dao.OrganizationDAO;
 import cn.com.isurpass.house.po.AddressPO;
 import cn.com.isurpass.house.po.OrganizationPO;
+import cn.com.isurpass.house.service.OrganizationService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
