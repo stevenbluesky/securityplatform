@@ -9,4 +9,6 @@ import cn.com.isurpass.house.po.PhonecardUserPO;
 public interface PhonecarduserDAO extends CrudRepository<PhonecardUserPO,Integer>{
 	PhonecardUserPO save(PhonecardUserPO pcud);
 	PhonecardUserPO findByUserid(Integer userid);
+
+	PhonecardUserPO findByPhonecardid(Integer phonecardid);
 }

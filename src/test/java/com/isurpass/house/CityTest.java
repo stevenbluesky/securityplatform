@@ -5,6 +5,7 @@ import javax.annotation.Resource;
 import cn.com.isurpass.house.dao.AddressDAO;
 import cn.com.isurpass.house.dao.OrganizationDAO;
 import cn.com.isurpass.house.po.AddressPO;
+import cn.com.isurpass.house.po.OrganizationPO;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import cn.com.isurpass.house.dao.CityDAO;
 import cn.com.isurpass.house.dao.ProvinceDAO;
 import cn.com.isurpass.house.po.ProvincePO;
+
+import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)  
 @ContextConfiguration("classpath:application.xml")  
@@ -46,7 +49,11 @@ public class CityTest {
 	@Test
 	public void testCount() {
 //        Integer count = od.countByStatus(1);
-        Integer count = od.countByStatusAndContactid(1,60);
-        System.out.println(count);
+//        Integer count = od.countByStatusAndContactid(1,60);
+//        System.out.println(count);
+            List<OrganizationPO> list = od.findByNameLikeAndCitycodeLike("%" + "supplier" + "%", "%" + "" + "%");
+        System.out.println("=============");
+        System.out.println(list.size());
+        list.forEach(System.out::println);
     }
 }

@@ -42,7 +42,7 @@ public class OrganizationDAOTest {
         search.setCitycode("citycode");
         search.setCity("city");
         System.out.println("======");*/
-        System.out.println(Optional.of(search).filter(f->f.getName() =="12313").get());
+//        System.out.println(Optional.of(search).filter(f->f.getName() =="12313").get());
 //        System.out.println(Optional.of(search).filter(f -> f.getName() == null).filter(f -> f.getCity() == null).filter(f -> f.getCitycode() == null).get());
 //        String s1 = Optional.ofNullable(search).map(s -> s.getName()).orElse("");
     }

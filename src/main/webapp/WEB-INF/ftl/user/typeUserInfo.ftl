@@ -122,6 +122,8 @@
     <script type="text/javascript">
     
 $(document).ready(function() {
+    getCountry(-1);
+
     $('#defaultForm').bootstrapValidator({
  //       live: 'disabled',
         message: 'This value is not valid',

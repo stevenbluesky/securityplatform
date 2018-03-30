@@ -1,31 +1,42 @@
 package cn.com.isurpass.house.vo;
 
+import java.io.UnsupportedEncodingException;
+
 public class OrgSearchVO {
-    private String name;
-    private String city;
-    private String citycode;
+    private String searchname;
+    private String searchcity;
+    private String searchcitycode;
 
-    public String getName() {
-        return name;
+    public String getSearchname() {
+        return searchname;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setSearchname(String searchname) throws UnsupportedEncodingException {
+        this.searchname = searchname;
     }
 
-    public String getCity() {
-        return city;
+    public String getSearchcity() {
+        return searchcity;
     }
 
-    public void setCity(String city) {
-        this.city = city;
+    public void setSearchcity(String searchcity) throws UnsupportedEncodingException {
+        this.searchcity = searchcity;
     }
 
-    public String getCitycode() {
-        return citycode;
+    public String getSearchcitycode() {
+        return searchcitycode;
     }
 
-    public void setCitycode(String citycode) {
-        this.citycode = citycode;
+    public void setSearchcitycode(String searchcitycode) {
+        this.searchcitycode = searchcitycode;
+    }
+
+    @Override
+    public String toString() {
+        return "OrgSearchVO{" +
+                "searchname='" + searchname + '\'' +
+                ", searchcity='" + searchcity + '\'' +
+                ", searchcitycode='" + searchcitycode + '\'' +
+                '}';
     }
 }

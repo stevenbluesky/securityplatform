@@ -74,4 +74,6 @@ public interface OrganizationDAO extends CrudRepository<OrganizationPO, Integer>
     Integer countByNameLikeAndCitycodeLike(String name, String citycode);
 
     Integer countByNameLikeAndCitycodeInAndOrgtype(String name, List<String> list0, Integer orgtype);
+
+    List<OrganizationPO> findByNameLikeAndCitycodeLike(String s, String s1);
 }

@@ -20,7 +20,7 @@
 		<mvc:path-matching registered-suffixes-only="true"/>
 	</mvc:annotation-driven>
 	<mvc:default-servlet-handler />
-	
+
 	<!-- i18n配置 -->
 	<bean id="localeResolver"
 		class="org.springframework.web.servlet.i18n.SessionLocaleResolver" />

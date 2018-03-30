@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 
+import cn.com.isurpass.house.util.FormUtils;
 import cn.com.isurpass.house.vo.OrgSearchVO;
 import cn.com.isurpass.house.vo.TransferVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -123,8 +124,11 @@ public class OrganizationController {
     //只有ameta可以访问
     @RequestMapping("supplierJsonList")
     @ResponseBody
-    public Map<String, Object> supplierJsonList(PageResult pr) {
+    public Map<String, Object> supplierJsonList(PageResult pr,OrgSearchVO osv,HttpServletRequest request) {
         Pageable pageable = PageRequest.of(pr.getPage() - 1, pr.getRows(), Sort.Direction.ASC, "organizationid");
+        if (!FormUtils.isEmpty(osv)) {//搜索
+           return ss.search(pageable, osv,request);
+        }
         return ss.listOrgByType(pageable, Constants.ORGTYPE_SUPPLIER);
     }
 
@@ -186,14 +190,6 @@ public class OrganizationController {
     @RequestMapping("installerList")
     public String installerList() {
         return "installer/installerList";
-    }
-
-    @RequestMapping("searchSupplier")
-    @ResponseBody
-    public Map<String, Object> searchSupplier(OrgSearchVO osvo, PageResult pr, HttpServletRequest request) {
-        Pageable pageable = PageRequest.of(0, 10, Sort.Direction.ASC, "organizationid");
-        Map<String, Object> map = ss.search(pageable, osvo, 1);
-        return map;
     }
 
 }

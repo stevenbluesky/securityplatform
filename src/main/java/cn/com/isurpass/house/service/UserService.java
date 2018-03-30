@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import cn.com.isurpass.house.dao.*;
 import cn.com.isurpass.house.exception.MyArgumentNullException;
+import cn.com.isurpass.house.po.*;
 import cn.com.isurpass.house.util.Constants;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,13 +15,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import cn.com.isurpass.house.po.AddressPO;
-import cn.com.isurpass.house.po.CityPO;
-import cn.com.isurpass.house.po.EmployeePO;
-import cn.com.isurpass.house.po.GatewayUserPO;
-import cn.com.isurpass.house.po.PersonPO;
-import cn.com.isurpass.house.po.PhonecardUserPO;
-import cn.com.isurpass.house.po.UserPO;
 import cn.com.isurpass.house.util.FormUtils;
 import cn.com.isurpass.house.vo.EmployeeParentOrgIdVO;
 import cn.com.isurpass.house.vo.UserAddVO;
@@ -46,27 +40,36 @@ public class UserService {
     @Autowired
     PhonecarduserDAO pcud;
     @Autowired
+    PhonecardDAO pcard;
+    @Autowired
     EmployeeService emps;
     @Autowired
     GatewayuserDAO gd;
     @Autowired
     GatewayBindingDAO gbd;
     @Autowired
-    PhonecarduserDAO pud;
-    @Autowired
     EmployeeroleDAO erd;
 
     @Transactional(rollbackFor = Exception.class)
     public void add(UserAddVO u, HttpServletRequest request) {
         EmployeePO emp = (EmployeePO) SecurityUtils.getSubject().getPrincipal();
-        if (gd.findByDeviceid(u.getDeviceid()) != null) {
+
+        if (!FormUtils.checkNUll(u.getDeviceid()) || !FormUtils.checkNUll(u.getSerianumber())) {
+            throw new RuntimeException("网关或电话卡不能为空.");
+        }
+        if (gd.findByDeviceid(u.getDeviceid()).size() != 0) {
             throw new RuntimeException("此网关已经绑定了用户");
         }
         if (gbd.findByDeviceidAndOrganizationid(u.getDeviceid(), emp.getOrganizationid()) == null) {//网关不存在或者此网关不属于此机构
             throw new RuntimeException("无法添加此网关!");
         }
-
-        //TODO 判断此电话号码是否已经绑定过
+        PhonecardPO pcardpo = pcard.findBySerialnumber(u.getSerianumber());
+        if (pcardpo == null) {
+            throw new RuntimeException("无法添加此网关");
+        }
+        if (pcud.findByPhonecardid(pcardpo.getPhonecardid()) != null) {
+            throw new RuntimeException("此电话卡已经绑定了用户.");
+        }
 
         UserPO user = new UserPO();
         user.setLoginname(u.getPhonenumber());
@@ -115,52 +118,54 @@ public class UserService {
         Integer personid = pd.save(person).getPersonid();
         user.setPersonid(personid);
         UserPO userSave = ud.save(user);
-        if (u.getDeviceid() != null) {
-            GatewayUserPO gateway = new GatewayUserPO();
-            gateway.setDeviceid(u.getDeviceid());
-            gateway.setUserid(userSave.getUserid());
-            gd.save(gateway);
-        }
+//        if (u.getDeviceid() != null) {
+        GatewayUserPO gateway = new GatewayUserPO();
+        gateway.setDeviceid(u.getDeviceid());
+        gateway.setUserid(userSave.getUserid());
+        gateway.setCreatetime(new Date());
+        gd.save(gateway);
+//        }
 
-        if (u.getPhonecardid() != null) {
-            PhonecardUserPO pcup = new PhonecardUserPO();
-            pcup.setUserid(userSave.getUserid());
-            pcup.setPhonecardid(1);
-            pcud.save(pcup);
-        }
+//        if (pcardpo.getPhonecardid() != null) {//此方法最开始已经强制phonecardid不能为空,这里不用进行判断了.
+        PhonecardUserPO pcup = new PhonecardUserPO();
+        pcup.setUserid(userSave.getUserid());
+        pcup.setPhonecardid(1);
+        pcup.setCreatetime(new Date());
+        pcud.save(pcup);
+//        }
 
     }
 
     @Transactional(readOnly = true)
-    public  Map<String, Object> listUserInfo(Pageable pageable, HttpServletRequest request) {
+    public Map<String, Object> listUserInfo(Pageable pageable, HttpServletRequest request) {
         EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
         Integer orgtype = od.findByOrganizationid(emp.getOrganizationid()).getOrgtype();
         Integer count = 0;
         if (erd.findByEmployeeid(emp.getEmployeeid()).getRoleid() == 4) {
-            Page<UserPO> userList = ud.findByInstallerid(emp.getEmployeeid(),pageable);
+            Page<UserPO> userList = ud.findByInstallerid(emp.getEmployeeid(), pageable);
             count = ud.countByInstallerid(emp.getEmployeeid());
-            return listUserInfo0(pageable,userList,count);
+            return listUserInfo0(pageable, userList, count);
         }
         if (orgtype == Constants.ORGTYPE_AMETA) {
             Page<UserPO> userList = ud.findAll(pageable);
             count = (int) ud.count();
-            return listUserInfo0(pageable,userList,count);
+            return listUserInfo0(pageable, userList, count);
         }
         if (orgtype == Constants.ORGTYPE_INSTALLER) {
-            Page<UserPO> userList = ud.findByInstallerorgid(emp.getOrganizationid(),pageable);
+            Page<UserPO> userList = ud.findByInstallerorgid(emp.getOrganizationid(), pageable);
             count = ud.countByInstallerorgid(emp.getOrganizationid());
-            return listUserInfo0(pageable, userList,count);
+            return listUserInfo0(pageable, userList, count);
         }
         if (orgtype == Constants.ORGTYPE_SUPPLIER) {
-            Page<UserPO> userList = ud.findByOrganizationid(emp.getOrganizationid(),pageable);
+            Page<UserPO> userList = ud.findByOrganizationid(emp.getOrganizationid(), pageable);
             count = ud.countByInstallerorgid(emp.getOrganizationid());
-            return listUserInfo0(pageable, userList,count);
+            return listUserInfo0(pageable, userList, count);
         }
         return null;
     }
 
     @Transactional(readOnly = true)
-    public Map<String, Object> listUserInfo0(Pageable pageable,Page<UserPO> userList,Integer count) {
+    public Map<String, Object> listUserInfo0(Pageable pageable, Page<UserPO> userList, Integer count) {
         Map<String, Object> map = new HashMap<>();
         map.put("total", count);
         List<UserInfoListVO> list = new ArrayList<>();
@@ -205,14 +210,14 @@ public class UserService {
             for (Object id : ids) {
                 toggleUserStatus(Integer.valueOf(id.toString()), Constants.STATUS_NORMAL, request);
             }
-        } else if("suspence".equals(hope)){
+        } else if ("suspence".equals(hope)) {
             for (Object id : ids) {
-                toggleUserStatus(Integer.valueOf(id.toString()),Constants.STATUS_SUSPENCED,request);
+                toggleUserStatus(Integer.valueOf(id.toString()), Constants.STATUS_SUSPENCED, request);
             }
         }
     }
 
-    public void toggleUserStatus(Integer userid,Integer status,HttpServletRequest request) throws MyArgumentNullException {
+    public void toggleUserStatus(Integer userid, Integer status, HttpServletRequest request) throws MyArgumentNullException {
         if (status == null) {
             throw new RuntimeException("status不能为空");
         }
@@ -224,12 +229,11 @@ public class UserService {
         ud.save(user);
     }
 
-    @Transactional(readOnly = true)
     private boolean hasProvilege(Integer userid, HttpServletRequest request) {
         UserPO user = ud.findByUserid(userid);
         EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
         Integer orgtype = od.findByOrganizationid(emp.getOrganizationid()).getOrgtype();
-        if (orgtype == Constants.ORGTYPE_INSTALLER &&emp.getOrganizationid() ==user.getInstallerorgid()) {
+        if (orgtype == Constants.ORGTYPE_INSTALLER && emp.getOrganizationid() == user.getInstallerorgid()) {
             return true;
         }
         if (orgtype == Constants.ORGTYPE_SUPPLIER && emp.getOrganizationid() == user.getOrganizationid()) {

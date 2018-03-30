@@ -8,14 +8,14 @@
                           <div class="form-group col-md-3">
                               <div>
                                   <b><@spring.message code="label.pname"/></b>
-                                  <input type="text" class="form-control" id="name" name="name"
+                                  <input type="text" class="form-control" id="searchname" name="searchname"
                                          placeholder="<@spring.message code="label.pname"/>">
                               </div>
                           </div>
                           <div class="form-group col-md-3">
                               <div>
                                   <b><@spring.message code="label.city"/></b>
-                                  <input type="text" class="form-control" id="city" name="city"
+                                  <input type="text" class="form-control" id="searchcity" name="searchcity"
                                          placeholder="<@spring.message code="label.city"/>">
                               </div>
                           </div>
@@ -23,12 +23,12 @@
                           <div class="form-group col-md-3">
                               <div>
                                   <b><@spring.message code="label.citycode"/></b>
-                                  <input type="text" class="form-control" id="citycode" name="citycode"
+                                  <input type="text" class="form-control" id="searchcitycode" name="searchcitycode"
                                          placeholder="<@spring.message code="label.citycode"/>">
                               </div>
                           </div>
                           <div class=" col-md-3">
-                              <button id="searchbtn"
+                              <button id="searchbtn" type="button"
                                       class="btn btn-default"><@spring.message code="label.search"/></button>
                           </div>
                       </form>
@@ -82,7 +82,7 @@
             minimumCountColumns: 2,             //最少允许的列数
             clickToSelect: true,                //是否启用点击选中行
             //height: 500,                      //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
-            uniqueId: "code",                     //每一行的唯一标识，一般为主键列
+            uniqueId: "organizationid",                     //每一行的唯一标识，一般为主键列
             showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
             cardView: false,                    //是否显示详细视图
             detailView: false,                  //是否显示父子表
@@ -90,6 +90,9 @@
             queryParams: function (params) {
                 //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
                 var temp = {
+                    searchname:$("#searchname").val(),
+                    searchcity:$("#searchcity").val(),
+                    searchcitycode:$("#searchcitycode").val(),
                     rows: params.limit,                         //页面大小
                     page: (params.offset / params.limit) + 1,   //页码
                     sort: params.sort,      //排序列名
@@ -111,6 +114,11 @@
             }
         });
 
+        //当点击搜索按钮后，表格刷新并跳到第一页
+        $("#searchbtn").click(function(){
+            $("#table").bootstrapTable("refreshOptions",{pageNumber:1})
+        });
+
         window.supplieraddEvents =
                 {
                     "click #btn1": function (e, value, row, index) {
@@ -128,29 +136,6 @@
                     }
 
                 };
-
-        $("#searchbtn").click(function () {
-            if (1) {//获取验证结果，如果成功，执行下面代码
-                var url = "../org/searchSupplier";
-                $.ajax({
-                    type: "POST",
-                    dataType: "html",
-                    async: false,
-                    url: url,
-                    data: $('#searchform').serialize(),
-                    success: function (data) {
-                        var strresult = data;
-                        alert(strresult);
-                    },
-                    error: function (data) {
-                        alert("error:" + data.responseText);
-                    }
-                });
-            } else {
-                alert("<@spring.message code="label.nullstrexception"/>");
-            }
-        });
-
 
         // <#--获取复选框选中的列的id数组-->
         function getCheckedId() {

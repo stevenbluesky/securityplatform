@@ -12,10 +12,12 @@ import cn.com.isurpass.house.vo.OrgSearchVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
 import java.util.*;
 
 @Service
@@ -388,30 +390,30 @@ public class OrganizationService {
     }
 
     @Transactional(readOnly = true)
-    public Map<String, Object> search(Pageable pageable, OrgSearchVO search, Integer orgtype) {
-        if (FormUtils.isEmpty(search)) {
-            return null;
-        }
+    public Map<String, Object> search(Pageable pageable, OrgSearchVO search, HttpServletRequest request) {
+        Integer orgtype = getOrgtypeByReqeust(request);
+
         String name = "";
         String city1 = "";
         String citycode = "";
+
         Page<OrganizationPO> orgList = null;
-        if (search.getName() != null) {
-            name = search.getName();
+        if (search.getSearchname() != null) {
+            name = "%" + search.getSearchname() + "%";
         }
-        if (search.getCity() != null) {
-            city1 = search.getCity();
+        if (search.getSearchcity() != null) {
+            city1 = "%" + search.getSearchcity() + "%";
         }
-        if (search.getCitycode() != null) {
-            citycode = search.getCitycode();
+        if (search.getSearchcitycode() != null) {
+            citycode = "%" + search.getSearchcitycode() + "%";
         }
 
         Map<String, Object> map = new HashMap<>();
-        if (search.getCity() == "") {
+        if (search.getSearchcity() == "") {
             map.put("total", od.countByNameLikeAndCitycodeLike(name, citycode));
             orgList = od.findByNameLikeAndCitycodeLike(pageable, name, citycode);
         }
-        if (search.getCity() != "") {
+        if (search.getSearchcity() != "") {
             //先通过citycode和city查找相似的,再通过返回的List集合中的citycode在organization表中查找
             List<CityPO> list = city.findByCitycodeLikeAndCitynameLike(citycode, city1);
             if (list.isEmpty()) {
@@ -482,5 +484,19 @@ public class OrganizationService {
                 toggleOrganizationStatus(Integer.valueOf(id.toString()), Constants.STATUS_SUSPENCED, request);
             }
         }
+    }
+
+    /**
+     * 通过request中当前登录的用户对象取得其所在机构的类型
+     *
+     * @param request
+     * @return
+     */
+    public Integer getOrgtypeByReqeust(HttpServletRequest request) {
+        EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
+        if (emp == null) {
+            return null;
+        }
+        return od.findByOrganizationid(emp.getOrganizationid()).getOrgtype();
     }
 }
