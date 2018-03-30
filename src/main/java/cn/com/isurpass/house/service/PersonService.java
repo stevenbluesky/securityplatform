@@ -7,6 +7,7 @@ import cn.com.isurpass.house.vo.EmployeeAddVO;
 import cn.com.isurpass.house.vo.OrgAddVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @SuppressWarnings("Duplicates")
 @Service
@@ -22,6 +23,7 @@ public class PersonService {
      * @param emp
      * @return
      */
+    @Transactional(readOnly = true)
     public void findPeronInfo(Integer personid, EmployeeAddVO emp) {
         if (personid != null) {
             PersonPO person = pd.findByPersonid(personid);
@@ -39,6 +41,7 @@ public class PersonService {
         }
     }
 
+    @Transactional(readOnly = true)
     public PersonPO findPeronInfo(Integer personid) {
         PersonPO person0 = new PersonPO();
         if (personid != null) {
@@ -58,6 +61,7 @@ public class PersonService {
         return person0;
     }
 
+    @Transactional(readOnly = true)
     public void findPersonInfo(OrganizationPO orgPO, OrgAddVO org) {
         if (orgPO.getContactid() != null) {
             org.setContactid(orgPO.getContactid());

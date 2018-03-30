@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -33,6 +34,7 @@ public class ZwaveDeviceService {
     @Autowired
     OrganizationDAO od;
 
+    @Transactional(readOnly = true)
     public Map<String, Object> listDevice(Pageable pageable, HttpServletRequest request) {
         Map<String, Object> map = new HashMap<>();
 //		Page<ZwaveDevicePO> zdevice = dd.findAll(pageable);
@@ -67,6 +69,7 @@ public class ZwaveDeviceService {
         if (zdevicelist == null) {
             return null;
         }
+        long start=System.currentTimeMillis(); //获取开始时间
         List<ZwaveDeviceListVO> list = new ArrayList<>();
         zdevicelist.forEach(zw -> {
             ZwaveDeviceListVO z = new ZwaveDeviceListVO();
@@ -84,6 +87,8 @@ public class ZwaveDeviceService {
             list.add(z);
         });
         map.put("rows", list);
+        long end=System.currentTimeMillis(); //获取结束时间
+        System.out.println("程序运行时间： "+(end-start)+"ms");
         return map;
     }
 
@@ -92,6 +97,7 @@ public class ZwaveDeviceService {
      *
      * @param zwavedeviceid
      */
+    @Transactional(readOnly = true)
     public DeviceDetailVO findDeviceDetail(Integer zwavedeviceid) {
         //TODO 判断当前登录的员工是否有操作此id的权限
 
@@ -105,9 +111,12 @@ public class ZwaveDeviceService {
         return dd;
     }
 
+    @Transactional(readOnly = true)
     public Page<ZwaveDevicePO> findZDeviceByDeviceidList(Pageable pageable, List<String> deviceidlist) {
         return zd.findByDeviceidIn(pageable, deviceidlist);
     }
+
+    @Transactional(readOnly = true)
     public List<ZwaveDevicePO> findZDeviceByDeviceidList(List<String> deviceidlist) {
         return zd.findByDeviceidIn(deviceidlist);
     }

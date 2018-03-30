@@ -3,6 +3,7 @@ package com.isurpass.house;
 import javax.annotation.Resource;
 
 import cn.com.isurpass.house.dao.AddressDAO;
+import cn.com.isurpass.house.dao.OrganizationDAO;
 import cn.com.isurpass.house.po.AddressPO;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,6 +25,8 @@ public class CityTest {
 	ProvinceDAO pd;
 	@Autowired
 	AddressDAO ad;
+	@Autowired
+    OrganizationDAO od;
 	@Test
 	public void testCitySave() {
 	/*	CityPO city = new CityPO("fda","12312","312fdsf");
@@ -39,4 +42,11 @@ public class CityTest {
         a0.setProvince("Province");
         ad.save(a0);
 	}
+
+	@Test
+	public void testCount() {
+//        Integer count = od.countByStatus(1);
+        Integer count = od.countByStatusAndContactid(1,60);
+        System.out.println(count);
+    }
 }

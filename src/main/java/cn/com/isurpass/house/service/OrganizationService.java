@@ -74,6 +74,7 @@ public class OrganizationService {
      * @param as
      * @throws MyArgumentNullException
      */
+    @Transactional(rollbackFor = Exception.class)
     public void add(OrgAddVO as, HttpServletRequest request) throws MyArgumentNullException {
         addByOrgtype(as, Constants.ORGTYPE_SUPPLIER, request);
     }
@@ -85,7 +86,7 @@ public class OrganizationService {
         if (!FormUtils.checkOrgNull(as)) {
             throw new MyArgumentNullException("必填字段不能为空!");
         }
-        if (orgInfo== null && !FormUtils.checkLoginNull(as)) {
+        if (orgInfo == null && !FormUtils.checkLoginNull(as)) {
             throw new MyArgumentNullException("必填字段不能为空!");
         }
 
@@ -119,7 +120,6 @@ public class OrganizationService {
                 org.setOrgtype(Constants.ORGTYPE_INSTALLER);
                 if (as.getParentorgid() != null) {// 不为空,ameta在进行添加//要进行当前用户是否是ameta员工的判断
                     org.setParentorgid(as.getParentorgid());
-
                 } else {
                     org.setParentorgid(emp0.getOrganizationid());
                 }
@@ -174,11 +174,6 @@ public class OrganizationService {
 //        EmployeePO emp = new EmployeePO(as.getLoginname(), FormUtils.encrypt(as.getPassword()), as.getQuestion(),FormUtils.encrypt(as.getAnswer()));
         EmployeePO emp = new EmployeePO(as.getLoginname(), Encrypt.encrypt(as.getLoginname(), as.getPassword(), as.getCode()), as.getQuestion(), Encrypt.encrypt(as.getLoginname(), as.getAnswer(), as.getCode()));
 
-
-        System.out.println(address.toString());
-        System.out.println(bAddress.toString());
-        System.out.println(csAddress.toString());
-
         if (orgInfo != null) {
             address.setAddressid(orgInfo.getOfficeaddressid());
             bAddress.setAddressid(orgInfo.getBillingaddressid());
@@ -221,6 +216,7 @@ public class OrganizationService {
         if (orgInfo == null) {
             emp.setOrganizationid(orgId);
             emp.setStatus(1);
+            emp.setCreatetime(new Date());
             if (!FormUtils.isEmpty(emp)) {// 管理员不为空..由于此方法一开始就对管理员账号不存在的情况进行了处理,所以此处管理员对象是肯定存在的.
                 // TODO 现在数据库里面 Loginname
                 // 是unique类型的,要文档上面意思是不同的机构可以有相同的loginname,所以这里要判断一下同机构中的loginname,并去掉数据库里面的unique索引
@@ -236,28 +232,35 @@ public class OrganizationService {
      * @param orgType
      * @return
      */
+    @Transactional(readOnly = true)
     public Map<String, Object> listOrgByType(Pageable pageable, Integer orgType) {
         Map<String, Object> map = new HashMap<>();
         Page<OrganizationPO> orgList = od.findByOrgtype(pageable, orgType);
-        map.put("total", orgList.getTotalElements());
+        map.put("total", od.countByOrgtype(orgType));
+//        map.put("total", orgList.getTotalElements());
         List<OrgListVO> list = new ArrayList<>();
         setProperties(orgList, list);
         map.put("rows", list);
         return map;
     }
 
+    @Transactional(readOnly = true)
     public Map<String, Object> listInstallerOrg(Pageable pageable, HttpServletRequest request) {
         // 角色为服务商的员工才可以访问
         // 先取员工的机构id,再通过机构id查询其机构下所有的安装商,
         EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
         Page<OrganizationPO> orgList = null;
+        Map<String, Object> map = new HashMap<>();
         if (isAdmin(emp.getOrganizationid())) {
             orgList = od.findByOrgtype(pageable, Constants.ORGTYPE_INSTALLER);
+            map.put("total", od.countByOrgtype(Constants.ORGTYPE_INSTALLER));
         } else {
-            orgList = od.findByOrgtypeAndParentorgidIn(pageable, Constants.ORGTYPE_INSTALLER, emp.getOrganizationid());
+            orgList = od.findByOrgtypeAndParentorgid(pageable, Constants.ORGTYPE_INSTALLER, emp.getOrganizationid());
+            map.put("total", od.countByOrgtypeAndParentorgid(Constants.ORGTYPE_INSTALLER, emp.getOrganizationid()));
         }
-        Map<String, Object> map = new HashMap<>();
-        map.put("total", orgList.getTotalElements());
+//        Map<String, Object> map = new HashMap<>();
+
+//        map.put("total", orgList.getTotalElements());
         List<OrgListVO> list = new ArrayList<>();
         setProperties(orgList, list);
         map.put("rows", list);
@@ -288,6 +291,7 @@ public class OrganizationService {
      *
      * @return
      */
+    @Transactional(readOnly = true)
     public List<OrganizationPO> listOrgByType(Integer orgType) {
         return od.findByOrgtype(orgType);
     }
@@ -298,18 +302,22 @@ public class OrganizationService {
      * @param orgType
      * @return
      */
+    @Transactional(readOnly = true)
     public List<OrganizationPO> listOrgSelectByType(Integer orgType) {
         return od.findAllOrgSelect(orgType);
     }
 
+    @Transactional(readOnly = true)
     public List<OrganizationPO> listAllOrg() {
         return od.findAll();
     }
 
+    @Transactional(readOnly = true)
     public List<OrganizationPO> listAllOrgSelect() {
         return od.findAllOrgSelect();
     }
 
+    @Transactional(readOnly = true)
     public boolean validCode(String code) {
         OrganizationPO org = od.findByCode(code);
         if (org == null)
@@ -317,6 +325,7 @@ public class OrganizationService {
         return false;
     }
 
+    @Transactional(readOnly = true)
     public List<Integer> findParentOrgid(Integer id, List<Integer> list) {
         OrganizationPO org = od.findByOrganizationid(id);//
         od.findByParentorgid(org.getOrganizationid());
@@ -327,6 +336,7 @@ public class OrganizationService {
         return list;
     }
 
+    @Transactional(readOnly = true)
     public List<Integer> findChildrenOrgid(Integer id, List<Integer> list) {
         List<OrganizationPO> orgList = od.findByParentorgid(id);
         if (orgList == null) {
@@ -347,6 +357,7 @@ public class OrganizationService {
      * @param id
      * @return
      */
+    @Transactional(readOnly = true)
     public boolean isAdmin(Integer id) {
         OrganizationPO org = od.findByOrganizationid(id);
         if (org != null) {
@@ -355,6 +366,7 @@ public class OrganizationService {
         return false;
     }
 
+    @Transactional(readOnly = true)
     public OrgAddVO getOrganizationVOInfo(Integer organizationid) {
         OrgAddVO org = new OrgAddVO();
         OrganizationPO orgPO = od.findByOrganizationid(organizationid);
@@ -375,39 +387,43 @@ public class OrganizationService {
         return org;
     }
 
-    public Map<String, Object> search(Pageable pageable,OrgSearchVO search,Integer orgtype) {
+    @Transactional(readOnly = true)
+    public Map<String, Object> search(Pageable pageable, OrgSearchVO search, Integer orgtype) {
         if (FormUtils.isEmpty(search)) {
             return null;
         }
         String name = "";
         String city1 = "";
         String citycode = "";
-        Page<OrganizationPO> orgList= null;
+        Page<OrganizationPO> orgList = null;
         if (search.getName() != null) {
-            name= search.getName();
+            name = search.getName();
         }
         if (search.getCity() != null) {
-            city1= search.getCity();
+            city1 = search.getCity();
         }
         if (search.getCitycode() != null) {
-            citycode=search.getCitycode();
+            citycode = search.getCitycode();
         }
 
+        Map<String, Object> map = new HashMap<>();
         if (search.getCity() == "") {
-            orgList = od.findByNameLikeAndCitycodeLike(pageable,name,citycode);
+            map.put("total", od.countByNameLikeAndCitycodeLike(name, citycode));
+            orgList = od.findByNameLikeAndCitycodeLike(pageable, name, citycode);
         }
-        if (search.getCity()!= ""){
+        if (search.getCity() != "") {
             //先通过citycode和city查找相似的,再通过返回的List集合中的citycode在organization表中查找
             List<CityPO> list = city.findByCitycodeLikeAndCitynameLike(citycode, city1);
             if (list.isEmpty()) {
                 return null;
             }
             List<String> list0 = new ArrayList<>();
-            list.forEach(l->list0.add(l.getCitycode()));
-            orgList = od.findByNameLikeAndCitycodeInAndOrgtype(name, list0,orgtype,pageable);
+            list.forEach(l -> list0.add(l.getCitycode()));
+            map.put("total", od.countByNameLikeAndCitycodeInAndOrgtype(name, list0, orgtype));
+            orgList = od.findByNameLikeAndCitycodeInAndOrgtype(name, list0, orgtype, pageable);
         }
-        Map<String, Object> map = new HashMap<>();
-        map.put("total", orgList.getTotalElements());
+//        Map<String, Object> map = new HashMap<>();
+//        map.put("total", orgList.getTotalElements());
         List<OrgListVO> list = new ArrayList<>();
         setProperties(orgList, list);
         map.put("rows", list);
@@ -438,6 +454,7 @@ public class OrganizationService {
      * @param request
      * @return
      */
+    @Transactional(readOnly = true)
     public boolean hasProvilege(Integer organizationid, HttpServletRequest request) {
         OrganizationPO org = od.findByOrganizationid(organizationid);//要操作的员工的机构
         EmployeePO emp1 = (EmployeePO) request.getSession().getAttribute("emp");
@@ -454,15 +471,15 @@ public class OrganizationService {
         return false;
     }
 
-    public void toggleOrganizationStatus0(String hope, Object[] ids,HttpServletRequest request) {
+    public void toggleOrganizationStatus0(String hope, Object[] ids, HttpServletRequest request) {
         if ("unsuspence".equals(hope)) {
             for (Object id : ids) {
                 toggleOrganizationStatus(Integer.valueOf(id.toString()), Constants.STATUS_NORMAL, request);
             }
 
-        } else if("suspence".equals(hope)){
+        } else if ("suspence".equals(hope)) {
             for (Object id : ids) {
-                toggleOrganizationStatus(Integer.valueOf(id.toString()),Constants.STATUS_SUSPENCED,request);
+                toggleOrganizationStatus(Integer.valueOf(id.toString()), Constants.STATUS_SUSPENCED, request);
             }
         }
     }

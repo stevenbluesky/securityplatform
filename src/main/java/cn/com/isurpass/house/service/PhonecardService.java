@@ -28,7 +28,7 @@ public class PhonecardService {
 	 * @param pc
 	 * @throws MyArgumentNullException
 	 */
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	public void add(PhonecardPO pc) throws MyArgumentNullException {
 		if (StringUtils.isEmpty(pc.getSerialnumber())|| StringUtils.isEmpty(pc.getModel()) || StringUtils.isEmpty(pc.getRateplan())){
 			throw new MyArgumentNullException("1");
@@ -82,7 +82,7 @@ public class PhonecardService {
 		map.put("rows", list);
 		return map;
 	}
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	public void updatePhonecardStatus(String hope, Object[] ids) {
 		for (Object string : ids) {
 			PhonecardPO phonecardpo = pd.findByPhonecardid(string);

@@ -1,18 +1,42 @@
 package cn.com.isurpass.house.service;
 
-import cn.com.isurpass.house.dao.*;
-import cn.com.isurpass.house.exception.MyArgumentNullException;
-import cn.com.isurpass.house.po.*;
-import cn.com.isurpass.house.util.Constants;
-import cn.com.isurpass.house.vo.GatewayDetailVO;
-import cn.com.isurpass.house.vo.TypeGatewayInfoVO;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import java.util.*;
+import cn.com.isurpass.house.dao.CityDAO;
+import cn.com.isurpass.house.dao.EmployeeDAO;
+import cn.com.isurpass.house.dao.GatewayBindingDAO;
+import cn.com.isurpass.house.dao.GatewayDAO;
+import cn.com.isurpass.house.dao.GatewayuserDAO;
+import cn.com.isurpass.house.dao.OrganizationDAO;
+import cn.com.isurpass.house.dao.PhonecardDAO;
+import cn.com.isurpass.house.dao.PhonecarduserDAO;
+import cn.com.isurpass.house.dao.UserDAO;
+import cn.com.isurpass.house.dao.ZwaveDeviceDAO;
+import cn.com.isurpass.house.exception.MyArgumentNullException;
+import cn.com.isurpass.house.po.CityPO;
+import cn.com.isurpass.house.po.EmployeePO;
+import cn.com.isurpass.house.po.GatewayBindingPO;
+import cn.com.isurpass.house.po.GatewayPO;
+import cn.com.isurpass.house.po.GatewayUserPO;
+import cn.com.isurpass.house.po.OrganizationPO;
+import cn.com.isurpass.house.po.PhonecardPO;
+import cn.com.isurpass.house.po.PhonecardUserPO;
+import cn.com.isurpass.house.po.UserPO;
+import cn.com.isurpass.house.po.ZwaveDevicePO;
+import cn.com.isurpass.house.util.Constants;
+import cn.com.isurpass.house.vo.GatewayDetailVO;
+import cn.com.isurpass.house.vo.TypeGatewayInfoVO;
 
 @Service
 public class GatewayService {
@@ -85,14 +109,14 @@ public class GatewayService {
 	    	map.put("rows", list);
 			return map;
 		}*/
-		List<String> citynamedeviceidlist = new ArrayList<String>();
-		List<String> citycodedeviceidlist = new ArrayList<String>();
-		List<String> devicenamedeviceidlist = new ArrayList<String>();
-		List<String> customerdeviceidlist = new ArrayList<String>();
-		List<String> serviceproviderdeviceidlist = new ArrayList<String>();
-		List<String> installerorgdeviceidlist = new ArrayList<String>();
-		List<String> installerdeviceidlist = new ArrayList<String>();
-		List<String> deviceiddeviceidlist = new ArrayList<String>();
+		List<String> citynamedeviceidlist = new ArrayList<>();
+		List<String> citycodedeviceidlist = new ArrayList<>();
+		List<String> devicenamedeviceidlist = new ArrayList<>();
+		List<String> customerdeviceidlist = new ArrayList<>();
+		List<String> serviceproviderdeviceidlist = new ArrayList<>();
+		List<String> installerorgdeviceidlist = new ArrayList<>();
+		List<String> installerdeviceidlist = new ArrayList<>();
+		List<String> deviceiddeviceidlist = new ArrayList<>();
 
 		citynamedeviceidlist = findIdListByCityname(tgiv.getCityname());
 		citycodedeviceidlist = findIdListByCitycode(tgiv.getCitycode());

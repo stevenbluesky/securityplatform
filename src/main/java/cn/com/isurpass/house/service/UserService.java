@@ -131,30 +131,38 @@ public class UserService {
 
     }
 
+    @Transactional(readOnly = true)
     public  Map<String, Object> listUserInfo(Pageable pageable, HttpServletRequest request) {
         EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
         Integer orgtype = od.findByOrganizationid(emp.getOrganizationid()).getOrgtype();
+        Integer count = 0;
         if (erd.findByEmployeeid(emp.getEmployeeid()).getRoleid() == 4) {
             Page<UserPO> userList = ud.findByInstallerid(emp.getEmployeeid(),pageable);
-            return listUserInfo0(pageable,userList);
+            count = ud.countByInstallerid(emp.getEmployeeid());
+            return listUserInfo0(pageable,userList,count);
         }
         if (orgtype == Constants.ORGTYPE_AMETA) {
             Page<UserPO> userList = ud.findAll(pageable);
-            return listUserInfo0(pageable,userList);
+            count = (int) ud.count();
+            return listUserInfo0(pageable,userList,count);
         }
         if (orgtype == Constants.ORGTYPE_INSTALLER) {
             Page<UserPO> userList = ud.findByInstallerorgid(emp.getOrganizationid(),pageable);
-            return listUserInfo0(pageable, userList);
+            count = ud.countByInstallerorgid(emp.getOrganizationid());
+            return listUserInfo0(pageable, userList,count);
         }
         if (orgtype == Constants.ORGTYPE_SUPPLIER) {
             Page<UserPO> userList = ud.findByOrganizationid(emp.getOrganizationid(),pageable);
-            return listUserInfo0(pageable, userList);
+            count = ud.countByInstallerorgid(emp.getOrganizationid());
+            return listUserInfo0(pageable, userList,count);
         }
         return null;
     }
-    public Map<String, Object> listUserInfo0(Pageable pageable,Page<UserPO> userList) {
+
+    @Transactional(readOnly = true)
+    public Map<String, Object> listUserInfo0(Pageable pageable,Page<UserPO> userList,Integer count) {
         Map<String, Object> map = new HashMap<>();
-        map.put("total", ud.count());
+        map.put("total", count);
         List<UserInfoListVO> list = new ArrayList<>();
         if (userList == null) {
             return null;
@@ -183,6 +191,7 @@ public class UserService {
     }
 
     //判断当前的是服务商还是安装商
+    @Transactional(readOnly = true)
     public List<UserPO> findUser(Integer orgid) {
 
         //TODO 先要判断角色,然后查找相应的机构.
@@ -215,6 +224,7 @@ public class UserService {
         ud.save(user);
     }
 
+    @Transactional(readOnly = true)
     private boolean hasProvilege(Integer userid, HttpServletRequest request) {
         UserPO user = ud.findByUserid(userid);
         EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");

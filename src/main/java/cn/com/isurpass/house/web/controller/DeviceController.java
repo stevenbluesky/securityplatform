@@ -34,7 +34,7 @@ public class DeviceController {
 	public String deviceList() {
 		return "device/deviceList";
 	}
-	
+
 	@RequestMapping("deviceDetail")
 	public String deviceDetail(Integer zwavedeviceid,Model model) {
 		if(zwavedeviceid == null || zwavedeviceid == 0)

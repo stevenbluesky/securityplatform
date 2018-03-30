@@ -9,6 +9,7 @@ import cn.com.isurpass.house.vo.EmployeeAddVO;
 import cn.com.isurpass.house.vo.OrgAddVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -43,6 +44,7 @@ public class AddressService {
      * @param addressid
      * @param emp
      */
+    @Transactional(readOnly = true)
     public void findAddressInfo(Integer addressid, EmployeeAddVO emp) {
         if (addressid != null) {
             AddressPO addresspo = ad.findByAddressid(addressid);
@@ -56,6 +58,7 @@ public class AddressService {
         }
     }
 
+    @Transactional(readOnly = true)
     public void findAddressInfo(OrganizationPO orgPO, OrgAddVO org) {
         if (orgPO.getOfficeaddressid() != null) {
             org.setOfficeaddressid(orgPO.getOfficeaddressid());

@@ -1,6 +1,7 @@
 package cn.com.isurpass.house.dao;
 
 import java.util.List;
+import java.util.Set;
 
 import cn.com.isurpass.house.po.EmployeePO;
 import org.springframework.data.domain.Page;
@@ -45,7 +46,7 @@ public interface OrganizationDAO extends CrudRepository<OrganizationPO, Integer>
 
     List<OrganizationPO> findByParentorgid(Integer id);
 
-    Page<OrganizationPO> findByOrgtypeAndParentorgidIn(Pageable pageable, Integer orgtypeInstaller, Integer organizationid);
+    Page<OrganizationPO> findByOrgtypeAndParentorgidIn(Pageable pageable, Integer orgtypeInstaller, Set<Integer> idlist);
 
     List<OrganizationPO> findByCodeLike(String s);
 
@@ -60,4 +61,17 @@ public interface OrganizationDAO extends CrudRepository<OrganizationPO, Integer>
     List<OrganizationPO> findByOrgtypeAndNameContainingOrCentralstationnameContaining(Integer orgtypeSupplier,
                                                                                       String serviceprovider, String serviceprovider2);
 
+    Integer countByStatus(int i);
+
+    Integer countByStatusAndContactid(int i, int i1);
+
+    Integer countByOrgtype(Integer orgType);
+
+    Page<OrganizationPO> findByOrgtypeAndParentorgid(Pageable pageable, Integer orgtypeInstaller, Integer organizationid);
+
+    Integer countByOrgtypeAndParentorgid(Integer orgtypeInstaller,Integer parentorgid);
+
+    Integer countByNameLikeAndCitycodeLike(String name, String citycode);
+
+    Integer countByNameLikeAndCitycodeInAndOrgtype(String name, List<String> list0, Integer orgtype);
 }

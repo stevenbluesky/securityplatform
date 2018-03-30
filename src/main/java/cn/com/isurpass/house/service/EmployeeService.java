@@ -91,6 +91,7 @@ public class EmployeeService {
     /*
      * 判断一个员工登录用户名在其机构下是否已经被注册,如果被注册返回true
      * */
+    @Transactional(readOnly = true)
     public boolean isRegister(Integer orgid, String loginname) {
         List<EmployeePO> list = ed.findByOrganizationidAndLoginname(orgid, loginname);
         if (!list.isEmpty()) {
@@ -177,6 +178,7 @@ public class EmployeeService {
         ed.save(empPO);
     }
 
+    @Transactional(readOnly = true)
     public Map<String, Object> listEmployee(Pageable pageable, HttpServletRequest request) {
         // 角色不要在里面判断,可以在方法上加上权限注解.(如,管理员才可以访问)
 
@@ -200,7 +202,8 @@ public class EmployeeService {
             list.add(emp.getOrganizationid());
 //            System.out.println(list+"fdsf");
             Page<EmployeePO> empList = ed.findByOrganizationidIn(pageable, list);
-            map.put("total", empList.getTotalElements());
+            map.put("total", ed.countByOrganizationidIn(list));
+//            map.put("total", empList.getTotalElements());
             List<EmployeeListVO> listt = new ArrayList<>();
             empList.forEach(e -> {
                 forEachEmp(listt, e);
@@ -210,6 +213,7 @@ public class EmployeeService {
         }
     }
 
+    @Transactional(readOnly = true)
     public Map<String, Object> listAllEmployee(Pageable pageable) {
         // System.out.println(em.toString());
         Map<String, Object> map = new HashMap<>();
@@ -223,6 +227,7 @@ public class EmployeeService {
         return map;
     }
 
+    @Transactional(readOnly = true)
     private void forEachEmp(List<EmployeeListVO> list, EmployeePO e) {
         EmployeeListVO emp = new EmployeeListVO();
         emp.setName(e.getName());
@@ -234,6 +239,7 @@ public class EmployeeService {
         list.add(emp);
     }
 
+    @Transactional(readOnly = true)
     public EmployeePO findByLoginname(String loginname) {
         return ed.findByLoginname(loginname);
     }
@@ -250,6 +256,7 @@ public class EmployeeService {
         return ed.findByLoginnameAndPassword(loginname, password);
     }
 
+    @Transactional(readOnly = true)
     public EmployeePO login(String loginname, String password, String code0) {
         OrganizationPO org = null;
         // System.out.println(od.findByCode(code0));
@@ -272,6 +279,7 @@ public class EmployeeService {
      * @param emp
      * @return
      */
+    @Transactional(readOnly = true)
     public EmployeeParentOrgIdVO findEmpParentOrgid(EmployeePO emp) {
         EmployeeParentOrgIdVO empp = new EmployeeParentOrgIdVO();
         empp.setInstallerid(emp.getEmployeeid());
@@ -292,6 +300,7 @@ public class EmployeeService {
      * @param id
      * @return
      */
+    @Transactional(readOnly = true)
     public EmployeeAddVO getEmployeeVOInfo(Integer id) {
         EmployeeAddVO emp = new EmployeeAddVO();
         EmployeePO empPO = ed.findByEmployeeid(id);
@@ -344,6 +353,7 @@ public class EmployeeService {
      * @param request
      * @return
      */
+    @Transactional(readOnly = true)
     public boolean hasProvilege(Integer employeeid,HttpServletRequest request) {
      /*   EmployeePO emp = ed.findByEmployeeid(employeeid);
         OrganizationPO org = od.findByOrganizationid(emp.getOrganizationid());//要操作的员工的机构

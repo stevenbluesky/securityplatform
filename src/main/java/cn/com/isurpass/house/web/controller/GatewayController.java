@@ -45,7 +45,6 @@ public class GatewayController {
 	/**
 	 * 录入网关信息
 	 * @param tgi
-	 * @param model
 	 * @return
 	 */
 	@ResponseBody

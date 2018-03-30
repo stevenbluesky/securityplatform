@@ -17,6 +17,7 @@ import cn.com.isurpass.house.po.EmployeePO;
 import cn.com.isurpass.house.po.GatewayUserPO;
 import cn.com.isurpass.house.po.OrganizationPO;
 import cn.com.isurpass.house.po.UserPO;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class GatewayuserService {
@@ -32,15 +33,16 @@ public class GatewayuserService {
     @Autowired
     EmployeeDAO ed;
 
-	/**
-	 * 通过网关id获取 使用网关的用户姓名
-	 * 
-	 * @param deviceid
-	 * @return
-	 */
-	public String findUsernameByDeviceid(String deviceid) {
-		return findUserBydeviceid(deviceid).getName();
-	}
+    /**
+     * 通过网关id获取 使用网关的用户姓名
+     *
+     * @param deviceid
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public String findUsernameByDeviceid(String deviceid) {
+        return findUserBydeviceid(deviceid).getName();
+    }
 
     /**
      * 通过网关id获取 使用网关的用户
@@ -48,6 +50,7 @@ public class GatewayuserService {
      * @param deviceid
      * @return
      */
+    @Transactional(readOnly = true)
     public UserPO findUserBydeviceid(String deviceid) {
         List<GatewayUserPO> gulist = gd.findByDeviceid(deviceid);
         GatewayUserPO gu = gulist.get(0);
@@ -65,6 +68,7 @@ public class GatewayuserService {
      * @param deviceid
      * @return
      */
+    @Transactional(readOnly = true)
     public String findCityBydeviceid(String deviceid) {
         String code = findUserBydeviceid(deviceid).getCitycode();
         return cd.findByCitycode(code).getCityname();
@@ -76,21 +80,24 @@ public class GatewayuserService {
      * @param deviceid
      * @return
      */
+    @Transactional(readOnly = true)
     public OrganizationPO findOrgBydeviceid(String deviceid) {
         Integer organizationid = findUserBydeviceid(deviceid).getOrganizationid();
         return od.findByOrganizationid(organizationid);
     }
 
+    @Transactional(readOnly = true)
     public OrganizationPO findInstallOrgBydeviceid(String deviceid) {
         Integer organizationid = findUserBydeviceid(deviceid).getInstallerorgid();
         return od.findByOrganizationid(organizationid);
     }
 
+    @Transactional(readOnly = true)
     public EmployeePO findInstallerByDeviceid(String deviceid) {
         Integer installerid = findUserBydeviceid(deviceid).getInstallerid();
         return ed.findByEmployeeid(installerid);
     }
-
+    @Transactional(readOnly = true)
     public String findInstallernameBydeviceid(String deviceid) {
         if (findInstallerByDeviceid(deviceid) == null) {
             return null;
@@ -104,10 +111,12 @@ public class GatewayuserService {
      * @param deviceid
      * @return
      */
+    @Transactional(readOnly = true)
     public String findOrgnameBydeviceId(String deviceid) {
         return findOrgBydeviceid(deviceid).getName();
     }
 
+    @Transactional(readOnly = true)
     public String findInstallerOrgnameBydeviceId(String deviceid) {
         if (findInstallOrgBydeviceid(deviceid) == null) {
             return null;
@@ -121,6 +130,7 @@ public class GatewayuserService {
      * @param list
      * @return
      */
+    @Transactional(readOnly = true)
     public List<String> findGatewayidListByUserList(List<UserPO> list) {
         List<Integer> l = new ArrayList<>();
         List<String> gid = new ArrayList<>();
@@ -135,6 +145,7 @@ public class GatewayuserService {
      *
      * @param zdevicelist
      */
+    @Transactional(readOnly = true)
     public List<String> filterDevice(List<ZwaveDevicePO> zdevicelist) {
         List<String> list0 = new ArrayList<>();
         List<String> list1 = new ArrayList<>();
