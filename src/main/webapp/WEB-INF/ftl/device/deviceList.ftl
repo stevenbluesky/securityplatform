@@ -61,7 +61,7 @@
                 </div>
               </div>
               <div class="form-group col-md-4">
-                   <button type="submit" class="btn btn-default" style="width:28%;"><@spring.message code="label.search"/></button>
+                   <button type="button" class="btn btn-default" style="width:28%;"><@spring.message code="label.search"/></button>
               </div>
           </div>
           </form>

@@ -4,7 +4,7 @@
                   <div class="row">
                       <div class="text-center"><h1><@spring.message code="label.supplierlist"/></h1></div>
                       <hr>
-                      <form id="searchform" class="form-inline" method="POST">
+                      <form id="searchform" class="form-inline">
                           <div class="form-group col-md-3">
                               <div>
                                   <b><@spring.message code="label.pname"/></b>
@@ -27,7 +27,8 @@
                               </div>
                           </div>
                           <div class=" col-md-3">
-                              <button id="searchbtn" class="btn btn-default"><@spring.message code="label.search"/></button>
+                              <button id="searchbtn" type="button"
+                                      class="btn btn-default"><@spring.message code="label.search"/></button>
                           </div>
                       </form>
                   </div>
@@ -88,9 +89,9 @@
             queryParams: function (params) {
                 //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
                 var temp = {
-                    searchname:$("#searchname").val(),
-                    searchcity:$("#searchcity").val(),
-                    searchcitycode:$("#searchcitycode").val(),
+                    searchname: $("#searchname").val(),
+                    searchcity: $("#searchcity").val(),
+                    searchcitycode: $("#searchcitycode").val(),
                     rows: params.limit,                         //页面大小
                     page: (params.offset / params.limit) + 1,   //页码
                     sort: params.sort,      //排序列名
@@ -113,8 +114,8 @@
         });
 
         //当点击搜索按钮后，表格刷新并跳到第一页
-        $("#searchbtn").click(function(){
-            $("#table").bootstrapTable("refreshOptions",{pageNumber:1})
+        $("#searchbtn").click(function () {
+            $("#table").bootstrapTable("refreshOptions", {pageNumber: 1})
         });
 
         window.supplieraddEvents =
@@ -144,11 +145,12 @@
             });
             return ids;
         }
+
         // $("#table").bootstrapTable('getSelections')[1].organizationid
         function toggleOrganizationStatus(obj) {
             var ids = getCheckedId();
             // alert(checkedIds);
-            if (ids[0] == null || ids[0] =="") {
+            if (ids[0] == null || ids[0] == "") {
                 alert("<@spring.message code='label.nochecked'/>");
                 return;
             }

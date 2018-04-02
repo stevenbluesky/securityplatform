@@ -42,4 +42,12 @@ public interface EmployeeDAO extends CrudRepository<EmployeePO,Integer>{
 	List<EmployeePO> findByLoginnameContainingOrNameContaining(String installer, String installer2);
 
     Integer countByOrganizationidIn(List<Integer> list);
+
+    Page<EmployeePO> findByNameLike(Pageable pageable, String name);
+
+	Integer countByNameLike(String name);
+
+	Page<EmployeePO> findByOrganizationidInAndNameLike(Pageable pageable, List<Integer> ids, String name);
+
+	Integer countByOrganizationidInAndNameLike(List<Integer> ids, String name);
 }

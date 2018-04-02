@@ -8,7 +8,9 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import cn.com.isurpass.house.po.*;
 import cn.com.isurpass.house.util.Encrypt;
+import cn.com.isurpass.house.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,16 +25,9 @@ import cn.com.isurpass.house.dao.OrganizationDAO;
 import cn.com.isurpass.house.dao.PersonDAO;
 import cn.com.isurpass.house.dao.ProvinceDAO;
 import cn.com.isurpass.house.exception.MyArgumentNullException;
-import cn.com.isurpass.house.po.AddressPO;
-import cn.com.isurpass.house.po.EmployeePO;
-import cn.com.isurpass.house.po.OrganizationPO;
-import cn.com.isurpass.house.po.PersonPO;
 import cn.com.isurpass.house.util.Constants;
 import cn.com.isurpass.house.util.Encrypt;
 import cn.com.isurpass.house.util.FormUtils;
-import cn.com.isurpass.house.vo.EmployeeAddVO;
-import cn.com.isurpass.house.vo.EmployeeListVO;
-import cn.com.isurpass.house.vo.EmployeeParentOrgIdVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -261,7 +256,7 @@ public class EmployeeService {
         // System.out.println(od.findByCode(code0));
         if ((org = od.findByCode(code0)) != null) {
             List<EmployeePO> empList = ed.findByOrganizationidAndLoginname(org.getOrganizationid(), loginname);
-            for (int i = 0;!empList.isEmpty() && i < empList.size(); i++) {
+            for (int i = 0; !empList.isEmpty() && i < empList.size(); i++) {
                 if (Encrypt.check(loginname, password, code0, empList.get(i).getPassword())) {
                     return empList.get(i);
                 }
@@ -275,6 +270,7 @@ public class EmployeeService {
 
     /**
      * 对EmployeeParentOrgIdVO进行查找,填充
+     *
      * @param emp
      * @return
      */
@@ -319,10 +315,11 @@ public class EmployeeService {
 
     /**
      * 改变用户的状态
+     *
      * @param employeeid
      * @param status
      */
-    public void toggleEmployeeStatus(Integer employeeid,Integer status,HttpServletRequest request) {
+    public void toggleEmployeeStatus(Integer employeeid, Integer status, HttpServletRequest request) {
         if (status == null) {
             throw new RuntimeException("status不能为空");
         }
@@ -334,26 +331,27 @@ public class EmployeeService {
         ed.save(emp);
     }
 
-    public void toggleEmployeeStatus0(String hope, Object[] ids,HttpServletRequest request) {
+    public void toggleEmployeeStatus0(String hope, Object[] ids, HttpServletRequest request) {
         if ("unsuspence".equals(hope)) {
             for (Object id : ids) {
                 toggleEmployeeStatus(Integer.valueOf(id.toString()), Constants.STATUS_NORMAL, request);
             }
-        } else if("suspence".equals(hope)){
+        } else if ("suspence".equals(hope)) {
             for (Object id : ids) {
-                toggleEmployeeStatus(Integer.valueOf(id.toString()),Constants.STATUS_SUSPENCED,request);
+                toggleEmployeeStatus(Integer.valueOf(id.toString()), Constants.STATUS_SUSPENCED, request);
             }
         }
     }
 
     /**
      * 通过要操作的员工id和request判断当前登录的员工是否有权限操作此员工
+     *
      * @param employeeid
      * @param request
      * @return
      */
     @Transactional(readOnly = true)
-    public boolean hasProvilege(Integer employeeid,HttpServletRequest request) {
+    public boolean hasProvilege(Integer employeeid, HttpServletRequest request) {
      /*   EmployeePO emp = ed.findByEmployeeid(employeeid);
         OrganizationPO org = od.findByOrganizationid(emp.getOrganizationid());//要操作的员工的机构
 
@@ -374,4 +372,57 @@ public class EmployeeService {
         EmployeePO emp = ed.findByEmployeeid(employeeid);
         return os.hasProvilege(emp.getOrganizationid(), request);
     }
+
+    @Transactional(readOnly = true)
+    public Map<String, Object> search(Pageable pageable, OrgSearchVO search, HttpServletRequest request) {
+        EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
+        Integer orgid = emp.getOrganizationid();
+        Integer orgtype = od.findByOrganizationid(orgid).getOrgtype();
+
+        String name = "";
+        String city1 = "";
+        String citycode = "";
+
+        Page<EmployeePO> empList = null;
+        if (search.getSearchname() != null) {
+            name = "%" + search.getSearchname() + "%";
+        }
+        if (search.getSearchcity() != null) {
+            city1 = "%" + search.getSearchcity() + "%";
+        }
+        if (search.getSearchcitycode() != null) {
+            citycode = "%" + search.getSearchcitycode() + "%";
+        }
+
+        Map<String, Object> map = new HashMap<>();
+        if (search.getSearchname() == null || search.getSearchname() == "") {
+
+            map.put("total", city.countByCitycodeLikeAndCityname(citycode, city1));
+            Page<CityPO> cityPO = city.findByCitycodeLikeAndCitynameLike(pageable, citycode, city1);
+        }
+        if (search.getSearchname() != "") {
+            if (orgtype == Constants.ORGTYPE_INSTALLER) {
+                empList = ed.findByNameLike(pageable, name);
+                map.put("total", ed.countByNameLike(name));
+            }
+            if (orgtype == Constants.ORGTYPE_SUPPLIER) {
+                List<Integer> list = new ArrayList<>();
+                list.add(orgid);
+                List<Integer> ids = os.findChildrenOrgid(emp.getOrganizationid(), list);
+                empList = ed.findByOrganizationidInAndNameLike(pageable, ids, name);
+                map.put("total", ed.countByOrganizationidInAndNameLike(ids, name));
+            }
+
+        }
+        List<EmployeeListVO> list = new ArrayList<>();
+        if (empList == null || empList.getTotalElements() == 0) {
+            map.put("total", 0);
+            map.put("rows", "[]");
+            return map;
+        }
+        empList.forEach(e -> forEachEmp(list, e));
+        map.put("rows", list);
+        return map;
+    }
+
 }

@@ -5,6 +5,9 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import cn.com.isurpass.house.util.Constants;
+import cn.com.isurpass.house.util.FormUtils;
+import cn.com.isurpass.house.vo.OrgSearchVO;
 import cn.com.isurpass.house.vo.TransferVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -48,11 +51,12 @@ public class EmployeeController {
 
     @RequestMapping("employeeJsonList")
     @ResponseBody
-    public Map<String, Object> employeeJsonList(PageResult pr, HttpServletRequest request) {
+    public Map<String, Object> employeeJsonList(PageResult pr, OrgSearchVO osv, HttpServletRequest request) {
         Pageable pageable = PageRequest.of(pr.getPage() - 1, pr.getRows(), Sort.Direction.ASC, "employeeid");
-        Map<String, Object> map = es.listEmployee(pageable, request);
-        return map;
-
+        if (!FormUtils.isEmpty(osv)) {//搜索
+            return es.search(pageable, osv,request);
+        }
+        return es.listEmployee(pageable, request);
     }
 
     @RequestMapping("add")

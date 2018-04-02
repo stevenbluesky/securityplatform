@@ -65,6 +65,7 @@ function formatter_devicetype(value, row, index) {
 }
 
 function formatter_devicestatus(value, row, index) {
+    // row.devicetype
     if (row.status == '0') {
         return lan.close;
     }

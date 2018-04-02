@@ -4,27 +4,31 @@
           <div class="row">
               <div class="text-center"><h1><@spring.message code="label.employeelist"/></h1></div>
               <hr>
-              <form class="form-inline" action="" method="POST">
+              <form id="searchform" class="form-inline">
                   <div class="form-group col-md-3">
                       <div>
                           <b><@spring.message code="label.pname"/></b>
-                          <input type="text" class="form-control" id="name" name="name" placeholder="<@spring.message code="label.pname"/>">
+                          <input type="text" class="form-control" id="searchname" name="searchname"
+                                 placeholder="<@spring.message code="label.pname"/>">
                       </div>
                   </div>
                   <div class="form-group col-md-3">
                       <div>
                           <b><@spring.message code="label.city"/></b>
-                          <input type="text" class="form-control" id="code" name="code" placeholder="<@spring.message code="label.city"/>">
+                          <input type="text" class="form-control" id="searchcity" name="searchcity"
+                                 placeholder="<@spring.message code="label.city"/>">
                       </div>
                   </div>
                   <div class="form-group col-md-3">
                       <div>
                           <b><@spring.message code="label.citycode"/></b>
-                          <input type="text" class="form-control" id="code" name="code" placeholder="<@spring.message code="label.citycode"/>">
+                          <input type="text" class="form-control" id="searchcitycode" name="searchcitycode"
+                                 placeholder="<@spring.message code="label.citycode"/>">
                       </div>
                   </div>
                   <div class="form-group col-md-3">
-                      <button type="submit" class="btn btn-default"><@spring.message code="label.search"/></button>
+                      <button id="searchbtn" type="button"
+                              class="btn btn-default"><@spring.message code="label.search"/></button>
                   </div>
               </form>
           </div>
@@ -47,7 +51,8 @@
         <th data-field="code"><@spring.message code="label.empcode"/></th>
         <th data-field="status" data-formatter='formatter_status'><@spring.message code="label.status"/></th>
         <th data-field="employeeroleid"><@spring.message code="label.privilege"/></th>
-        <th data-field="operate" data-formatter="formatter_op" data-events="operateEvents"><@spring.message code="label.operate"/></th>
+        <th data-field="operate" data-formatter="formatter_op"
+            data-events="operateEvents"><@spring.message code="label.operate"/></th>
     </tr>
     </thead>
 </table>
@@ -83,6 +88,9 @@
             queryParams: function (params) {
                 //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
                 var temp = {
+                    searchname: $("#searchname").val(),
+                    searchcity: $("#searchcity").val(),
+                    searchcitycode: $("#searchcitycode").val(),
                     rows: params.limit,                         //页面大小
                     page: (params.offset / params.limit) + 1,   //页码
                     sort: params.sort,      //排序列名
@@ -104,20 +112,25 @@
             }
         });
 
+        //当点击搜索按钮后，表格刷新并跳到第一页
+        $("#searchbtn").click(function () {
+            $("#table").bootstrapTable("refreshOptions", {pageNumber: 1})
+        });
+
         window.operateEvents =
                 {
                     "click #btn1": function (e, value, row, index) {
                         // alert(row.name);
-                        window.location.href = "addEmployeePage?id="+row.employeeid;
+                        window.location.href = "addEmployeePage?id=" + row.employeeid;
                     },
-                    "click #btn2":function (e, value, row, index) {
-                        toggleStatus(e,value,row,index,'toggleEmployeeStatus',row.employeeid,2);
+                    "click #btn2": function (e, value, row, index) {
+                        toggleStatus(e, value, row, index, 'toggleEmployeeStatus', row.employeeid, 2);
                     },
                     "click #btn3": function (e, value, row, index) {
-                        toggleStatus(e,value,row,index,'toggleEmployeeStatus',row.employeeid,1);
+                        toggleStatus(e, value, row, index, 'toggleEmployeeStatus', row.employeeid, 1);
                     },
                     "click #btn9": function (e, value, row, index) {
-                        toggleStatus(e,value,row,index,'toggleEmployeeStatus',row.employeeid,9);
+                        toggleStatus(e, value, row, index, 'toggleEmployeeStatus', row.employeeid, 9);
                     }
 
                 };

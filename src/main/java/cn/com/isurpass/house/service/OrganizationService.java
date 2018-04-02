@@ -265,6 +265,11 @@ public class OrganizationService {
 //        map.put("total", orgList.getTotalElements());
         List<OrgListVO> list = new ArrayList<>();
         setProperties(orgList, list);
+        if (list == null || list.size() == 0) {
+            map.put("total", 0);
+            map.put("rows", "[]");
+            return map;
+        }
         map.put("rows", list);
         return map;
     }
@@ -416,7 +421,7 @@ public class OrganizationService {
         }
 
         Map<String, Object> map = new HashMap<>();
-        if (search.getSearchcity() == "") {
+        if (search.getSearchcitycode() == null || search.getSearchcity() == "") {
             map.put("total", od.countByNameLikeAndCitycodeLike(name, citycode));
             orgList = od.findByNameLikeAndCitycodeLike(pageable, name, citycode);
         }

@@ -2,6 +2,9 @@ package cn.com.isurpass.house.vo;
 
 import java.io.UnsupportedEncodingException;
 
+/**
+ * 服务商,安装商与员工搜索的实体类
+ */
 public class OrgSearchVO {
     private String searchname;
     private String searchcity;
