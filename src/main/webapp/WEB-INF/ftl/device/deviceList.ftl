@@ -75,7 +75,7 @@
             <th data-field="zwavedeviceid" data-visible="false">ID</th>
             <th data-field="name"><@spring.message code="label.dname"/></th>
             <th data-field="devicetype" data-formatter='formatter_devicetype'><@spring.message code="label.devicetype"/></th>
-            <th data-field="warningstatuses"><@spring.message code="label.alarmstatus"/></th>
+            <th data-field="warningstatuses" data-formatter='formatter_warnigstatuses'><@spring.message code="label.alarmstatus"/></th>
             <th data-field="status" data-formatter='formatter_devicestatus'><@spring.message code="label.status"/></th>
             <th data-field="battery"><@spring.message code="label.energy"/></th>
             <th data-field="city"><@spring.message code="label.area"/></th>
@@ -103,10 +103,10 @@
       pageNumber: 1,                      //初始化加载第一页，默认第一页,并记录
       pageSize: '10',                     //每页的记录行数（*）
       pageList: [10, 25, 50, 100],        //可供选择的每页的行数（*）
-      search: true,                      //是否显示表格搜索
+      search: false,                      //是否显示表格搜索
       strictSearch: false,
-      showColumns: true,                  //是否显示所有的列（选择显示的列）
-      showRefresh: true,                  //是否显示刷新按钮
+      showColumns: false,                  //是否显示所有的列（选择显示的列）
+      showRefresh: false,                  //是否显示刷新按钮
       minimumCountColumns: 2,             //最少允许的列数
       clickToSelect: true,                //是否启用点击选中行
       //height: 500,                      //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
