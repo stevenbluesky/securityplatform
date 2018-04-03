@@ -67,7 +67,7 @@
                 <input type="text" class="form-control" id="captchacode" name="captchacode" placeholder="<@spring.message code='label.captchcode'/> ">
                 </div>
                 <div class="col-sm-4">
-                <img class="img-responsive" src="static/img/code.jpg" style="height:100px;"/>
+                <img class="img-responsive" src="../login/getCode" onclick="this.src='../login/getCode?time='+new Date().getTime();" style="height:35px;float: right"/>
               </div>
               </div>
               <button id="btn-submit" class="btn btn-default  btn-lg" style="float:right;"><@spring.message code='label.login'/></button>
@@ -78,7 +78,7 @@
 </div>
 
 <script type="text/javascript">
-$(document).ready(function() {
+    $(document).ready(function() {
     $('#defaultForm').bootstrapValidator({
 //      live: 'disabled',
         message: 'This value is not valid',
