@@ -4,7 +4,7 @@
     <div class="row-horizontal">
         <div class="col-md-1"></div>
         <div class="col-md-10">
-          <form action="../phonecard/add" method="POST">
+          <form id="typeform" action="../phonecard/add" method="POST">
           
               <div class="text-center"><h1><@spring.message code='label.enteringphonecardinfo'/></h1></div>
              
@@ -126,10 +126,10 @@
               </div>
               
               <div id="msg" class="text-center" style="color:red;font-size:14px;">
-            	 <#if msg?exists&&msg=="6"><@spring.message code="label.6"/>${msgserialnumber}<@spring.message code="label.5"/><#elseif msg?exists><@spring.message code="label."+msg/></#if>
+              <#if msg?exists&&msg=="6"><font color="green"><@spring.message code="label.6"/>${msgserialnumber}<@spring.message code="label.5"/></font><#elseif msg?exists><@spring.message code="label."+msg/></#if>
               </div>
               <div class="row text-center">
-	              <div class="col-sm-6"><button type="submit" class="btn btn-default" style="width:25%;"><@spring.message code='label.submit'/></button></div>
+	              <div class="col-sm-6"><button id="submitid" type="button" class="btn btn-default" style="width:25%;"><@spring.message code='label.submit'/></button></div>
 	              <div class="col-sm-6"><button type="button" id="resetform" class="btn btn-default" style="width:25%;"><@spring.message code='label.reset'/></button></div>
               </div>
               
@@ -145,9 +145,13 @@
     $("#resetform").click(function(r){
       	$("input").val("");
       });
-      $("form").submit(function(e){
-	});
-	  
+    $("#submitid").click(function (e) {
+        document.getElementById("submitid").setAttribute("disabled", true);
+        $("#typeform").submit();
+    });
+    $("#serialnumber").change(function () {
+        document.getElementById("submitid").removeAttribute("disabled");
+    });
 	  $('.form_datetime').datetimepicker({
         //language:  'fr',
         format: 'yyyy-mm-dd',
