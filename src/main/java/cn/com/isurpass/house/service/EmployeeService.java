@@ -144,12 +144,13 @@ public class EmployeeService {
         }
         empPO.setLoginname(emp.getLoginname());
         empPO.setCode(emp.getCode());
-        Encrypt svr = new Encrypt();
+//        Encrypt svr = new Encrypt();
 //        empPO.setPassword(FormUtils.encrypt(emp.getPassword()));// 加密
-        empPO.setPassword(svr.encrypt(emp.getLoginname(), emp.getPassword(), emp.getCode()));
+        String code = od.findByOrganizationid(emp.getOrganizationid()).getCode();
+        empPO.setPassword(Encrypt.encrypt(emp.getLoginname(), emp.getPassword(), code));
         empPO.setQuestion(emp.getQuestion());
 //        empPO.setAnswer(FormUtils.encrypt(emp.getAnswer()));
-        empPO.setAnswer(svr.encrypt(emp.getLoginname(), emp.getAnswer(), emp.getCode()));
+        empPO.setAnswer(Encrypt.encrypt(emp.getLoginname(), emp.getAnswer(), emp.getCode()));
         empPO.setStatus(emp.getStatus());
         empPO.setExpiredate(new Date());
         empPO.setOrganizationid(emp.getOrganizationid());
