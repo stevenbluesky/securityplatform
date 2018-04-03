@@ -228,7 +228,7 @@ public class EmployeeService {
     }
 
     @Transactional(readOnly = true)
-    private void forEachEmp(List<EmployeeListVO> list, EmployeePO e) {
+    public void forEachEmp(List<EmployeeListVO> list, EmployeePO e) {
         EmployeeListVO emp = new EmployeeListVO();
         emp.setName(e.getName());
         emp.setEmployeeid(e.getEmployeeid());

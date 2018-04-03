@@ -6,7 +6,7 @@
     <div class="row-horizontal">
         <div class="col-md-1"></div>
         <div class="col-md-10">
-          <form action="/house/gateway/add"  method="GET">
+          <form action="../gateway/add"  method="GET">
               <div class="text-center"><h1><@spring.message code="label.enteringgatewayinfo"/></h1></div>            
               <div  class="form-group">
                 <label for="name"  class="col-sm-2 control-label"><@spring.message code="label.gatewayID"/>*</label>

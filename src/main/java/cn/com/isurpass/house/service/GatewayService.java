@@ -158,8 +158,8 @@ public class GatewayService {
 		serviceproviderdeviceidlist.retainAll(installerdeviceidlist);
 		citynamedeviceidlist.retainAll(serviceproviderdeviceidlist);
 		List<GatewayPO> gateList = gd.findByDeviceidIn(pageable,citynamedeviceidlist);//从网关表中拿基本数据
-		map.put("total", gateList.size());
-
+		//map.put("total", gateList.size());
+		map.put("total",gd.countByDeviceidIn(citynamedeviceidlist));
 		gateList.forEach(o -> {
 			TypeGatewayInfoVO gateVO = new TypeGatewayInfoVO();
 			gateVO.setDeviceid(o.getDeviceid());

@@ -4,7 +4,7 @@
     <div class="row-horizontal">
         <div class="col-md-1"></div>
         <div class="col-md-10">
-          <form action="/house/phonecard/add" method="POST">
+          <form action="../phonecard/add" method="POST">
           
               <div class="text-center"><h1><@spring.message code='label.enteringphonecardinfo'/></h1></div>
              
