@@ -13,7 +13,7 @@ public class EmployeeAddVO {
     private String question;
     private String answer;
     private String code;
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private Date expiredate;
     private Integer status;
 

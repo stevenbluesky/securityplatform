@@ -311,6 +311,8 @@
                     if (jsonObj['status'] == 1) {
                         alert("success");
                         window.location.href = "employeeList";
+                    }else{
+                        alert(jsonObj['msg']);
                     }
                 },
                 error: function (data) {
@@ -345,7 +347,7 @@
 
     $('.form_datetime').datetimepicker({
         //language:  'fr',
-        format: 'yyyy/mm/dd hh:ii',
+        format: 'yyyy-mm-dd hh:ii',
         weekStart: 1,
         todayBtn: 1,
         autoclose: 1,
