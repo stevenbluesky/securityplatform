@@ -19,5 +19,6 @@ var lan = {
     alarm:"报警",
     noperson:"感应范围内没有人",
     hasperson:"感应范围内有人",
-    highpoweralarm:"大功率告警"
+    highpoweralarm:"大功率告警",
+    dooropen:"门开了"
 };

@@ -64,35 +64,6 @@ function formatter_devicetype(value, row, index) {
     return row.devicetype;
 }
 
-function formatter_warnigstatuses(value, row, index) {
-    switch (row.devicetype) {
-        case '4':
-            switch (row.warningstatuses) {
-                case '[255]':
-                    return lan.open;
-                case '[251]':
-                    return lan.takepart;
-            }
-        case '2':
-            switch (row.warningstatuses) {
-                case '[255]':
-                    // alert(row.warningstatuses);
-                    return lan.alarm;
-                case '[251]':
-                    return lan.takepart;
-            }
-        case '6':
-            return '-';
-        case '11':
-            switch (row.warningstatuses) {
-                case '[310]':
-                    return lan.highpoweralarm;
-            }
-        case '46':
-            return '-';
-    }
-}
-
 function formatter_devicestatus(value, row, index) {
     //!devicetype是String类型,status是Integer类型
     switch (row.devicetype) {
@@ -147,3 +118,53 @@ function formatter_devicestatus(value, row, index) {
             }
     }
 }
+
+function formatter_warnigstatuses(value, row, index) {
+    var strs = [];
+    if(row.warningstatuses == null) {
+        return '-';
+    }
+    var json = JSON.parse(row.warningstatuses);
+    for (var i = 0; i < json.length; i++) {
+        strs[i] = formatter_zwavewarning(row.devicetype, json[i]);;
+    }
+    return strs;
+
+}
+
+function formatter_zwavewarning(devicetype, warningstatuses){
+    switch (devicetype) {
+        case '4':
+            switch (warningstatuses) {
+                case 255:
+                    return lan.dooropen;
+                case 251:
+                    return lan.takepart;
+            }
+        case '2':
+            switch (warningstatuses) {
+                case 255:
+                    // alert(row.warningstatuses);
+                    return lan.alarm;
+                case 251:
+                    return lan.takepart;
+            }
+        case '6':
+            switch (warningstatuses) {
+                case 255:
+                    // alert(row.warningstatuses);
+                    return lan.hasperson;
+                case 251:
+                    return lan.takepart;
+            }
+        case '11':
+            switch (warningstatuses) {
+                case 310:
+                    return lan.highpoweralarm;
+            }
+        case '46':
+            return '-';
+    }
+}
+
+

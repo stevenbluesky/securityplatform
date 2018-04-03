@@ -108,6 +108,7 @@ public class ZwaveDeviceService {
         dd.setWarningstatuses(zwave.getWarningstatuses());
         dd.setStatus(zwave.getStatus());
         dd.setDevicename(zwave.getName());
+        dd.setDevicetype(zwave.getDevicetype());
         dd.setSuppliename(gs.findOrgnameBydeviceId(deviceid));
         return dd;
     }

@@ -44,9 +44,10 @@ public class Encrypt {
 //        boolean b = check(name, pw, code, str);
 //        System.out.println(System.currentTimeMillis() - s);
 //        System.out.println(b);
-        String name = "admin";
-        String pw = "123";
+        String name = "test001";
+        String pw = "test001";
         String code = "002";
-        System.out.println(Encrypt.check(name,pw,code,"wOgkupwkgZJZlCtxV5Zo/QMuwKYOec3s"));
+//        System.out.println(encrypt(name,pw,code));
+        System.out.println(Encrypt.check(name,pw,code,"b6WLvEXigldas6v2H6TinxZBFwMD65iq"));
     }
 }
