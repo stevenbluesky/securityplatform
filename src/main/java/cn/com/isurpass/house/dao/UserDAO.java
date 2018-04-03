@@ -27,12 +27,11 @@ public interface UserDAO extends CrudRepository<UserPO,Integer>{
 
 	List<UserPO> findByInstalleridIn(List<Integer> employeeidlist);
 
-	List<UserPO> findByLoginnameContainingOrNameContaining(String customer, String customer2);
 	List<UserPO> findByUseridIn(List<Integer> useridlist);
 
     Integer countByInstallerid(Integer employeeid);
 
- //    Integer countAll();
-
     Integer countByInstallerorgid(Integer organizationid);
+
+    List<UserPO> findByNameContaining(String customer);
 }

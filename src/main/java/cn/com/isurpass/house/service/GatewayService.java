@@ -83,10 +83,7 @@ public class GatewayService {
 		gwPO.setModel(tgi.getModel());
 		gwPO.setStatus(1);//TODO 暂时默认新增即视为在线状态
         gd.save(gwPO);
-
-        if (gbd.findByDeviceid(tgi.getDeviceid()) != null) {
-            throw new MyArgumentNullException("此网关已经绑定过机构");
-        }
+        //添加网关时，根据用户所属机构进行机构网关绑定
         GatewayBindingPO gbp = new GatewayBindingPO();
         gbp.setCreatetime(new Date());
         gbp.setDeviceid(tgi.getDeviceid());
@@ -105,22 +102,6 @@ public class GatewayService {
 	public Map<String, Object> listGateway(Pageable pageable, TypeGatewayInfoVO tgiv) {
         Map<String, Object> map = new HashMap<>();//返回的map
 		List<TypeGatewayInfoVO> list = new ArrayList<>();//返回的list对象
-		/*if(StringUtils.isEmpty(tgiv.getCityname())&&StringUtils.isEmpty(tgiv.getCitycode())&&StringUtils.isEmpty(tgiv.getName())&&StringUtils.isEmpty(tgiv.getCustomer())&&StringUtils.isEmpty(tgiv.getServiceprovider())&&StringUtils.isEmpty(tgiv.getInstallerorg())&&StringUtils.isEmpty(tgiv.getInstaller())&&StringUtils.isEmpty(tgiv.getDeviceid())){
-			Page<GatewayPO> gateList = gd.findAll(pageable);
-			map.put("total", gd.count());
-	    	gateList.forEach(o -> {
-	    		TypeGatewayInfoVO gateVO = new TypeGatewayInfoVO();
-	    		gateVO.setDeviceid(o.getDeviceid());
-	    		gateVO.setName(o.getName());
-	    		gateVO.setStatus(o.getStatus());
-	    		gateVO.setModel(o.getModel());
-	    		gateVO.setBattery(o.getBattery());
-	    		gateVO.setFirmwareversion(o.getFirmwareversion());
-	    		list.add(gateVO);
-	    	});
-	    	map.put("rows", list);
-			return map;
-		}*/
 		List<String> citynamedeviceidlist = new ArrayList<>();
 		List<String> citycodedeviceidlist = new ArrayList<>();
 		List<String> devicenamedeviceidlist = new ArrayList<>();
@@ -129,8 +110,6 @@ public class GatewayService {
 		List<String> installerorgdeviceidlist = new ArrayList<>();
 		List<String> installerdeviceidlist = new ArrayList<>();
 		List<String> deviceiddeviceidlist = new ArrayList<>();
-
-
 		Iterable<GatewayPO> geted = gd.findAll();
 		List<String> gdlist = new ArrayList<>();
 		geted.forEach(single ->{gdlist.add(single.getDeviceid());});
@@ -256,13 +235,6 @@ public class GatewayService {
 	public List<String> findIdListByCitycode(String citycode){
 		List<String> citycodedeviceidlist = new ArrayList<String>();
 		List<Integer> citycodeuseridlist = new ArrayList<Integer>();
-		if(StringUtils.isEmpty(citycode)){
-			Iterable<GatewayPO> devicelist =  gd.findAll();
-			devicelist.forEach(o ->{
-				citycodedeviceidlist.add(o.getDeviceid());
-			});
-			return citycodedeviceidlist;
-		}
 		List<UserPO> findByCitycodeContaining = ud.findByCitycodeContaining(citycode);
 		if(findByCitycodeContaining.size()==0){
 			return null;
@@ -286,9 +258,6 @@ public class GatewayService {
 	 */
 	@Transactional(readOnly = true)
 	public List<String> findIdListByDevicename(String devicename){
-		if(StringUtils.isEmpty(devicename)){
-			devicename = "";
-		}
 		List<String> devicenamedeviceidlist = new ArrayList<String>();
 		List<ZwaveDevicePO> findByNameContaining = zdd.findByNameContaining(devicename);
 		if(findByNameContaining.size()==0){
@@ -306,12 +275,9 @@ public class GatewayService {
 	 */
 	@Transactional(readOnly = true)
 	public List<String> findIdListByCustomer(String customer){
-		if(StringUtils.isEmpty(customer)){
-			customer = "";
-		}
 		List<String> customerdeviceidlist = new ArrayList<String>();
 		List<Integer> customeruseridlist = new ArrayList<Integer>();
-		List<UserPO> userlist = ud.findByLoginnameContainingOrNameContaining(customer,customer);
+		List<UserPO> userlist = ud.findByNameContaining(customer);
 		if(userlist.size()==0){
 			return null;
 		}
@@ -334,9 +300,6 @@ public class GatewayService {
 	 */
 	@Transactional(readOnly = true)
 	public List<String> findIdListByServiceprovider(String serviceprovider){
-		if(StringUtils.isEmpty(serviceprovider)){
-			serviceprovider = "";
-		}
 		List<String> serviceproviderdeviceidlist = new ArrayList<String>();
 		List<Integer> serviceprovideridlist = new ArrayList<Integer>();
 		List<OrganizationPO> orglist = od.findByOrgtypeAndNameContainingOrCentralstationnameContaining(Constants.ORGTYPE_SUPPLIER,serviceprovider,serviceprovider);
@@ -362,9 +325,6 @@ public class GatewayService {
 	 */
 	@Transactional(readOnly = true)
 	public List<String> findIdListByInstallerorg(String installerorg){
-		if(StringUtils.isEmpty(installerorg)){
-			installerorg = "";
-		}
 		List<String> installerorgdeviceidlist = new ArrayList<String>();
 		List<Integer> installerorgidlist = new ArrayList<Integer>();
 		List<OrganizationPO> orglist2 = od.findByOrgtypeAndNameContainingOrCentralstationnameContaining(Constants.ORGTYPE_INSTALLER,installerorg,installerorg);
@@ -390,13 +350,10 @@ public class GatewayService {
 	 */
 	@Transactional(readOnly = true)
 	public List<String> findIdListByInstaller(String installer){
-		if(StringUtils.isEmpty(installer)){
-			installer = "";
-		}
 		List<String> installerdeviceidlist = new ArrayList<String>();
 		List<Integer> employeeidlist = new ArrayList<Integer>();
 		List<Integer> installeridlist = new ArrayList<Integer>();
-		List<EmployeePO> emplist = ed.findByLoginnameContainingOrNameContaining(installer,installer);
+		List<EmployeePO> emplist = ed.findByNameContaining(installer);
 		if(emplist.size()==0){
 			return null;
 		}
@@ -426,9 +383,6 @@ public class GatewayService {
 	 */
 	@Transactional(readOnly = true)
 	public List<String> findIdListByDeviceid(String deviceid){
-		if(StringUtils.isEmpty(deviceid)){
-			deviceid = "";
-		}
 		List<String> deviceiddeviceidlist = new ArrayList<String>();
 		List<GatewayPO> gatewaylist = gd.findByDeviceidContaining(deviceid);
 		if(gatewaylist.size()==0){
