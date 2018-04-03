@@ -15,17 +15,18 @@ public class UserAddVO {
     private Integer city;
     private String detailaddress;
     private String deviceid;
-    private String serianumber;
+    private String serialnumber;
 //	private Integer organizationid;
 //	private Integer installerid;
 //	private Integer installerorgid;
 
-    public String getSerianumber() {
-        return serianumber;
+
+    public String getSerialnumber() {
+        return serialnumber;
     }
 
-    public void setSerianumber(String serianumber) {
-        this.serianumber = serianumber;
+    public void setSerialnumber(String serialnumber) {
+        this.serialnumber = serialnumber;
     }
 
     public String getCodepostfix() {

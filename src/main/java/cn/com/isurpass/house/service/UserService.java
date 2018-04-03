@@ -54,7 +54,7 @@ public class UserService {
     public void add(UserAddVO u, HttpServletRequest request) {
         EmployeePO emp = (EmployeePO) SecurityUtils.getSubject().getPrincipal();
 
-        if (!FormUtils.checkNUll(u.getDeviceid()) || !FormUtils.checkNUll(u.getSerianumber())) {
+        if (!FormUtils.checkNUll(u.getDeviceid()) || !FormUtils.checkNUll(u.getSerialnumber())) {
             throw new RuntimeException("网关或电话卡不能为空.");
         }
         if (gd.findByDeviceid(u.getDeviceid()).size() != 0) {
@@ -63,7 +63,7 @@ public class UserService {
         if (gbd.findByDeviceidAndOrganizationid(u.getDeviceid(), emp.getOrganizationid()) == null) {//网关不存在或者此网关不属于此机构
             throw new RuntimeException("无法添加此网关!");
         }
-        PhonecardPO pcardpo = pcard.findBySerialnumber(u.getSerianumber());
+        PhonecardPO pcardpo = pcard.findBySerialnumber(u.getSerialnumber());
         if (pcardpo == null) {
             throw new RuntimeException("无法添加此网关");
         }
@@ -140,7 +140,7 @@ public class UserService {
         EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
         Integer orgtype = od.findByOrganizationid(emp.getOrganizationid()).getOrgtype();
         Integer count = 0;
-        if (erd.findByEmployeeid(emp.getEmployeeid()).getRoleid() == 4) {
+        if (erd.findByEmployeeid(emp.getEmployeeid()) !=null && erd.findByEmployeeid(emp.getEmployeeid()).getRoleid() == 4) {
             Page<UserPO> userList = ud.findByInstallerid(emp.getEmployeeid(), pageable);
             count = ud.countByInstallerid(emp.getEmployeeid());
             return listUserInfo0(pageable, userList, count);

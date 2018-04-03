@@ -22,7 +22,8 @@
 			        <div class="col-md-3">
                         <p>${(zwave.devicename)!'<@spring.message code="label.none"/>'}</p>
                         <p>${(zwave.suppliename)!'<@spring.message code="label.none"/>'}</p>
-                        <p><#if zwave.warningstatusesopen?? && zwave.warningstatusesopen == true><@spring.message code='label.open'/><#else><@spring.message code='label.close'/></#if></p>
+                        <p>${(zwave.warningstatuses)!}</p>
+                        <#--<p><#if zwave.warningstatusesopen?? && zwave.warningstatusesopen == true><@spring.message code='label.open'/><#else><@spring.message code='label.close'/></#if></p>-->
                         <p><#if zwave.statusopen?? && zwave.statusopen== true><@spring.message code='label.open'/><#else><@spring.message code='label.close'/></#if></p>
                         <p>
                             <button type="submit" class="btn btn-default" style="width:28%"><@spring.message code="label.close"/></button>

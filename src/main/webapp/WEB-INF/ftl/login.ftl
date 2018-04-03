@@ -70,7 +70,7 @@
                 <img class="img-responsive" src="static/img/code.jpg" style="height:100px;"/>
               </div>
               </div>
-              <button id="btn-submit" class="btn btn-default  btn-lg" style="float:right;"><@spring.message code='label.login'/></button>
+              <button id="btn-submit" type="button" class="btn btn-default  btn-lg" style="float:right;"><@spring.message code='label.login'/></button>
        		 </form>
         </div>
 

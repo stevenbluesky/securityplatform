@@ -19,6 +19,7 @@ import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.util.EntityUtils;
+
 import java.io.IOException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
@@ -33,6 +34,7 @@ public class HttpsUtils {
     private static SSLConnectionSocketFactory sslsf = null;
     private static PoolingHttpClientConnectionManager cm = null;
     private static SSLContextBuilder builder = null;
+
     static {
         try {
             builder = new SSLContextBuilder();
@@ -54,17 +56,18 @@ public class HttpsUtils {
             e.printStackTrace();
         }
     }
+
     /**
      * httpClient post请求
-     * @param url 请求url
+     *
+     * @param url    请求url
      * @param header 头部信息
-     * @param param 请求参数 form提交适用
+     * @param param  请求参数 form提交适用
      * @param entity 请求实体 json/xml提交适用
      * @return 可能为空 需要处理
      * @throws Exception
-     *
      */
-    public static String post(String  url, Map<String, String> header, Map<String, String> param, HttpEntity entity) throws Exception {
+    public static String post(String url, Map<String, String> header, Map<String, String> param, HttpEntity entity) throws Exception {
         String result = "";
         CloseableHttpClient httpClient = null;
         try {
@@ -98,7 +101,8 @@ public class HttpsUtils {
             } else {
                 readHttpResponse(httpResponse);
             }
-        } catch (Exception e) {throw e;
+        } catch (Exception e) {
+            throw e;
         } finally {
             if (httpClient != null) {
                 httpClient.close();
@@ -106,6 +110,7 @@ public class HttpsUtils {
         }
         return result;
     }
+
     public static CloseableHttpClient getHttpClient() throws Exception {
         CloseableHttpClient httpClient = HttpClients.custom()
                 .setSSLSocketFactory(sslsf)
@@ -114,6 +119,7 @@ public class HttpsUtils {
                 .build();
         return httpClient;
     }
+
     public static String readHttpResponse(HttpResponse httpResponse)
             throws ParseException, IOException {
         StringBuilder builder = new StringBuilder();
@@ -136,7 +142,7 @@ public class HttpsUtils {
     }
 
     public static void main(String[] args) throws Exception {
-        for (int i = 0; i < 100; i++) {
+      /*  for (int i = 0; i < 100; i++) {
             Map<String, String> map = new HashMap<>();
             map.put("loginname", "00"+(50001+i));
 //        map.put("code", "thirdparter_open_demo");
@@ -148,6 +154,12 @@ public class HttpsUtils {
             String post = HttpsUtils.post("https://test.isurpass.com.cn/iremote/thirdpart/zufang/querythirdpartdevices", null, map, null);
             System.out.println(post);
             Thread.sleep(50);
-        }
+        }*/
+        Map<String, String> map = new HashMap<>();
+        map.put("token", "f4e20a8b432d47c4b4e8fbab35e0af34292496");
+        map.put("zwavedeviceid", "11542");
+//        map.put("channel", "2");
+        String post = HttpsUtils.post("https://test.isurpass.com.cn/iremote/thirdpart/zufang/unlock", null, map, null);
+        System.out.println(post);
     }
 }
