@@ -1,5 +1,5 @@
-<#include "/_head0.ftl"/>
-<#include "/_head1.ftl"/>
+<#include "../_head0.ftl"/>
+<#include "../_head1.ftl"/>
         
                   <div class="row">
                       <div class="text-center"><h1><@spring.message code="label.supplierlist"/></h1></div>
@@ -183,5 +183,5 @@
             });
         }
     </script>
-<#include "/_foot1.ftl"/>
-<#include "/_foot0.ftl"/>
+<#include "../_foot1.ftl"/>
+<#include "../_foot0.ftl"/>

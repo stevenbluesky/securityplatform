@@ -1,5 +1,5 @@
 <!-- 网关详情 -->
-<#include "/_head0.ftl"/>
+<#include "../_head0.ftl"/>
     <div class="row-horizontal">
         <div class="col-md-1"></div>
 
@@ -92,4 +92,4 @@
             }
         });
     </script>
-<#include "/_foot0.ftl"/>
+<#include "../_foot0.ftl"/>

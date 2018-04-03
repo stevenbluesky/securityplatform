@@ -2,7 +2,7 @@
 <#import "/spring.ftl" as spring />
 
 <!-- 录入网关信息页面 -->
-<#include "/_head0.ftl"/>
+<#include "../_head0.ftl"/>
     <div class="row-horizontal">
         <div class="col-md-1"></div>
         <div class="col-md-10">
@@ -49,4 +49,4 @@
 	});
     </script>
 
-<#include "/_foot0.ftl"/>
+<#include "../_foot0.ftl"/>

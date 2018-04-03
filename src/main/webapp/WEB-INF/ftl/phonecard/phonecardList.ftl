@@ -1,5 +1,5 @@
- <#include "/_head0.ftl"/>
- <#include "/_head1.ftl"/>
+ <#include "../_head0.ftl"/>
+ <#include "../_head1.ftl"/>
  <#import "/spring.ftl" as spring />       
           <div class="row">
               <div class="text-center"><h1><@spring.message code='label.phonecardlist'/></h1></div><hr>
@@ -197,5 +197,5 @@
 	}
     </script>
 
-<#include "/_foot1.ftl"/>
-<#include "/_foot0.ftl"/>
+<#include "../_foot1.ftl"/>
+<#include "../_foot0.ftl"/>

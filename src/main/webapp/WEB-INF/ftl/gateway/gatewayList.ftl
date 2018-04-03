@@ -1,5 +1,5 @@
-<#include "/_head0.ftl"/>
-<#include "/_head1.ftl"/>
+<#include "../_head0.ftl"/>
+<#include "../_head1.ftl"/>
 <#import "/spring.ftl" as spring />
 <form class="form-inline" id="searchForm" method="POST">
     <div class="text-center"><h1><@spring.message code="label.gatewaylist"/></h1></div><hr>
@@ -243,5 +243,5 @@
     </div>
 </div>
 
-<#include "/_foot1.ftl"/>
-<#include "/_foot0.ftl"/>
+<#include "../_foot1.ftl"/>
+<#include "../_foot0.ftl"/>
