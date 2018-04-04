@@ -2,6 +2,7 @@ var lan = {
     success:"成功",//1
     addsuccess:"添加成功",//2
     error:"出错啦~",//-1
+    varificationcodeerror:"验证码错误",//-2
     loginfaied:"登录失败",//-98
     notpermission:"无权操作",//-99
     notempty: "必填字段不能为空!",//-100

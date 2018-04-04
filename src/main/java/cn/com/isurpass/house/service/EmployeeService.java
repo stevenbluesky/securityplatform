@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import cn.com.isurpass.house.po.*;
 import cn.com.isurpass.house.util.Encrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,10 +24,6 @@ import cn.com.isurpass.house.dao.OrganizationDAO;
 import cn.com.isurpass.house.dao.PersonDAO;
 import cn.com.isurpass.house.dao.ProvinceDAO;
 import cn.com.isurpass.house.exception.MyArgumentNullException;
-import cn.com.isurpass.house.po.AddressPO;
-import cn.com.isurpass.house.po.EmployeePO;
-import cn.com.isurpass.house.po.OrganizationPO;
-import cn.com.isurpass.house.po.PersonPO;
 import cn.com.isurpass.house.util.Constants;
 import cn.com.isurpass.house.util.Encrypt;
 import cn.com.isurpass.house.util.FormUtils;

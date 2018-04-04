@@ -17,7 +17,6 @@ var lan = {
     addgatewayerror:"无法添加此网关!",//-109
     duplicatephonecarduser:"此电话卡已经绑定了用户.",//-110
 
-
     normal: "正常",
     unvalid: '未生效',
     suspenced: "冻结",
