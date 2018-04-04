@@ -18,7 +18,7 @@
                                 <th width="50%"><@spring.message code="label.devicename"/></th>
                                 <th width="50%">${(zwave.devicename)!'NONE'}</th>
                             </tr>
-                            <tr>
+                            <tr hidden>
                                 <th>id</th>
                                 <th id="zwavedevicetype">${(zwave.devicetype)!}</th>
                             </tr>
