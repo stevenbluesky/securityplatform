@@ -78,8 +78,8 @@
                            placeholder="<@spring.message code='label.captchcode'/> ">
                 </div>
                 <div class="col-sm-4">
-                    <img class="img-responsive" src="../login/getCode"
-                         onclick="this.src='../login/getCode?time='+new Date().getTime();"
+                    <img class="img-responsive" src="login/getCode"
+                         onclick="this.src='getCode?time='+new Date().getTime();"
                          style="height:35px;float: right"/>
                 </div>
             </div>

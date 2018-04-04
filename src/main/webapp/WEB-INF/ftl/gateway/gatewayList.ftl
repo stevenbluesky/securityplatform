@@ -66,14 +66,13 @@
 <#--新增，启用，停用按钮-->
 <button style="float: right;"  type="button" id='stopGateway' class='btn btn-default' onclick='updateGatewayStatus("stop");'><@spring.message code='label.stop'/></button>
 <button style="float: right;"  type="button" id='startGateway' class='btn btn-default' onclick='updateGatewayStatus("start");'><@spring.message code='label.start'/></button>
-<button style="float: right;"  type="button" class="btn btn-default" onclick="window.location.href='../gateway/typeGatewayInfo'"><@spring.message code="label.entering"/></button>
+<button style="float: right;"  type="button" class="btn btn-default" onclick="window.location.href='typeGatewayInfo'"><@spring.message code="label.entering"/></button>
 
 <table id="table" data-toggle="table">
     <thead>
     <tr>
         <th data-field="">复选框列</th>
         <th data-field="name"><@spring.message code="label.dname"/></th>
-        <th data-field=""><@spring.message code="label.alarmstatus"/></th>
         <th data-field="status" data-formatter="formatter_gatewaystatus"><@spring.message code="label.status"/></th>
         <th data-field="deviceid"><@spring.message code="label.gatewayID"/></th>
         <th data-field="cityname"><@spring.message code="label.area"/></th>
@@ -146,7 +145,7 @@
         onDblClickRow: function (row, $element) {
             var deid = row.deviceid;
             $('#myModal').modal('show');
-            $("#iframeDetail").attr("src", '../gateway/gatewayDetail?deviceid='+deid);
+            $("#iframeDetail").attr("src", 'gatewayDetail?deviceid='+deid);
         }
     });
 
@@ -204,7 +203,7 @@
         //异步更新     
         $.ajax({
             type:'post',
-            url:'../gateway/update',
+            url:'/update',
             contentType:'application/json',
             traditional:true,
             data:"{\"hope\":\""+obj+"\",\"ids\":"+JSON.stringify(trans)+"}",

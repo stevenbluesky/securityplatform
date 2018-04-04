@@ -35,7 +35,7 @@
             <button style="float: right;"  type="button" id='deletePhonecard' class='btn btn-default' onclick='updatePhonecardStatus("delete");'><@spring.message code='label.delete'/></button>
 			<button style="float: right;"  type="button" id='stopPhonecard' class='btn btn-default' onclick='updatePhonecardStatus("freeze");'><@spring.message code='label.freeze'/></button>
 			<button style="float: right;"  type="button" id='startPhonecard' class='btn btn-default' onclick='updatePhonecardStatus("start");'><@spring.message code='label.start'/></button>
-           	<button style="float: right;"  type="button" class="btn btn-default" onclick="window.location.href='../phonecard/typePhonecardInfo'"><@spring.message code="label.entering"/></button>
+           	<button style="float: right;"  type="button" class="btn btn-default" onclick="window.location.href='typePhonecardInfo'"><@spring.message code="label.entering"/></button>
            	
 	<table id="table" data-toggle="table">
 	    <thead>
@@ -181,7 +181,7 @@
         //异步更新     
 		$.ajax({  
 	        type:'post',  
-	        url:'../phonecard/update',  
+	        url:'update',
 	        contentType:'application/json',
 	        traditional:true, 
 	        data:"{\"hope\":\""+obj+"\",\"ids\":"+JSON.stringify(trans)+"}",  
