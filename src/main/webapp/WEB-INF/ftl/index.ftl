@@ -32,9 +32,10 @@
     <div class="col-md-10">
     </div>
     <div class="col-md-2">
-        <h3><#if emp?? ><@spring.message code='label.welcome'/>,${emp.loginname}</#if></h3>
         <br>
         <br>
+        <br>
+        <#if emp?? ><h3 style="display: inline;"><@spring.message code='label.welcome'/>,${emp.loginname}</h3> <a href="logout" ><@spring.message code='label.logout'/></a></#if>
         <br>
     </div>
 </div>

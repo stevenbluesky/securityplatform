@@ -1,34 +1,34 @@
 <#include "/_head0.ftl"/>
 <#include "/_head1.ftl"/>
            <form class="form-inline" action="" method="POST">
-               <div class="row">
+               <div class="row" >
                    <div class="text-center"><h1><@spring.message code='label.userlist'/></h1></div>
                    <hr>
-                   <div class="form-group col-md-3">
+                   <div class="form-group col-md-3" align="right">
                        <div>
                            <b><@spring.message code='label.name'/></b>
                            <input type="text" class="form-control" id="name" name="name"
                                   placeholder="<@spring.message code='label.name'/>">
                        </div>
                    </div>
-                   <div class="form-group col-md-3">
+                   <div class="form-group col-md-3" align="right">
                        <div>
                            <b><@spring.message code='label.city'/></b>
                            <input type="text" class="form-control" id="code" name="code"
                                   placeholder="<@spring.message code='label.city'/>">
                        </div>
                    </div>
-                   <div class="form-group col-md-3">
+                   <div class="form-group col-md-3" align="right">
                        <div>
                            <b><@spring.message code='label.phonenumber'/></b>
                            <input type="text" class="form-control" id="code" name="code"
                                   placeholder="<@spring.message code='label.phonenumber'/>">
                        </div>
                    </div>
-                   <div class="form-group col-md-3"></div>
+                   <div class="form-group col-md-3" align="right"></div>
                </div>
                <div class="row">
-                   <div class="form-group col-md-3">
+                   <div class="form-group col-md-3" align="right">
                        <div>
                            <b><@spring.message code='label.gatewayID'/></b>
                            <input type="text" class="form-control" id="name" name="name"
@@ -36,22 +36,22 @@
                        </div>
                    </div>
 
-                   <div class="form-group col-md-3">
+                   <div class="form-group col-md-3" align="right">
                        <div>
-                           <b><@spring.message code='label.phonecardid'/></b>
+                           <b><@spring.message code='label.phonecardid0'/></b>
                            <input type="text" class="form-control" id="code" name="code"
                                   placeholder="<@spring.message code='label.phonecardid'/>">
                        </div>
                    </div>
 
-                   <div class="form-group col-md-3">
+                   <div class="form-group col-md-3" align="right">
                        <div>
                            <b><@spring.message code='label.serviceprovider'/></b>
                            <input type="text" class="form-control" id="code" name="code"
                                   placeholder="<@spring.message code='label.serviceprovider'/>">
                        </div>
                    </div>
-                   <div class="form-group col-md-3">
+                   <div class="form-group col-md-3" align="center">
                        <button type="submit" class="btn btn-default"
                                style="width:28%;"><@spring.message code='label.search'/></button>
                    </div>

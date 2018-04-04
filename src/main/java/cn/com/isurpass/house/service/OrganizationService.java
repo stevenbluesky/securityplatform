@@ -267,7 +267,7 @@ public class OrganizationService {
         setProperties(orgList, list);
         if (list == null || list.size() == 0) {
             map.put("total", 0);
-            map.put("rows", "[]");
+            map.put("rows", Collections.EMPTY_LIST);
             return map;
         }
         map.put("rows", list);
