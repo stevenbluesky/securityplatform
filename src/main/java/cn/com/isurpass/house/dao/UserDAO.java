@@ -35,4 +35,6 @@ public interface UserDAO extends CrudRepository<UserPO,Integer>{
  //    Integer countAll();
 
     Integer countByInstallerorgid(Integer organizationid);
+
+    List<UserPO> findByNameContaining(String customer);
 }

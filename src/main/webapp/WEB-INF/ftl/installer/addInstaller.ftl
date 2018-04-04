@@ -1,5 +1,5 @@
 <!-- 新增安装商页面 -->
-<#include "/_head0.ftl"/>
+<#include "../_head0.ftl"/>
 <#import "/spring.ftl" as spring/>
     <div class="row-horizontal">
         <div class="col-md-1"></div>
@@ -458,4 +458,4 @@
     }
 
 </script>
-<#include "/_foot0.ftl"/>
+<#include "../_foot0.ftl"/>

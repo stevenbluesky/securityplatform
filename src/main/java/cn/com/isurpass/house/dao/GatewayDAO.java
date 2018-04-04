@@ -26,5 +26,5 @@ public interface GatewayDAO extends CrudRepository<GatewayPO,Integer>{
 	List<GatewayPO> findByDeviceidIn(List<String> emptydeviceidlist);
 
 
-
+    Long countByDeviceidIn(List<String> citynamedeviceidlist);
 }
