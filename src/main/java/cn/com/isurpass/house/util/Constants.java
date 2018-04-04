@@ -16,4 +16,12 @@ public class Constants {
 	
 	public static final Integer STATUS_ONLINE = 1; 		//在线
 	public static final Integer STATUS_OFFLINE = 0 ;	//离线
+	//电话卡状态切换
+
+	public static final String ACTIVATED = "ACTIVATED";//激活
+	public static final String ACTIVATION_READY = "ACTIVATION_READY";//就绪
+	public static final String	 DEACTIVATED = "DEACTIVATED";//停用
+	public static final String INVENTORY = "INVENTORY";//待处理
+	public static final String RETIRED = "RETIRED";//退休
+	public static final String Authorization = "Basic YW1ldGFjYTphNDRmNDJmMS0wMmRiLTRhY2EtYjZhMC04MWYxNTBmZGI1YmI=";//调用接口认证信息
 }

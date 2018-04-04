@@ -1,10 +1,7 @@
 package cn.com.isurpass.house.service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -62,7 +59,7 @@ public class GatewayService {
 	@Autowired
 	private PhonecardDAO pd;
 	@Autowired
-    private OrganizationService os;
+	private OrganizationService os;
 	/**
 	 * 新增网关信息
 	 * @param tgi
@@ -70,8 +67,8 @@ public class GatewayService {
 	 */
 	@Transactional(rollbackFor = Exception.class)
 	public void add(TypeGatewayInfoVO tgi,HttpServletRequest request) throws MyArgumentNullException {
-        EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
-        if (StringUtils.isEmpty(tgi.getDeviceid())|| StringUtils.isEmpty(tgi.getModel()) || StringUtils.isEmpty(tgi.getFirmwareversion())){
+		EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
+		if (StringUtils.isEmpty(tgi.getDeviceid())|| StringUtils.isEmpty(tgi.getModel()) || StringUtils.isEmpty(tgi.getFirmwareversion())){
 			throw new MyArgumentNullException("1");
 		}
 		GatewayPO gw = gd.findByDeviceid(tgi.getDeviceid());
@@ -85,18 +82,15 @@ public class GatewayService {
 		gwPO.setFirmwareversion(tgi.getFirmwareversion());
 		gwPO.setModel(tgi.getModel());
 		gwPO.setStatus(1);//TODO 暂时默认新增即视为在线状态
-        gd.save(gwPO);
-
-        if (gbd.findByDeviceid(tgi.getDeviceid()) != null) {
-            throw new MyArgumentNullException("-106");
-        }
-        GatewayBindingPO gbp = new GatewayBindingPO();
-        gbp.setCreatetime(new Date());
-        gbp.setDeviceid(tgi.getDeviceid());
-        gbp.setBindingtype(os.getOrgtypeByReqeust(request));
-        gbp.setOrganizationid(emp.getOrganizationid());
-        gbp.setStatus(1);
-        gbd.save(gbp);
+		gd.save(gwPO);
+		//添加网关时，根据用户所属机构进行机构网关绑定
+		GatewayBindingPO gbp = new GatewayBindingPO();
+		gbp.setCreatetime(new Date());
+		gbp.setDeviceid(tgi.getDeviceid());
+		gbp.setBindingtype(os.getOrgtypeByReqeust(request));
+		gbp.setOrganizationid(emp.getOrganizationid());
+		gbp.setStatus(1);
+		gbd.save(gbp);
 	}
 	/**
 	 * 根据搜索条件获取网关分页信息列表
@@ -106,7 +100,7 @@ public class GatewayService {
 	 */
 	@Transactional(readOnly = true)
 	public Map<String, Object> listGateway(Pageable pageable, TypeGatewayInfoVO tgiv) {
-        Map<String, Object> map = new HashMap<>();//返回的map
+		Map<String, Object> map = new HashMap<>();//返回的map
 		List<TypeGatewayInfoVO> list = new ArrayList<>();//返回的list对象
 		List<String> citynamedeviceidlist = new ArrayList<>();
 		List<String> citycodedeviceidlist = new ArrayList<>();

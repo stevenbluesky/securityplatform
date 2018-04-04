@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import cn.com.isurpass.house.dao.PhonecarduserDAO;
+import cn.com.isurpass.house.util.PhoneCardInterfaceCallUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -84,18 +85,21 @@ public class PhonecardService {
 		return map;
 	}
 	@Transactional(rollbackFor = Exception.class)
-	public void updatePhonecardStatus(String hope, Object[] ids) {
+	public void updatePhonecardStatus(String hope, Object [] ids) throws Exception {
 		for (Object string : ids) {
 			PhonecardPO phonecardpo = pd.findByPhonecardid(string);
 			if("start".equals(hope)){
-				phonecardpo.setStatus(Constants.STATUS_NORMAL);	
+				PhoneCardInterfaceCallUtils.updateStatus(phonecardpo.getSerialnumber(),Constants.ACTIVATED);
+				phonecardpo.setStatus(Constants.STATUS_NORMAL);
 			}else if("freeze".equals(hope)){
+				PhoneCardInterfaceCallUtils.updateStatus(phonecardpo.getSerialnumber(),Constants.INVENTORY);
 				phonecardpo.setStatus(Constants.STATUS_SUSPENCED);
 			}else if("delete".equals(hope)){
+				PhoneCardInterfaceCallUtils.updateStatus(phonecardpo.getSerialnumber(),Constants.DEACTIVATED);
 				phonecardpo.setStatus(Constants.STATUS_DELETED);
 			}
-			pd.save(phonecardpo);	
+			pd.save(phonecardpo);
 		}
 	}
-	
+
 }

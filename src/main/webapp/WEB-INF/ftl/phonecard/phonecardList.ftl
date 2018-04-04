@@ -186,7 +186,11 @@
 	        traditional:true, 
 	        data:"{\"hope\":\""+obj+"\",\"ids\":"+JSON.stringify(trans)+"}",  
 	        success:function(data){//返回json结果        
-	            alert("<@spring.message code='label.updatesuccess'/>");  
+                if("success"==data) {
+                    alert("<@spring.message code='label.updatesuccess'/>");
+                }else{
+                    alert("<@spring.message code='label.updatefailed'/>");
+                }
 	            $('#table').bootstrapTable('refresh');    
 	        },
 	        error : function() {// 请求失败处理函数
