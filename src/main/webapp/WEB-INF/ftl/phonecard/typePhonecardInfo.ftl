@@ -104,7 +104,7 @@
                 <div class="col-sm-10">
                 	<div  class="form-group" align="left">
 		                <div class="col-sm-5 input-group date form_datetime">
-		                  <input class="form-control" size="16" name="orderingdate" type="text" readonly placeholder="订购日期" <#if orderingdate?exists>value=${orderingdate?string("yyyy-MM-dd")!}</#if>>
+		                  <input class="form-control" size="16" name="orderingdate" type="text" readonly placeholder="Ordering Date" <#if orderingdate?exists>value=${orderingdate?string("yyyy-MM-dd")!}</#if>>
 		                  <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
 						  <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
 		                </div>	
@@ -117,7 +117,7 @@
                 <div class="col-sm-10">
                 	<div  class="form-group" align="left">
 		                <div class="col-sm-5 input-group date form_datetime">
-		                  <input class="form-control" size="16" name="expiredate" type="text" readonly placeholder="失效日期" <#if expiredate?exists>value=${expiredate?string("yyyy-MM-dd")!}</#if>>
+		                  <input class="form-control" size="16" name="expiredate" type="text" readonly placeholder="Expiredate Date" <#if expiredate?exists>value=${expiredate?string("yyyy-MM-dd")!}</#if>>
 		                  <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
 						  <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
 		                </div>	

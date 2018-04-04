@@ -52,7 +52,7 @@
         <th data-field="status" data-formatter='formatter_status'><@spring.message code="label.status"/></th>
         <th data-field="employeeroleid"><@spring.message code="label.privilege"/></th>
         <th data-field="operate" data-formatter="formatter_op"
-            data-events="operateEvents"><@spring.message code="label.operate"/></th>
+            data-events="operateEvents" data-visible="false"><@spring.message code="label.operate"/></th>
     </tr>
     </thead>
 </table>

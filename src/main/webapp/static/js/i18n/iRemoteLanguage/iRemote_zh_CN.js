@@ -20,5 +20,20 @@ var lan = {
     noperson:"感应范围内没有人",
     hasperson:"感应范围内有人",
     highpoweralarm:"大功率告警",
-    dooropen:"门开了"
+    dooropen:"门开了",
+    supplierlist:"服务商列表",
+    addsupplier:"新增服务商",
+    installerlist:"安装商列表",
+    addinstaller:"新增安装商",
+    employeelist:"员工列表",
+    addemployee:"新增员工",
+    gatewaylist:"网关列表",
+    enteringgatewayinfo:"录入网关信息",
+    gatewaydetail:"网关详情",
+    devicelist:"设备列表",
+    devicedetail:"设备详情",
+    userlist:"用户列表",
+    enteringuserinfo:"录入用户信息",
+    phonecardlist:"电话卡列表",
+    enteringphonecardinfo:"录入电话卡信息"
 };

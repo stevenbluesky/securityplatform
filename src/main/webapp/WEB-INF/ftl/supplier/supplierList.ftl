@@ -52,7 +52,7 @@
         <th data-field="city"><@spring.message code="label.city"/></th>
         <th data-field="status" data-formatter="formatter_status"><@spring.message code="label.status"/></th>
         <th data-field="operate" data-formatter="formatter_op"
-            data-events="supplieraddEvents"><@spring.message code="label.operate"/></th>
+            data-events="supplieraddEvents" data-visible="false"><@spring.message code="label.operate"/></th>
 
     </tr>
     </thead>

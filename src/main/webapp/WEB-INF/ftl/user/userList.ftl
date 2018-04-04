@@ -75,7 +75,7 @@
         <th data-field="city"><@spring.message code='label.city'/></th>
         <th data-field="suppliername"><@spring.message code='label.serviceprovider'/></th>
         <th data-field="status" data-formatter="formatter_status"><@spring.message code='label.status'/></th>
-        <th data-field="operate"><@spring.message code='label.operate'/></th>
+        <th data-field="operate" data-visible="false"><@spring.message code='label.operate'/></th>
     </tr>
     </thead>
 </table>

@@ -24,5 +24,6 @@ public interface CityDAO extends CrudRepository<CityPO, Integer> {
 
     Page<CityPO> findByCitycodeLikeAndCitynameLike(Pageable pageable, String citycode, String name);
 
-    Integer countByCitycodeLikeAndCityname(String citycode, String name);
+    Integer countByCitycodeLikeAndCitynameLike(String citycode, String name);
+
 }

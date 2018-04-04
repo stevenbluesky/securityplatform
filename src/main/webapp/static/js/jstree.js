@@ -15,74 +15,74 @@ function getTree(){
 
 var jsontree = [
   {
-    text: "服务商列表",
+    text: lan.supplierlist,
     nodes: [
       {
-        text: "新增服务商",
+        text: lan.addsupplier,
 		href: 'org/addSupplierPage'
       }
     ],
 	href:'org/supplierList'
   },
   {
-    text: "安装商列表",
+    text: lan.installerlist,
     nodes: [
       {
-        text: "新增安装商",
+        text: lan.addinstaller,
 		href: 'org/addInstallerPage'
       }
     ],
 	href:'org/installerList'
   },
   {
-    text: "员工列表",
+    text: lan.employeelist,
     nodes: [
       {
-        text: "新增员工",
+        text: lan.addemployee,
 		href: 'employee/addEmployeePage'
       }
     ],
 	href:'employee/employeeList'
   },
   {
-    text: "网关列表",
+    text: lan.gatewaylist,
     nodes: [
       {
-        text: "录入网关信息",
+        text: lan.enteringgatewayinfo,
 		href: 'gateway/typeGatewayInfo'
       },
 	   {
-        text: "网关详情",
+        text: lan.gatewaydetail,
 		href: 'gateway/gatewayDetail'
       }
     ],
 	href:'gateway/gatewayList'
   },
   {
-    text: "设备列表",
+    text: lan.devicelist,
     nodes: [
       {
-        text: "设备详情",
+        text: lan.devicedetail,
 		href: 'device/deviceDetail'
       }
     ],
 	href:'device/deviceList'
   },
   {
-    text: "用户列表",
+    text: lan.userlist,
     nodes: [
       {
-        text: "录入用户信息",
+        text: lan.enteringuserinfo,
 		href: 'user/typeUserInfo'
       }
     ],
 	href:'user/userList'
   },
   {
-    text: "电话卡列表",
+    text: lan.phonecardlist,
     nodes: [
       {
-        text: "录入电话卡",
+        text: lan.enteringphonecardinfo,
 		href: 'phonecard/typePhonecardInfo'
       }
     ],

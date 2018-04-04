@@ -35,20 +35,23 @@ public class FormUtils {
      * @param obj
      * @return 为空返回true, 不为空返回false
      */
-public static boolean isEmpty(Object obj) {
-        for (Field f : obj.getClass().getDeclaredFields()) {
-            f.setAccessible(true);
-            try {
-                System.out.println("====" + f.get(obj) + "====");
-                if (f.get(obj) != null && f.get(obj).toString().replace(" ", "") != "") { // 判断字段是否为空，并且对象属性中的基本都会转为对象类型来判断
-                    return false;
-                }
-            } catch (IllegalArgumentException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
+    public static boolean isEmpty(Object obj) {
+        if (obj == null || obj.toString() == ""){
+            return true;
         }
+            for (Field f : obj.getClass().getDeclaredFields()) {
+                f.setAccessible(true);
+                try {
+//                    System.out.println("====" + f.get(obj) + "====");
+                    if (f.get(obj) != null && f.get(obj).toString().replace(" ", "") != "") { // 判断字段是否为空，并且对象属性中的基本都会转为对象类型来判断
+                        return false;
+                    }
+                } catch (IllegalArgumentException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }
         return true;
     }
 

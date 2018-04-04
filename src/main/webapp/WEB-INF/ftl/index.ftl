@@ -56,5 +56,6 @@
 </div>
 
 <script src="static/js/bootstrap-treeview.min.js"></script>
+<script src="../static/js/i18n/iRemoteLanguage/<@spring.message code="label.language.js"/>"></script>
 <script src="static/js/jstree.js"></script>
 <#include "_foot0.ftl"/>
