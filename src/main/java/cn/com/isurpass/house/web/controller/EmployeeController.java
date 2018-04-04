@@ -70,7 +70,7 @@ public class EmployeeController {
             return new JsonResult(-1, e.getMessage());
         } catch (RuntimeException e) {
             e.printStackTrace();
-            return new JsonResult(-1, "出错啦~");
+            return new JsonResult(-1, "-1");
         }
         return new JsonResult(1, "success");
     }

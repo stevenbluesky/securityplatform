@@ -193,11 +193,11 @@ $("#btn-submit").click(function () {
                     url: url,
                     data: $('#defaultForm').serialize(),
                     success: function (data) {
-                        var strresult=data;
-                        alert(strresult);
+                        var jsonObj = eval('(' + data + ')');
+                        alert(formatterReturnStatus(jsonObj['msg']));
                     },
                     error: function(data) {
-                        alert("error:"+data.responseText);
+                        alert("error");
                      }
                 });
         }else{

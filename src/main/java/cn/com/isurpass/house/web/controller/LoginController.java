@@ -49,10 +49,10 @@ public class LoginController {
 			return new JsonResult(1, "success");
 		} catch (UnavailableSecurityManagerException e) {
 			e.printStackTrace();
-			return new JsonResult(-1, "登录失败");
+			return new JsonResult(-1, "-98");
  		} catch (AuthenticationException e) {
 			e.printStackTrace();
-			return new JsonResult(-1, "登录失败");
+			return new JsonResult(-1, "-98");
 		}
 
 	}

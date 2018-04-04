@@ -418,7 +418,14 @@
                 data: $('#defaultForm').serialize(),
                 success: function (data) {
                     var strresult = data;
-                    alert(strresult);
+                    var jsonObj = eval('(' + data + ')');
+                    // alert(strresult);
+                    if (jsonObj['status'] == 1) {
+                        alert("success");
+                        window.location.href = "installerList";
+                    }else{
+                        alert(formatterReturnStatus(jsonObj['msg']));
+                    }
                 },
                 error: function (data) {
                     alert("error:" + data.responseText);

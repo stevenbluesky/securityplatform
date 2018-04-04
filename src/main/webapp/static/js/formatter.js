@@ -167,4 +167,25 @@ function formatter_zwavewarning(devicetype, warningstatuses){
     }
 }
 
+function formatterReturnStatus(status){
+    switch (status){
+        case '1':return lan.success;
+        case '2':return lan.addsuccess;
+        case '-1':return lan.error;
+        case '-98':return lan.loginfaied;
+        case '-99':return lan.notpermission;
+        case '-100':return lan.notempty;
+        case '-101':return lan.statusnull;
+        case '-102':return lan.haduser;
+        case '-103':return lan.installerneedscode;
+        case '-104':return lan.duplicateempcode;
+        case '-105':return lan.loaderror;
+        case '-106':return lan.duplicategateway;
+        case '-107':return lan.gorpnotnull;
+        case '-108':return lan.duplicategatewayuser;
+        case '-109':return lan.addgatewayerror;
+        case '-110':return lan.duplicatephonecarduser;
+    }
+}
+
 

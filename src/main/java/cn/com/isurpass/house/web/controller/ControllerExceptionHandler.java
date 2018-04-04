@@ -13,6 +13,6 @@ public class ControllerExceptionHandler {
 	@ResponseBody
 	public JsonResult runtimeExceptionHandler(Exception e) {
 		e.printStackTrace();
-		return new JsonResult(-1,"出错啦~");
+		return new JsonResult(-1,"-1");
 	}
 }

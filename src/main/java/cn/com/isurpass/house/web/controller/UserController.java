@@ -36,9 +36,9 @@ public class UserController {
 			return new JsonResult(-1, e.getMessage());
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new JsonResult(-1, "出错啦~");
+			return new JsonResult(-1, "-1");
 		}
-		return new JsonResult(1,"添加成功");
+		return new JsonResult(1,"2");
 	}
 	
 	@RequestMapping("userInfoJsonList")

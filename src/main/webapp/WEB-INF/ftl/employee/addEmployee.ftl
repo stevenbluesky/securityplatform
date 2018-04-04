@@ -307,16 +307,16 @@
                 data: $('#defaultForm').serialize(),
                 success: function (data) {
                     var strresult = data;
-                    var jsonObj = eval('(' + strresult + ')');
+                        var jsonObj = eval('(' + strresult + ')');
                     if (jsonObj['status'] == 1) {
                         alert("success");
                         window.location.href = "employeeList";
                     }else{
-                        alert(jsonObj['msg']);
+                        alert(formatterReturnStatus(jsonObj['msg']));
                     }
                 },
                 error: function (data) {
-                    alert("error:" + data.responseText);
+                    alert("error");
                 }
             });
         } else {

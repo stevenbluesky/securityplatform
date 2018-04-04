@@ -55,20 +55,20 @@ public class UserService {
         EmployeePO emp = (EmployeePO) SecurityUtils.getSubject().getPrincipal();
 
         if (!FormUtils.checkNUll(u.getDeviceid()) || !FormUtils.checkNUll(u.getSerialnumber())) {
-            throw new RuntimeException("网关或电话卡不能为空.");
+            throw new RuntimeException("-107");
         }
         if (gd.findByDeviceid(u.getDeviceid()).size() != 0) {
-            throw new RuntimeException("此网关已经绑定了用户");
+            throw new RuntimeException("-108");
         }
         if (gbd.findByDeviceidAndOrganizationid(u.getDeviceid(), emp.getOrganizationid()) == null) {//网关不存在或者此网关不属于此机构
-            throw new RuntimeException("无法添加此网关!");
+            throw new RuntimeException("-108");
         }
         PhonecardPO pcardpo = pcard.findBySerialnumber(u.getSerialnumber());
         if (pcardpo == null) {
-            throw new RuntimeException("无法添加此网关");
+            throw new RuntimeException("-109");
         }
         if (pcud.findByPhonecardid(pcardpo.getPhonecardid()) != null) {
-            throw new RuntimeException("此电话卡已经绑定了用户.");
+            throw new RuntimeException("-110");
         }
 
         UserPO user = new UserPO();
@@ -218,10 +218,10 @@ public class UserService {
 
     public void toggleUserStatus(Integer userid, Integer status, HttpServletRequest request) throws MyArgumentNullException {
         if (status == null) {
-            throw new RuntimeException("status不能为空");
+            throw new RuntimeException("-101");
         }
         if (!hasProvilege(userid, request)) {
-            throw new MyArgumentNullException("无权操作!");
+            throw new MyArgumentNullException("-99");
         }
         UserPO user = ud.findByUserid(userid);
         user.setStatus(status);

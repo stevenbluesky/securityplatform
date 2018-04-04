@@ -87,7 +87,7 @@ public class GatewayService {
         gd.save(gwPO);
 
         if (gbd.findByDeviceid(tgi.getDeviceid()) != null) {
-            throw new MyArgumentNullException("此网关已经绑定过机构");
+            throw new MyArgumentNullException("-106");
         }
         GatewayBindingPO gbp = new GatewayBindingPO();
         gbp.setCreatetime(new Date());

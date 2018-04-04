@@ -37,10 +37,4 @@ public class DeviceDetailVO {
 		}
 		return this.status == 255;
 	}
-	public boolean getWarningstatusesopen(){
-        if (this.warningstatuses == null) {
-            return false;
-        }
-        return this.warningstatuses == "[255]";
-    }
 }

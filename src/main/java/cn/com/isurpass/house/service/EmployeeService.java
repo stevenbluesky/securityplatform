@@ -81,7 +81,7 @@ public class EmployeeService {
     @Transactional(rollbackFor = Exception.class)
     public void add(EmployeeAddVO emp, HttpServletRequest request) throws MyArgumentNullException {
         if (!FormUtils.checkNUll(emp.getLoginname()) || !FormUtils.checkNUll(emp.getPassword()))
-            throw new MyArgumentNullException("必填字段不能为空!");
+            throw new MyArgumentNullException("-100");
         EmployeePO emp1 = (EmployeePO) request.getSession().getAttribute("emp");//当前登录用户
         EmployeeAddVO empInfo = (EmployeeAddVO) request.getSession().getAttribute("empInfo");//修改员工时才会存在的员工session
         if (emp.getOrganizationid() == null) {//如果没有传入机构id
@@ -92,15 +92,15 @@ public class EmployeeService {
             }
         }
         if (empInfo == null && isRegister(emp.getOrganizationid(), emp.getLoginname())) {//被注册了
-            throw new MyArgumentNullException("用户名已存在!");
+            throw new MyArgumentNullException("-102");
         }
         if ((od.findByOrganizationid(emp.getOrganizationid()).getOrgtype() == Constants.ORGTYPE_INSTALLER)
                 && !FormUtils.checkNUll(emp.getCode()))// 是安装员且code为空时
-            throw new MyArgumentNullException("安装员必须要有员工代码!");
+            throw new MyArgumentNullException("-103");
 //        System.out.println(FormUtils.checkNUll(emp.getCode()) + "==================");
         if (empInfo == null && FormUtils.checkNUll(emp.getCode()) && !ed.findByOrganizationidAndCodeAndStatusNot(emp.getOrganizationid(), emp.getCode(),
                 Constants.STATUS_DELETED).isEmpty())
-            throw new MyArgumentNullException("员工代码不能重复.!");
+            throw new MyArgumentNullException("-104");
 
         EmployeePO empPO = new EmployeePO();
 
@@ -305,10 +305,10 @@ public class EmployeeService {
      */
     public void toggleEmployeeStatus(Integer employeeid, Integer status, HttpServletRequest request) {
         if (status == null) {
-            throw new RuntimeException("status不能为空");
+            throw new RuntimeException("-101");
         }
         if (!hasProvilege(employeeid, request)) {
-            throw new RuntimeException("无权操作!");
+            throw new RuntimeException("-99");
         }
         EmployeePO emp = ed.findByEmployeeid(employeeid);
         emp.setStatus(status);

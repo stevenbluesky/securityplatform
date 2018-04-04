@@ -86,10 +86,10 @@ public class OrganizationService {
         EmployeePO emp0 = (EmployeePO) request.getSession().getAttribute("emp");
         OrgAddVO orgInfo = (OrgAddVO) request.getSession().getAttribute("orgInfo");//修改时才会存在的机构id
         if (!FormUtils.checkOrgNull(as)) {
-            throw new MyArgumentNullException("必填字段不能为空!");
+            throw new MyArgumentNullException("-100");
         }
         if (orgInfo == null && !FormUtils.checkLoginNull(as)) {
-            throw new MyArgumentNullException("必填字段不能为空!");
+            throw new MyArgumentNullException("-100");
         }
 
         OrganizationPO org = new OrganizationPO();
@@ -460,10 +460,10 @@ public class OrganizationService {
      */
     public void toggleOrganizationStatus(Integer id, Integer toStatus, HttpServletRequest request) {
         if (toStatus == null) {
-            throw new RuntimeException("status不能为空.");
+            throw new RuntimeException("-101");
         }
         if (!hasProvilege(id, request)) {
-            throw new RuntimeException("无权操作");
+            throw new RuntimeException("-99");
         }
         OrganizationPO org = od.findByOrganizationid(id);
         org.setStatus(toStatus);
