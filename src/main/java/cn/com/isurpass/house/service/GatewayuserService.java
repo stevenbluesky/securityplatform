@@ -19,7 +19,7 @@ import cn.com.isurpass.house.po.OrganizationPO;
 import cn.com.isurpass.house.po.UserPO;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service
+@Service("gatewayuser")
 public class GatewayuserService {
 
     @Autowired

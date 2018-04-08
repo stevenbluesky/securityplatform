@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,7 +26,7 @@ public class ZwaveDeviceService {
 
     @Autowired
     ZwaveDeviceDAO zd;
-    @Autowired
+    @Resource(name="gatewayuser")
     GatewayuserService gs;
     @Autowired
     UserService us;

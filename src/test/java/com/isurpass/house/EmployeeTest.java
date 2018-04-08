@@ -1,4 +1,4 @@
-package com.isurpass.house.service;
+package com.isurpass.house;
 
 import java.util.List;
 

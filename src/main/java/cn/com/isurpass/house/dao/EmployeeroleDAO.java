@@ -5,7 +5,9 @@ import org.springframework.stereotype.Repository;
 
 import cn.com.isurpass.house.po.EmployeeRolePO;
 
+import java.util.List;
+
 @Repository
 public interface EmployeeroleDAO extends CrudRepository<EmployeeRolePO,Integer>{
-	EmployeeRolePO findByEmployeeid(Integer id);
+	List<EmployeeRolePO> findByEmployeeid(Integer id);
 }

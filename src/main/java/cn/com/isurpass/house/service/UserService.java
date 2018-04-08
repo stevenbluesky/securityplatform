@@ -140,7 +140,7 @@ public class UserService {
         EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
         Integer orgtype = od.findByOrganizationid(emp.getOrganizationid()).getOrgtype();
         Integer count = 0;
-        if (erd.findByEmployeeid(emp.getEmployeeid()) !=null && erd.findByEmployeeid(emp.getEmployeeid()).getRoleid() == 4) {
+        if (erd.findByEmployeeid(emp.getEmployeeid()) !=null && erd.findByEmployeeid(emp.getEmployeeid()).stream().map(EmployeeRolePO::getRoleid).anyMatch(id -> id==4)) {
             Page<UserPO> userList = ud.findByInstallerid(emp.getEmployeeid(), pageable);
             count = ud.countByInstallerid(emp.getEmployeeid());
             return listUserInfo0(pageable, userList, count);
