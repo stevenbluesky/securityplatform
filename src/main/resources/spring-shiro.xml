@@ -27,7 +27,7 @@
         <property name="loginUrl" value="/login"/>
         <!-- 认证成功统一跳转到first.action，建议不配置，shiro认证成功自动到上一个请求路径-->
         <!-- <property name="successUrl" value="/login22" /> -->
-        <property name="unauthorizedUrl" value="/403"/>
+        <property name="unauthorizedUrl" value="/noPermission"/>
         <property name="filterChainDefinitions">
             <value>
                 /index = authc

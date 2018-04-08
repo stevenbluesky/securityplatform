@@ -247,7 +247,7 @@ public class OrganizationService {
         return map;
     }
 
-    @RequiresPermissions("admin")
+//    @RequiresPermissions("admin")
     @Transactional(readOnly = true)
     public Map<String, Object> listInstallerOrg(Pageable pageable, HttpServletRequest request) {
         // 角色为服务商的员工才可以访问
