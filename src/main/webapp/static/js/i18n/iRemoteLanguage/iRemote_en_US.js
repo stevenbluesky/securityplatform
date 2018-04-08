@@ -1,16 +1,16 @@
 var lan = {
-    success:"成功",//1
-    addsuccess:"添加成功",//2
-    error:"出错啦~",//-1
+    success:"success",//1
+    addsuccess:"success",//2
+    error:"error",//-1
     varificationcodeerror:"验证码错误",//-2
     loginfaied:"登录失败",//-98
     notpermission:"无权操作",//-99
-    notempty: "必填字段不能为空!",//-100
-    statusnull:"status不能为空.",//-101
+    notempty: "Mandatory",//-100
+    statusnull:"Status is Mandatory.",//-101
     haduser:"用户名已存在!",//-102
     installerneedscode:"安装员必须要有员工代码!",//-103
     duplicateempcode:"员工代码不能重复!",//-104
-    loaderror: "数据加载失败!",//-105
+    loaderror: "Loading Data Error!",//-105
     duplicategateway:"此网关已经绑定过机构!",//-106
     gorpnotnull:"网关或电话卡不能为空.",//-107
     duplicategatewayuser:"此网关已经绑定了用户",//-108
