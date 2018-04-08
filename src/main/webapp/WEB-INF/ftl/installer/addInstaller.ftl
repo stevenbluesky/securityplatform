@@ -297,15 +297,9 @@
                 </div>
 
                 <div class="text-left"><h4><@spring.message code="label.installerprivilege"/></h4></div>
-                <div class="checkbox">
-                    <label style="margin-right: 30px;">
-                        <input type="checkbox" name="item" value="1" name="checkbox1"><span>管理员</span>
-                    </label>
-                    <label style="margin-right: 30px;">
-                        <input type="checkbox" name="item" value="2"><span>管理员</span>
-                    </label>
-                    <label style="margin-right: 30px;">
-                        <input type="checkbox" name="item" value="3"><span>管理员</span>
+                <div name="ck" class="checkbox">
+                    <label>
+                        <input type="checkbox">
                     </label>
                 </div>
                 <div class="row">
@@ -316,8 +310,10 @@
                         </button>
                     </div>
                 </div>
-        </form>
-    </div>
+
+            </form>
+
+        </div>
 
 
         <div class="col-md-1"></div>

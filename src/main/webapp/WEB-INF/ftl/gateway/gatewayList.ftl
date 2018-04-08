@@ -66,7 +66,7 @@
 <#--新增，启用，停用按钮-->
 <button style="float: right;"  type="button" id='stopGateway' class='btn btn-default' onclick='updateGatewayStatus("stop");'><@spring.message code='label.stop'/></button>
 <button style="float: right;"  type="button" id='startGateway' class='btn btn-default' onclick='updateGatewayStatus("start");'><@spring.message code='label.start'/></button>
-<button style="float: right;"  type="button" class="btn btn-default" onclick="window.location.href='../gateway/typeGatewayInfo'"><@spring.message code="label.entering"/></button>
+<button style="float: right;"  type="button" class="btn btn-default" onclick="window.location.href='typeGatewayInfo'"><@spring.message code="label.entering"/></button>
 
 <table id="table" data-toggle="table">
     <thead>
@@ -146,7 +146,7 @@
         onDblClickRow: function (row, $element) {
             var deid = row.deviceid;
             $('#myModal').modal('show');
-            $("#iframeDetail").attr("src", '../gateway/gatewayDetail?deviceid='+deid);
+            $("#iframeDetail").attr("src", 'gatewayDetail?deviceid='+deid);
         }
     });
 
@@ -204,7 +204,7 @@
         //异步更新     
         $.ajax({
             type:'post',
-            url:'../gateway/update',
+            url:'/update',
             contentType:'application/json',
             traditional:true,
             data:"{\"hope\":\""+obj+"\",\"ids\":"+JSON.stringify(trans)+"}",

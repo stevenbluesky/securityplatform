@@ -1,17 +1,25 @@
 package cn.com.isurpass.house.web.controller;
 
+import cn.com.isurpass.house.po.EmployeePO;
+import cn.com.isurpass.house.service.EmployeeService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author jwzh
  */
 @Controller
 public class IndexController {
+
+    @Autowired
+    EmployeeService employeeService;
 
 	@RequestMapping("index")
 	public String index() {
@@ -28,5 +36,14 @@ public class IndexController {
         Subject subject = SecurityUtils.getSubject();
         subject.logout();
         return "login";
+	}
+
+	@ResponseBody
+	@RequestMapping("getMenuTree")
+	public String getMenuTree(HttpServletResponse response, HttpServletRequest request){
+		EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
+		String json = employeeService.getMenuTree(emp);
+		//System.out.println(s);
+		return json;
 	}
 }

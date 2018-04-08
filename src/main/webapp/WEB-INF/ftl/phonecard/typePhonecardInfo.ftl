@@ -4,7 +4,7 @@
     <div class="row-horizontal">
         <div class="col-md-1"></div>
         <div class="col-md-10">
-          <form id="typeform" action="../phonecard/add" method="POST">
+          <form id="typeform" action="add" method="POST">
           
               <div class="text-center"><h1><@spring.message code='label.enteringphonecardinfo'/></h1></div>
              

@@ -1,5 +1,4 @@
 package cn.com.isurpass.house.service;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -11,7 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import cn.com.isurpass.house.dao.*;
 import cn.com.isurpass.house.po.*;
 import cn.com.isurpass.house.util.Encrypt;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
+
+import com.alibaba.fastjson.JSONObject;
+import net.sf.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,30 +21,31 @@ import org.springframework.transaction.annotation.Transactional;
 
 import cn.com.isurpass.house.exception.MyArgumentNullException;
 import cn.com.isurpass.house.util.Constants;
-import cn.com.isurpass.house.util.Encrypt;
 import cn.com.isurpass.house.util.FormUtils;
 import cn.com.isurpass.house.vo.EmployeeAddVO;
 import cn.com.isurpass.house.vo.EmployeeListVO;
 import cn.com.isurpass.house.vo.EmployeeParentOrgIdVO;
 import cn.com.isurpass.house.vo.OrgSearchVO;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.swing.*;
 import java.util.*;
 
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 
+
 @Service
 public class EmployeeService {
-
+    //TODO
     @Autowired
     EmployeeDAO ed;
+    @Autowired
+    private EmployeeroleDAO employeeroleDAO;
+    @Autowired
+    private RoleDAO roleDAO;
+    @Autowired
+    private RolePrivilegeDAO rolePrivilegeDAO;
+    @Autowired
+    private PrivilegeDAO privilegeDAO;
     @Autowired
     AddressDAO ad;
     @Autowired
@@ -219,7 +221,7 @@ public class EmployeeService {
         }
     }
 
-    @RequiresPermissions("employeeList")
+   // @RequiresPermissions("employeeList")
     @Transactional(readOnly = true)
     public Map<String, Object> listAllEmployee(Pageable pageable) {
         // System.out.println(em.toString());
@@ -489,6 +491,7 @@ public class EmployeeService {
      * @param employddid
      * @return
      */
+	 @Transactional(readOnly = true)
     public Set getEmployeeRolesNameSet(Integer employddid) {
         Set<String> set = new HashSet();
         List<EmployeeRolePO> emprolelist = erd.findByEmployeeid(employddid);
@@ -504,6 +507,7 @@ public class EmployeeService {
         return set;
     }
 
+	 @Transactional(readOnly = true)
     public Set<String> getEmployeePermissionsName(Integer employeeid) {
         Set<String> set = new HashSet<>();
         List<String> list = new ArrayList<>();
@@ -522,5 +526,52 @@ public class EmployeeService {
             return set;
         }
         return null;
+    }
+	
+	 @Transactional(readOnly = true)
+    public String getMenuTree(EmployeePO emp) {
+        List<RolePrivilegePO> roleprivilegelist = new ArrayList<>();//角色权限列表
+        List<Integer> privilegeid = new ArrayList<>();//权限列表
+        OrganizationPO org = od.findByOrganizationid(emp.getOrganizationid());//根据员工的机构id获取所属机构
+        List<EmployeeRolePO> emprolelist = employeeroleDAO.findByEmployeeid(emp.getEmployeeid());//根据员工id获取员工的所有角色
+        emprolelist.forEach(e -> roleprivilegelist.addAll(rolePrivilegeDAO.findByRoleid(e.getRoleid())));//遍历员工角色列表，获取角色权限列表
+        roleprivilegelist.forEach(e -> privilegeid.add(e.getPrivilegeid()));//根据员工的角色权限列表得到员工的权限id列表
+
+        List<PrivilegePO> privilegelist = privilegeDAO.findByPrivilegeidIn(privilegeid);//根据角色权限id列表去拿到权限权限列表
+        List<Integer> idlist = new ArrayList<>();
+       for(PrivilegePO e : privilegelist){
+            idlist.add(e.getPrivilegeid());
+        }
+        List<Object> parlist = new ArrayList<>();
+        for(PrivilegePO p : privilegelist){
+            Map<String,Object> parmap = new LinkedHashMap<>();
+            if ("0".equals(p.getParentprivilegeid()+"")){//为父节点
+                String text = p.getCode();
+                String href = p.getLabel();
+                parmap.put("text",text);
+                parmap.put("href",href);
+                List<PrivilegePO> sonlist = privilegeDAO.findByParentprivilegeid(p.getPrivilegeid());
+                if(sonlist.size()>0) {
+                    List<Object> pplist = new ArrayList<>();
+                    for (PrivilegePO pp : sonlist) {
+                        if(idlist.contains(pp.getPrivilegeid())) {
+                            Map<String, Object> sonmap = new HashMap<>();
+                            String tt = pp.getCode();
+                            String hh = pp.getLabel();
+                            sonmap.put("text", tt);
+                            sonmap.put("href", hh);
+                            pplist.add(sonmap);
+                        }
+                    }
+                    JSONArray jj = JSONArray.fromObject(pplist);
+                    parmap.put("nodes",jj);
+                }
+            }
+            if(parmap.size()>0) {
+                parlist.add(parmap);
+            }
+        }
+        JSONArray json = JSONArray.fromObject(parlist);
+        return String.valueOf(json);
     }
 }

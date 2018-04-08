@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import cn.com.isurpass.house.util.ValidateCode;
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.UnavailableSecurityManagerException;
 import org.apache.shiro.authc.AuthenticationException;
@@ -47,6 +48,7 @@ public class LoginController {
 		try {
 			String validateCode = (String) request.getSession().getAttribute("validateCode");
 			String code = login.getCaptchacode();
+			System.out.println("接收到的验证码："+code);
 			if(StringUtils.isEmpty(code)||!code.equalsIgnoreCase(validateCode)){
 				return new JsonResult(-1, "-2");
 			}
@@ -60,6 +62,8 @@ public class LoginController {
 			request.getSession().setAttribute("emp", emp);
 			//TODO 这里可以加一个当前员工角色的字段返回到前端,可以很容易的进行内容的显隐
 			request.getSession().setAttribute("admin", os.isAdmin(emp.getOrganizationid()));
+
+
 			return new JsonResult(1, "success");
 		} catch (UnavailableSecurityManagerException e) {
 			e.printStackTrace();
@@ -80,6 +84,7 @@ public class LoginController {
 	@RequestMapping(value="getCode")
 	public void getCode(HttpServletRequest request, HttpServletResponse response){
 		ValidateCode code = new ValidateCode(100,30,4,30,25,"validateCode");
-		String code1 = code.getCode(request, response);
+		String validateCode = code.getCode(request, response);
+		System.out.println("生成的验证码："+validateCode);
 	}
 }

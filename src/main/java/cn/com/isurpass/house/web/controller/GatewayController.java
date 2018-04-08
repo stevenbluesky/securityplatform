@@ -50,7 +50,7 @@ public class GatewayController {
 	@ResponseBody
 	@RequestMapping(value="add",method = RequestMethod.GET)
 	public ModelAndView add(TypeGatewayInfoVO tgi,HttpServletRequest request) {
-		ModelAndView mv = new ModelAndView("gateway/typeGatewayInfo");
+		ModelAndView mv = new ModelAndView("gateway/TypeGatewayInfo");
 		mv.addObject("deviceid", tgi.getDeviceid());
         mv.addObject("model", tgi.getModel());
         mv.addObject("firmwareversion", tgi.getFirmwareversion());
