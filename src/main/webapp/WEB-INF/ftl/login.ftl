@@ -78,8 +78,8 @@
                            placeholder="<@spring.message code='label.captchcode'/> ">
                 </div>
                 <div class="col-sm-4">
-                    <img class="img-responsive" src="login/getCode"
-                         onclick="this.src='getCode?time='+new Date().getTime();"
+                    <img id="validateCode" class="img-responsive" src=""
+                         onclick="this.src='login/getCode?time='+new Date().getTime();"
                          style="height:35px;float: right"/>
                 </div>
             </div>
@@ -92,6 +92,7 @@
 </div>
 
 <script type="text/javascript">
+    $("#validateCode").click();
     $(document).ready(function () {
         $('#defaultForm').bootstrapValidator({
 //      live: 'disabled',
@@ -145,6 +146,7 @@
                     if (data.status == 1) {
                         window.location.href = 'index';
                     } else {
+                        $("#validateCode").click();
                         alert(formatterReturnStatus(data.msg));
                     }
                 },

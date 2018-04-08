@@ -49,4 +49,13 @@ public class PrivilegePO {
 		this.parentprivilegeid = parentprivilegeid;
 	}
 
+	@Override
+	public String toString() {
+		return "PrivilegePO{" +
+				"privilegeid=" + privilegeid +
+				", label='" + label + '\'' +
+				", code='" + code + '\'' +
+				", parentprivilegeid=" + parentprivilegeid +
+				'}';
+	}
 }

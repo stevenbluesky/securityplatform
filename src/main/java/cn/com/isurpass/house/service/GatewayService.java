@@ -251,20 +251,21 @@ public class GatewayService {
 		}
 		return citycodedeviceidlist;
 	}
+	//TODO
 	/**
-	 * 根据设备名称模糊查询对应网关id列表
+	 * 根据网关名称模糊查询对应网关id列表
 	 * @param devicename
 	 * @return
 	 */
 	@Transactional(readOnly = true)
 	public List<String> findIdListByDevicename(String devicename){
 		List<String> devicenamedeviceidlist = new ArrayList<String>();
-		List<ZwaveDevicePO> findByNameContaining = zdd.findByNameContaining(devicename);
+		List<GatewayPO> findByNameContaining = gd.findByNameContaining(devicename);
 		if(findByNameContaining.size()==0){
 			return null;
 		}
-		for (ZwaveDevicePO zwaveDevicePO : findByNameContaining) {
-			devicenamedeviceidlist.add(zwaveDevicePO.getDeviceid());
+		for (GatewayPO gatewayPO : findByNameContaining) {
+			devicenamedeviceidlist.add(gatewayPO.getDeviceid());
 		}
 		return devicenamedeviceidlist;
 	}
