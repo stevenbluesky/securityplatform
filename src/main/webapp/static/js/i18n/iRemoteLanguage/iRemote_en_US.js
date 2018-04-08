@@ -24,7 +24,10 @@ var lan = {
     notempty: "Mandatory",
     loaderror: "Loading Data Error",
 
+
     doorlock: "门磁",
+    smokesensor:"烟雾传感器",
+    gassensor:"燃气传感器",
     leaksensor: "漏水传感器",
     PyroelectricSensors: "移动感应器",
     socket0: "插座",
