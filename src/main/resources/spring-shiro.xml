@@ -32,9 +32,23 @@
             <value>
                 /index = authc
                 /org/supplierList = authc
-                /success.jsp = authc
+                /org/addSupplierPage = authc
+                /org/installerList = authc
+                /org/addInstallerPage = authc
+                /employee/employeeList = authc
+                /employee/addEmployee = authc
+                /gateway/gatewayList = authc
+                /gateway/typeGatewayInfo = authc
+                /gateway/gatewayDetail = authc
+                /device/deviceList = authc
+                /device/deviceDetail = authc
+                /user/userList = authc
+                /user/typeUserInfo = authc
+                /phonecard/phonecardList = authc
+                /phonecadr/typePhoneCardInfo = authc
+                <!--/success.jsp = authc-->
                 <!-- 表示需要认证才能访问的页面 -->
-                /home = authc, perms[/home]  <!-- perms 表示需要该权限才能访问的页面 -->
+                <!--/home = authc, perms[/home]  &lt;!&ndash; perms 表示需要该权限才能访问的页面 &ndash;&gt;-->
                 /** = anon
             </value>
         </property>
