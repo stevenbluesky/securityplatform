@@ -73,8 +73,8 @@ public class UserService {
 
         UserPO user = new UserPO();
         user.setLoginname(u.getPhonenumber());
-        user.setName(u.getFirstname() + " " + u.getLastname());
-        user.setCitycode("");
+        user.setName(u.getFirstname()+u.getLastname());
+        user.setCitycode(city.findByCityname(u.getCity()).getCitycode());
 
         EmployeeParentOrgIdVO empp = emps.findEmpParentOrgid(emp);
         user.setOrganizationid(1);

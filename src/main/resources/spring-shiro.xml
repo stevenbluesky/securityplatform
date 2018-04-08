@@ -33,7 +33,7 @@
                 /index = authc
                 /org/supplierList = authc
                 /org/addSupplierPage = authc
-                /org/installerList = authc,perms[admin]
+                /org/installerList = authc
                 /org/addInstallerPage = authc
                 /employee/employeeList = authc
                 /employee/addEmployee = authc
