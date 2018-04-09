@@ -172,7 +172,7 @@
         $("table :checkbox").each(function(key,value){
             if($(value).prop('checked')){
                 if(key!=0){
-                    ids[key-1] = tbodyObj.rows[key].cells[4].innerHTML;
+                    ids[key-1] = tbodyObj.rows[key].cells[3].innerHTML;
                 }
             }
         })
@@ -204,7 +204,7 @@
         //异步更新     
         $.ajax({
             type:'post',
-            url:'/update',
+            url:'update',
             contentType:'application/json',
             traditional:true,
             data:"{\"hope\":\""+obj+"\",\"ids\":"+JSON.stringify(trans)+"}",

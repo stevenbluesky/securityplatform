@@ -9,6 +9,7 @@ import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateModelException;
 
+/*
 public class FreeMarkerConfigExtend extends FreeMarkerConfigurer {
 	@Override  
 	public void afterPropertiesSet() throws IOException, TemplateException {  
@@ -26,4 +27,11 @@ public class FreeMarkerConfigExtend extends FreeMarkerConfigurer {
 		//shiro tag 
         put(cfg,"shiro", new ShiroTags());
 	}
+}*/
+public class FreeMarkerConfigExtend extends FreeMarkerConfigurer {
+    @Override
+    public void afterPropertiesSet() throws IOException, TemplateException {
+        super.afterPropertiesSet();
+        this.getConfiguration().setSharedVariable("shiro", new ShiroTags());
+    }
 }
