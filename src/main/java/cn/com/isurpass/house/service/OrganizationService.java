@@ -9,16 +9,13 @@ import cn.com.isurpass.house.util.FormUtils;
 import cn.com.isurpass.house.vo.OrgAddVO;
 import cn.com.isurpass.house.vo.OrgListVO;
 import cn.com.isurpass.house.vo.OrgSearchVO;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.UnsupportedEncodingException;
 import java.util.*;
 
 @Service
@@ -42,6 +39,8 @@ public class OrganizationService {
     AddressService as;
     @Autowired
     PersonService ps;
+    @Autowired
+    EmployeeroleDAO erd;
 
     /**
      * 通过指定员工id和要切换成的方法进行状态的改变
@@ -220,11 +219,24 @@ public class OrganizationService {
             emp.setOrganizationid(orgId);
             emp.setStatus(1);
             emp.setCreatetime(new Date());
-            if (!FormUtils.isEmpty(emp)) {// 管理员不为空..由于此方法一开始就对管理员账号不存在的情况进行了处理,所以此处管理员对象是肯定存在的.
-                // TODO 现在数据库里面 Loginname
-                // 是unique类型的,要文档上面意思是不同的机构可以有相同的loginname,所以这里要判断一下同机构中的loginname,并去掉数据库里面的unique索引
-                ed.save(emp);
+//            if (!FormUtils.isEmpty(emp)) {// 管理员不为空..由于此方法一开始就对管理员账号不存在的情况进行了处理,所以此处管理员对象是肯定存在的.
+            // TODO 现在数据库里面 Loginname
+            // 是unique类型的,文档上面意思是不同的机构可以有相同的loginname,所以这里要判断一下同机构中的loginname,并去掉数据库里面的unique索引
+            EmployeePO save = ed.save(emp);
+//            }
+            EmployeeRolePO erpo = new EmployeeRolePO();
+            erpo.setCreatetime(new Date());
+            erpo.setEmployeeid(save.getEmployeeid());
+            if (orgtype == Constants.ORGTYPE_AMETA) {
+                erpo.setRoleid(1);
             }
+            if (orgtype == Constants.ORGTYPE_SUPPLIER) {
+                erpo.setRoleid(2);
+            }
+            if (orgtype == Constants.ORGTYPE_AMETA) {
+                erpo.setRoleid(3);
+            }
+            erd.save(erpo);
         }
     }
 
@@ -247,7 +259,7 @@ public class OrganizationService {
         return map;
     }
 
-//    @RequiresPermissions("admin")
+    //    @RequiresPermissions("admin")
     @Transactional(readOnly = true)
     public Map<String, Object> listInstallerOrg(Pageable pageable, HttpServletRequest request) {
         // 角色为服务商的员工才可以访问
@@ -348,6 +360,7 @@ public class OrganizationService {
     /**
      * 使用此方法时,返回的list集合里面只有其children机构的id,不包括其本身.<br>
      * 所以在通过此方法返回服务商的安装商集合来显示数据时,一般还要加上服务商本身的id.
+     *
      * @param id
      * @param list
      * @return

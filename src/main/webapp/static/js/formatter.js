@@ -210,7 +210,7 @@ function formatterReturnStatus(status){
     switch (status){
         case '1':return lan.success;
         case '2':return lan.addsuccess;
-        case '-1':return lan.error;
+        case '-1':return lan.error0;
         case '-2':return lan.varificationcodeerror;
         case '-98':return lan.loginfaied;
         case '-99':return lan.notpermission;

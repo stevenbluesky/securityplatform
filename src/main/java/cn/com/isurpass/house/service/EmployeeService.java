@@ -183,7 +183,14 @@ public class EmployeeService {
             }
             empPO.setPersonid(pd.save(personPO).getPersonid());
         }
-        ed.save(empPO);
+        EmployeePO save = ed.save(empPO);
+        if (empInfo == null) {
+            EmployeeRolePO erp = new EmployeeRolePO();
+            erp.setRoleid(5);//默认角色是员工
+            erp.setEmployeeid(save.getEmployeeid());
+            erp.setCreatetime(new Date());
+            erd.save(erp);
+        }
     }
 
     @Transactional(readOnly = true)
