@@ -152,8 +152,8 @@
 
     //当点击搜索按钮后，表格刷新并跳到第一页
     $("#searchsubmit").click(function(){
-        //$("#table").bootstrapTable("refreshOptions",{pageNumber:1})
-        $('#table').bootstrapTable('refresh');
+        $("#table").bootstrapTable("refreshOptions",{pageNumber:1})
+        // $('#table').bootstrapTable('refresh');
     });
 
 	<#--隐藏列-->

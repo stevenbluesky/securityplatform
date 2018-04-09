@@ -234,7 +234,7 @@ public class OrganizationService {
             if (orgtype == Constants.ORGTYPE_SUPPLIER) {
                 erpo.setRoleid(2);
             }
-            if (orgtype == Constants.ORGTYPE_AMETA) {
+            if (orgtype == Constants.ORGTYPE_INSTALLER) {
                 erpo.setRoleid(3);
             }
             erd.save(erpo);

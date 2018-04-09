@@ -65,7 +65,7 @@
             <div class="form-group">
                 <label for="password" class="col-sm-2 control-label"><@spring.message code='label.password'/></label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" id="password" name="password"
+                    <input type="password" class="form-control" id="password" name="password"
                            placeholder="<@spring.message code='label.password'/>">
                 </div>
             </div>
