@@ -102,57 +102,18 @@ public class GatewayService {
 	public Map<String, Object> listGateway(Pageable pageable, TypeGatewayInfoVO tgiv) {
 		Map<String, Object> map = new HashMap<>();//返回的map
 		List<TypeGatewayInfoVO> list = new ArrayList<>();//返回的list对象
-		List<String> citynamedeviceidlist = new ArrayList<>();
-		List<String> citycodedeviceidlist = new ArrayList<>();
-		List<String> devicenamedeviceidlist = new ArrayList<>();
-		List<String> customerdeviceidlist = new ArrayList<>();
-		List<String> serviceproviderdeviceidlist = new ArrayList<>();
-		List<String> installerorgdeviceidlist = new ArrayList<>();
-		List<String> installerdeviceidlist = new ArrayList<>();
-		List<String> deviceiddeviceidlist = new ArrayList<>();
-		Iterable<GatewayPO> geted = gd.findAll();
+		Iterable<GatewayPO> geted = gd.findAll();//拿到网关列表所有记录
 		List<String> gdlist = new ArrayList<>();
 		geted.forEach(single ->{gdlist.add(single.getDeviceid());});
-		if(StringUtils.isEmpty(tgiv.getCityname())){//如果城市名称为空，则默认查网关列表的全部
-			citynamedeviceidlist = gdlist;
-		}else {
-			citynamedeviceidlist = findIdListByCityname(tgiv.getCityname());
-		}
-		if(StringUtils.isEmpty(tgiv.getCitycode())){//如果城市代码为空，则默认查网关列表的全部
-			citycodedeviceidlist = gdlist;
-		}else {
-			citycodedeviceidlist = findIdListByCitycode(tgiv.getCitycode());
-		}
-		if(StringUtils.isEmpty(tgiv.getName())){//如果设备名称为空，则默认查网关列表的全部
-			devicenamedeviceidlist = gdlist;
-		}else {
-			devicenamedeviceidlist = findIdListByDevicename(tgiv.getName());
-		}
-		if(StringUtils.isEmpty(tgiv.getCustomer())){//如果客户名称为空，则默认查网关列表的全部
-			customerdeviceidlist = gdlist;
-		}else {
-			customerdeviceidlist = findIdListByCustomer(tgiv.getCustomer());
-		}
-		if(StringUtils.isEmpty(tgiv.getServiceprovider())){//如果服务商为空，则默认查网关列表的全部
-			serviceproviderdeviceidlist = gdlist;
-		}else {
-			serviceproviderdeviceidlist = findIdListByServiceprovider(tgiv.getServiceprovider());
-		}
-		if(StringUtils.isEmpty(tgiv.getInstallerorg())){//如果安装商为空，则默认查网关列表的全部
-			installerorgdeviceidlist = gdlist;
-		}else {
-			installerorgdeviceidlist = findIdListByInstallerorg(tgiv.getInstallerorg());
-		}
-		if(StringUtils.isEmpty(tgiv.getInstaller())){//如果安装商为空，则默认查网关列表的全部
-			installerdeviceidlist = gdlist;
-		}else {
-			installerdeviceidlist = findIdListByInstaller(tgiv.getInstaller());
-		}
-		if(StringUtils.isEmpty(tgiv.getDeviceid())){//如果网关id为空，则默认查网关列表的全部
-			deviceiddeviceidlist = gdlist;
-		}else {
-			deviceiddeviceidlist = findIdListByDeviceid(tgiv.getDeviceid());
-		}
+		//如果传入参数为空，则默认查网关列表的全部
+		List<String> citynamedeviceidlist = StringUtils.isEmpty(tgiv.getCityname())?gdlist:findIdListByCityname(tgiv.getCityname());
+		List<String> citycodedeviceidlist = StringUtils.isEmpty(tgiv.getCitycode())?gdlist:findIdListByCitycode(tgiv.getCitycode());
+		List<String> devicenamedeviceidlist = StringUtils.isEmpty(tgiv.getName())?gdlist:findIdListByDevicename(tgiv.getName());
+		List<String> customerdeviceidlist = StringUtils.isEmpty(tgiv.getCustomer())?gdlist:findIdListByCustomer(tgiv.getCustomer());
+		List<String> serviceproviderdeviceidlist = StringUtils.isEmpty(tgiv.getServiceprovider())?gdlist:findIdListByServiceprovider(tgiv.getServiceprovider());
+		List<String> installerorgdeviceidlist = StringUtils.isEmpty(tgiv.getInstallerorg())?gdlist:findIdListByInstallerorg(tgiv.getInstallerorg());
+		List<String> installerdeviceidlist = StringUtils.isEmpty(tgiv.getInstaller())?gdlist:findIdListByInstaller(tgiv.getInstaller());
+		List<String> deviceiddeviceidlist = StringUtils.isEmpty(tgiv.getDeviceid())?gdlist:findIdListByDeviceid(tgiv.getDeviceid());
 		//处理各获取id列表方法的返回值
 		if(citynamedeviceidlist==null||devicenamedeviceidlist==null||serviceproviderdeviceidlist==null||installerdeviceidlist==null||citycodedeviceidlist==null||customerdeviceidlist==null||installerorgdeviceidlist==null||deviceiddeviceidlist==null){
 			map.put("total", 0);
@@ -177,9 +138,11 @@ public class GatewayService {
 				UserPO upo= ud.findByUserid(userlist.get(0).getUserid());
 				gateVO.setCityname(cd.findByCitycode(upo.getCitycode()).getCityname());
 				gateVO.setInstallerorg(od.findByOrganizationid(upo.getInstallerorgid()).getName());
-				gateVO.setInstaller(ed.findByEmployeeid(upo.getInstallerid()).getName());
+				if(upo.getInstallerid()!=null) {
+					gateVO.setInstaller(ed.findByEmployeeid(upo.getInstallerid()).getLoginname());
+				}
 				gateVO.setServiceprovider(od.findByOrganizationid(upo.getOrganizationid()).getName());
-				gateVO.setCustomer(upo.getName());
+				gateVO.setCustomer(upo.getLoginname());
 			}
 			gateVO.setName(o.getName());
 			gateVO.setStatus(o.getStatus());
@@ -303,7 +266,7 @@ public class GatewayService {
 	public List<String> findIdListByServiceprovider(String serviceprovider){
 		List<String> serviceproviderdeviceidlist = new ArrayList<String>();
 		List<Integer> serviceprovideridlist = new ArrayList<Integer>();
-		List<OrganizationPO> orglist = od.findByOrgtypeAndNameContainingOrCentralstationnameContaining(Constants.ORGTYPE_SUPPLIER,serviceprovider,serviceprovider);
+		List<OrganizationPO> orglist = od.findByOrgtypeAndNameContaining(Constants.ORGTYPE_SUPPLIER,serviceprovider);
 		if(orglist.size()==0){
 			return null;
 		}
@@ -328,7 +291,7 @@ public class GatewayService {
 	public List<String> findIdListByInstallerorg(String installerorg){
 		List<String> installerorgdeviceidlist = new ArrayList<String>();
 		List<Integer> installerorgidlist = new ArrayList<Integer>();
-		List<OrganizationPO> orglist2 = od.findByOrgtypeAndNameContainingOrCentralstationnameContaining(Constants.ORGTYPE_INSTALLER,installerorg,installerorg);
+		List<OrganizationPO> orglist2 = od.findByOrgtypeAndNameContaining(Constants.ORGTYPE_INSTALLER,installerorg);
 		if(orglist2.size()==0){
 			return null;
 		}
@@ -354,7 +317,7 @@ public class GatewayService {
 		List<String> installerdeviceidlist = new ArrayList<String>();
 		List<Integer> employeeidlist = new ArrayList<Integer>();
 		List<Integer> installeridlist = new ArrayList<Integer>();
-		List<EmployeePO> emplist = ed.findByNameContaining(installer);
+		List<EmployeePO> emplist = ed.findByLoginnameContaining(installer);
 		if(emplist.size()==0){
 			return null;
 		}
@@ -415,8 +378,10 @@ public class GatewayService {
 		if(gu!=null&&gu.size()!=0) {//网关用户表匹配到了数据，该网关已跟用户绑定
 			UserPO user = ud.findByUserid(gu.get(0).getUserid());
 			gate.setCustomer(user.getName());
-			EmployeePO emp = ed.findByEmployeeid(user.getInstallerid());
-			gate.setInstaller(emp.getName());
+			if(user.getInstallerid()!=null) {
+				EmployeePO emp = ed.findByEmployeeid(user.getInstallerid());
+				gate.setInstaller(emp.getLoginname());
+			}
 			//电话卡信息
 			PhonecardUserPO puPO = pud.findByUserid(user.getUserid());
 			PhonecardPO pc = pd.findByPhonecardid(puPO.getPhonecardid());

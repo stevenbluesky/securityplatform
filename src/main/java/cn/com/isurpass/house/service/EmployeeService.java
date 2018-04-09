@@ -471,15 +471,28 @@ public class EmployeeService {
         map.put("rows", list);
         return map;
     }
+
+    /**
+     * 根据用户权限获取对应菜单
+     * @param emp
+     * @return
+     */
     @Transactional(readOnly = true)
     public String getMenuTree(EmployeePO emp) {
+        ResourceBundle resourceBundle ;
+        String language = Locale.getDefault().getLanguage();
+        if ("zh".equals(language)){
+            resourceBundle =ResourceBundle.getBundle("messages",Locale.SIMPLIFIED_CHINESE);
+            //resourceBundle =ResourceBundle.getBundle("messages",Locale.US);
+        }else{
+            resourceBundle =ResourceBundle.getBundle("messages",Locale.US);
+        }
         List<RolePrivilegePO> roleprivilegelist = new ArrayList<>();//角色权限列表
         List<Integer> privilegeid = new ArrayList<>();//权限列表
         OrganizationPO org = od.findByOrganizationid(emp.getOrganizationid());//根据员工的机构id获取所属机构
         List<EmployeeRolePO> emprolelist = employeeroleDAO.findByEmployeeid(emp.getEmployeeid());//根据员工id获取员工的所有角色
         emprolelist.forEach(e -> roleprivilegelist.addAll(rolePrivilegeDAO.findByRoleid(e.getRoleid())));//遍历员工角色列表，获取角色权限列表
         roleprivilegelist.forEach(e -> privilegeid.add(e.getPrivilegeid()));//根据员工的角色权限列表得到员工的权限id列表
-
         List<PrivilegePO> privilegelist = privilegeDAO.findByPrivilegeidIn(privilegeid);//根据角色权限id列表去拿到权限权限列表
         List<Integer> idlist = new ArrayList<>();
        for(PrivilegePO e : privilegelist){
@@ -489,7 +502,7 @@ public class EmployeeService {
         for(PrivilegePO p : privilegelist){
             Map<String,Object> parmap = new LinkedHashMap<>();
             if ("0".equals(p.getParentprivilegeid()+"")){//为父节点
-                String text = p.getCode();
+                String text = resourceBundle.getString(p.getCode());
                 String href = p.getLabel();
                 parmap.put("text",text);
                 parmap.put("href",href);
@@ -499,7 +512,7 @@ public class EmployeeService {
                     for (PrivilegePO pp : sonlist) {
                         if(idlist.contains(pp.getPrivilegeid())) {
                             Map<String, Object> sonmap = new HashMap<>();
-                            String tt = pp.getCode();
+                            String tt = resourceBundle.getString(pp.getCode());
                             String hh = pp.getLabel();
                             sonmap.put("text", tt);
                             sonmap.put("href", hh);
