@@ -68,7 +68,7 @@ public class OrganizationController {
             e.printStackTrace();
             return new JsonResult(-1, e.getMessage());
         }
-        return new JsonResult(1, "success");
+        return new JsonResult(1, "1");
     }
 
     /**
@@ -92,7 +92,7 @@ public class OrganizationController {
             e.printStackTrace();
             return new JsonResult(-1, "-1");
         }
-        return new JsonResult(1, "success");
+        return new JsonResult(1, "1");
     }
 
     @RequestMapping("addInstallerorg")
@@ -107,7 +107,7 @@ public class OrganizationController {
             e.printStackTrace();
             return new JsonResult(-1, "-1");
         }
-        return new JsonResult(1, "success");
+        return new JsonResult(1, "1");
     }
 
     @RequestMapping("listAllOrg")
