@@ -15,6 +15,47 @@
     <!-- <context:annotation-config /> <context:component-scan base-package="cf.zhul"
         /> -->
 
+    <!-- 配置freeMarker 拓展-->
+    <bean id="freemarkerConfig"
+          class="cn.com.isurpass.house.shiro.FreeMarkerConfigExtend">
+        <property name="templateLoaderPath">
+            <value>/WEB-INF/ftl/</value>
+        </property>
+        <property name="freemarkerVariables">
+            <map>
+                <entry key="xml_escape" value-ref="fmXmlEscape" />
+                <!--<entry key="api" value-ref="api"/>-->
+            </map>
+        </property>
+        <property name="defaultEncoding">
+            <value>utf-8</value>
+        </property>
+        <property name="freemarkerSettings">
+            <props><!-- 315360000 -->
+                <prop key="template_update_delay">0</prop>
+                <prop key="defaultEncoding">UTF-8</prop>
+                <prop key="url_escaping_charset">UTF-8</prop>
+                <prop key="locale">zh_CN</prop>
+                <prop key="boolean_format">true,false</prop>
+                <prop key="datetime_format">yyyy-MM-dd HH:mm:ss</prop>
+                <prop key="date_format">yyyy-MM-dd</prop>
+                <prop key="time_format">HH:mm:ss</prop>
+                <!--			<prop key="number_format">0.######</prop>-->
+                <prop key="number_format">#</prop>
+                <prop key="whitespace_stripping">true</prop>
+                <prop key="auto_import">
+                    /common/config/top.ftl as _top,
+                    /common/config/left.ftl as _left,
+                    /common/config/html.ftl as _html,
+                    /common/config/bottom.ftl as _footer,
+                    /common/config/menu.ftl as _menu
+                </prop>
+            </props>
+        </property>
+    </bean>
+    <!--<bean name="api" class="com.sojson.core.tags.APITemplateModel"></bean>-->
+    <bean id="fmXmlEscape" class="freemarker.template.utility.XmlEscape"/>
+
     <bean id="myShiroRealm" class="cn.com.isurpass.house.shiro.MyShiroUtil"></bean>
     <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
         <property name="realm" ref="myShiroRealm"></property>
@@ -31,21 +72,21 @@
         <property name="filterChainDefinitions">
             <value>
                 /index = authc
-                /org/supplierList = authc
-                /org/addSupplierPage = authc
-                /org/installerList = authc
-                /org/addInstallerPage = authc
-                /employee/employeeList = authc
-                /employee/addEmployee = authc
-                /gateway/gatewayList = authc
-                /gateway/typeGatewayInfo = authc
-                /gateway/gatewayDetail = authc
-                /device/deviceList = authc
-                /device/deviceDetail = authc
-                /user/userList = authc
-                /user/typeUserInfo = authc
-                /phonecard/phonecardList = authc
-                /phonecadr/typePhoneCardInfo = authc
+                /org/supplierList = authc,perms[label.DealerList]
+                /org/addSupplierPage = authc,perms[label.AddDealer]
+                /org/installerList = authc,perms[label.InstallerList]
+                /org/addInstallerPage = authc,perms[label.AddInstaller]
+                /employee/employeeList = authc,perms[label.EmployeeList]
+                /employee/addEmployee = authc,perms[label.AddEmployee]
+                /gateway/gatewayList = authc,perms[label.GatewayList]
+                /gateway/typeGatewayInfo = authc,perms[label.InputGatewayInformation]
+                /gateway/gatewayDetail = authc,perms[label.GatewayDetail]
+                /device/deviceList = authc,perms[label.DeviceList]
+                /device/deviceDetail = authc,perms[label.DeviceDetail]
+                /user/userList = authc,perms[label.UserList]
+                /user/typeUserInfo = authc,perms[label.InputUserInformation]
+                /phonecard/phonecardList = authc,perms[label.SIMCardList]
+                /phonecadr/typePhoneCardInfo = authc,perms[label.InputSIMCardInformation]
                 <!--/success.jsp = authc-->
                 <!-- 表示需要认证才能访问的页面 -->
                 <!--/home = authc, perms[/home]  &lt;!&ndash; perms 表示需要该权限才能访问的页面 &ndash;&gt;-->

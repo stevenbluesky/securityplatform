@@ -1,4 +1,5 @@
 package cn.com.isurpass.house.service;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -228,7 +229,7 @@ public class EmployeeService {
         }
     }
 
-   // @RequiresPermissions("employeeList")
+    // @RequiresPermissions("employeeList")
     @Transactional(readOnly = true)
     public Map<String, Object> listAllEmployee(Pageable pageable) {
         // System.out.println(em.toString());
@@ -498,7 +499,7 @@ public class EmployeeService {
      * @param employddid
      * @return
      */
-	 @Transactional(readOnly = true)
+    @Transactional(readOnly = true)
     public Set getEmployeeRolesNameSet(Integer employddid) {
         Set<String> set = new HashSet();
         List<EmployeeRolePO> emprolelist = erd.findByEmployeeid(employddid);
@@ -514,7 +515,7 @@ public class EmployeeService {
         return set;
     }
 
-	 @Transactional(readOnly = true)
+    @Transactional(readOnly = true)
     public Set<String> getEmployeePermissionsName(Integer employeeid) {
         Set<String> set = new HashSet<>();
         List<String> list = new ArrayList<>();
@@ -534,16 +535,16 @@ public class EmployeeService {
         }
         return null;
     }
-	
-	 @Transactional(readOnly = true)
-    public String getMenuTree(EmployeePO emp) {
-        ResourceBundle resourceBundle ;
-        String language = Locale.getDefault().getLanguage();
-        if ("zh".equals(language)){
-            resourceBundle =ResourceBundle.getBundle("messages",Locale.SIMPLIFIED_CHINESE);
+
+    @Transactional(readOnly = true)
+    public String getMenuTree(EmployeePO emp, HttpServletRequest request) {
+        ResourceBundle resourceBundle;
+        String language = request.getLocale().getLanguage();
+        if ("zh".equals(language)) {
+            resourceBundle = ResourceBundle.getBundle("messages", Locale.SIMPLIFIED_CHINESE);
             //resourceBundle =ResourceBundle.getBundle("messages",Locale.US);
-        }else{
-            resourceBundle =ResourceBundle.getBundle("messages",Locale.US);
+        } else {
+            resourceBundle = ResourceBundle.getBundle("messages", Locale.US);
         }
         List<RolePrivilegePO> roleprivilegelist = new ArrayList<>();//角色权限列表
         List<Integer> privilegeid = new ArrayList<>();//权限列表
@@ -553,22 +554,22 @@ public class EmployeeService {
         roleprivilegelist.forEach(e -> privilegeid.add(e.getPrivilegeid()));//根据员工的角色权限列表得到员工的权限id列表
         List<PrivilegePO> privilegelist = privilegeDAO.findByPrivilegeidIn(privilegeid);//根据角色权限id列表去拿到权限权限列表
         List<Integer> idlist = new ArrayList<>();
-       for(PrivilegePO e : privilegelist){
+        for (PrivilegePO e : privilegelist) {
             idlist.add(e.getPrivilegeid());
         }
         List<Object> parlist = new ArrayList<>();
-        for(PrivilegePO p : privilegelist){
-            Map<String,Object> parmap = new LinkedHashMap<>();
-            if ("0".equals(p.getParentprivilegeid()+"")){//为父节点
+        for (PrivilegePO p : privilegelist) {
+            Map<String, Object> parmap = new LinkedHashMap<>();
+            if ("0".equals(p.getParentprivilegeid() + "")) {//为父节点
                 String text = resourceBundle.getString(p.getCode());
                 String href = p.getLabel();
-                parmap.put("text",text);
-                parmap.put("href",href);
+                parmap.put("text", text);
+                parmap.put("href", href);
                 List<PrivilegePO> sonlist = privilegeDAO.findByParentprivilegeid(p.getPrivilegeid());
-                if(sonlist.size()>0) {
+                if (sonlist.size() > 0) {
                     List<Object> pplist = new ArrayList<>();
                     for (PrivilegePO pp : sonlist) {
-                        if(idlist.contains(pp.getPrivilegeid())) {
+                        if (idlist.contains(pp.getPrivilegeid())) {
                             Map<String, Object> sonmap = new HashMap<>();
                             String tt = resourceBundle.getString(pp.getCode());
                             String hh = pp.getLabel();
@@ -578,10 +579,15 @@ public class EmployeeService {
                         }
                     }
                     JSONArray jj = JSONArray.fromObject(pplist);
-                    parmap.put("nodes",jj);
+                    parmap.put("nodes", jj);
                 }
+            } else if (p.getParentprivilegeid() != null && !idlist.contains(p.getParentprivilegeid())) {
+                String text = resourceBundle.getString(p.getCode());
+                String href = p.getLabel();
+                parmap.put("text", text);
+                parmap.put("href", href);
             }
-            if(parmap.size()>0) {
+            if (parmap.size() > 0) {
                 parlist.add(parmap);
             }
         }

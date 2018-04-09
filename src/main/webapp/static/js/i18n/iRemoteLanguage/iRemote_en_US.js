@@ -3,7 +3,7 @@ var lan = {
     addsuccess:"success",//2
     error:"error",//-1
     varificationcodeerror:"验证码错误",//-2
-    loginfaied:"登录失败",//-98
+    loginfaied:"Incorrect username or password.",//-98
     notpermission:"无权操作",//-99
     notempty: "Mandatory",//-100
     statusnull:"Status is Mandatory.",//-101

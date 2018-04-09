@@ -73,7 +73,7 @@
     <tr>
         <th data-field="">复选框列</th>
         <th data-field="name"><@spring.message code="label.dname"/></th>
-        <th data-field=""><@spring.message code="label.alarmstatus"/></th>
+        <#--<th data-field=""><@spring.message code="label.alarmstatus"/></th>-->
         <th data-field="status" data-formatter="formatter_gatewaystatus"><@spring.message code="label.status"/></th>
         <th data-field="deviceid"><@spring.message code="label.gatewayID"/></th>
         <th data-field="cityname"><@spring.message code="label.area"/></th>
