@@ -48,7 +48,7 @@
 	            <th data-field="firmwareversion"><@spring.message code='label.firmwareversion'/></th>
 	            <th data-field="rateplan">Rate Plan</th>
 	            <th data-field="activationdate" data-formatter="formatter_date">Activation Date</th>
-	            <th data-field="employeeroleid">Dealer</th>
+	           <#-- <th data-field="employeeroleid">Dealer</th>-->
 	        </tr>
 	    </thead>
 	</table>

@@ -58,9 +58,6 @@ public interface OrganizationDAO extends CrudRepository<OrganizationPO, Integer>
 
     Page<OrganizationPO> findByNameLikeAndCitycodeInAndOrgtype(String name, List<String> list0, Integer orgtype, Pageable pageable);
 
-    List<OrganizationPO> findByOrgtypeAndNameContainingOrCentralstationnameContaining(Integer orgtypeSupplier,
-                                                                                      String serviceprovider, String serviceprovider2);
-
     Integer countByStatus(int i);
 
     Integer countByStatusAndContactid(int i, int i1);
@@ -78,4 +75,6 @@ public interface OrganizationDAO extends CrudRepository<OrganizationPO, Integer>
     List<OrganizationPO> findByNameLikeAndCitycodeLike(String s, String s1);
 
     Integer countByNameLikeAndCitycodeIn(String name, List<String> list0);
+
+    List<OrganizationPO> findByOrgtypeAndNameContaining(Integer orgtypeSupplier, String serviceprovider);
 }

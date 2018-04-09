@@ -81,7 +81,7 @@
         <th data-field="installerorg"><@spring.message code="label.installerorg"/></th>
         <th data-field="installer"><@spring.message code="label.installer"/></th>
         <th data-field="customer"><@spring.message code="label.user"/></th>
-        <th data-field=""><@spring.message code="label.businessstatus"/></th>
+        <#--<th data-field=""><@spring.message code="label.businessstatus"/></th>-->
 	<#--<th data-field="operate" data-formatter="formatter_operate"><@spring.message code="label.operate"/></th>-->
     </tr>
     </thead>
