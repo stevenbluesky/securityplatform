@@ -99,9 +99,9 @@
                </div>
                
               <div  class="form-group">
-                <label for="phonecardid"  class="col-sm-2 control-label"><@spring.message code='label.phonecardid'/></label>
+                <label for="serialnumber"  class="col-sm-2 control-label"><@spring.message code='label.phonecardid'/></label>
                 <div class="col-sm-10">
-                 <input type="text" class="form-control" id="phonecardid" name="phonecardid" placeholder="<@spring.message code='label.phonecardid'/>">
+                 <input type="text" class="form-control" id="serialnumber" name="serialnumber" placeholder="<@spring.message code='label.phonecardid'/>">
                </div>
               </div>
               

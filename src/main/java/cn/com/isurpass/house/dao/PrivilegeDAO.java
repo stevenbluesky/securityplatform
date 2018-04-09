@@ -9,7 +9,7 @@ import java.util.Set;
 
 @Repository
 public interface PrivilegeDAO extends CrudRepository<PrivilegePO,Integer>{
-    List<PrivilegePO> findByPrivilegeidIn(List<Integer> privilegeset);
 
-    List<PrivilegePO> findByParentprivilegeid(Integer privilegeid);
+    List<PrivilegePO> findByPrivilegeidIn(List<Integer> privilegeidList);
+	List<PrivilegePO> findByParentprivilegeid(Integer privilegeid);
 }

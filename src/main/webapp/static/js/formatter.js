@@ -45,6 +45,13 @@ function formatter_op(value, row, index) {
 }
 
 function formatter_devicetype(value, row, index) {
+
+    if (row.devicetype == '1') {
+        return lan.smokesensor;
+    }
+    if (row.devicetype == '3') {
+        return lan.gassensor;
+    }
     if (row.devicetype == '4') {
         return lan.doorlock;
     }
@@ -77,6 +84,24 @@ function formatter_devicestatus(value, row, index) {
                     return lan.open;
                 case 251:
                     return lan.takepart;
+            }
+        case '1':
+            switch (row.status) {
+                case -1:
+                    return lan.error;
+                case 0:
+                    return lan.normal;
+                case 255:
+                    return lan.alarm;
+            }
+        case '3':
+            switch (row.status) {
+                case -1:
+                    return lan.error;
+                case 0:
+                    return lan.normal;
+                case 255:
+                    return lan.alarm;
             }
         case '2':
             switch (row.status) {
@@ -138,6 +163,20 @@ function formatter_zwavewarning(devicetype, warningstatuses){
             switch (warningstatuses) {
                 case 255:
                     return lan.dooropen;
+                case 251:
+                    return lan.takepart;
+            }
+        case '1':
+            switch (warningstatuses) {
+                case 255:
+                    return lan.alarm;
+                case 251:
+                    return lan.takepart;
+            }
+        case '3':
+            switch (warningstatuses) {
+                case 255:
+                    return lan.alarm;
                 case 251:
                     return lan.takepart;
             }

@@ -9,6 +9,7 @@ import cn.com.isurpass.house.util.FormUtils;
 import cn.com.isurpass.house.vo.OrgAddVO;
 import cn.com.isurpass.house.vo.OrgListVO;
 import cn.com.isurpass.house.vo.OrgSearchVO;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -246,6 +247,7 @@ public class OrganizationService {
         return map;
     }
 
+//    @RequiresPermissions("admin")
     @Transactional(readOnly = true)
     public Map<String, Object> listInstallerOrg(Pageable pageable, HttpServletRequest request) {
         // 角色为服务商的员工才可以访问

@@ -1,5 +1,4 @@
 package cn.com.isurpass.house.service;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -12,6 +11,7 @@ import cn.com.isurpass.house.dao.*;
 import cn.com.isurpass.house.po.*;
 import cn.com.isurpass.house.util.Encrypt;
 
+import com.alibaba.fastjson.JSONObject;
 import net.sf.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -28,6 +28,10 @@ import cn.com.isurpass.house.vo.EmployeeParentOrgIdVO;
 import cn.com.isurpass.house.vo.OrgSearchVO;
 
 import java.util.*;
+
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
+
 
 @Service
 public class EmployeeService {
@@ -60,6 +64,14 @@ public class EmployeeService {
     OrganizationService os;
     @Autowired
     AddressService as;
+    @Autowired
+    EmployeeroleDAO erd;
+    @Autowired
+    RoleDAO rd;
+    @Autowired
+    RolePrivilegeDAO rpd;
+    @Autowired
+    PrivilegeDAO privilegedao;
 
     public void changeStatus(Integer empid, Integer status) {
         EmployeePO emp = ed.findByEmployeeid(empid);
@@ -209,6 +221,7 @@ public class EmployeeService {
         }
     }
 
+   // @RequiresPermissions("employeeList")
     @Transactional(readOnly = true)
     public Map<String, Object> listAllEmployee(Pageable pageable) {
         // System.out.println(em.toString());
@@ -422,7 +435,6 @@ public class EmployeeService {
                 empList = ed.findByNameLikeAndAddressidIn(pageable, search.getSearchname(), addressidlist);
                 map.put("total", ed.countByNameLikeAndAddressidIn(search.getSearchname(), addressidlist));
             }
-        }else if (search.getSearchname() != "") {
             if (orgtype == Constants.ORGTYPE_AMETA) {
                 empList = ed.findByNameLike(pageable, name);
                 map.put("total", ed.countByNameLike(name));
@@ -472,12 +484,51 @@ public class EmployeeService {
         return map;
     }
 
+
     /**
-     * 根据用户权限获取对应菜单
-     * @param emp
+     * 获取用户的角色集合(返回角色名称)
+     *
+     * @param employddid
      * @return
      */
-    @Transactional(readOnly = true)
+	 @Transactional(readOnly = true)
+    public Set getEmployeeRolesNameSet(Integer employddid) {
+        Set<String> set = new HashSet();
+        List<EmployeeRolePO> emprolelist = erd.findByEmployeeid(employddid);
+        if (emprolelist != null && !emprolelist.isEmpty()) {
+            emprolelist.forEach(emprole -> {
+                        RolePO role = rd.findByRoleid(emprole.getRoleid());
+                        if (role != null) {
+                            set.add(role.getName());
+                        }
+                    }
+            );
+        }
+        return set;
+    }
+
+	 @Transactional(readOnly = true)
+    public Set<String> getEmployeePermissionsName(Integer employeeid) {
+        Set<String> set = new HashSet<>();
+        List<String> list = new ArrayList<>();
+        List<EmployeeRolePO> emprolelist = erd.findByEmployeeid(employeeid);
+        if (emprolelist != null && !emprolelist.isEmpty()) {
+            emprolelist.forEach(emprole -> {
+                List<RolePrivilegePO> rplist = rpd.findByRoleid(emprole.getRoleid());
+                if (rplist != null) {
+                    List<Integer> privilegeidlist = rplist.stream().map(RolePrivilegePO::getPrivilegeid).collect(toList());
+                    List<PrivilegePO> privilegelist = privilegedao.findByPrivilegeidIn(privilegeidlist);
+                    if (privilegelist != null && privilegelist.size() != 0) {
+                        set.addAll(privilegelist.stream().map(PrivilegePO::getCode).collect(toSet()));
+                    }
+                }
+            });
+            return set;
+        }
+        return null;
+    }
+	
+	 @Transactional(readOnly = true)
     public String getMenuTree(EmployeePO emp) {
         ResourceBundle resourceBundle ;
         String language = Locale.getDefault().getLanguage();

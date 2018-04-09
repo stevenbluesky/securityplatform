@@ -6,7 +6,7 @@
     <div class="row-horizontal">
         <div class="col-md-1"></div>
         <div class="col-md-10">
-          <form id="typeform" action="/gateway/add" method="get">
+          <form id="typeform" action="add" method="get">
               <div class="text-center"><h1><@spring.message code="label.enteringgatewayinfo"/></h1></div>            
               <div  class="form-group">
                 <label for="name"  class="col-sm-2 control-label"><@spring.message code="label.gatewayID"/>*</label>
@@ -27,7 +27,7 @@
                </div>
               </div>
               <div id="msg" class="text-center" style="color:red;font-size:14px;">
-              	<#if msg?exists&&msg=="4"><font color="green"><@spring.message code="label.4"/> ${msgdeviceid} <@spring.message code="label.5"/></font><#elseif msg?exists><@spring.message code="label."+msg/></#if>
+              	<#if msg?exists&&msg=="4"><font color="green"><@spring.message code="label.4"/>${msgdeviceid}<@spring.message code="label.5"/></font><#elseif msg?exists><@spring.message code="label."+msg/></#if>
               </div>
               <div class="row text-center" style="color:red;font-size:14px;">
 	              <div class="col-sm-6"><button type="button" id="submitid"  class="btn btn-default" style="width:25%;"><@spring.message code="label.submit"/></button></div>
