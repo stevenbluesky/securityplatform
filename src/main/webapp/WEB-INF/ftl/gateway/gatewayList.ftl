@@ -73,7 +73,7 @@
     <tr>
         <th data-field="">复选框列</th>
         <th data-field="name"><@spring.message code="label.dname"/></th>
-        <th data-field=""><@spring.message code="label.alarmstatus"/></th>
+        <#--<th data-field=""><@spring.message code="label.alarmstatus"/></th>-->
         <th data-field="status" data-formatter="formatter_gatewaystatus"><@spring.message code="label.status"/></th>
         <th data-field="deviceid"><@spring.message code="label.gatewayID"/></th>
         <th data-field="cityname"><@spring.message code="label.area"/></th>
@@ -81,7 +81,7 @@
         <th data-field="installerorg"><@spring.message code="label.installerorg"/></th>
         <th data-field="installer"><@spring.message code="label.installer"/></th>
         <th data-field="customer"><@spring.message code="label.user"/></th>
-        <th data-field=""><@spring.message code="label.businessstatus"/></th>
+        <#--<th data-field=""><@spring.message code="label.businessstatus"/></th>-->
 	<#--<th data-field="operate" data-formatter="formatter_operate"><@spring.message code="label.operate"/></th>-->
     </tr>
     </thead>
@@ -172,7 +172,7 @@
         $("table :checkbox").each(function(key,value){
             if($(value).prop('checked')){
                 if(key!=0){
-                    ids[key-1] = tbodyObj.rows[key].cells[4].innerHTML;
+                    ids[key-1] = tbodyObj.rows[key].cells[3].innerHTML;
                 }
             }
         })
@@ -204,7 +204,7 @@
         //异步更新     
         $.ajax({
             type:'post',
-            url:'/update',
+            url:'update',
             contentType:'application/json',
             traditional:true,
             data:"{\"hope\":\""+obj+"\",\"ids\":"+JSON.stringify(trans)+"}",

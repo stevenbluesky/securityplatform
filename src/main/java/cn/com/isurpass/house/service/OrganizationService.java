@@ -9,6 +9,7 @@ import cn.com.isurpass.house.util.FormUtils;
 import cn.com.isurpass.house.vo.OrgAddVO;
 import cn.com.isurpass.house.vo.OrgListVO;
 import cn.com.isurpass.house.vo.OrgSearchVO;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -509,6 +510,7 @@ public class OrganizationService {
         return false;
     }
 
+    @RequiresPermissions("fasf")
     public void toggleOrganizationStatus0(String hope, Object[] ids, HttpServletRequest request) {
         if ("unsuspence".equals(hope)) {
             for (Object id : ids) {

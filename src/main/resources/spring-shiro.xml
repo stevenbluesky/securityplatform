@@ -15,6 +15,34 @@
     <!-- <context:annotation-config /> <context:component-scan base-package="cf.zhul"
         /> -->
 
+    <!--&lt;!&ndash; 配置freeMarker 拓展&ndash;&gt;-->
+    <!--<bean id="freemarkerConfig"-->
+          <!--class="cn.com.isurpass.house.shiro.FreeMarkerConfigExtend">-->
+        <!--<property name="templateLoaderPaths">-->
+            <!--<list>-->
+                <!--<value>/WEB-INF/ftl/</value>-->
+                <!--&lt;!&ndash;<value>/WEB-INF/templates/</value>&ndash;&gt;-->
+            <!--</list>-->
+        <!--</property>-->
+        <!--<property name="defaultEncoding" value="UTF-8" />-->
+        <!--<property name="freemarkerSettings">-->
+            <!--<props>-->
+                <!--<prop key="template_update_delay">0</prop>-->
+                <!--<prop key="locale">zh_CN</prop>-->
+                <!--<prop key="default_encoding">UTF-8</prop>-->
+            <!--</props>-->
+        <!--</property>-->
+        <!--&lt;!&ndash;    <property name="freemarkerVariables">-->
+                <!--<map>-->
+                    <!--<entry key="BasePath" value="/fms" />-->
+                    <!--<entry key="model" value="200" />-->
+                    <!--<entry key="xml_escape" value-ref="fmXmlEscape" />-->
+                <!--</map>-->
+            <!--</property> &ndash;&gt;-->
+    <!--</bean>-->
+
+
+
     <bean id="myShiroRealm" class="cn.com.isurpass.house.shiro.MyShiroUtil"></bean>
     <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
         <property name="realm" ref="myShiroRealm"></property>
@@ -31,21 +59,21 @@
         <property name="filterChainDefinitions">
             <value>
                 /index = authc
-                /org/supplierList = authc
-                /org/addSupplierPage = authc
-                /org/installerList = authc
-                /org/addInstallerPage = authc
-                /employee/employeeList = authc
-                /employee/addEmployee = authc
-                /gateway/gatewayList = authc
-                /gateway/typeGatewayInfo = authc
-                /gateway/gatewayDetail = authc
-                /device/deviceList = authc
-                /device/deviceDetail = authc
-                /user/userList = authc
-                /user/typeUserInfo = authc
-                /phonecard/phonecardList = authc
-                /phonecadr/typePhoneCardInfo = authc
+                /org/supplierList = authc,perms[label.DealerList]
+                /org/addSupplierPage = authc,perms[label.AddDealer]
+                /org/installerList = authc,perms[label.InstallerList]
+                /org/addInstallerPage = authc,perms[label.AddInstaller]
+                /employee/employeeList = authc,perms[label.EmployeeList]
+                /employee/addEmployee = authc,perms[label.AddEmployee]
+                /gateway/gatewayList = authc,perms[label.GatewayList]
+                /gateway/typeGatewayInfo = authc,perms[label.InputGatewayInformation]
+                /gateway/gatewayDetail = authc,perms[label.GatewayDetail]
+                /device/deviceList = authc,perms[label.DeviceList]
+                /device/deviceDetail = authc,perms[label.DeviceDetail]
+                /user/userList = authc,perms[label.UserList]
+                /user/typeUserInfo = authc,perms[label.InputUserInformation]
+                /phonecard/phonecardList = authc,perms[label.SIMCardList]
+                /phonecadr/typePhoneCardInfo = authc,perms[label.InputSIMCardInformation]
                 <!--/success.jsp = authc-->
                 <!-- 表示需要认证才能访问的页面 -->
                 <!--/home = authc, perms[/home]  &lt;!&ndash; perms 表示需要该权限才能访问的页面 &ndash;&gt;-->

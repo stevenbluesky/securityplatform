@@ -33,14 +33,14 @@
                       </form>
                   </div>
           <hr>
-
+<@shiro.hasPermission name="label.DealerList">
             <button style="float: right;" class='btn btn-default'
                     onclick='toggleOrganizationStatus("unsuspence");'><@spring.message code='label.unsuspence'/></button>
 			<button style="float: right;" class='btn btn-default'
                     onclick='toggleOrganizationStatus("suspence");'><@spring.message code='label.suspenced'/></button>
             <button onclick="window.location.href='addSupplierPage'" style="float: right;"
                     class="btn btn-default"><@spring.message code="label.addnew"/></button>
-
+</@shiro.hasPermission>
 <table id="table" data-toggle="table">
     <thead>
     <tr>

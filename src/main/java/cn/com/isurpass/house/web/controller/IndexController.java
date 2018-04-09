@@ -33,17 +33,17 @@ public class IndexController {
 
 	@RequestMapping("logout")
 	public String logout(HttpServletRequest request){
-        Subject subject = SecurityUtils.getSubject();
-        subject.logout();
+       /* Subject subject = SecurityUtils.getSubject();
+        subject.logout();*/
+        request.getSession().removeAttribute("emp");
         return "login";
 	}
 
 	@ResponseBody
-	@RequestMapping("getMenuTree")
+	@RequestMapping(value = "getMenuTree",produces = "text/json;charset=UTF-8")
 	public String getMenuTree(HttpServletResponse response, HttpServletRequest request){
 		EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
-		String json = employeeService.getMenuTree(emp);
-		//System.out.println(s);
+		String json = employeeService.getMenuTree(emp,request);
 		return json;
 	}
 }
