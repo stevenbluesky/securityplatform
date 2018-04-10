@@ -6,7 +6,8 @@
 
     <div class="col-md-10">
         <div class="text-center"><h2><@spring.message code="label.gatewaydetail"/></h2></div>
-        <div class="text-left"><h4><@spring.message code="label.gatewayinfo"/></h4></div><hr>
+        <div class="text-left"><h4><@spring.message code="label.gatewayinfo"/></h4></div>
+        <hr>
         <div class="row">
             <div class="col-md-3">
                 <p><@spring.message code="label.dname"/></p>
@@ -38,7 +39,8 @@
             </div>
         </div>
         <br>
-        <div class="text-left"><h4><@spring.message code="label.phonecardinfo"/></h4></div><hr>
+        <div class="text-left"><h4><@spring.message code="label.phonecardinfo"/></h4></div>
+        <hr>
         <div class="row">
             <div class="col-md-3">
                 <p><@spring.message code="label.serialnumber"/></p>
@@ -69,14 +71,15 @@
                 <p><#if (gwd.expiredate)??>${gwd.expiredate?string('yyyy-MM-dd')}<#else><@spring.message code="label.none"/></#if></p>
             </div>
         </div>
-        <div class="text-left"><h4><@spring.message code="label.associatedequipment"/></h4></div><hr>
-        <table class="table table-hover table-bordered">
+        <div class="text-left"><h4><@spring.message code="label.associatedequipment"/></h4></div>
+        <hr>
+        <table id="table0" class="table table-hover table-bordered">
             <thead>
             <tr>
                 <th><@spring.message code="label.dname"/></th>
-                <th><@spring.message code="label.devicetype"/></th>
-                <th><@spring.message code="label.alarmstatus"/></th>
-                <th><@spring.message code="label.status"/></th>
+                <th data-formatter='formatter_devicetype'><@spring.message code="label.devicetype"/></th>
+                <th data-formatter='formatter_warnigstatuses'><@spring.message code="label.alarmstatus"/></th>
+                <th data-formatter='formatter_devicestatus'><@spring.message code="label.status"/></th>
                 <th><@spring.message code="label.energy"/></th>
             </tr>
             </thead>
@@ -84,14 +87,14 @@
 			<#if (gdd)??>
 				<#list gdd as being>
                 <tr id="item">
-                    <td>${being.name}</td>
-                    <td>${being.devicetype}</td>
-                    <td>${being.warningstatuses}</td>
-                    <td>${being.status}</td>
-                    <td>${being.battery}%</td>
+                    <td>${(being.name)!}</td>
+                    <td>${(being.devicetype)!}</td>
+                    <td>${(being.warningstatuses)!}</td>
+                    <td>${(being.status)!}</td>
+                    <td>${(being.battery)!}%</td>
                 </tr>
-				</#list>
-			</#if>
+                </#list>
+            </#if>
             </tbody>
         </table>
     </div>
@@ -100,6 +103,5 @@
 
 <!-- JavaScript 部分 -->
 <script type="text/javascript">
-
 </script>
 <#include "../_foot0.ftl"/>
