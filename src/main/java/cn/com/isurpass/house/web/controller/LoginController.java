@@ -84,7 +84,7 @@ public class LoginController {
 	@RequestMapping(value="getCode")
 	public void getCode(HttpServletRequest request, HttpServletResponse response){
 		ValidateCode code = new ValidateCode(100,30,4,30,25,"validateCode");
+		request.getSession();
 		String validateCode = code.getCode(request, response);
-		System.out.println("生成的验证码："+validateCode);
 	}
 }
