@@ -32,11 +32,10 @@ public class IndexController {
 	}
 
 	@RequestMapping("logout")
-	public String logout(HttpServletRequest request){
-       /* Subject subject = SecurityUtils.getSubject();
-        subject.logout();*/
-        request.getSession().removeAttribute("emp");
-        return "login";
+	public String  logout(HttpServletRequest request){
+        Subject subject = SecurityUtils.getSubject();
+        subject.logout();
+        return "redirect:/login";
 	}
 
 	@ResponseBody
