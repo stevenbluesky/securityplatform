@@ -35,7 +35,7 @@
         <br>
         <br>
         <br>
-        <#if emp?? ><h3 style="display: inline;"><@spring.message code='label.welcome'/>,${emp.loginname}</h3> <a href="logout" ><@spring.message code='label.logout'/></a></#if>
+        <#if emp?? ><h4 style="display: inline;"><@spring.message code='label.welcome'/>,${emp.loginname}&nbsp;&nbsp;<a href="logout" ><@spring.message code='label.logout'/></a></h4></#if>
         <br>
     </div>
 </div>
