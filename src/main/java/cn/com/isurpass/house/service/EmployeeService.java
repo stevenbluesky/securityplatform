@@ -435,29 +435,35 @@ public class EmployeeService {
                 empList = ed.findByAddressidInAndOrganizationidIn(pageable, addressidlist,childrenOrgid);
                 map.put("total", ed.countByAddressidIn(addressidlist));
             }
-        } else if (!FormUtils.isEmpty(search.getSearchcity()) || !FormUtils.isEmpty(search.getSearchcitycode())) {
+        } else{
             //当通过名称来搜索时,首先判断城市和城市代码有没有传值:
             //如果有传值,先通过城市和城市代码查找出一个addressid集合,再通过集合和名称进行查找
             //如果没有传值,直接通过名称查找.
-//            if (FormUtils.isEmpty(search.getSearchname())) {
-//                empList = ed.findByAddressidIn(pageable, addressidlist);
-//                map.put("total", ed.countByAddressidIn(addressidlist));
-//            } else {
-//                empList = ed.findByNameLikeAndAddressidIn(pageable, search.getSearchname(), addressidlist);
-//                map.put("total", ed.countByNameLikeAndAddressidIn(search.getSearchname(), addressidlist));
-//            }
-            if (orgtype == Constants.ORGTYPE_AMETA) {
-                empList = ed.findByNameLikeAndAddressidIn(pageable, name,addressidlist);
-                map.put("total", ed.countByNameLike(name));
-            } else if (orgtype == Constants.ORGTYPE_SUPPLIER) {
-                List<Integer> list = new ArrayList<>();
-                list.add(orgid);
-                List<Integer> ids = os.findChildrenOrgid(emp.getOrganizationid(), list);
-                empList = ed.findByOrganizationidInAndNameLikeAndAddressidIn(pageable, ids, name,addressidlist);
-                map.put("total", ed.countByOrganizationidInAndNameLike(ids, name));
-            } else if (orgtype == Constants.ORGTYPE_INSTALLER) {//当前登录的是安装商
-                empList = ed.findByNameLikeAndOrganizationid(pageable, name, orgid);
-                map.put("total", ed.countByNameLikeAndOrganizationid(name, orgid));
+            List<Integer> list = new ArrayList<>();
+            list.add(orgid);
+            List<Integer> ids = os.findChildrenOrgid(emp.getOrganizationid(), list);
+            if (FormUtils.isEmpty(search.getSearchcitycode()) && FormUtils.isEmpty(search.getSearchcity())) {
+                if (orgtype == Constants.ORGTYPE_AMETA) {
+                    empList = ed.findByNameLike(pageable, name);
+                    map.put("total", ed.countByNameLike(name));
+                } else if (orgtype == Constants.ORGTYPE_SUPPLIER) {
+                    empList = ed.findByOrganizationidInAndNameLike(pageable, ids, name);
+                    map.put("total", ed.countByOrganizationidInAndNameLike(ids, name));
+                } else if (orgtype == Constants.ORGTYPE_INSTALLER) {//当前登录的是安装商
+                    empList = ed.findByNameLikeAndOrganizationid(pageable, name, orgid);
+                    map.put("total", ed.countByNameLikeAndOrganizationid(name, orgid));
+                }
+            }else {
+                if (orgtype == Constants.ORGTYPE_AMETA) {
+                    empList = ed.findByNameLikeAndAddressidIn(pageable, name, addressidlist);
+                    map.put("total", ed.countByNameLikeAndAddressidIn(name,ids));
+                } else if (orgtype == Constants.ORGTYPE_SUPPLIER) {
+                    empList = ed.findByOrganizationidInAndNameLikeAndAddressidIn(pageable, ids, name, addressidlist);
+                    map.put("total", ed.countByOrganizationidInAndNameLikeAndAddressidIn(ids, name,addressidlist));
+                } else if (orgtype == Constants.ORGTYPE_INSTALLER) {//当前登录的是安装商
+                    empList = ed.findByNameLikeAndOrganizationidAndAddressidIn(pageable, name, orgid,addressidlist);
+                    map.put("total", ed.countByNameLikeAndOrganizationidAndAddressidIn(name, orgid,addressidlist));
+                }
             }
         }
         if (empList == null || empList.getTotalElements() == 0) {
