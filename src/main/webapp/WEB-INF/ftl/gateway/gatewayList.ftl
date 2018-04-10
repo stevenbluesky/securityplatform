@@ -153,7 +153,7 @@
     //将网关id传递到网关详情页面
     function setCookie(name,value) {
         var exp　= new Date();
-        exp.setTime(exp.getTime() + 5*1000);
+        exp.setTime(exp.getTime() + 10*1000);//Cookie有效期设置为10s
         document.cookie = name + "="+ escape (value) + ";expires=" + exp.toGMTString();
         //location.href = "gatewayDetail"; //接收页面.
         $("#iframeDetail").attr("src", 'gatewayDetail?deviceid='+value);

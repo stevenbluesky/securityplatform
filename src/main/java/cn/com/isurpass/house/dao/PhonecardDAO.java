@@ -24,7 +24,7 @@ public interface PhonecardDAO extends CrudRepository<PhonecardPO,String>{
 	//SELECT * FROM  phonecard WHERE serialnumber LIKE '%f%' AND rateplan LIKE '%f%' AND STATUS=1  ORDER BY activationdate ASC LIMIT 0,9;
 	Page<PhonecardPO> findByStatusInAndSerialnumberContainingAndRateplanContaining(List<Integer> statuslist,
 			String serialnumber, String rateplan, Pageable pageable);
-	
-	
-	
+
+
+    long countByStatusInAndSerialnumberContainingAndRateplanContaining(List<Integer> statuslist, String serialnumber, String rateplan);
 }

@@ -64,7 +64,7 @@ public class PhonecardService {
 	@Transactional(readOnly = true)
 	public Map<String, Object> listPhonecard(Pageable pageable, PhonecardPO pc) {
 		Map<String, Object> map = new HashMap<>();
-		map.put("total", pd.count());
+		//map.put("total", pd.count());
 		//SELECT * FROM  phonecard WHERE serialnumber LIKE '%f%' AND rateplan LIKE '%f%' AND STATUS=1  ORDER BY activationdate ASC LIMIT 0,9;
 		Integer status = pc.getStatus();
 		List<Integer> statuslist = new ArrayList<Integer>();
@@ -77,6 +77,8 @@ public class PhonecardService {
 			statuslist.add(2);
 		}
 		Page<PhonecardPO> gateList = pd.findByStatusInAndSerialnumberContainingAndRateplanContaining(statuslist,pc.getSerialnumber(),pc.getRateplan(),pageable);
+		long count = pd.countByStatusInAndSerialnumberContainingAndRateplanContaining(statuslist,pc.getSerialnumber(),pc.getRateplan());
+		map.put("total",count);
 		List<PhonecardPO> list = new ArrayList<>();
 		gateList.forEach(o -> {
 			list.add(o);
