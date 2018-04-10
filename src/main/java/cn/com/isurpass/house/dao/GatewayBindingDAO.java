@@ -14,4 +14,8 @@ public interface GatewayBindingDAO extends CrudRepository<GatewayBindingPO,Integ
     GatewayBindingPO findByDeviceid(String deviceid);
 
     GatewayBindingPO findByDeviceidAndOrganizationid(String deviceid, Integer organizationid);
+
+    List<GatewayBindingPO> findByOrganizationid(Integer organizationid);
+
+    List<GatewayBindingPO> findByOrganizationidIn(List<Integer> oolist);
 }

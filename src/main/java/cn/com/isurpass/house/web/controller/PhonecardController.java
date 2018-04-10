@@ -73,13 +73,14 @@ public class PhonecardController {
 	@ResponseBody
 	@RequestMapping(value="update",method = RequestMethod.POST)
 	public String update(@RequestBody TransferVO tf){
+		String s = "";
 		String hope = tf.getHope();
 		Object[] ids = tf.getIds();
 		try {
-			ps.updatePhonecardStatus(hope,ids);
+			s = ps.updatePhonecardStatus(hope, ids);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return "failed";
+			return s;
 		}
 		return "success";
 	}

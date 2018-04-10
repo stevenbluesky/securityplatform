@@ -33,13 +33,14 @@
                       </form>
                   </div>
           <hr>
-<@shiro.hasPermission name="label.DealerList">
+<@shiro.hasPermission name="button:changeStatus">
             <button style="float: right;" class='btn btn-default'
                     onclick='toggleOrganizationStatus("unsuspence");'><@spring.message code='label.unsuspence'/></button>
-			<button style="float: right;" class='btn btn-default'
+            <button style="float: right;" class='btn btn-default'
                     onclick='toggleOrganizationStatus("suspence");'><@spring.message code='label.suspenced'/></button>
             <button onclick="window.location.href='addSupplierPage'" style="float: right;"
                     class="btn btn-default"><@spring.message code="label.addnew"/></button>
+            <button style="float: right;" class='btn btn-default' id='btn1'  onclick='toggleOrganizationStatus("modify");'><@spring.message code='label.modify'/></button>
 </@shiro.hasPermission>
 <table id="table" data-toggle="table">
     <thead>
@@ -53,7 +54,6 @@
         <th data-field="status" data-formatter="formatter_status"><@spring.message code="label.status"/></th>
         <th data-field="operate" data-formatter="formatter_op"
             data-events="supplieraddEvents" data-visible="false"><@spring.message code="label.operate"/></th>
-
     </tr>
     </thead>
 </table>
@@ -117,7 +117,7 @@
         $("#searchbtn").click(function () {
             $("#table").bootstrapTable("refreshOptions", {pageNumber: 1})
         });
-
+/*
         window.supplieraddEvents =
                 {
                     "click #btn1": function (e, value, row, index) {
@@ -134,7 +134,7 @@
                         toggleStatus(e, value, row, index, 'toggleOrganizationStatus', row.organizationid, 9);
                     }
 
-                };
+                };*/
 
         // <#--获取复选框选中的列的id数组-->
         function getCheckedId() {
@@ -153,6 +153,15 @@
             if (ids[0] == null || ids[0] == "") {
                 alert("<@spring.message code='label.nochecked'/>");
                 return;
+            }
+            if (obj == "modify") {
+                if(ids.length>1) {
+                    alert("<@spring.message code='label.chooseonepls'/>");
+                    return ;
+                }else {
+                    window.location.href="addSupplierPage?organizationid=" + ids[0];
+                    return;
+                }
             }
             if (obj == "unsuspence") {
                 if (!confirm("<@spring.message code='label.recoverconfirm'/>")) {

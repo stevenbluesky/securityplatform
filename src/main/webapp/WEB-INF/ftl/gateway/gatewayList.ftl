@@ -146,14 +146,22 @@
         onDblClickRow: function (row, $element) {
             var deid = row.deviceid;
             $('#myModal').modal('show');
-            $("#iframeDetail").attr("src", 'gatewayDetail?deviceid='+deid);
+            //$("#iframeDetail").attr("src", 'gatewayDetail?deviceid='+deid);
+            setCookie("id",deid);
         }
     });
-
+    //将网关id传递到网关详情页面
+    function setCookie(name,value) {
+        var exp　= new Date();
+        exp.setTime(exp.getTime() + 5*1000);
+        document.cookie = name + "="+ escape (value) + ";expires=" + exp.toGMTString();
+        //location.href = "gatewayDetail"; //接收页面.
+        $("#iframeDetail").attr("src", 'gatewayDetail?deviceid='+value);
+    }
     //当点击搜索按钮后，表格刷新并跳到第一页
     $("#searchsubmit").click(function(){
         $("#table").bootstrapTable("refreshOptions",{pageNumber:1})
-        // $('#table').bootstrapTable('refresh');
+        //$('#table').bootstrapTable('refresh');
     });
 
 	<#--隐藏列-->
