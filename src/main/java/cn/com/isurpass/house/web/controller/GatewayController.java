@@ -1,11 +1,13 @@
 package cn.com.isurpass.house.web.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 
+import cn.com.isurpass.house.po.EmployeePO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -77,9 +79,10 @@ public class GatewayController {
 	 */
 	@RequestMapping("gatewayJsonList")
 	@ResponseBody
-	public Map<String, Object> gatewayJsonList(PageResult pr,TypeGatewayInfoVO tgiv) {
+	public Map<String, Object> gatewayJsonList(PageResult pr,TypeGatewayInfoVO tgiv,HttpServletRequest request) {
 		Pageable pageable = PageRequest.of(pr.getPage()-1,pr.getRows(),Sort.Direction.ASC,"deviceid");
-		return gs.listGateway(pageable,tgiv);
+		EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
+		return gs.listGateway(pageable,tgiv,emp);
 	}
 	
 	/*@RequestMapping("gatewayDeviceJsonList")
@@ -101,8 +104,21 @@ public class GatewayController {
 		}
 		GatewayDetailVO gw = gs.findByDeviceid(deviceid);
 		model.addAttribute("gwd", gw);
-		model.addAttribute("gdd", gw.getDevice());
+		//model.addAttribute("gdd", gw.getDevice());
 		return "gateway/gatewayDetail";
+	}
+	@ResponseBody
+	@RequestMapping("gatewayDeviceDetail")
+	public Map<String,Object> gatewayDeviceDetail(PageResult pr,String deviceid,Model model) {
+		if(StringUtils.isEmpty(deviceid)){
+			return null;
+		}
+		GatewayDetailVO gw = gs.findByDeviceid(deviceid);
+		List<ZwaveDevicePO> list= gw.getDevice();
+		Map<String,Object> map = new HashMap<>();
+		map.put("total",list.size());
+		map.put("rows",list);
+		return map;
 	}
 	/**
 	 * 根据操作及id执行更新 

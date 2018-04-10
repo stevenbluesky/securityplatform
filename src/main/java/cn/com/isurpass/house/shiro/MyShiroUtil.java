@@ -45,7 +45,7 @@ public class MyShiroUtil extends AuthorizingRealm {
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
         EmployeePO emp = (EmployeePO) principalCollection.fromRealm(getName()).iterator().next();
-        System.out.println(emp);
+        System.out.println("权限"+emp);
 //		EmployeePO emp = es.findByLoginname(loginName);
 //        System.out.println("abcdefg");
 //		System.out.println(loginName);
