@@ -96,15 +96,42 @@ public class GatewayService {
 	 * 根据搜索条件获取网关分页信息列表
 	 * @param pageable
 	 * @param tgiv
+	 * @param emp
 	 * @return
 	 */
 	@Transactional(readOnly = true)
-	public Map<String, Object> listGateway(Pageable pageable, TypeGatewayInfoVO tgiv) {
+	public Map<String, Object> listGateway(Pageable pageable, TypeGatewayInfoVO tgiv, EmployeePO emp) {
+
 		Map<String, Object> map = new HashMap<>();//返回的map
 		List<TypeGatewayInfoVO> list = new ArrayList<>();//返回的list对象
 		Iterable<GatewayPO> geted = gd.findAll();//拿到网关列表所有记录
 		List<String> gdlist = new ArrayList<>();
 		geted.forEach(single ->{gdlist.add(single.getDeviceid());});
+		List<Integer> orglist = new ArrayList<>();
+		List<String> orgglist = new ArrayList<>();
+		Integer organizationid = emp.getOrganizationid();
+		OrganizationPO org = od.findByOrganizationid(organizationid);
+		if("1".equals(org.getOrgtype()+"")){//为服务商,拿本身及旗下安装商的网关
+			List<OrganizationPO> pid = od.findByParentorgid(organizationid);
+			List<Integer> oolist = new ArrayList<>();
+			for(OrganizationPO o : pid){
+				oolist.add(o.getOrganizationid());
+			}
+			oolist.add(organizationid);
+			List<GatewayBindingPO> olist = gbd.findByOrganizationidIn(oolist);
+			for(GatewayBindingPO s : olist){
+				orgglist.add(s.getDeviceid());
+			}
+		}else if("2".equals(org.getOrgtype()+"")){//为安装商，拿自己的网关
+			List<GatewayBindingPO> olist = gbd.findByOrganizationid(organizationid);
+			for(GatewayBindingPO s : olist){
+				orgglist.add(s.getDeviceid());
+			}
+		}else{//为ameta管理员，拿所有网关
+			for(String s : gdlist){
+				orgglist.add(s);
+			}
+		}
 		//如果传入参数为空，则默认查网关列表的全部
 		List<String> citynamedeviceidlist = StringUtils.isEmpty(tgiv.getCityname())?gdlist:findIdListByCityname(tgiv.getCityname());
 		List<String> citycodedeviceidlist = StringUtils.isEmpty(tgiv.getCitycode())?gdlist:findIdListByCitycode(tgiv.getCitycode());
@@ -128,6 +155,7 @@ public class GatewayService {
 		citynamedeviceidlist.retainAll(devicenamedeviceidlist);
 		serviceproviderdeviceidlist.retainAll(installerdeviceidlist);
 		citynamedeviceidlist.retainAll(serviceproviderdeviceidlist);
+		citynamedeviceidlist.retainAll(orgglist);
 		List<GatewayPO> gateList = gd.findByDeviceidIn(pageable,citynamedeviceidlist);//从网关表中拿基本数据
 		map.put("total",gd.countByDeviceidIn(citynamedeviceidlist));
 		gateList.forEach(o -> {

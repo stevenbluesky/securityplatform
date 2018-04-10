@@ -43,7 +43,7 @@ public class IndexController {
 	@RequestMapping(value = "getMenuTree",produces = "text/json;charset=UTF-8")
 	public String getMenuTree(HttpServletResponse response, HttpServletRequest request){
 		EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
-		String json = employeeService.getMenuTree(emp);
+		String json = employeeService.getMenuTree(emp,request);
 		return json;
 	}
 }

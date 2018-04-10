@@ -73,7 +73,7 @@
     <tr>
         <th data-field="">复选框列</th>
         <th data-field="name"><@spring.message code="label.dname"/></th>
-        <th data-field=""><@spring.message code="label.alarmstatus"/></th>
+        <#--<th data-field=""><@spring.message code="label.alarmstatus"/></th>-->
         <th data-field="status" data-formatter="formatter_gatewaystatus"><@spring.message code="label.status"/></th>
         <th data-field="deviceid"><@spring.message code="label.gatewayID"/></th>
         <th data-field="cityname"><@spring.message code="label.area"/></th>
@@ -146,14 +146,22 @@
         onDblClickRow: function (row, $element) {
             var deid = row.deviceid;
             $('#myModal').modal('show');
-            $("#iframeDetail").attr("src", 'gatewayDetail?deviceid='+deid);
+            //$("#iframeDetail").attr("src", 'gatewayDetail?deviceid='+deid);
+            setCookie("id",deid);
         }
     });
-
+    //将网关id传递到网关详情页面
+    function setCookie(name,value) {
+        var exp　= new Date();
+        exp.setTime(exp.getTime() + 5*1000);
+        document.cookie = name + "="+ escape (value) + ";expires=" + exp.toGMTString();
+        //location.href = "gatewayDetail"; //接收页面.
+        $("#iframeDetail").attr("src", 'gatewayDetail?deviceid='+value);
+    }
     //当点击搜索按钮后，表格刷新并跳到第一页
     $("#searchsubmit").click(function(){
-        //$("#table").bootstrapTable("refreshOptions",{pageNumber:1})
-        $('#table').bootstrapTable('refresh');
+        $("#table").bootstrapTable("refreshOptions",{pageNumber:1})
+        //$('#table').bootstrapTable('refresh');
     });
 
 	<#--隐藏列-->
@@ -172,7 +180,7 @@
         $("table :checkbox").each(function(key,value){
             if($(value).prop('checked')){
                 if(key!=0){
-                    ids[key-1] = tbodyObj.rows[key].cells[4].innerHTML;
+                    ids[key-1] = tbodyObj.rows[key].cells[3].innerHTML;
                 }
             }
         })
@@ -204,7 +212,7 @@
         //异步更新     
         $.ajax({
             type:'post',
-            url:'/update',
+            url:'update',
             contentType:'application/json',
             traditional:true,
             data:"{\"hope\":\""+obj+"\",\"ids\":"+JSON.stringify(trans)+"}",

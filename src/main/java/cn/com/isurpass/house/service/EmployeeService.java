@@ -536,10 +536,10 @@ public class EmployeeService {
     }
 	
 	 @Transactional(readOnly = true)
-    public String getMenuTree(EmployeePO emp) {
+    public String getMenuTree(EmployeePO emp, HttpServletRequest request) {
         ResourceBundle resourceBundle ;
-        String language = Locale.getDefault().getLanguage();
-        if ("zh".equals(language)){
+        String language = request.getLocale().getLanguage();
+         if ("zh".equals(language)){
             resourceBundle =ResourceBundle.getBundle("messages",Locale.SIMPLIFIED_CHINESE);
             //resourceBundle =ResourceBundle.getBundle("messages",Locale.US);
         }else{
@@ -552,7 +552,7 @@ public class EmployeeService {
         emprolelist.forEach(e -> roleprivilegelist.addAll(rolePrivilegeDAO.findByRoleid(e.getRoleid())));//遍历员工角色列表，获取角色权限列表
         roleprivilegelist.forEach(e -> privilegeid.add(e.getPrivilegeid()));//根据员工的角色权限列表得到员工的权限id列表
         List<PrivilegePO> privilegelist = privilegeDAO.findByPrivilegeidIn(privilegeid);//根据角色权限id列表去拿到权限权限列表
-        List<Integer> idlist = new ArrayList<>();
+        List<Integer> idlist = new ArrayList<>();//权限列表id集合
        for(PrivilegePO e : privilegelist){
             idlist.add(e.getPrivilegeid());
         }
@@ -580,6 +580,11 @@ public class EmployeeService {
                     JSONArray jj = JSONArray.fromObject(pplist);
                     parmap.put("nodes",jj);
                 }
+            }else if(p.getParentprivilegeid()!=null&&!idlist.contains(p.getParentprivilegeid())){
+                String text = resourceBundle.getString(p.getCode());
+                String href = p.getLabel();
+                parmap.put("text",text);
+                parmap.put("href",href);
             }
             if(parmap.size()>0) {
                 parlist.add(parmap);

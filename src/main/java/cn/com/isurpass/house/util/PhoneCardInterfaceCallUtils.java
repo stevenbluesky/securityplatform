@@ -43,7 +43,6 @@ public class PhoneCardInterfaceCallUtils {
         String serialnumber = (String)jsStr.get("iccid");
         String errorMessage = (String)jsStr.get("errorMessage");
         String errorCode = (String)jsStr.get("errorCode");
-        System.out.println(result);
         if(errorCode!=null||errorMessage!=null){
             throw new MyArgumentNullException("errorMessage:"+errorMessage+";errorCode:"+errorCode);
         }

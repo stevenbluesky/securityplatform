@@ -51,7 +51,7 @@
     </div>
 
     <div class="col-md-10" style="height: 800px;">
-        <iframe class="embed-responsive-item" id="right" name="right" frameborder="0" src="org/supplierList"
+        <iframe class="embed-responsive-item" id="right" name="right" frameborder="0" src="welcome.html"
                 style="height: 100%;width: 100%;"></iframe>
     </div>
 </div>

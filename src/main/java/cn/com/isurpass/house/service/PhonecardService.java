@@ -85,21 +85,23 @@ public class PhonecardService {
 		return map;
 	}
 	@Transactional(rollbackFor = Exception.class)
-	public void updatePhonecardStatus(String hope, Object [] ids) throws Exception {
+	public String  updatePhonecardStatus(String hope, Object [] ids) throws Exception {
+		String s = "";
 		for (Object string : ids) {
 			PhonecardPO phonecardpo = pd.findByPhonecardid(string);
 			if("start".equals(hope)){
-				PhoneCardInterfaceCallUtils.updateStatus(phonecardpo.getSerialnumber(),Constants.ACTIVATED);
+				s = PhoneCardInterfaceCallUtils.updateStatus(phonecardpo.getSerialnumber(), Constants.ACTIVATED);
 				phonecardpo.setStatus(Constants.STATUS_NORMAL);
 			}else if("freeze".equals(hope)){
-				PhoneCardInterfaceCallUtils.updateStatus(phonecardpo.getSerialnumber(),Constants.INVENTORY);
+				s = PhoneCardInterfaceCallUtils.updateStatus(phonecardpo.getSerialnumber(),Constants.INVENTORY);
 				phonecardpo.setStatus(Constants.STATUS_SUSPENCED);
 			}else if("delete".equals(hope)){
-				PhoneCardInterfaceCallUtils.updateStatus(phonecardpo.getSerialnumber(),Constants.DEACTIVATED);
+				s = PhoneCardInterfaceCallUtils.updateStatus(phonecardpo.getSerialnumber(),Constants.DEACTIVATED);
 				phonecardpo.setStatus(Constants.STATUS_DELETED);
 			}
 			pd.save(phonecardpo);
 		}
+		return s;
 	}
 	
 }
