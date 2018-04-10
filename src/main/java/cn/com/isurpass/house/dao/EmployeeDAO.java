@@ -68,4 +68,10 @@ public interface EmployeeDAO extends CrudRepository<EmployeePO,Integer>{
     Page<EmployeePO> findByAddressidInAndOrganizationidIn(Pageable pageable, List<Integer> addressidlist, List<Integer> childrenOrgid);
 
 	Page<EmployeePO> findByOrganizationidInAndNameLikeAndAddressidIn(Pageable pageable, List<Integer> ids, String name, List<Integer> addressidlist);
+
+	Integer countByOrganizationidInAndNameLikeAndAddressidIn(List<Integer> ids, String name, List<Integer> addressidlist);
+
+	Page<EmployeePO> findByNameLikeAndOrganizationidAndAddressidIn(Pageable pageable, String name, Integer orgid, List<Integer> addressidlist);
+
+	Integer countByNameLikeAndOrganizationidAndAddressidIn(String name, Integer orgid, List<Integer> addressidlist);
 }
