@@ -7,21 +7,21 @@
                    <div class="form-group col-md-3" align="right">
                        <div>
                            <b><@spring.message code='label.name'/></b>
-                           <input type="text" class="form-control" id="name" name="name"
+                           <input type="text" class="form-control" id="searchName" name="searchName"
                                   placeholder="<@spring.message code='label.name'/>">
                        </div>
                    </div>
                    <div class="form-group col-md-3" align="right">
                        <div>
                            <b><@spring.message code='label.city'/></b>
-                           <input type="text" class="form-control" id="code" name="code"
+                           <input type="text" class="form-control" id="searchCity" name="searchCity"
                                   placeholder="<@spring.message code='label.city'/>">
                        </div>
                    </div>
                    <div class="form-group col-md-3" align="right">
                        <div>
                            <b><@spring.message code='label.phonenumber'/></b>
-                           <input type="text" class="form-control" id="code" name="code"
+                           <input type="text" class="form-control" id="searchPhonenumber" name="searchPhonenumber"
                                   placeholder="<@spring.message code='label.phonenumber'/>">
                        </div>
                    </div>
@@ -31,7 +31,7 @@
                    <div class="form-group col-md-3" align="right">
                        <div>
                            <b><@spring.message code='label.gatewayID'/></b>
-                           <input type="text" class="form-control" id="name" name="name"
+                           <input type="text" class="form-control" id="searchGatewayid" name="searchGatewayid"
                                   placeholder="<@spring.message code='label.gatewayID'/>">
                        </div>
                    </div>
@@ -39,7 +39,7 @@
                    <div class="form-group col-md-3" align="right">
                        <div>
                            <b><@spring.message code='label.phonecardid0'/></b>
-                           <input type="text" class="form-control" id="code" name="code"
+                           <input type="text" class="form-control" id="searchSerialnumber" name="searchSerialnumber"
                                   placeholder="<@spring.message code='label.phonecardid'/>">
                        </div>
                    </div>
@@ -47,12 +47,12 @@
                    <div class="form-group col-md-3" align="right">
                        <div>
                            <b><@spring.message code='label.serviceprovider'/></b>
-                           <input type="text" class="form-control" id="code" name="code"
+                           <input type="text" class="form-control" id="searchDealername" name="searchDealername"
                                   placeholder="<@spring.message code='label.serviceprovider'/>">
                        </div>
                    </div>
                    <div class="form-group col-md-3" align="center">
-                       <button type="submit" class="btn btn-default"
+                       <button id="searchbtn" type="button" class="btn btn-default"
                                style="width:28%;"><@spring.message code='label.search'/></button>
                    </div>
            </form>
@@ -111,6 +111,12 @@
             queryParams: function (params) {
                 //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
                 var temp = {
+                    searchName:$("#searchName").val(),
+                    searchCity:$("#searchCity").val(),
+                    searchSerialnumber:$("#searchSerialnumber").val(),
+                    searchGatewayid:$("#searchGatewayid").val(),
+                    searchPhonenumber:$("#searchPhonenumber").val(),
+                    searchDealername:$("#searchDealername").val(),
                     rows: params.limit,                         //页面大小
                     page: (params.offset / params.limit) + 1,   //页码
                     sort: params.sort,      //排序列名
@@ -132,6 +138,11 @@
                 // alert(id);
 
             }
+        });
+
+        //当点击搜索按钮后，表格刷新并跳到第一页
+        $("#searchbtn").click(function () {
+            $("#table").bootstrapTable("refreshOptions", {pageNumber: 1})
         });
 
         // <#--获取复选框选中的列的id数组-->

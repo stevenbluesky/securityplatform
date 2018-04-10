@@ -23,4 +23,6 @@ public interface AddressDAO extends CrudRepository<AddressPO,Integer>/* extends 
 	List<AddressPO> findByCity(String city);
 
     List<AddressPO> findByCityIn(List<String> citynamelist);
+
+    List<AddressPO> findByCityContaining(String searchCity);
 }

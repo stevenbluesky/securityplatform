@@ -27,4 +27,5 @@ public interface CityDAO extends CrudRepository<CityPO, Integer> {
     Integer countByCitycodeLikeAndCitynameLike(String citycode, String name);
 
     CityPO findByCityname(Integer city);
+
 }

@@ -2,16 +2,19 @@ package cn.com.isurpass.house.service;
 
 import java.util.*;
 
+import javax.persistence.criteria.*;
 import javax.servlet.http.HttpServletRequest;
 
 import cn.com.isurpass.house.dao.*;
 import cn.com.isurpass.house.exception.MyArgumentNullException;
 import cn.com.isurpass.house.po.*;
 import cn.com.isurpass.house.util.Constants;
+import cn.com.isurpass.house.vo.UserSearchVO;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +22,8 @@ import cn.com.isurpass.house.util.FormUtils;
 import cn.com.isurpass.house.vo.EmployeeParentOrgIdVO;
 import cn.com.isurpass.house.vo.UserAddVO;
 import cn.com.isurpass.house.vo.UserInfoListVO;
+
+import static java.util.stream.Collectors.toList;
 
 @Service
 public class UserService {
@@ -49,6 +54,10 @@ public class UserService {
     GatewayBindingDAO gbd;
     @Autowired
     EmployeeroleDAO erd;
+    @Autowired
+    GatewayDAO gateway;
+    @Autowired
+    OrganizationService os;
 
     @Transactional(rollbackFor = Exception.class)
     public void add(UserAddVO u, HttpServletRequest request) {
@@ -73,7 +82,7 @@ public class UserService {
 
         UserPO user = new UserPO();
         user.setLoginname(u.getPhonenumber());
-        user.setName(u.getFirstname()+u.getLastname());
+        user.setName(u.getFirstname() + u.getLastname());
         user.setCitycode(city.findByCityid(u.getCity()).getCitycode());
 
         EmployeeParentOrgIdVO empp = emps.findEmpParentOrgid(emp);
@@ -141,7 +150,7 @@ public class UserService {
         EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
         Integer orgtype = od.findByOrganizationid(emp.getOrganizationid()).getOrgtype();
         Integer count = 0;
-        if (erd.findByEmployeeid(emp.getEmployeeid()) !=null && erd.findByEmployeeid(emp.getEmployeeid()).stream().map(EmployeeRolePO::getRoleid).anyMatch(id -> id==4)) {
+        if (erd.findByEmployeeid(emp.getEmployeeid()) != null && erd.findByEmployeeid(emp.getEmployeeid()).stream().map(EmployeeRolePO::getRoleid).anyMatch(id -> id == 4)) {
             Page<UserPO> userList = ud.findByInstallerid(emp.getEmployeeid(), pageable);
             count = ud.countByInstallerid(emp.getEmployeeid());
             return listUserInfo0(pageable, userList, count);
@@ -243,5 +252,70 @@ public class UserService {
             return true;
         }
         return false;
+    }
+
+    @Transactional(readOnly = true)
+    public Map<String, Object> search(Pageable pageable, UserSearchVO usv, HttpServletRequest request) {
+        Specification<UserPO> specification = new Specification<UserPO>() {
+            @Override
+            public Predicate toPredicate(Root<UserPO> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
+                List<Predicate> predicates = new ArrayList<Predicate>();
+                Predicate predicate = null;
+                Expression<String> namePath = null;
+
+                List<String> citycodelist = null;
+                List<Integer> personidlist = null;
+                List<Integer> useridlist = null;
+                List<Integer> useridlist0 = null;
+                if (!FormUtils.isEmpty(usv.getSearchCity())) {
+                    citycodelist = city.findByCitynameContaining(usv.getSearchCity()).stream().map(CityPO::getCitycode).collect(toList());
+                }
+                if (!FormUtils.isEmpty(usv.getSearchPhonenumber())) {
+                    personidlist = pd.findByPhonenumberContaining(usv.getSearchPhonenumber()).stream().map(PersonPO::getPersonid).collect(toList());
+                }
+                if (!FormUtils.isEmpty(usv.getSearchGatewayid())) {
+                    List<String> gatewayidlist = gateway.findByDeviceidContaining(usv.getSearchGatewayid()).stream().map(GatewayPO::getDeviceid).collect(toList());
+                    useridlist = gd.findByDeviceidIn(gatewayidlist).stream().map(GatewayUserPO::getUserid).collect(toList());
+                }
+                if (!FormUtils.isEmpty(usv.getSearchSerialnumber())) {
+                    List<Integer> phonecardidlist = pcard.findBySerialnumberContaining(usv.getSearchSerialnumber()).stream().map(PhonecardPO::getPhonecardid).collect(toList());
+                    useridlist0 = pcud.findByPhonecardidIn(phonecardidlist).stream().map(PhonecardUserPO::getUserid).collect(toList());
+                }
+
+                if (true) {
+                    if (citycodelist != null && citycodelist.size() != 0) {
+                        namePath = root.get("citycode");
+                        predicates.add(namePath.in(citycodelist));
+                    }
+                    if (personidlist != null && personidlist.size() != 0) {
+                        namePath = root.get("personid");
+//                        predicate = builder.in(namePath.in(personidlist));
+                        predicates.add(namePath.in(personidlist));
+                    }
+                    if (useridlist != null && useridlist.size() != 0) {
+                        namePath = root.get("userid");
+                        predicates.add(namePath.in(useridlist));
+                    }
+                    if (useridlist0 != null && useridlist0.size() != 0) {
+                        namePath = root.get("userid");
+//                        predicate = builder.in(namePath.in(useridlist0));
+                        predicates.add(namePath.in(useridlist0));
+                    }
+//                    EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
+//                    Integer orgtype = od.findByOrganizationid(emp.getOrganizationid()).getOrgtype();
+//                    if (orgtype != Constants.ORGTYPE_AMETA) {
+//
+//                    }
+                }
+                query.where(predicates.toArray(new Predicate[predicates.size()]));
+                return null;
+            }
+        };
+//        System.out.println(ud.findAll(specification));
+        List<UserPO> list = ud.findAll(specification);
+        Map<String, Object> map = new HashMap<>();
+        map.put("total", 0);
+        map.put("rows", Collections.EMPTY_LIST);
+        return map;
     }
 }

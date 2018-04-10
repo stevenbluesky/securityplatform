@@ -1,18 +1,17 @@
 package com.isurpass.house;
 
 
-import cn.com.isurpass.house.dao.EmployeeDAO;
-import cn.com.isurpass.house.dao.EmployeeroleDAO;
-import cn.com.isurpass.house.dao.RolePrivilegeDAO;
-import cn.com.isurpass.house.po.EmployeePO;
-import cn.com.isurpass.house.po.EmployeeRolePO;
-import cn.com.isurpass.house.po.RolePrivilegePO;
+import cn.com.isurpass.house.dao.*;
+import cn.com.isurpass.house.po.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import javax.persistence.criteria.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -23,11 +22,15 @@ import static java.util.stream.Collectors.toList;
 public class OPDatabase {
 
     @Autowired
+    AddressDAO ad;
+    @Autowired
     EmployeeDAO emp;
     @Autowired
     RolePrivilegeDAO rp;
     @Autowired
     EmployeeroleDAO erd;
+    @Autowired
+    UserDAO ud;
 
     @Test
     public void addRP() {
@@ -58,5 +61,9 @@ public class OPDatabase {
                 erd.save(erp);
             }
         });
+    }
+
+    @Test
+    public void search() {
     }
 }

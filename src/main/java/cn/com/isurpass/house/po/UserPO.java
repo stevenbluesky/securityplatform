@@ -122,6 +122,21 @@ public class UserPO {
 		this.createtime = createtime;
 	}
 
-
-
+	@Override
+	public String toString() {
+		return "UserPO{" +
+				"userid=" + userid +
+				", loginname='" + loginname + '\'' +
+				", name='" + name + '\'' +
+				", citycode='" + citycode + '\'' +
+				", organizationid=" + organizationid +
+				", installerorgid=" + installerorgid +
+				", installerid=" + installerid +
+				", codepostfix='" + codepostfix + '\'' +
+				", usercode='" + usercode + '\'' +
+				", personid=" + personid +
+				", status=" + status +
+				", createtime=" + createtime +
+				'}';
+	}
 }

@@ -27,4 +27,6 @@ public interface PhonecardDAO extends CrudRepository<PhonecardPO,String>{
 
 
     long countByStatusInAndSerialnumberContainingAndRateplanContaining(List<Integer> statuslist, String serialnumber, String rateplan);
+
+    List<PhonecardPO> findBySerialnumberContaining(String searchSerialnumber);
 }
