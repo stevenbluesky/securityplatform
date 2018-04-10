@@ -49,7 +49,7 @@
         <th data-field="organizationid" data-visible="false">ID</th>
         <!--<th data-field="organizationid">ID</th>-->
         <th data-field="name"><@spring.message code="label.pname"/></th>
-        <th data-field="code"><@spring.message code="label.code"/></th>
+        <th data-field="code" ><@spring.message code="label.code"/></th>
         <th data-field="city"><@spring.message code="label.city"/></th>
         <th data-field="status" data-formatter="formatter_status"><@spring.message code="label.status"/></th>
         <th data-field="operate" data-formatter="formatter_op"
