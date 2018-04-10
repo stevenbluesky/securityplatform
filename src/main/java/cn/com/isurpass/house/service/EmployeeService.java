@@ -176,7 +176,7 @@ public class EmployeeService {
         }
         if (FormUtils.checkNUll(emp.getLastname()) || FormUtils.checkNUll(emp.getFirstname()) || FormUtils.checkNUll(emp.getSsn())
                 || FormUtils.checkNUll(emp.getSsn()) || emp.getGender() != null || FormUtils.checkNUll(emp.getTitle())) {
-            PersonPO personPO = new PersonPO(emp.getLastname() + " " + emp.getFirstname(), emp.getSsn(), emp.getGender(), emp.getTitle(), emp.getFirstname(), emp.getLastname(),
+            PersonPO personPO = new PersonPO(emp.getLastname() + emp.getFirstname(), emp.getSsn(), emp.getGender(), emp.getTitle(), emp.getFirstname(), emp.getLastname(),
                     emp.getPhonenumber(), emp.getEmail(), emp.getFax());
             personPO.setAddressid(addressid);
             if (empInfo != null) {
@@ -188,6 +188,9 @@ public class EmployeeService {
         if (empInfo == null) {
             EmployeeRolePO erp = new EmployeeRolePO();
             erp.setRoleid(5);//默认角色是员工
+            if ((od.findByOrganizationid(emp.getOrganizationid()).getOrgtype() == Constants.ORGTYPE_INSTALLER)){// 是安装员且code为空时
+                erp.setRoleid(4);
+            }
             erp.setEmployeeid(save.getEmployeeid());
             erp.setCreatetime(new Date());
             erd.save(erp);

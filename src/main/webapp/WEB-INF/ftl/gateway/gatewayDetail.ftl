@@ -6,7 +6,8 @@
 
     <div class="col-md-10">
         <div class="text-center"><h2><@spring.message code="label.gatewaydetail"/></h2></div>
-        <div class="text-left"><h4><@spring.message code="label.gatewayinfo"/></h4></div><hr>
+        <div class="text-left"><h4><@spring.message code="label.gatewayinfo"/></h4></div>
+        <hr>
         <div class="row">
             <div class="col-md-3">
                 <p><@spring.message code="label.dname"/></p>
@@ -39,6 +40,7 @@
         </div>
         <br>
         <div class="text-left"><h4><@spring.message code="label.phonecardinfo"/></h4></div><hr>
+        <hr>
         <div class="row">
             <div class="col-md-3">
                 <p><@spring.message code="label.serialnumber"/></p>

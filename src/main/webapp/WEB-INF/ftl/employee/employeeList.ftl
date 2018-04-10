@@ -33,14 +33,15 @@
               </form>
           </div>
           <hr>
-
+<@shiro.hasPermission name="button:changeStatus">
                <button style="float: right;" class='btn btn-default'
                        onclick='toggleEmployeeStatus0("unsuspence");'><@spring.message code='label.unsuspence'/></button>
 			<button style="float: right;" class='btn btn-default'
                     onclick='toggleEmployeeStatus0("suspence");'><@spring.message code='label.suspenced'/></button>
             <button onclick="window.location.href='addEmployeePage'" style="float: right;"
                     class="btn btn-default"><@spring.message code="label.addnew"/></button>
-          
+           <button style="float: right;" class='btn btn-default' id='btn1'  onclick='toggleEmployeeStatus0("modify");'><@spring.message code='label.modify'/></button>
+</@shiro.hasPermission>
 <table id="table" data-toggle="table">
     <thead>
     <tr>
@@ -116,7 +117,7 @@
         $("#searchbtn").click(function () {
             $("#table").bootstrapTable("refreshOptions", {pageNumber: 1})
         });
-
+/*
         window.operateEvents =
                 {
                     "click #btn1": function (e, value, row, index) {
@@ -133,7 +134,7 @@
                         toggleStatus(e, value, row, index, 'toggleEmployeeStatus', row.employeeid, 9);
                     }
 
-                };
+                };*/
 
         // <#--获取复选框选中的列的id数组-->
         function getCheckedId() {
@@ -152,6 +153,15 @@
             if (ids[0] == null || ids[0] == "") {
                 alert("<@spring.message code='label.nochecked'/>");
                 return;
+            }
+            if (obj == "modify") {
+                if(ids.length>1) {
+                    alert("<@spring.message code='label.chooseonepls'/>");
+                    return ;
+                }else {
+                    window.location.href="addEmployeePage?id=" + ids[0];
+                    return;
+                }
             }
             if (obj == "unsuspence") {
                 if (!confirm("<@spring.message code='label.recoverconfirm'/>")) {

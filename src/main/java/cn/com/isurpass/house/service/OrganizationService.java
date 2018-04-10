@@ -234,7 +234,7 @@ public class OrganizationService {
             if (orgtype == Constants.ORGTYPE_SUPPLIER) {
                 erpo.setRoleid(2);
             }
-            if (orgtype == Constants.ORGTYPE_AMETA) {
+            if (orgtype == Constants.ORGTYPE_INSTALLER) {
                 erpo.setRoleid(3);
             }
             erd.save(erpo);
@@ -510,7 +510,7 @@ public class OrganizationService {
         return false;
     }
 
-    @RequiresPermissions("fasf")
+//    @RequiresPermissions("fasf")
     public void toggleOrganizationStatus0(String hope, Object[] ids, HttpServletRequest request) {
         if ("unsuspence".equals(hope)) {
             for (Object id : ids) {

@@ -14,7 +14,7 @@ public interface EmployeeDAO extends CrudRepository<EmployeePO,Integer>{
 	EmployeePO save(EmployeePO emp);
 	
 //	List<EmployeePO> listAllEmployee(Pageable pageable);
-	
+	List<EmployeePO> findAll();
 	Page<EmployeePO> findAll(Pageable pageable);
 /*	public List<EmployeePO> listAllEmployee(PageResult pr) {
 		return (List<EmployeePO>) getSession().createCriteria(EmployeePO.class).setFirstResult(pr.getStart())
