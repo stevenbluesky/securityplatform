@@ -40,7 +40,6 @@
         </div>
         <br>
         <div class="text-left"><h4><@spring.message code="label.phonecardinfo"/></h4></div><hr>
-        <hr>
         <div class="row">
             <div class="col-md-3">
                 <p><@spring.message code="label.serialnumber"/></p>
@@ -107,8 +106,8 @@
             pageList: [10, 25, 50, 100],        //可供选择的每页的行数（*）
             search: false,                      //是否显示表格搜索
             strictSearch: false,
-            showColumns: true,                  //是否显示所有的列（选择显示的列）
-            showRefresh: true,                  //是否显示刷新按钮
+            showColumns: false,                  //是否显示所有的列（选择显示的列）
+            showRefresh: false,                  //是否显示刷新按钮
             minimumCountColumns: 2,             //最少允许的列数
             clickToSelect: true,                //是否启用点击选中行
             //height: 500,                      //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
@@ -128,8 +127,8 @@
                 return temp;
             },
             columns: [{
-                checkbox: true,
-                visible: true
+                checkbox: false,
+                visible: false
             }],
             onLoadSuccess: function () {
             },

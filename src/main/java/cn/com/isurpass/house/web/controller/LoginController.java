@@ -48,7 +48,6 @@ public class LoginController {
 		try {
 			String validateCode = (String) request.getSession().getAttribute("validateCode");
 			String code = login.getCaptchacode();
-			System.out.println("接收到的验证码："+code);
 			if(StringUtils.isEmpty(code)||!code.equalsIgnoreCase(validateCode)){
 				return new JsonResult(-1, "-2");
 			}

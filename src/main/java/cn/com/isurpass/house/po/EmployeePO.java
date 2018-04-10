@@ -1,5 +1,7 @@
 package cn.com.isurpass.house.po;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -18,6 +20,7 @@ public class EmployeePO {
 	private String loginname;
 	private String code;
 	private String name;
+	@JSONField(serialize=false)
 	private String password;
 	private Integer organizationid;
 	private String question;
