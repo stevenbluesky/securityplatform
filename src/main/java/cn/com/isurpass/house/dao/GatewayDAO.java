@@ -19,8 +19,6 @@ public interface GatewayDAO extends CrudRepository<GatewayPO,Integer>{
 
 	List<GatewayPO> findByDeviceidContaining(String deviceid);
 
-
-
 	List<GatewayPO> findByDeviceidIn(Pageable pageable, List<String> citynamedeviceidlist);
 
 	List<GatewayPO> findByDeviceidIn(List<String> emptydeviceidlist);
@@ -29,4 +27,5 @@ public interface GatewayDAO extends CrudRepository<GatewayPO,Integer>{
     Long countByDeviceidIn(List<String> citynamedeviceidlist);
 
     List<GatewayPO> findByNameContaining(String devicename);
+
 }

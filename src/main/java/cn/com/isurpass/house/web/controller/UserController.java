@@ -4,9 +4,11 @@ import cn.com.isurpass.house.exception.MyArgumentNullException;
 import cn.com.isurpass.house.result.JsonResult;
 import cn.com.isurpass.house.service.UserService;
 import cn.com.isurpass.house.util.Constants;
+import cn.com.isurpass.house.util.FormUtils;
 import cn.com.isurpass.house.util.PageResult;
 import cn.com.isurpass.house.vo.TransferVO;
 import cn.com.isurpass.house.vo.UserAddVO;
+import cn.com.isurpass.house.vo.UserSearchVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -43,8 +45,11 @@ public class UserController {
 	
 	@RequestMapping("userInfoJsonList")
 	@ResponseBody
-	public Map<String, Object> userInfoJsonList(PageResult pr,HttpServletRequest request) {
+	public Map<String, Object> userInfoJsonList(PageResult pr, UserSearchVO usv,HttpServletRequest request) {
 		Pageable pageable = PageRequest.of(pr.getPage()-1,pr.getRows(),Sort.Direction.ASC,"organizationid");
+		if (!FormUtils.isEmpty(usv)) {//搜索
+			return us.search(pageable, usv,request);
+		}
 		return us.listUserInfo(pageable,request);
 	}
 
