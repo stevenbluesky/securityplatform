@@ -73,7 +73,7 @@
         </div>
         <div class="text-left"><h4><@spring.message code="label.associatedequipment"/></h4></div>
         <hr>
-        <table class="table table-hover table-bordered" data-toggle="table">
+        <table id="table0" class="table table-hover table-bordered">
             <thead>
             <tr>
                 <th><@spring.message code="label.dname"/></th>
