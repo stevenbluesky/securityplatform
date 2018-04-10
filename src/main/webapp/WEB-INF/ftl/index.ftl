@@ -28,17 +28,21 @@
     </style>
 </head>
 <body>
+<br>
 <div class="row">
-    <div class="col-md-10">
+    <div class="col-md-3"  style="height:70px;width: 300px" align="right">
+        <img src="../../image/logo1.jpg"  height="70" >
     </div>
-    <div class="col-md-2">
-        <br>
-        <br>
+
+    <div class="col-md-7">
+    </div>
+    <div class="col-md-2" align="middle">
         <br>
         <#if emp?? ><h4 style="display: inline;"><@spring.message code='label.welcome'/>,${emp.loginname}&nbsp;&nbsp;<a href="logout" ><@spring.message code='label.logout'/></a></h4></#if>
         <br>
     </div>
 </div>
+<br>
 <div class="row">
     <div id="wrap" class="col-md-2">
         <div class="container">
