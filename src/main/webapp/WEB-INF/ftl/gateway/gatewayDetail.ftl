@@ -76,10 +76,10 @@
             <thead>
             <tr>
                 <th data-field="zwavedeviceid">ID</th><!--复选框-->
-                <th data-field="name"><@spring.message code="label.name"/></th>
-                <th data-field="devicetype"><@spring.message code="label.devicetype"/></th>
-                <th data-field="warningstatuses"><@spring.message code="label.alarmstatus"/></th>
-                <th data-field="statuses"><@spring.message code="label.status"/></th>
+                <th data-field="name"><@spring.message code="label.pname"/></th>
+                <th data-field="devicetype" data-formatter='formatter_devicetype'><@spring.message code="label.devicetype"/></th>
+                <th data-field="warningstatuses" data-formatter='formatter_warnigstatuses'><@spring.message code="label.alarmstatus"/></th>
+                <th data-field="status" data-formatter='formatter_devicestatus'><@spring.message code="label.status"/></th>
                 <th data-field="battery"><@spring.message code="label.energy"/></th>
             </tr>
             </thead>
