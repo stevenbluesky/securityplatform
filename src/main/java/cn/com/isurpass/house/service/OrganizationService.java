@@ -19,6 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
+import static java.util.stream.Collectors.toList;
+
 @Service
 public class OrganizationService {
 
@@ -299,8 +301,9 @@ public class OrganizationService {
                 if (addresspo != null) {
                     orgVO.setCity(addresspo.getCity());
                 }
-            } else
+            } else {
                 orgVO.setCity("-");
+            }
             orgVO.setCode(o.getCode());
             orgVO.setStatus(o.getStatus());
             list.add(orgVO);
@@ -378,7 +381,6 @@ public class OrganizationService {
             findChildrenOrgid(o.getOrganizationid(), list);
         });
         return list;
-
     }
 
     /**
@@ -418,8 +420,8 @@ public class OrganizationService {
     }
 
     @Transactional(readOnly = true)
-    public Map<String, Object> search(Pageable pageable, OrgSearchVO search, HttpServletRequest request) {
-        Integer orgtype = getOrgtypeByReqeust(request);
+    public Map<String, Object> search(Pageable pageable, OrgSearchVO search, HttpServletRequest request,Integer orgtype1) {
+//        Integer orgtype = getOrgtypeByReqeust(request);
 
         String name = "";
         String city1 = "";
@@ -437,32 +439,32 @@ public class OrganizationService {
         }
 
         Map<String, Object> map = new HashMap<>();
-        if (search.getSearchcitycode() == null || search.getSearchcity() == "") {
-            map.put("total", od.countByNameLikeAndCitycodeLike(name, citycode));
-            orgList = od.findByNameLikeAndCitycodeLike(pageable, name, citycode);
-        }
-        if (search.getSearchcity() != "" && getOrgtypeByReqeust(request) != Constants.ORGTYPE_AMETA) {
+        if (search.getSearchcity() == null || search.getSearchcity() == "") {
+            map.put("total", od.countByNameLikeAndCitycodeLikeAndOrgtype(name, citycode,orgtype1));
+            orgList = od.findByNameLikeAndCitycodeLikeAndOrgtype(pageable, name, citycode,orgtype1);
+        } else {
             //先通过citycode和city查找相似的,再通过返回的List集合中的citycode在organization表中查找
             List<CityPO> list = city.findByCitycodeLikeAndCitynameLike(citycode, city1);
             if (list.isEmpty()) {
-                return null;
+                map.put("total", 0);
+                map.put("rows", Collections.EMPTY_LIST);
+                return map;
             }
-            List<String> list0 = new ArrayList<>();
-            list.forEach(l -> list0.add(l.getCitycode()));
-            map.put("total", od.countByNameLikeAndCitycodeInAndOrgtype(name, list0, orgtype));
-            orgList = od.findByNameLikeAndCitycodeInAndOrgtype(name, list0, orgtype, pageable);
-        } else {//是ameta,则查询所有的
-            List<CityPO> list = city.findByCitycodeLikeAndCitynameLike(citycode, city1);
-            if (list.isEmpty()) {
-                return null;
+            //TODO不同的机构取不同的数据
+            List<String> list0 = list.stream().map(CityPO::getCitycode).collect(toList());
+            if (Constants.ORGTYPE_INSTALLER.equals(orgtype1)) {
+                List<Integer> list1 = new ArrayList<>();
+                Integer orgid = getOrganizationidByReqeust(request);
+                findChildrenOrgid(orgid, list1);
+                list1.add(orgid);
+                map.put("total", od.countByNameLikeAndCitycodeInAndOrgtypeAndOrganizationidIn(name, list0, orgtype1, list1));
+                orgList = od.findByNameLikeAndCitycodeInAndOrgtypeAndOrganizationidIn(name, list0, orgtype1, list1,pageable);
+            }else {
+                map.put("total", od.countByNameLikeAndCitycodeInAndOrgtype(name, list0, orgtype1));
+                orgList = od.findByNameLikeAndCitycodeInAndOrgtype(name, list0, orgtype1, pageable);
             }
-            List<String> list0 = new ArrayList<>();
-            list.forEach(l -> list0.add(l.getCitycode()));
-            map.put("total", od.countByNameLikeAndCitycodeIn(name, list0));
-            orgList = od.findByNameLikeAndCitycodeIn(name, list0, pageable);
         }
-//        Map<String, Object> map = new HashMap<>();
-//        map.put("total", orgList.getTotalElements());
+
         List<OrgListVO> list = new ArrayList<>();
         setProperties(orgList, list);
         map.put("rows", list);
@@ -536,5 +538,13 @@ public class OrganizationService {
             return null;
         }
         return od.findByOrganizationid(emp.getOrganizationid()).getOrgtype();
+    }
+
+    public Integer getOrganizationidByReqeust(HttpServletRequest request) {
+        EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
+        if (emp == null) {
+            return null;
+        }
+        return emp.getOrganizationid();
     }
 }

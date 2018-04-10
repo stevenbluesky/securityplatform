@@ -408,6 +408,7 @@ public class EmployeeService {
         String city1 = "";
         String citycode = "";
 
+        Map<String, Object> map = new HashMap<>();
         Page<EmployeePO> empList = null;
         if (search.getSearchname() != null) {
             name = "%" + search.getSearchname() + "%";
@@ -419,77 +420,52 @@ public class EmployeeService {
             citycode = "%" + search.getSearchcitycode() + "%";
         }
 
-        Map<String, Object> map = new HashMap<>();
+        List<CityPO> cityPO = city.findByCitycodeLikeAndCitynameLike(citycode, city1);
+        List<String> citynamelist = cityPO.stream().map(CityPO::getCityname).collect(toList());
+        List<AddressPO> citylist = ad.findByCityIn(citynamelist);
+        List<Integer> addressidlist = citylist.stream().map(AddressPO::getAddressid).collect(toList());
         if (search.getSearchname() == null || search.getSearchname() == "") {
-            List<CityPO> cityPO = city.findByCitycodeLikeAndCitynameLike(citycode, city1);
-            List<String> citynamelist = new ArrayList<>();
-            List<Integer> addressidlist = new ArrayList<>();
-            cityPO.forEach(c -> citynamelist.add(c.getCityname()));
-            List<AddressPO> citylist = ad.findByCityIn(citynamelist);
-            citylist.forEach(c -> addressidlist.add(c.getAddressid()));
-            empList = ed.findByAddressidIn(pageable, addressidlist);
-            map.put("total", ed.countByAddressidIn(addressidlist));
+            if (Constants.ORGTYPE_AMETA.equals(orgtype)) {
+                empList = ed.findByAddressidIn(pageable, addressidlist);
+                map.put("total", ed.countByAddressidIn(addressidlist));
+            } else {
+                List<Integer> list1 = new ArrayList<>();
+                List<Integer> childrenOrgid = os.findChildrenOrgid(orgid, list1);
+                childrenOrgid.add(orgid);
+                empList = ed.findByAddressidInAndOrganizationidIn(pageable, addressidlist,childrenOrgid);
+                map.put("total", ed.countByAddressidIn(addressidlist));
+            }
         } else if (!FormUtils.isEmpty(search.getSearchcity()) || !FormUtils.isEmpty(search.getSearchcitycode())) {
             //当通过名称来搜索时,首先判断城市和城市代码有没有传值:
             //如果有传值,先通过城市和城市代码查找出一个addressid集合,再通过集合和名称进行查找
             //如果没有传值,直接通过名称查找.
-            List<CityPO> cityPO = city.findByCitycodeLikeAndCitynameLike(citycode, city1);
-            List<String> citynamelist = new ArrayList<>();
-            List<Integer> addressidlist = new ArrayList<>();
-            cityPO.forEach(c -> citynamelist.add(c.getCityname()));
-            List<AddressPO> citylist = ad.findByCityIn(citynamelist);
-            citylist.forEach(c -> addressidlist.add(c.getAddressid()));
-            if (FormUtils.isEmpty(search.getSearchname())) {
-                empList = ed.findByAddressidIn(pageable, addressidlist);
-                map.put("total", ed.countByAddressidIn(addressidlist));
-            } else {
-                empList = ed.findByNameLikeAndAddressidIn(pageable, search.getSearchname(), addressidlist);
-                map.put("total", ed.countByNameLikeAndAddressidIn(search.getSearchname(), addressidlist));
-            }
+//            if (FormUtils.isEmpty(search.getSearchname())) {
+//                empList = ed.findByAddressidIn(pageable, addressidlist);
+//                map.put("total", ed.countByAddressidIn(addressidlist));
+//            } else {
+//                empList = ed.findByNameLikeAndAddressidIn(pageable, search.getSearchname(), addressidlist);
+//                map.put("total", ed.countByNameLikeAndAddressidIn(search.getSearchname(), addressidlist));
+//            }
             if (orgtype == Constants.ORGTYPE_AMETA) {
-                empList = ed.findByNameLike(pageable, name);
+                empList = ed.findByNameLikeAndAddressidIn(pageable, name,addressidlist);
                 map.put("total", ed.countByNameLike(name));
             } else if (orgtype == Constants.ORGTYPE_SUPPLIER) {
                 List<Integer> list = new ArrayList<>();
                 list.add(orgid);
                 List<Integer> ids = os.findChildrenOrgid(emp.getOrganizationid(), list);
-                empList = ed.findByOrganizationidInAndNameLike(pageable, ids, name);
+                empList = ed.findByOrganizationidInAndNameLikeAndAddressidIn(pageable, ids, name,addressidlist);
                 map.put("total", ed.countByOrganizationidInAndNameLike(ids, name));
             } else if (orgtype == Constants.ORGTYPE_INSTALLER) {//当前登录的是安装商
                 empList = ed.findByNameLikeAndOrganizationid(pageable, name, orgid);
                 map.put("total", ed.countByNameLikeAndOrganizationid(name, orgid));
             }
         }
-        /* else if (search.getSearchname() != "") {
-            if (orgtype == Constants.ORGTYPE_AMETA) {
-                empList = ed.findByNameLike(pageable, name);
-                map.put("total", ed.countByNameLike(name));
-            } else if (orgtype == Constants.ORGTYPE_SUPPLIER) {
-                List<Integer> list = new ArrayList<>();
-                list.add(orgid);
-                List<Integer> ids = os.findChildrenOrgid(emp.getOrganizationid(), list);
-                empList = ed.findByOrganizationidInAndNameLike(pageable, ids, name);
-                map.put("total", ed.countByOrganizationidInAndNameLike(ids, name));
-            } else if (orgtype == Constants.ORGTYPE_INSTALLER) {//当前登录的是安装商
-                empList = ed.findByNameLikeAndOrganizationid(pageable, name, orgid);
-                map.put("total", ed.countByNameLikeAndOrganizationid(name, orgid));
-            }
-            if (search.getSearchcitycode() != "" || search.getSearchcity() != "") {
-                List<CityPO> cityPO = city.findByCitycodeLikeAndCitynameLike(citycode, city1);
-                List<String> citynamelist = new ArrayList<>();
-                List<Integer> addressidlist = new ArrayList<>();
-                cityPO.forEach(c -> citynamelist.add(c.getCityname()));
-                List<AddressPO> citylist = ad.findByCityIn(citynamelist);
-                citylist.forEach(c -> addressidlist.add(c.getAddressid()));
-
-            }
-        }*/
-        List<EmployeeListVO> list = new ArrayList<>();
         if (empList == null || empList.getTotalElements() == 0) {
             map.put("total", 0);
             map.put("rows", Collections.EMPTY_LIST);
             return map;
         }
+        List<EmployeeListVO> list = new ArrayList<>();
         empList.forEach(e -> forEachEmp(list, e));
         map.put("rows", list);
         return map;
