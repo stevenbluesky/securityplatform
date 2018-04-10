@@ -128,7 +128,7 @@ public class OrganizationController {
     public Map<String, Object> supplierJsonList(PageResult pr,OrgSearchVO osv,HttpServletRequest request) {
         Pageable pageable = PageRequest.of(pr.getPage() - 1, pr.getRows(), Sort.Direction.ASC, "organizationid");
         if (!FormUtils.isEmpty(osv)) {//搜索
-           return ss.search(pageable, osv,request);
+           return ss.search(pageable, osv,request,Constants.ORGTYPE_SUPPLIER);
         }
         return ss.listOrgByType(pageable, Constants.ORGTYPE_SUPPLIER);
     }
@@ -138,7 +138,7 @@ public class OrganizationController {
     public Map<String, Object> installerJsonList(PageResult pr,OrgSearchVO osv, HttpServletRequest request) {
         Pageable pageable = PageRequest.of(pr.getPage() - 1, pr.getRows(), Sort.Direction.ASC, "organizationid");
         if (!FormUtils.isEmpty(osv)) {//搜索
-            return ss.search(pageable, osv,request);
+            return ss.search(pageable, osv,request,Constants.ORGTYPE_INSTALLER);
         }
         return ss.listInstallerOrg(pageable, request);
     }

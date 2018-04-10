@@ -7,9 +7,9 @@
               <form id="searchform" class="form-inline">
                   <div class="form-group col-md-3">
                       <div>
-                          <b><@spring.message code="label.pname"/></b>
+                          <b><@spring.message code="label.name"/></b>
                           <input type="text" class="form-control" id="searchname" name="searchname"
-                                 placeholder="<@spring.message code="label.pname"/>">
+                                 placeholder="<@spring.message code="label.name"/>">
                       </div>
                   </div>
                   <div class="form-group col-md-3">
