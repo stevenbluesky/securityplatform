@@ -74,7 +74,7 @@ public class UserService {
         UserPO user = new UserPO();
         user.setLoginname(u.getPhonenumber());
         user.setName(u.getFirstname()+u.getLastname());
-        user.setCitycode(city.findByCityname(u.getCity()).getCitycode());
+        user.setCitycode(city.findByCityid(u.getCity()).getCitycode());
 
         EmployeeParentOrgIdVO empp = emps.findEmpParentOrgid(emp);
         user.setOrganizationid(1);
@@ -106,7 +106,7 @@ public class UserService {
         PersonPO person = new PersonPO();
         person.setFirstname(u.getFirstname());
         person.setLastname(u.getLastname());
-        person.setName(u.getFirstname() + " " + u.getLastname());
+        person.setName(u.getFirstname() + u.getLastname());
         person.setSsn(u.getSsn());
         person.setGender(u.getGender());
         person.setPhonenumber(u.getPhonenumber());
@@ -129,7 +129,8 @@ public class UserService {
 //        if (pcardpo.getPhonecardid() != null) {//此方法最开始已经强制phonecardid不能为空,这里不用进行判断了.
         PhonecardUserPO pcup = new PhonecardUserPO();
         pcup.setUserid(userSave.getUserid());
-        pcup.setPhonecardid(1);
+        pcup.setPhonecardid(pcardpo.getPhonecardid());
+        pcup.setUserid(userSave.getUserid());
         pcup.setCreatetime(new Date());
         pcud.save(pcup);
 //        }
