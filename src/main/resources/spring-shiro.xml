@@ -55,7 +55,7 @@
         <property name="loginUrl" value="/login"/>
         <!-- 认证成功统一跳转到first.action，建议不配置，shiro认证成功自动到上一个请求路径-->
         <!-- <property name="successUrl" value="/login22" /> -->
-        <property name="unauthorizedUrl" value="/noPermission"/>
+        <property name="unauthorizedUrl" value="/noPermission.html"/>
         <property name="filterChainDefinitions">
             <value>
                 /index = authc
@@ -64,16 +64,20 @@
                 /org/installerList = authc,perms[label.InstallerList]
                 /org/addInstallerPage = authc,perms[label.AddInstaller]
                 /employee/employeeList = authc,perms[label.EmployeeList]
-                /employee/addEmployee = authc,perms[label.AddEmployee]
+                /employee/addEmployeePage = authc,perms[label.AddEmployee]
+                /employee/add = authc,perms[label.AddEmployee]
                 /gateway/gatewayList = authc,perms[label.GatewayList]
                 /gateway/typeGatewayInfo = authc,perms[label.InputGatewayInformation]
                 /gateway/gatewayDetail = authc,perms[label.GatewayDetail]
+                /gateway/add = authc,perms[label.InputGatewayInformation]
                 /device/deviceList = authc,perms[label.DeviceList]
                 /device/deviceDetail = authc,perms[label.DeviceDetail]
                 /user/userList = authc,perms[label.UserList]
                 /user/typeUserInfo = authc,perms[label.InputUserInformation]
+                /user/add = authc,perms[label.InputUserInformation]
                 /phonecard/phonecardList = authc,perms[label.SIMCardList]
-                /phonecadr/typePhoneCardInfo = authc,perms[label.InputSIMCardInformation]
+                /phonecard/typePhonecardInfo = authc,perms[label.InputSIMCardInformation]
+                /phonecard/add = authc,perms[label.InputSIMCardInformation]
                 <!--/success.jsp = authc-->
                 <!-- 表示需要认证才能访问的页面 -->
                 <!--/home = authc, perms[/home]  &lt;!&ndash; perms 表示需要该权限才能访问的页面 &ndash;&gt;-->
