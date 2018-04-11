@@ -87,7 +87,7 @@ public class PhonecardService {
 		return map;
 	}
 	@Transactional(rollbackFor = Exception.class)
-	public String  updatePhonecardStatus(String hope, Object [] ids) throws Exception {
+	public String updatePhonecardStatus(String hope, Object [] ids) throws Exception {
 		String s = "";
 		for (Object string : ids) {
 			PhonecardPO phonecardpo = pd.findByPhonecardid(string);

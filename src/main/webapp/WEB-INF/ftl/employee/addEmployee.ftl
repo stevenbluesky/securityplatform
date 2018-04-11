@@ -77,14 +77,15 @@
                     <label for="expiredate" class="col-sm-2 control-label" data-date="1979-09-16T05:25:07Z"
                            data-date-format="dd MM yyyy - HH:ii p"
                            data-link-field="dtp_input1"><@spring.message code="label.expiredate"/></label>
-                    <div class="col-sm-3 input-group date form_datetime">
-                        <input class="form-control" size="16" name="expiredate" type="text"
-                               value="${(empInfo.expiredate)!}" readonly>
-                        <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-                        <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                    <div  class="col-sm-10" align="left">
+                        <div class="col-sm-4 input-group date form_datetime">
+                            <input class="form-control" size="16" name="expiredate" type="text" value="${(empInfo.expiredate)!}" readonly>
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                        </div>
                     </div>
-                    <input type="hidden" id="dtp_input1" value=""/><br/>
-                </div>
+                    </div>
+                    <input type="hidden" id="dtp_input1" value=""/>
 
                 <div class="form-group">
                     <label for="status" class="col-sm-2 control-label"><@spring.message code="label.status"/></label>
@@ -347,9 +348,10 @@
 
     $('.form_datetime').datetimepicker({
         //language:  'fr',
-        format: 'yyyy-mm-dd hh:ii',
+        format: 'yyyy-mm-dd',
         weekStart: 1,
-        todayBtn: 1,
+        minView:'month',
+        todayBtn:  1,
         autoclose: 1,
         todayHighlight: 1,
         startView: 2,

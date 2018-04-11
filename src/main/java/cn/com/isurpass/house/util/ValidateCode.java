@@ -86,8 +86,8 @@ public class ValidateCode{
 
 
     char[] codeSequence = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
-            'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W',
-            'X', 'Y', 'Z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
+            'K', 'L', 'M', 'N','O','P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W',
+            'X', 'Y', 'Z','0','1', '2', '3', '4', '5', '6', '7', '8', '9' };
 
     /**
      * 具体获取验证码的方法
@@ -119,7 +119,7 @@ public class ValidateCode{
         //4.设置验证码
         g.setColor(Color.blue);
         //4.1设置验证码字体
-        g.setFont(new Font("宋体",Font.BOLD|Font.ITALIC,fontSize));
+        g.setFont(new Font("Times New Roman",Font.BOLD|Font.ITALIC,fontSize));
         for (int i = 0; i < codeCount; i++) {
             char c = codeSequence[r.nextInt(codeSequence.length)];
             builderCode.append(c);

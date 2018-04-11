@@ -80,7 +80,7 @@ public class PhonecardController {
 			s = ps.updatePhonecardStatus(hope, ids);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return s;
+			return e.getMessage();
 		}
 		return "success";
 	}
