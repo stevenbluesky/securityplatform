@@ -520,6 +520,12 @@ public class EmployeeService {
         return null;
     }
 
+    /**
+     * 根据登录员工的角色、权限拿到对应的菜单
+     * @param emp
+     * @param request
+     * @return
+     */
     @Transactional(readOnly = true)
     public String getMenuTree(EmployeePO emp, HttpServletRequest request) {
         ResourceBundle resourceBundle;
@@ -564,12 +570,15 @@ public class EmployeeService {
                     }
                     JSONArray jj = JSONArray.fromObject(pplist);
                     parmap.put("nodes", jj);
+                }else{
+                    parmap.put("nodes",new ArrayList<>());
                 }
             } else if (p.getParentprivilegeid() != null && !idlist.contains(p.getParentprivilegeid())) {
                 String text = resourceBundle.getString(p.getCode());
                 String href = p.getLabel();
                 parmap.put("text", text);
                 parmap.put("href", href);
+                parmap.put("nodes",new ArrayList<>());
             }
             if (parmap.size() > 0) {
                 parlist.add(parmap);
