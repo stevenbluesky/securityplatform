@@ -555,6 +555,9 @@ public class EmployeeService {
                 String href = p.getLabel();
                 parmap.put("text", text);
                 parmap.put("href", href);
+                Map<String, String> m = new HashMap<>();
+                m.put("expanded", "true");
+                parmap.put("state",m);
                 List<PrivilegePO> sonlist = privilegeDAO.findByParentprivilegeid(p.getPrivilegeid());
                 if (sonlist.size() > 0) {
                     List<Object> pplist = new ArrayList<>();
@@ -578,6 +581,9 @@ public class EmployeeService {
                 String href = p.getLabel();
                 parmap.put("text", text);
                 parmap.put("href", href);
+                Map<String, String> m = new HashMap<>();
+                m.put("expanded", "true");
+                parmap.put("state",m);
                 parmap.put("nodes",new ArrayList<>());
             }
             if (parmap.size() > 0) {

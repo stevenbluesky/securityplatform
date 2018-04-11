@@ -66,11 +66,11 @@ public class UserService {
             throw new RuntimeException("-108");
         }
         if (gbd.findByDeviceidAndOrganizationid(u.getDeviceid(), emp.getOrganizationid()) == null) {//网关不存在或者此网关不属于此机构
-            throw new RuntimeException("-108");
+            throw new RuntimeException("-109");
         }
         PhonecardPO pcardpo = pcard.findBySerialnumber(u.getSerialnumber());
         if (pcardpo == null) {
-            throw new RuntimeException("-109");
+            throw new RuntimeException("-111");
         }
         if (pcud.findByPhonecardid(pcardpo.getPhonecardid()) != null) {
             throw new RuntimeException("-110");
@@ -79,8 +79,9 @@ public class UserService {
         UserPO user = new UserPO();
         user.setLoginname(u.getPhonenumber());
         user.setName(u.getFirstname() + u.getLastname());
-        user.setCitycode(city.findByCityid(u.getCity()).getCitycode());
-
+        if (!FormUtils.isEmpty(u.getCity())) {
+            user.setCitycode(city.findByCityid(u.getCity()).getCitycode());
+        }
         EmployeeParentOrgIdVO empp = emps.findEmpParentOrgid(emp);
         user.setOrganizationid(1);
         user.setInstallerorgid(1);

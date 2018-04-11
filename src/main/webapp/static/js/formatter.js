@@ -225,6 +225,7 @@ function formatterReturnStatus(status){
         case '-108':return lan.duplicategatewayuser;
         case '-109':return lan.addgatewayerror;
         case '-110':return lan.duplicatephonecarduser;
+        case '-111':return lan.simdontexsit;
     }
 }
 
