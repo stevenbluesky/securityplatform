@@ -46,7 +46,7 @@ public class UserController {
 	@RequestMapping("userInfoJsonList")
 	@ResponseBody
 	public Map<String, Object> userInfoJsonList(PageResult pr, UserSearchVO usv,HttpServletRequest request) {
-		Pageable pageable = PageRequest.of(pr.getPage()-1,pr.getRows(),Sort.Direction.ASC,"organizationid");
+		Pageable pageable = PageRequest.of(pr.getPage()-1,pr.getRows(),Sort.Direction.ASC,"userid");
 		if (!FormUtils.isEmpty(usv)) {//搜索
 			return us.search(pageable, usv,request);
 		}

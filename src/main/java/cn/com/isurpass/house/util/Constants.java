@@ -24,4 +24,12 @@ public class Constants {
 	public static final String INVENTORY = "INVENTORY";//待处理
 	public static final String RETIRED = "RETIRED";//退休
 	public static final String Authorization = "Basic YW1ldGFjYTphNDRmNDJmMS0wMmRiLTRhY2EtYjZhMC04MWYxNTBmZGI1YmI=";//调用接口认证信息
+
+	public static final Integer ROLE_AMETA_ADMIN=1;
+	public static final Integer ROLE_SUPPLIER_ADMIN=2;
+	public static final Integer ROLE_INSTALLER_ADMILN=3;
+	public static final Integer ROLE_INSTALLER=4;
+	public static final Integer ROLE_AMETA_EMPLOYEE=5;
+	public static final Integer ROLE_SUPPLIER_EMPLOYEE=6;
+	public static final Integer ROLE_EMPLOYEE=7;  //此用户没有权限.一般情况下不会有员工为此角色,除非新增了机构角色.
 }

@@ -13,6 +13,7 @@ import cn.com.isurpass.house.po.*;
 import cn.com.isurpass.house.util.Encrypt;
 
 import com.alibaba.fastjson.JSONObject;
+import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import net.sf.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -187,9 +188,17 @@ public class EmployeeService {
         EmployeePO save = ed.save(empPO);
         if (empInfo == null) {
             EmployeeRolePO erp = new EmployeeRolePO();
+
+            Integer orgtype = od.findByOrganizationid(emp.getOrganizationid()).getOrgtype();//添加员工所属的机构的类型
             erp.setRoleid(5);//默认角色是员工
-            if ((od.findByOrganizationid(emp.getOrganizationid()).getOrgtype() == Constants.ORGTYPE_INSTALLER)){// 是安装员且code为空时
-                erp.setRoleid(4);
+            if (orgtype == Constants.ORGTYPE_AMETA) {
+                erp.setRoleid(Constants.ROLE_AMETA_EMPLOYEE);
+            } else if (orgtype == Constants.ORGTYPE_SUPPLIER) {
+                erp.setRoleid(Constants.ROLE_SUPPLIER_EMPLOYEE);
+            } else if (orgtype == Constants.ORGTYPE_INSTALLER) {// 是安装员且code为空时
+                erp.setRoleid(Constants.ROLE_INSTALLER);
+            } else {
+                erp.setRoleid(Constants.ROLE_EMPLOYEE);
             }
             erp.setEmployeeid(save.getEmployeeid());
             erp.setCreatetime(new Date());
@@ -280,7 +289,7 @@ public class EmployeeService {
         OrganizationPO org = null;
         // System.out.println(od.findByCode(code0));
         if ((org = od.findByCode(code0)) != null) {
-            List<EmployeePO> empList = ed.findByOrganizationidAndLoginname(org.getOrganizationid(), loginname);
+            List<EmployeePO> empList = ed.findByOrganizationidAndLoginnameAndStatus(org.getOrganizationid(), loginname, Constants.STATUS_NORMAL);
             for (int i = 0; !empList.isEmpty() && i < empList.size(); i++) {
                 if (Encrypt.check(loginname, password, code0, empList.get(i).getPassword())) {
                     return empList.get(i);
@@ -432,10 +441,10 @@ public class EmployeeService {
                 List<Integer> list1 = new ArrayList<>();
                 List<Integer> childrenOrgid = os.findChildrenOrgid(orgid, list1);
                 childrenOrgid.add(orgid);
-                empList = ed.findByAddressidInAndOrganizationidIn(pageable, addressidlist,childrenOrgid);
+                empList = ed.findByAddressidInAndOrganizationidIn(pageable, addressidlist, childrenOrgid);
                 map.put("total", ed.countByAddressidIn(addressidlist));
             }
-        } else{
+        } else {
             //当通过名称来搜索时,首先判断城市和城市代码有没有传值:
             //如果有传值,先通过城市和城市代码查找出一个addressid集合,再通过集合和名称进行查找
             //如果没有传值,直接通过名称查找.
@@ -453,16 +462,16 @@ public class EmployeeService {
                     empList = ed.findByNameLikeAndOrganizationid(pageable, name, orgid);
                     map.put("total", ed.countByNameLikeAndOrganizationid(name, orgid));
                 }
-            }else {
+            } else {
                 if (orgtype == Constants.ORGTYPE_AMETA) {
                     empList = ed.findByNameLikeAndAddressidIn(pageable, name, addressidlist);
-                    map.put("total", ed.countByNameLikeAndAddressidIn(name,ids));
+                    map.put("total", ed.countByNameLikeAndAddressidIn(name, ids));
                 } else if (orgtype == Constants.ORGTYPE_SUPPLIER) {
                     empList = ed.findByOrganizationidInAndNameLikeAndAddressidIn(pageable, ids, name, addressidlist);
-                    map.put("total", ed.countByOrganizationidInAndNameLikeAndAddressidIn(ids, name,addressidlist));
+                    map.put("total", ed.countByOrganizationidInAndNameLikeAndAddressidIn(ids, name, addressidlist));
                 } else if (orgtype == Constants.ORGTYPE_INSTALLER) {//当前登录的是安装商
-                    empList = ed.findByNameLikeAndOrganizationidAndAddressidIn(pageable, name, orgid,addressidlist);
-                    map.put("total", ed.countByNameLikeAndOrganizationidAndAddressidIn(name, orgid,addressidlist));
+                    empList = ed.findByNameLikeAndOrganizationidAndAddressidIn(pageable, name, orgid, addressidlist);
+                    map.put("total", ed.countByNameLikeAndOrganizationidAndAddressidIn(name, orgid, addressidlist));
                 }
             }
         }
@@ -521,62 +530,62 @@ public class EmployeeService {
         }
         return null;
     }
-	
-	 @Transactional(readOnly = true)
+
+    @Transactional(readOnly = true)
     public String getMenuTree(EmployeePO emp, HttpServletRequest request) {
-        ResourceBundle resourceBundle ;
+        ResourceBundle resourceBundle;
         String language = request.getLocale().getLanguage();
-         if ("zh".equals(language)){
-            resourceBundle =ResourceBundle.getBundle("messages",Locale.SIMPLIFIED_CHINESE);
+        if ("zh".equals(language)) {
+            resourceBundle = ResourceBundle.getBundle("messages", Locale.SIMPLIFIED_CHINESE);
             //resourceBundle =ResourceBundle.getBundle("messages",Locale.US);
-         }else{
-             resourceBundle =ResourceBundle.getBundle("messages",Locale.US);
-         }
-         List<RolePrivilegePO> roleprivilegelist = new ArrayList<>();//角色权限列表
-         List<Integer> privilegeid = new ArrayList<>();//权限列表
-         OrganizationPO org = od.findByOrganizationid(emp.getOrganizationid());//根据员工的机构id获取所属机构
-         List<EmployeeRolePO> emprolelist = employeeroleDAO.findByEmployeeid(emp.getEmployeeid());//根据员工id获取员工的所有角色
-         emprolelist.forEach(e -> roleprivilegelist.addAll(rolePrivilegeDAO.findByRoleid(e.getRoleid())));//遍历员工角色列表，获取角色权限列表
-         roleprivilegelist.forEach(e -> privilegeid.add(e.getPrivilegeid()));//根据员工的角色权限列表得到员工的权限id列表
-         List<PrivilegePO> privilegelist = privilegeDAO.findByPrivilegeidIn(privilegeid);//根据角色权限id列表去拿到权限权限列表
-         List<Integer> idlist = new ArrayList<>();//权限列表id集合
-         for(PrivilegePO e : privilegelist){
-             idlist.add(e.getPrivilegeid());
-         }
-         List<Object> parlist = new ArrayList<>();
-         for(PrivilegePO p : privilegelist){
-             Map<String,Object> parmap = new LinkedHashMap<>();
-             if ("0".equals(p.getParentprivilegeid()+"")){//为父节点
-                 String text = resourceBundle.getString(p.getCode());
-                 String href = p.getLabel();
-                 parmap.put("text",text);
-                 parmap.put("href",href);
-                 List<PrivilegePO> sonlist = privilegeDAO.findByParentprivilegeid(p.getPrivilegeid());
-                 if(sonlist.size()>0) {
-                     List<Object> pplist = new ArrayList<>();
-                     for (PrivilegePO pp : sonlist) {
-                         if(idlist.contains(pp.getPrivilegeid())) {
-                             Map<String, Object> sonmap = new HashMap<>();
-                             String tt = resourceBundle.getString(pp.getCode());
-                             String hh = pp.getLabel();
-                             sonmap.put("text", tt);
-                             sonmap.put("href", hh);
-                             pplist.add(sonmap);
-                         }
-                     }
-                     JSONArray jj = JSONArray.fromObject(pplist);
-                     parmap.put("nodes",jj);
-                 }
-             }else if(p.getParentprivilegeid()!=null&&!idlist.contains(p.getParentprivilegeid())){
-                 String text = resourceBundle.getString(p.getCode());
-                 String href = p.getLabel();
-                 parmap.put("text",text);
-                 parmap.put("href",href);
-             }
-             if(parmap.size()>0) {
-                 parlist.add(parmap);
-             }
-         }
+        } else {
+            resourceBundle = ResourceBundle.getBundle("messages", Locale.US);
+        }
+        List<RolePrivilegePO> roleprivilegelist = new ArrayList<>();//角色权限列表
+        List<Integer> privilegeid = new ArrayList<>();//权限列表
+        OrganizationPO org = od.findByOrganizationid(emp.getOrganizationid());//根据员工的机构id获取所属机构
+        List<EmployeeRolePO> emprolelist = employeeroleDAO.findByEmployeeid(emp.getEmployeeid());//根据员工id获取员工的所有角色
+        emprolelist.forEach(e -> roleprivilegelist.addAll(rolePrivilegeDAO.findByRoleid(e.getRoleid())));//遍历员工角色列表，获取角色权限列表
+        roleprivilegelist.forEach(e -> privilegeid.add(e.getPrivilegeid()));//根据员工的角色权限列表得到员工的权限id列表
+        List<PrivilegePO> privilegelist = privilegeDAO.findByPrivilegeidIn(privilegeid);//根据角色权限id列表去拿到权限权限列表
+        List<Integer> idlist = new ArrayList<>();//权限列表id集合
+        for (PrivilegePO e : privilegelist) {
+            idlist.add(e.getPrivilegeid());
+        }
+        List<Object> parlist = new ArrayList<>();
+        for (PrivilegePO p : privilegelist) {
+            Map<String, Object> parmap = new LinkedHashMap<>();
+            if ("0".equals(p.getParentprivilegeid() + "")) {//为父节点
+                String text = resourceBundle.getString(p.getCode());
+                String href = p.getLabel();
+                parmap.put("text", text);
+                parmap.put("href", href);
+                List<PrivilegePO> sonlist = privilegeDAO.findByParentprivilegeid(p.getPrivilegeid());
+                if (sonlist.size() > 0) {
+                    List<Object> pplist = new ArrayList<>();
+                    for (PrivilegePO pp : sonlist) {
+                        if (idlist.contains(pp.getPrivilegeid())) {
+                            Map<String, Object> sonmap = new HashMap<>();
+                            String tt = resourceBundle.getString(pp.getCode());
+                            String hh = pp.getLabel();
+                            sonmap.put("text", tt);
+                            sonmap.put("href", hh);
+                            pplist.add(sonmap);
+                        }
+                    }
+                    JSONArray jj = JSONArray.fromObject(pplist);
+                    parmap.put("nodes", jj);
+                }
+            } else if (p.getParentprivilegeid() != null && !idlist.contains(p.getParentprivilegeid())) {
+                String text = resourceBundle.getString(p.getCode());
+                String href = p.getLabel();
+                parmap.put("text", text);
+                parmap.put("href", href);
+            }
+            if (parmap.size() > 0) {
+                parlist.add(parmap);
+            }
+        }
         JSONArray json = JSONArray.fromObject(parlist);
         return String.valueOf(json);
     }

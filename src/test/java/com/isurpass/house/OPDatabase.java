@@ -3,6 +3,7 @@ package com.isurpass.house;
 
 import cn.com.isurpass.house.dao.*;
 import cn.com.isurpass.house.po.*;
+import org.apache.commons.lang3.ObjectUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.persistence.criteria.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -34,11 +36,11 @@ public class OPDatabase {
 
     @Test
     public void addRP() {
-        for (int i = 6; i < 17; i++) {
+        for (int i = 4; i < 17; i++) {
             RolePrivilegePO rolep = new RolePrivilegePO();
             rolep.setCreatetime(new Date());
             rolep.setPrivilegeid(i);
-            rolep.setRoleid(3);
+            rolep.setRoleid(6);
             rp.save(rolep);
         }
     }
@@ -65,5 +67,7 @@ public class OPDatabase {
 
     @Test
     public void search() {
+        List byAddressidIn = emp.findByAddressidIn(null);
+        System.out.println(byAddressidIn);
     }
 }
