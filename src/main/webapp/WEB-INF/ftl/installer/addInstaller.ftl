@@ -418,9 +418,7 @@
                 url: url,
                 data: $('#defaultForm').serialize(),
                 success: function (data) {
-                    var strresult = data;
                     var jsonObj = eval('(' + data + ')');
-                    // alert(strresult);
                     if (jsonObj['status'] == 1) {
                         alert("success");
                         window.location.href = "installerList";

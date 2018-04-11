@@ -2,6 +2,8 @@ package cn.com.isurpass.house.web.controller;
 
 import java.util.Map;
 
+import cn.com.isurpass.house.util.FormUtils;
+import cn.com.isurpass.house.vo.DeviceSearchVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -25,10 +27,13 @@ public class DeviceController {
 	
 	@RequestMapping("deviceJsonList")
 	@ResponseBody
-	public Map<String, Object> deviceJsonList(PageResult pr, HttpServletRequest request){
+	public Map<String, Object> deviceJsonList(PageResult pr, DeviceSearchVO dsv, HttpServletRequest request){
 		Pageable pageable = PageRequest.of(pr.getPage()-1,pr.getRows(),Sort.Direction.ASC,"zwavedeviceid");
+		if (!FormUtils.isEmpty(dsv)) {//搜索
+			return ds.search(pageable, dsv,request);
+		}
 		return ds.listDevice(pageable,request);
-	} 
+	}
 	
 	@RequestMapping("deviceList")
 	public String deviceList() {

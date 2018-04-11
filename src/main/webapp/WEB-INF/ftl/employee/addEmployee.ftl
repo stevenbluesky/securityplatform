@@ -77,15 +77,16 @@
                     <label for="expiredate" class="col-sm-2 control-label" data-date="1979-09-16T05:25:07Z"
                            data-date-format="dd MM yyyy - HH:ii p"
                            data-link-field="dtp_input1"><@spring.message code="label.expiredate"/></label>
-                    <div  class="col-sm-10" align="left">
+                    <div class="col-sm-10" align="left">
                         <div class="col-sm-4 input-group date form_datetime">
-                            <input class="form-control" size="16" name="expiredate" type="text" value="${(empInfo.expiredate)!}" readonly>
+                            <input class="form-control" size="16" name="expiredate" type="text"
+                                   value="${(empInfo.expiredate)!}" readonly>
                             <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
                             <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
                         </div>
                     </div>
-                    </div>
-                    <input type="hidden" id="dtp_input1" value=""/>
+                </div>
+                <input type="hidden" id="dtp_input1" value=""/>
 
                 <div class="form-group">
                     <label for="status" class="col-sm-2 control-label"><@spring.message code="label.status"/></label>
@@ -307,12 +308,11 @@
                 url: url,
                 data: $('#defaultForm').serialize(),
                 success: function (data) {
-                    var strresult = data;
-                        var jsonObj = eval('(' + strresult + ')');
+                    var jsonObj = eval('(' + data + ')');
                     if (jsonObj['status'] == 1) {
                         alert("success");
                         window.location.href = "employeeList";
-                    }else{
+                    } else {
                         alert(formatterReturnStatus(jsonObj['msg']));
                     }
                 },
@@ -327,7 +327,7 @@
 
     getParentOrg("#organizationid");
 
-    function getParentOrg(s,id) {
+    function getParentOrg(s, id) {
         $.ajax({
             type: "get",
             url: "../org/listAllOrgSelect",
@@ -348,10 +348,10 @@
 
     $('.form_datetime').datetimepicker({
         //language:  'fr',
-        format: 'yyyy-mm-dd',
+        format: 'yyyy-mm-dd HH:mm',
         weekStart: 1,
-        minView:'month',
-        todayBtn:  1,
+        minView: 'day',
+        todayBtn: 1,
         autoclose: 1,
         todayHighlight: 1,
         startView: 2,

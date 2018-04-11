@@ -6,6 +6,7 @@ import cn.com.isurpass.house.dao.ZwaveDeviceDAO;
 import cn.com.isurpass.house.po.EmployeePO;
 import cn.com.isurpass.house.po.UserPO;
 import cn.com.isurpass.house.po.ZwaveDevicePO;
+import cn.com.isurpass.house.vo.DeviceSearchVO;
 import cn.com.isurpass.house.vo.ZwaveDeviceListVO;
 import cn.com.isurpass.house.vo.DeviceDetailVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -121,5 +122,10 @@ public class ZwaveDeviceService {
     @Transactional(readOnly = true)
     public List<ZwaveDevicePO> findZDeviceByDeviceidList(List<String> deviceidlist) {
         return zd.findByDeviceidIn(deviceidlist);
+    }
+
+    @Transactional(readOnly = true)
+    public Map<String,Object> search(Pageable pageable, DeviceSearchVO dsv, HttpServletRequest request) {
+        return null;
     }
 }

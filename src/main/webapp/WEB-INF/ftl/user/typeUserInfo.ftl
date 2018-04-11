@@ -194,7 +194,12 @@ $("#btn-submit").click(function () {
                     data: $('#defaultForm').serialize(),
                     success: function (data) {
                         var jsonObj = eval('(' + data + ')');
-                        alert(formatterReturnStatus(jsonObj['msg']));
+                        if (jsonObj['status'] == 1) {
+                            alert("success");
+                            window.location.href = "userList";
+                        }else{
+                            alert(formatterReturnStatus(jsonObj['msg']));
+                        }
                     },
                     error: function(data) {
                         alert("error");
