@@ -36,11 +36,11 @@ public class OPDatabase {
 
     @Test
     public void addRP() {
-        for (int i = 6; i < 17; i++) {
+        for (int i = 4; i < 17; i++) {
             RolePrivilegePO rolep = new RolePrivilegePO();
             rolep.setCreatetime(new Date());
             rolep.setPrivilegeid(i);
-            rolep.setRoleid(3);
+            rolep.setRoleid(6);
             rp.save(rolep);
         }
     }

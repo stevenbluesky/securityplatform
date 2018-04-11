@@ -63,10 +63,13 @@
     </div>
 </form>
 <hr>
+
+<@shiro.hasPermission name="button:changeStatus">
 <#--新增，启用，停用按钮-->
 <button style="float: right;"  type="button" id='stopGateway' class='btn btn-default' onclick='updateGatewayStatus("stop");'><@spring.message code='label.stop'/></button>
 <button style="float: right;"  type="button" id='startGateway' class='btn btn-default' onclick='updateGatewayStatus("start");'><@spring.message code='label.start'/></button>
 <button style="float: right;"  type="button" class="btn btn-default" onclick="window.location.href='typeGatewayInfo'"><@spring.message code="label.entering"/></button>
+</@shiro.hasPermission>
 
 <table id="table" data-toggle="table">
     <thead>
