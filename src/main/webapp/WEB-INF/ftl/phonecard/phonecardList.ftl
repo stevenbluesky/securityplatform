@@ -189,7 +189,7 @@
                 if("success"==data) {
                     alert("<@spring.message code='label.updatesuccess'/>");
                 }else{
-                    alert("<@spring.message code='label.updatefailed'/>");
+                    alert("<@spring.message code='label.updatefailed'/>"+"("+data+")");
                 }
 	            $('#table').bootstrapTable('refresh');    
 	        },

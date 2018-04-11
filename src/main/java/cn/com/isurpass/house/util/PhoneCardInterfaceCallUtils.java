@@ -46,7 +46,7 @@ public class PhoneCardInterfaceCallUtils {
         if(errorCode!=null||errorMessage!=null){
             throw new MyArgumentNullException("errorMessage:"+errorMessage+";errorCode:"+errorCode);
         }
-        return result;
+        return jsStr.toString();
     }
 
     /**
