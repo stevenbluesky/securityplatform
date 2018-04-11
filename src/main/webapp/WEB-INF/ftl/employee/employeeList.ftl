@@ -106,7 +106,7 @@
             onLoadSuccess: function () {
             },
             onLoadError: function () {
-                alert(lan.loaderror);
+                // alert(lan.loaderror);
             },
             onDblClickRow: function (row, $element) {
                 var id = row.ID;
