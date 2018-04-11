@@ -1,7 +1,7 @@
 <!-- 新增服务商页面 -->
 <#include "../_head0.ftl"/>
     <div class="row-horizontal">
-        <#--<div class="col-md-1"></div>-->
+        <div class="col-md-1"></div>
         <div class="col-md-10">
             <form id="defaultForm">
                <#if orgInfo??>
