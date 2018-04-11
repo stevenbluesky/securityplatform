@@ -521,7 +521,13 @@ public class EmployeeService {
         }
         return null;
     }
-	
+
+    /**
+     * 根据登录员工的角色、权限拿到对应的菜单
+     * @param emp
+     * @param request
+     * @return
+     */
 	 @Transactional(readOnly = true)
     public String getMenuTree(EmployeePO emp, HttpServletRequest request) {
         ResourceBundle resourceBundle ;
