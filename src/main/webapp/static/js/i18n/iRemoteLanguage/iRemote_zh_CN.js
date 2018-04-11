@@ -16,6 +16,7 @@ var lan = {
     duplicategatewayuser:"此网关已经绑定了用户",//-108
     addgatewayerror:"无法添加此网关!",//-109
     duplicatephonecarduser:"此电话卡已经绑定了用户.",//-110
+    simdontexsit:"电话卡未录入",//-111
 
     normal: "正常",
     unvalid: '未生效',
