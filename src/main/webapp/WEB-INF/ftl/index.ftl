@@ -30,7 +30,7 @@
         }
     </style>
 </head>
-<body>
+<body style="overflow: hidden;">
 <br>
 <div class="row">
     <div class="col-md-3"  style="height:70px;width: 300px" align="right">
