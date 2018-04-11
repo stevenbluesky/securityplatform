@@ -280,7 +280,7 @@ public class EmployeeService {
         OrganizationPO org = null;
         // System.out.println(od.findByCode(code0));
         if ((org = od.findByCode(code0)) != null) {
-            List<EmployeePO> empList = ed.findByOrganizationidAndLoginname(org.getOrganizationid(), loginname);
+            List<EmployeePO> empList = ed.findByOrganizationidAndLoginnameAndStatus(org.getOrganizationid(), loginname,Constants.STATUS_NORMAL);
             for (int i = 0; !empList.isEmpty() && i < empList.size(); i++) {
                 if (Encrypt.check(loginname, password, code0, empList.get(i).getPassword())) {
                     return empList.get(i);

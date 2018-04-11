@@ -34,7 +34,7 @@
 <br>
 <div class="row">
     <div class="col-md-3"  style="height:70px;width: 300px" align="right">
-        <img src="../../image/logo1.jpg"  height="70" >
+        <img src="image/logo1.jpg"  height="70" >
     </div>
 
     <div class="col-md-7">
