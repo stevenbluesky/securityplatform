@@ -2,6 +2,8 @@ package cn.com.isurpass.house.service;
 
 import java.util.*;
 
+import cn.com.isurpass.house.dao.*;
+import cn.com.isurpass.house.po.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -9,27 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import cn.com.isurpass.house.dao.CityDAO;
-import cn.com.isurpass.house.dao.EmployeeDAO;
-import cn.com.isurpass.house.dao.GatewayBindingDAO;
-import cn.com.isurpass.house.dao.GatewayDAO;
-import cn.com.isurpass.house.dao.GatewayuserDAO;
-import cn.com.isurpass.house.dao.OrganizationDAO;
-import cn.com.isurpass.house.dao.PhonecardDAO;
-import cn.com.isurpass.house.dao.PhonecarduserDAO;
-import cn.com.isurpass.house.dao.UserDAO;
-import cn.com.isurpass.house.dao.ZwaveDeviceDAO;
 import cn.com.isurpass.house.exception.MyArgumentNullException;
-import cn.com.isurpass.house.po.CityPO;
-import cn.com.isurpass.house.po.EmployeePO;
-import cn.com.isurpass.house.po.GatewayBindingPO;
-import cn.com.isurpass.house.po.GatewayPO;
-import cn.com.isurpass.house.po.GatewayUserPO;
-import cn.com.isurpass.house.po.OrganizationPO;
-import cn.com.isurpass.house.po.PhonecardPO;
-import cn.com.isurpass.house.po.PhonecardUserPO;
-import cn.com.isurpass.house.po.UserPO;
-import cn.com.isurpass.house.po.ZwaveDevicePO;
 import cn.com.isurpass.house.util.Constants;
 import cn.com.isurpass.house.vo.GatewayDetailVO;
 import cn.com.isurpass.house.vo.TypeGatewayInfoVO;
@@ -60,6 +42,8 @@ public class GatewayService {
 	private PhonecardDAO pd;
 	@Autowired
 	private OrganizationService os;
+	@Autowired
+	private EmployeeroleDAO employeeroleDAO;
 	/**
 	 * 新增网关信息
 	 * @param tgi
@@ -122,9 +106,20 @@ public class GatewayService {
 			gateList = gd.findByDeviceidIn(orgglist,pageable);
 			count = gd.countByDeviceidIn(orgglist);
 		}else if("2".equals(org.getOrgtype()+"")){//为安装商，拿自己的网关
-			List<GatewayBindingPO> olist = gbd.findByOrganizationid(organizationid);
-			for(GatewayBindingPO s : olist){
-				orgglist.add(s.getDeviceid());
+			List<EmployeeRolePO> elist = employeeroleDAO.findByEmployeeid(emp.getEmployeeid());
+			List<Integer> emprolelist = new ArrayList<>();
+			List<Integer> useridlist = new ArrayList<>();
+			elist.forEach(single ->{emprolelist.add(single.getRoleid());});
+			if(emprolelist.contains(Constants.ROLE_INSTALLER)){//包含安装员id
+				List<UserPO> byInstallerid = ud.findByInstallerid(emp.getEmployeeid());
+				byInstallerid.forEach(single ->{useridlist.add(single.getUserid());});
+				List<GatewayUserPO> byUseridIn = gud.findByUseridIn(useridlist);
+				byUseridIn.forEach(single ->{orgglist.add(single.getDeviceid());});
+			}else {
+				List<GatewayBindingPO> olist = gbd.findByOrganizationid(organizationid);
+				for (GatewayBindingPO s : olist) {
+					orgglist.add(s.getDeviceid());
+				}
 			}
 			gateList = gd.findByDeviceidIn(orgglist,pageable);
 			count = gd.countByDeviceidIn(orgglist);
@@ -189,9 +184,20 @@ public class GatewayService {
 				orgglist.add(s.getDeviceid());
 			}
 		}else if("2".equals(org.getOrgtype()+"")){//为安装商，拿自己的网关
-			List<GatewayBindingPO> olist = gbd.findByOrganizationid(organizationid);
-			for(GatewayBindingPO s : olist){
-				orgglist.add(s.getDeviceid());
+			List<EmployeeRolePO> elist = employeeroleDAO.findByEmployeeid(emp.getEmployeeid());
+			List<Integer> emprolelist = new ArrayList<>();
+			List<Integer> useridlist = new ArrayList<>();
+			elist.forEach(single ->{emprolelist.add(single.getRoleid());});
+			if(emprolelist.contains(Constants.ROLE_INSTALLER)){//包含安装员id
+				List<UserPO> byInstallerid = ud.findByInstallerid(emp.getEmployeeid());
+				byInstallerid.forEach(single ->{useridlist.add(single.getUserid());});
+				List<GatewayUserPO> byUseridIn = gud.findByUseridIn(useridlist);
+				byUseridIn.forEach(single ->{orgglist.add(single.getDeviceid());});
+			}else {
+				List<GatewayBindingPO> olist = gbd.findByOrganizationid(organizationid);
+				for (GatewayBindingPO s : olist) {
+					orgglist.add(s.getDeviceid());
+				}
 			}
 		}else{//为ameta管理员，拿所有网关
 			for(String s : gdlist){
@@ -479,16 +485,18 @@ public class GatewayService {
 			//电话卡信息
 			PhonecardUserPO puPO = pud.findByUserid(user.getUserid());
 			PhonecardPO pc = pd.findByPhonecardid(puPO.getPhonecardid());
-			gate.setPhonecardserialnumber(pc.getSerialnumber());
-			gate.setPhonecardmodel(pc.getModel());
-			gate.setPhonecardstatus(pc.getStatus());
-			gate.setRateplan(pc.getRateplan());
-			gate.setPhonecardfirmwareversion(pc.getFirmwareversion());
-			gate.setActivationdate(pc.getActivationdate());
-			gate.setFirstprogrammedon(pc.getFirstprogrammedondate());
-			gate.setLastprogrammedon(pc.getLastprogrammedondate());
-			gate.setOrderingdate(pc.getOrderingdate());
-			gate.setExpiredate(pc.getExpiredate());
+			if(pc!=null) {
+				gate.setPhonecardserialnumber(pc.getSerialnumber());
+				gate.setPhonecardmodel(pc.getModel());
+				gate.setPhonecardstatus(pc.getStatus());
+				gate.setRateplan(pc.getRateplan());
+				gate.setPhonecardfirmwareversion(pc.getFirmwareversion());
+				gate.setActivationdate(pc.getActivationdate());
+				gate.setFirstprogrammedon(pc.getFirstprogrammedondate());
+				gate.setLastprogrammedon(pc.getLastprogrammedondate());
+				gate.setOrderingdate(pc.getOrderingdate());
+				gate.setExpiredate(pc.getExpiredate());
+			}
 		}
 		List<ZwaveDevicePO> zdlist = zdd.findByDeviceid(deviceid);
 		gate.setDevice(zdlist);
