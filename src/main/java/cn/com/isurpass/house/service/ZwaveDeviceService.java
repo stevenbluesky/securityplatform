@@ -1,11 +1,14 @@
 package cn.com.isurpass.house.service;
 
+import cn.com.isurpass.house.dao.EmployeeroleDAO;
 import cn.com.isurpass.house.dao.OrganizationDAO;
 import cn.com.isurpass.house.dao.UserDAO;
 import cn.com.isurpass.house.dao.ZwaveDeviceDAO;
 import cn.com.isurpass.house.po.EmployeePO;
+import cn.com.isurpass.house.po.EmployeeRolePO;
 import cn.com.isurpass.house.po.UserPO;
 import cn.com.isurpass.house.po.ZwaveDevicePO;
+import cn.com.isurpass.house.util.Constants;
 import cn.com.isurpass.house.vo.DeviceSearchVO;
 import cn.com.isurpass.house.vo.ZwaveDeviceListVO;
 import cn.com.isurpass.house.vo.DeviceDetailVO;
@@ -34,6 +37,8 @@ public class ZwaveDeviceService {
     UserDAO ud;
     @Autowired
     OrganizationDAO od;
+    @Autowired
+    EmployeeroleDAO erd;
 
     @Transactional(readOnly = true)
     public Map<String, Object> listDevice(Pageable pageable, HttpServletRequest request) {
@@ -51,14 +56,20 @@ public class ZwaveDeviceService {
         //通过机构id查找其子类所有的机构id,再查询它们的用户
 //        Page<ZwaveDevicePO> zdevicelist = null;
         List<UserPO> userList = null;
-        if (od.findByOrganizationid(emp.getOrganizationid()).getOrgtype() == 0) {
+        if (od.findByOrganizationid(emp.getOrganizationid()).getOrgtype() == Constants.ORGTYPE_AMETA) {
 //            zdevicelist = zd.findAll(pageable);
             userList = ud.findAll();
-        } else if (od.findByOrganizationid(emp.getOrganizationid()).getOrgtype() == 1) {
+        } else if (od.findByOrganizationid(emp.getOrganizationid()).getOrgtype() == Constants.ORGTYPE_SUPPLIER) {
 //          List<UserPO> userList = us.findUser(od.findByOrganizationid(emp.getOrganizationid());
             userList = ud.findByOrganizationid(emp.getOrganizationid());
         } else {
-            userList = ud.findByInstallerorgid(emp.getOrganizationid());
+            if (erd.findByEmployeeid(emp.getEmployeeid()).contains(Constants.ROLE_INSTALLER)) {
+                //如果是安装员
+                userList = ud.findByInstallerid(emp.getEmployeeid());
+            } else {
+                //安装商
+                userList = ud.findByInstallerorgid(emp.getOrganizationid());
+            }
         }
         List<String> deviceidlist = gs.findGatewayidListByUserList(userList);
         List<ZwaveDevicePO> zdevicelist0 = findZDeviceByDeviceidList(deviceidlist);
