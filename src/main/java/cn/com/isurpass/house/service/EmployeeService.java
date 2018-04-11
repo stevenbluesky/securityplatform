@@ -581,12 +581,15 @@ public class EmployeeService {
                     }
                     JSONArray jj = JSONArray.fromObject(pplist);
                     parmap.put("nodes", jj);
+                }else{
+                    parmap.put("nodes",new ArrayList<>());
                 }
             } else if (p.getParentprivilegeid() != null && !idlist.contains(p.getParentprivilegeid())) {
                 String text = resourceBundle.getString(p.getCode());
                 String href = p.getLabel();
                 parmap.put("text", text);
                 parmap.put("href", href);
+                parmap.put("nodes",new ArrayList<>());
             }
             if (parmap.size() > 0) {
                 parlist.add(parmap);
