@@ -14,7 +14,7 @@ var lan = {
     duplicategateway:"此网关已经绑定过机构!",//-106
     gorpnotnull:"网关或电话卡不能为空.",//-107
     duplicategatewayuser:"此网关已经绑定了用户",//-108
-    addgatewayerror:"无法添加此网关!",//-109
+    addgatewayerror:"Gateway doesn't exsit!",//-109
     duplicatephonecarduser:"此电话卡已经绑定了用户.",//-110
     simdontexsit:"SIM doesn't exsit",//-111
 
