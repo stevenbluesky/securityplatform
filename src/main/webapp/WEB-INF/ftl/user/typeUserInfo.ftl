@@ -133,7 +133,7 @@ $(document).ready(function() {
             validating: 'glyphicon glyphicon-refresh'
         },
         fields: {
-            phonenumber: {
+           /* phonenumber: {
                 message: 'The phonenumber is not valid',
                 validators: {
                     notEmpty: {
@@ -149,33 +149,44 @@ $(document).ready(function() {
                         message: 'The loginname can only consist of alphabetical, number, dot and underscore'
                     }
                 }
-            },
-            password: {
+            },*/
+            firstname: {
+                message: 'The firstname is not valid',
                 validators: {
                     notEmpty: {
-                        message: 'The password is required and cannot be empty'
-                    },
-                    identical: {
-                        field: 'repassword',
-                        message: 'The password and its confirm are not the same'
+                        message: 'The firstname is required and cannot be empty'
                     }
                 }
             },
-            organizationid: {
+            lastname: {
+                message: 'The lastname is not valid',
                 validators: {
                     notEmpty: {
-                        message: 'The password is required and cannot be empty'
+                        message: 'The lastname is required and cannot be empty'
                     }
                 }
             },
-            repassword: {
+            ssn: {
+                message: 'The ssn is not valid',
                 validators: {
                     notEmpty: {
-                        message: 'The repassword is required and cannot be empty'
-                    },
-                    identical: {
-                        field: 'password',
-                        message: 'The password and its confirm are not the same'
+                        message: 'The ssn is required and cannot be empty'
+                    }
+                }
+            },
+            deviceid: {
+                message: 'The deviceid is not valid',
+                validators: {
+                    notEmpty: {
+                        message: 'The deviceid is required and cannot be empty'
+                    }
+                }
+            },
+            serialnumber: {
+                message: 'The serialnumber is not valid',
+                validators: {
+                    notEmpty: {
+                        message: 'The serialnumber is required and cannot be empty'
                     }
                 }
             }
@@ -186,7 +197,7 @@ $(document).ready(function() {
 $("#btn-submit").click(function () {
         $("#defaultForm").bootstrapValidator('validate');//提交验证  
         if ($("#defaultForm").data('bootstrapValidator').isValid()) {//获取验证结果，如果成功，执行下面代码  
-            var url= "../user/add";       
+            var url= "../user/add";
                 $.ajax({
                     type: "POST",
                     dataType: "html",
@@ -194,7 +205,12 @@ $("#btn-submit").click(function () {
                     data: $('#defaultForm').serialize(),
                     success: function (data) {
                         var jsonObj = eval('(' + data + ')');
-                        alert(formatterReturnStatus(jsonObj['msg']));
+                        if (jsonObj['status'] == 1) {
+                            alert("success");
+                            window.location.href = "userList";
+                        }else{
+                            alert(formatterReturnStatus(jsonObj['msg']));
+                        }
                     },
                     error: function(data) {
                         alert("error");

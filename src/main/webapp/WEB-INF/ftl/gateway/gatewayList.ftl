@@ -143,7 +143,7 @@
         onLoadSuccess: function () {
         },
         onLoadError: function () {
-            alert('<@spring.message code="label.dataloaderror"/>');
+            <#--alert('<@spring.message code="label.dataloaderror"/>');-->
         },
 	<#--双击触发模态框展示-->
         onDblClickRow: function (row, $element) {

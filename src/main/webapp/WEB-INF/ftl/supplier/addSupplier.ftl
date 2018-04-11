@@ -408,9 +408,13 @@
                 url: url,
                 data: $('#defaultForm').serialize(),
                 success: function (data) {
-                    var strresult = data;
                     var jsonObj = eval('(' + data + ')');
-                    alert(formatterReturnStatus(jsonObj['msg']));
+                    if (jsonObj['status'] == 1) {
+                        alert("success");
+                        window.location.href = "supplierList";
+                    }else{
+                        alert(formatterReturnStatus(jsonObj['msg']));
+                    }
                 },
                 error: function (data) {
                     alert("error");
