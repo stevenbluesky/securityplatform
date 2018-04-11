@@ -1,5 +1,6 @@
 package cn.com.isurpass.house.web.controller;
 
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,6 +9,7 @@ import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 
 import cn.com.isurpass.house.po.EmployeePO;
+import cn.com.isurpass.house.util.FormUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -82,6 +84,9 @@ public class GatewayController {
 	public Map<String, Object> gatewayJsonList(PageResult pr,TypeGatewayInfoVO tgiv,HttpServletRequest request) {
 		Pageable pageable = PageRequest.of(pr.getPage()-1,pr.getRows(),Sort.Direction.ASC,"deviceid");
 		EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
+		if(FormUtils.isEmpty(tgiv)){
+			return gs.listNUllGateway(pageable,emp);
+		}
 		return gs.listGateway(pageable,tgiv,emp);
 	}
 	

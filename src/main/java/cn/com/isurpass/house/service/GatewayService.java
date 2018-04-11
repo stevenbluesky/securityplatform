@@ -92,6 +92,73 @@ public class GatewayService {
 		gbp.setStatus(1);
 		gbd.save(gbp);
 	}
+
+	/**
+	 * 没有搜索条件时显示的网关
+	 * @param pageable
+	 * @param emp
+	 * @return
+	 */
+	@Transactional(readOnly = true)
+	public Map<String, Object> listNUllGateway(Pageable pageable, EmployeePO emp) {
+		Long count = 0L;
+		List<GatewayPO> gateList = new ArrayList<>();
+		Map<String, Object> map = new HashMap<>();//返回的map
+		List<TypeGatewayInfoVO> list = new ArrayList<>();//返回的list对象
+		List<String> orgglist = new ArrayList<>();
+		Integer organizationid = emp.getOrganizationid();
+		OrganizationPO org = od.findByOrganizationid(organizationid);
+		if("1".equals(org.getOrgtype()+"")){//为服务商,拿本身及旗下安装商的网关
+			List<OrganizationPO> pid = od.findByParentorgid(organizationid);
+			List<Integer> oolist = new ArrayList<>();
+			for(OrganizationPO o : pid){
+				oolist.add(o.getOrganizationid());
+			}
+			oolist.add(organizationid);
+			List<GatewayBindingPO> olist = gbd.findByOrganizationidIn(oolist);
+			for(GatewayBindingPO s : olist){
+				orgglist.add(s.getDeviceid());
+			}
+			gateList = gd.findByDeviceidIn(orgglist,pageable);
+			count = gd.countByDeviceidIn(orgglist);
+		}else if("2".equals(org.getOrgtype()+"")){//为安装商，拿自己的网关
+			List<GatewayBindingPO> olist = gbd.findByOrganizationid(organizationid);
+			for(GatewayBindingPO s : olist){
+				orgglist.add(s.getDeviceid());
+			}
+			gateList = gd.findByDeviceidIn(orgglist,pageable);
+			count = gd.countByDeviceidIn(orgglist);
+
+		}else{//为ameta管理员，拿所有网关
+			Page<GatewayPO> all = gd.findAll(pageable);
+			count = gd.count();
+			gateList = all.getContent();
+		}
+		for(GatewayPO o : gateList) {//使用for循环比lamaba表达式提高50ms响应,根据目前数据库数据少，耗时占总时间1/3左右
+			TypeGatewayInfoVO gateVO = new TypeGatewayInfoVO();
+			gateVO.setDeviceid(o.getDeviceid());
+			List<GatewayUserPO> userlist = gud.findByDeviceid(o.getDeviceid());//TODO
+			if (userlist != null && userlist.size() != 0) {//网关用户表匹配到了数据，该网关已跟用户绑定
+				UserPO upo = ud.findByUserid(userlist.get(0).getUserid());
+				gateVO.setCityname(cd.findByCitycode(upo.getCitycode()).getCityname());
+				gateVO.setInstallerorg(od.findByOrganizationid(upo.getInstallerorgid()).getName());
+				if (upo.getInstallerid() != null) {
+					gateVO.setInstaller(ed.findByEmployeeid(upo.getInstallerid()).getLoginname());
+				}
+				gateVO.setServiceprovider(od.findByOrganizationid(upo.getOrganizationid()).getName());
+				gateVO.setCustomer(upo.getLoginname());
+			}
+			gateVO.setName(o.getName());
+			gateVO.setStatus(o.getStatus());
+			gateVO.setModel(o.getModel());
+			gateVO.setBattery(o.getBattery());
+			gateVO.setFirmwareversion(o.getFirmwareversion());
+			list.add(gateVO);
+		}
+		map.put("total",count);
+		map.put("rows",list);
+		return map;
+	}
 	/**
 	 * 根据搜索条件获取网关分页信息列表
 	 * @param pageable
@@ -101,12 +168,11 @@ public class GatewayService {
 	 */
 	@Transactional(readOnly = true)
 	public Map<String, Object> listGateway(Pageable pageable, TypeGatewayInfoVO tgiv, EmployeePO emp) {
-
 		Map<String, Object> map = new HashMap<>();//返回的map
 		List<TypeGatewayInfoVO> list = new ArrayList<>();//返回的list对象
 		Iterable<GatewayPO> geted = gd.findAll();//拿到网关列表所有记录
 		List<String> gdlist = new ArrayList<>();
-		geted.forEach(single ->{gdlist.add(single.getDeviceid());});
+		geted.forEach(single ->{gdlist.add(single.getDeviceid());});//网关表所有记录的id集合
 		List<Integer> orglist = new ArrayList<>();
 		List<String> orgglist = new ArrayList<>();
 		Integer organizationid = emp.getOrganizationid();
@@ -158,15 +224,15 @@ public class GatewayService {
 		citynamedeviceidlist.retainAll(orgglist);
 		List<GatewayPO> gateList = gd.findByDeviceidIn(pageable,citynamedeviceidlist);//从网关表中拿基本数据
 		map.put("total",gd.countByDeviceidIn(citynamedeviceidlist));
-		gateList.forEach(o -> {
+		for(GatewayPO o : gateList) {//使用for循环比lamaba表达式提高50ms响应,根据目前数据库数据少，耗时占总时间1/3左右
 			TypeGatewayInfoVO gateVO = new TypeGatewayInfoVO();
 			gateVO.setDeviceid(o.getDeviceid());
 			List<GatewayUserPO> userlist = gud.findByDeviceid(o.getDeviceid());//TODO
-			if(userlist!=null&&userlist.size()!=0){//网关用户表匹配到了数据，该网关已跟用户绑定
-				UserPO upo= ud.findByUserid(userlist.get(0).getUserid());
+			if (userlist != null && userlist.size() != 0) {//网关用户表匹配到了数据，该网关已跟用户绑定
+				UserPO upo = ud.findByUserid(userlist.get(0).getUserid());
 				gateVO.setCityname(cd.findByCitycode(upo.getCitycode()).getCityname());
 				gateVO.setInstallerorg(od.findByOrganizationid(upo.getInstallerorgid()).getName());
-				if(upo.getInstallerid()!=null) {
+				if (upo.getInstallerid() != null) {
 					gateVO.setInstaller(ed.findByEmployeeid(upo.getInstallerid()).getLoginname());
 				}
 				gateVO.setServiceprovider(od.findByOrganizationid(upo.getOrganizationid()).getName());
@@ -178,7 +244,7 @@ public class GatewayService {
 			gateVO.setBattery(o.getBattery());
 			gateVO.setFirmwareversion(o.getFirmwareversion());
 			list.add(gateVO);
-		});
+		}
 		map.put("rows", list);
 		return map;
 	}
@@ -449,4 +515,6 @@ public class GatewayService {
 			}
 		}
 	}
+
+
 }

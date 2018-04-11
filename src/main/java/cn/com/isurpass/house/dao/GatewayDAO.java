@@ -28,4 +28,5 @@ public interface GatewayDAO extends CrudRepository<GatewayPO,Integer>{
 
     List<GatewayPO> findByNameContaining(String devicename);
 
+	List<GatewayPO> findByDeviceidIn(List<String> orgglist, Pageable pageable);
 }
