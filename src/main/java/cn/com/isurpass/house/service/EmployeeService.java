@@ -1,19 +1,15 @@
 package cn.com.isurpass.house.service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
 import cn.com.isurpass.house.dao.*;
+import cn.com.isurpass.house.exception.MyArgumentNullException;
 import cn.com.isurpass.house.po.*;
+import cn.com.isurpass.house.util.Constants;
 import cn.com.isurpass.house.util.Encrypt;
-
-import com.alibaba.fastjson.JSONObject;
-import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
+import cn.com.isurpass.house.util.FormUtils;
+import cn.com.isurpass.house.vo.EmployeeAddVO;
+import cn.com.isurpass.house.vo.EmployeeListVO;
+import cn.com.isurpass.house.vo.EmployeeParentOrgIdVO;
+import cn.com.isurpass.house.vo.OrgSearchVO;
 import net.sf.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,14 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import cn.com.isurpass.house.exception.MyArgumentNullException;
-import cn.com.isurpass.house.util.Constants;
-import cn.com.isurpass.house.util.FormUtils;
-import cn.com.isurpass.house.vo.EmployeeAddVO;
-import cn.com.isurpass.house.vo.EmployeeListVO;
-import cn.com.isurpass.house.vo.EmployeeParentOrgIdVO;
-import cn.com.isurpass.house.vo.OrgSearchVO;
-
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 import static java.util.stream.Collectors.toList;

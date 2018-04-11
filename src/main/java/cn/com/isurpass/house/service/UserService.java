@@ -1,28 +1,23 @@
 package cn.com.isurpass.house.service;
 
-import java.util.*;
-
-import javax.persistence.criteria.*;
-import javax.servlet.http.HttpServletRequest;
-
 import cn.com.isurpass.house.dao.*;
 import cn.com.isurpass.house.exception.MyArgumentNullException;
 import cn.com.isurpass.house.po.*;
 import cn.com.isurpass.house.util.Constants;
-import cn.com.isurpass.house.vo.UserSearchVO;
-import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
-import org.apache.shiro.SecurityUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import cn.com.isurpass.house.util.FormUtils;
 import cn.com.isurpass.house.vo.EmployeeParentOrgIdVO;
 import cn.com.isurpass.house.vo.UserAddVO;
 import cn.com.isurpass.house.vo.UserInfoListVO;
+import cn.com.isurpass.house.vo.UserSearchVO;
+import org.apache.shiro.SecurityUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.*;
 
 import static java.util.stream.Collectors.toList;
 
