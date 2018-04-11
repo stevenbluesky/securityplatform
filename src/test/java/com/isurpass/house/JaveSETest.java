@@ -5,10 +5,7 @@ import com.alibaba.fastjson.JSON;
 import cn.com.isurpass.house.vo.LoginVO;
 import com.alibaba.fastjson.JSONObject;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class JaveSETest {
 	public static void main(String[] args) throws IllegalArgumentException, IllegalAccessException {
@@ -24,7 +21,7 @@ public class JaveSETest {
 		System.out.println(xx.getCaptchacode());
 		System.out.println(xx.getPassword());*/
 
-		List<Object> list = new ArrayList<>();
+		/*List<Object> list = new ArrayList<>();
 		Map<String, Object> map = new HashMap<>();
 		Map<String, Object> map1 = new HashMap<>();
 
@@ -38,7 +35,16 @@ public class JaveSETest {
 		list.add(map1);
 		System.out.println(list);
 		Object o = JSONObject.toJSON(list);
-		System.out.println(o.toString());
+		System.out.println(o.toString());*/
+		Set<Object> set = new HashSet<>();
+		set.add("sdfasdf");
+		set.add("sdfsdaafdsa");
+		set.add(null);
+		set.remove(null);
+		Iterator<Object> i = set.iterator();
+		while (i.hasNext()) {
+			System.out.println(i.next().toString());
+		}
 	}
 
 }

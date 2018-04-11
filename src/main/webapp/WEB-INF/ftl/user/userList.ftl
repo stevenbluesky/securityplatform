@@ -59,12 +59,15 @@
           </div>
           <hr>
 
+<@shiro.hasPermission name="button:changeStatus">
             <button style="float: right;" class='btn btn-default'
                     onclick='toggleUserStatus0("unsuspence");'><@spring.message code='label.unsuspence'/></button>
 			<button style="float: right;" class='btn btn-default'
                     onclick='toggleUserStatus0("suspence");'><@spring.message code='label.suspenced'/></button>
             <button onclick="window.location.href='typeUserInfo'" style="float: right;"
                     class="btn btn-default"><@spring.message code='label.addnew'/></button>
+</@shiro.hasPermission>
+
 <table id="table" data-toggle="table">
     <thead>
     <tr>
