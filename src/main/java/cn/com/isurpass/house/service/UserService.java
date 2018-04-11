@@ -65,7 +65,7 @@ public class UserService {
         if (gd.findByDeviceid(u.getDeviceid()).size() != 0) {
             throw new RuntimeException("-108");
         }
-        if (gbd.findByDeviceidAndOrganizationid(u.getDeviceid(), emp.getOrganizationid()) == null) {//网关不存在或者此网关不属于此机构
+        if (gbd.findByDeviceid(u.getDeviceid()) == null) {//网关不存在
             throw new RuntimeException("-109");
         }
         PhonecardPO pcardpo = pcard.findBySerialnumber(u.getSerialnumber());
