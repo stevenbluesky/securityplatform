@@ -493,18 +493,20 @@ public class GatewayService {
 			}
 			//电话卡信息
 			PhonecardUserPO puPO = pud.findByUserid(user.getUserid());
-			PhonecardPO pc = pd.findByPhonecardid(puPO.getPhonecardid());
-			if(pc!=null) {
-				gate.setPhonecardserialnumber(pc.getSerialnumber());
-				gate.setPhonecardmodel(pc.getModel());
-				gate.setPhonecardstatus(pc.getStatus());
-				gate.setRateplan(pc.getRateplan());
-				gate.setPhonecardfirmwareversion(pc.getFirmwareversion());
-				gate.setActivationdate(pc.getActivationdate());
-				gate.setFirstprogrammedon(pc.getFirstprogrammedondate());
-				gate.setLastprogrammedon(pc.getLastprogrammedondate());
-				gate.setOrderingdate(pc.getOrderingdate());
-				gate.setExpiredate(pc.getExpiredate());
+			if(puPO!=null) {
+				PhonecardPO pc = pd.findByPhonecardid(puPO.getPhonecardid());
+				if(pc!=null) {
+					gate.setPhonecardserialnumber(pc.getSerialnumber());
+					gate.setPhonecardmodel(pc.getModel());
+					gate.setPhonecardstatus(pc.getStatus());
+					gate.setRateplan(pc.getRateplan());
+					gate.setPhonecardfirmwareversion(pc.getFirmwareversion());
+					gate.setActivationdate(pc.getActivationdate());
+					gate.setFirstprogrammedon(pc.getFirstprogrammedondate());
+					gate.setLastprogrammedon(pc.getLastprogrammedondate());
+					gate.setOrderingdate(pc.getOrderingdate());
+					gate.setExpiredate(pc.getExpiredate());
+				}
 			}
 		}
 		List<ZwaveDevicePO> zdlist = zdd.findByDeviceid(deviceid);
