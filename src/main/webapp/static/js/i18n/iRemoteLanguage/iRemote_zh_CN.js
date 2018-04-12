@@ -22,8 +22,17 @@ var lan = {
     unvalid: '未生效',
     suspenced: "冻结",
     deleted: "删除",
+    alarm0:"胁迫告警",
+    status0:"NONE",
+    keyalarm:"钥匙告警",//当有人试图用钥匙开锁时
+    closefail:"关锁失败",
+    dooropen0:"开门",
+    doorclose0:"关门",
+    pswfail:"连续5次密码错误",
+    keyerror:"机械钥匙不匹配报警",
 
     doorlock: "门磁",
+    doorlock0: "门锁",
     smokesensor:"烟雾传感器",
     gassensor:"燃气传感器",
     leaksensor: "漏水传感器",
