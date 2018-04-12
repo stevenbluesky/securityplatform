@@ -62,7 +62,6 @@ public class LoginController {
 			//TODO 这里可以加一个当前员工角色的字段返回到前端,可以很容易的进行内容的显隐
 			request.getSession().setAttribute("admin", os.isAdmin(emp.getOrganizationid()));
 
-
 			return new JsonResult(1, "success");
 		} catch (UnavailableSecurityManagerException e) {
 			e.printStackTrace();

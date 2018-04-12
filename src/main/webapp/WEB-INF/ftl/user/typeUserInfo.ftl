@@ -8,19 +8,19 @@
               <div class="text-center"><h1><@spring.message code='label.enteringuserinfo'/></h1></div>
              
               <div  class="form-group">
-                <label for="firstname"  class="col-sm-2 control-label"><@spring.message code='label.firstname'/></label>
+                <label for="firstname"  class="col-sm-2 control-label"><@spring.message code='label.firstname'/>*</label>
                 <div class="col-sm-10">
                  <input type="text" class="form-control" id="firstname" name="firstname" placeholder="<@spring.message code='label.firstname'/>">
                 </div>
               </div>
               <div  class="form-group">
-                <label for="lastname"  class="col-sm-2 control-label"><@spring.message code='label.lastname'/></label>
+                <label for="lastname"  class="col-sm-2 control-label"><@spring.message code='label.lastname'/>*</label>
                 <div class="col-sm-10">
                  <input type="text" class="form-control" id="lastname" name="lastname" placeholder="<@spring.message code='label.lastname'/>">
                 </div>
               </div>
               <div  class="form-group">
-                <label for="ssn"  class="col-sm-2 control-label"><@spring.message code='label.ssn'/></label>
+                <label for="ssn"  class="col-sm-2 control-label"><@spring.message code='label.ssn'/>*</label>
                 <div class="col-sm-10">
                  <input type="text" class="form-control" id="ssn" name="ssn" placeholder="<@spring.message code='label.ssn'/>">
                </div>
@@ -56,7 +56,7 @@
               </div>
               
                 <div  class="form-group">
-                <label for="address"  class="col-sm-2 control-label"><@spring.message code='label.address'/></label>
+                <label for="address"  class="col-sm-2 control-label"><@spring.message code='label.address'/>*</label>
                 <div class="col-sm-10">
                  <div class="row text-left">
                  
@@ -92,14 +92,14 @@
               </div>
               
               <div  class="form-group">
-                <label for="deviceid"  class="col-sm-2 control-label"><@spring.message code='label.gatewayID'/></label>
+                <label for="deviceid"  class="col-sm-2 control-label"><@spring.message code='label.gatewayID'/>*</label>
                 <div class="col-sm-10">
                  <input type="text" class="form-control" id="deviceid" name="deviceid" placeholder="<@spring.message code='label.gatewayID'/>">
                </div>
                </div>
                
               <div  class="form-group">
-                <label for="serialnumber"  class="col-sm-2 control-label"><@spring.message code='label.phonecardid'/></label>
+                <label for="serialnumber"  class="col-sm-2 control-label"><@spring.message code='label.phonecardid'/>*</label>
                 <div class="col-sm-10">
                  <input type="text" class="form-control" id="serialnumber" name="serialnumber" placeholder="<@spring.message code='label.phonecardid'/>">
                </div>
@@ -207,7 +207,8 @@ $("#btn-submit").click(function () {
                         var jsonObj = eval('(' + data + ')');
                         if (jsonObj['status'] == 1) {
                             alert("success");
-                            window.location.href = "userList";
+
+                            window.location.href = "typeUserInfo";
                         }else{
                             alert(formatterReturnStatus(jsonObj['msg']));
                         }

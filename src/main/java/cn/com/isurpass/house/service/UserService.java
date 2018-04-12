@@ -79,8 +79,9 @@ public class UserService {
         UserPO user = new UserPO();
         user.setLoginname(u.getPhonenumber());
         user.setName(u.getFirstname() + u.getLastname());
-        if (!FormUtils.isEmpty(u.getCity())) {
-            user.setCitycode(city.findByCityid(u.getCity()).getCitycode());
+        if (FormUtils.isEmpty(u.getCity())) {
+//            user.setCitycode(city.findByCityid(u.getCity()).getCitycode());
+            throw new RuntimeException("-100");
         }
         EmployeeParentOrgIdVO empp = emps.findEmpParentOrgid(emp);
         user.setOrganizationid(1);
@@ -385,7 +386,8 @@ public class UserService {
         EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
         Integer orgtype = od.findByOrganizationid(emp.getOrganizationid()).getOrgtype();
         Page<UserPO> listpage = null;
-        List<EmployeeRolePO> emprolelist = erd.findByEmployeeid(emp.getEmployeeid());
+//        List<EmployeeRolePO> emprolelist = erd.findByEmployeeid(emp.getEmployeeid());
+        List<Integer> emprolelist = erd.findByEmployeeid(emp.getEmployeeid()).stream().map(EmployeeRolePO::getRoleid).collect(toList());
         if (emprolelist.contains(Constants.ROLE_INSTALLER)) {
             //登录的是安装员
             listpage = ud.findByUseridInAndInstallerid(ids, emp.getEmployeeid(), pageable);

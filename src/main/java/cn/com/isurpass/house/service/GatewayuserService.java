@@ -1,23 +1,13 @@
 package cn.com.isurpass.house.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import cn.com.isurpass.house.dao.*;
 import cn.com.isurpass.house.po.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
-
-import cn.com.isurpass.house.dao.CityDAO;
-import cn.com.isurpass.house.dao.EmployeeDAO;
-import cn.com.isurpass.house.dao.GatewayuserDAO;
-import cn.com.isurpass.house.dao.OrganizationDAO;
-import cn.com.isurpass.house.dao.UserDAO;
-import cn.com.isurpass.house.po.EmployeePO;
-import cn.com.isurpass.house.po.GatewayUserPO;
-import cn.com.isurpass.house.po.OrganizationPO;
-import cn.com.isurpass.house.po.UserPO;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service("gatewayuser")
 public class GatewayuserService {
