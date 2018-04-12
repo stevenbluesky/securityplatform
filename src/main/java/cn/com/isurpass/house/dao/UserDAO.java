@@ -78,4 +78,12 @@ public interface UserDAO extends CrudRepository<UserPO, Integer> {
     Page<UserPO> findByUseridInAndInstallerorgid(List<Integer> ids, Integer organizationid, Pageable pageable);
 
     Integer countByUseridInAndInstallerorgid(List<Integer> ids, Integer organizationid);
+
+    List<UserPO> findByInstallerorgidIn(List<Integer> orgidlist);
+
+    List<UserPO> findByInstallerorgidInAndOrganizationid(List<Integer> orgidlist, Integer organizationid);
+
+    List<UserPO> findByInstalleridInAndOrganizationidIn(List<Integer> empidlist, Integer organizationid);
+
+    List<UserPO> findByInstallerorgidAndInstalleridIn(Integer organizationid, List<Integer> empidlist);
 }
