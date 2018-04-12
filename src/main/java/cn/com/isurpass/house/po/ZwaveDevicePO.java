@@ -1,19 +1,17 @@
 package cn.com.isurpass.house.po;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.Date;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "zwavedevice")
 public class ZwaveDevicePO{
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+//	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer zwavedeviceid;
 	private String deviceid;
 	private String name;
@@ -24,7 +22,7 @@ public class ZwaveDevicePO{
 	private String warningstatuses;
 	private Date createtime;
 
-	public Integer getZwavedeviceid() {
+    public Integer getZwavedeviceid() {
 		return zwavedeviceid;
 	}
 

@@ -4,10 +4,9 @@ import cn.com.isurpass.house.dao.*;
 import cn.com.isurpass.house.po.*;
 import cn.com.isurpass.house.util.Constants;
 import cn.com.isurpass.house.util.FormUtils;
-import cn.com.isurpass.house.vo.DeviceSearchVO;
-import cn.com.isurpass.house.vo.UserInfoListVO;
-import cn.com.isurpass.house.vo.ZwaveDeviceListVO;
 import cn.com.isurpass.house.vo.DeviceDetailVO;
+import cn.com.isurpass.house.vo.DeviceSearchVO;
+import cn.com.isurpass.house.vo.ZwaveDeviceListVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,6 +28,8 @@ public class ZwaveDeviceService {
     @Autowired
     GatewayuserDAO gud;
     @Autowired
+    GatewayBindingDAO gbd;
+    @Autowired
     UserService us;
     @Autowired
     UserDAO ud;
@@ -40,6 +41,36 @@ public class ZwaveDeviceService {
     CityDAO city;
     @Autowired
     EmployeeDAO ed;
+
+  /*   @Transactional(readOnly = true)
+    public Map<String, Object> listDevice0(Pageable pageable, HttpServletRequest request) {
+       ZwaveDevicePO z = new ZwaveDevicePO();
+        z.setDeviceid("");
+//        Pageable pageable = new PageRequest(0, 10, new Sort(Sort.Direction.DESC, "zwavedeviceid"));
+        Page<ZwaveDevicePO> all = zd.findAll(new Specification<ZwaveDevicePO>() {
+            @Override
+            public Predicate toPredicate(Root<ZwaveDevicePO> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                Predicate stuNameLike = null;
+//                if (null != student && !StringUtils.isEmpty(student.getName())) {
+                stuNameLike = cb.like(root.<String>get("name"), "%" + "hw" + "%");
+//                }
+
+                Predicate clazzNameLike = null;
+//                if (null != student && null != student.getClazz() && !StringUtils.isEmpty(student.getClazz().getName())) {
+                clazzNameLike = cb.like(root.<String>get("gatewayPO").<String>get("name"), "%" + "8005" + "%");
+//                }
+
+                Predicate user = null;
+//                user = cb.like()
+                if (null != stuNameLike) query.where(stuNameLike);
+                if (null != clazzNameLike) query.where(clazzNameLike);
+                return null;
+            }
+        }, pageable);
+//        all.forEach(z-> System.out.println(z.getZwavedeviceid()));
+        System.out.println(all);
+        return null;
+    }*/
 
     @Transactional(readOnly = true)
     public Map<String, Object> listDevice(Pageable pageable, HttpServletRequest request) {
@@ -59,7 +90,20 @@ public class ZwaveDeviceService {
         List<UserPO> userList = null;
         if (od.findByOrganizationid(emp.getOrganizationid()).getOrgtype() == Constants.ORGTYPE_AMETA) {
 //            zdevicelist = zd.findAll(pageable);
-            userList = ud.findAll();
+//            userList = ud.findAll();
+            Page<ZwaveDevicePO> zdevicelist = zd.findAll(pageable);
+            if (zdevicelist == null) {
+                return null;
+            }
+            long start = System.currentTimeMillis(); //获取开始时间
+            List<ZwaveDeviceListVO> list = new ArrayList<>();
+            setProperties(zdevicelist, list);
+            map.put("rows", list);
+            map.put("total", zd.count());
+            long end = System.currentTimeMillis(); //获取结束时间
+            System.out.println("timer： " + (end - start) + "ms");
+            return map;
+
         } else if (od.findByOrganizationid(emp.getOrganizationid()).getOrgtype() == Constants.ORGTYPE_SUPPLIER) {
 //          List<UserPO> userList = us.findUser(od.findByOrganizationid(emp.getOrganizationid());
             userList = ud.findByOrganizationid(emp.getOrganizationid());
@@ -73,7 +117,8 @@ public class ZwaveDeviceService {
             }
         }
         List<String> deviceidlist = gs.findGatewayidListByUserList(userList);
-        List<ZwaveDevicePO> zdevicelist0 = findZDeviceByDeviceidList(deviceidlist);
+//        List<ZwaveDevicePO> zdevicelist0 = findZDeviceByDeviceidList(deviceidlist);
+        List<ZwaveDevicePO> zdevicelist0 = zd.findByDeviceidIn(deviceidlist);
 //        map.put("total", zdevicelist.getTotalElements());
 
         List<String> filterlist = gs.filterDevice(zdevicelist0);//只显示与用户绑定了的设备
@@ -196,7 +241,8 @@ public class ZwaveDeviceService {
         }
         if (!FormUtils.isEmpty(dsv.getSearchserviceprovider())) {
             List<Integer> orgidlist = od.findByNameContaining(dsv.getSearchserviceprovider()).stream().map(OrganizationPO::getOrganizationid).collect(toList());
-            List<Integer> useridlist = ud.findByOrganizationidIn(orgidlist).stream().map(UserPO::getUserid).collect(toList());;
+            List<Integer> useridlist = ud.findByOrganizationidIn(orgidlist).stream().map(UserPO::getUserid).collect(toList());
+            ;
          /*   switch (emptype) {
                 case 0:
                     useridlist = ud.findByOrganizationidIn(orgidlist).stream().map(UserPO::getUserid).collect(toList());

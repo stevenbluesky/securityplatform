@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -25,4 +26,10 @@ public interface ZwaveDeviceDAO extends CrudRepository<ZwaveDevicePO, Integer> {
 	Page<ZwaveDevicePO> findByZwavedeviceidIn(List<Integer> ids, Pageable pageable);
 
 	Integer countByZwavedeviceidIn(List<Integer> ids);
+
+    Page<ZwaveDevicePO> findAll(Specification<ZwaveDevicePO> specification, Pageable pageable);
+
+    long count();
+
 }
+
