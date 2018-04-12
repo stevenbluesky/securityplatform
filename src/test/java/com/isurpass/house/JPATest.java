@@ -1,7 +1,10 @@
 package com.isurpass.house;
 
+import java.util.Date;
 import java.util.List;
 
+import cn.com.isurpass.house.dao.GatewayDAO;
+import cn.com.isurpass.house.po.GatewayPO;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +25,8 @@ public class JPATest {
 
 	@Autowired
 	OrganizationDAO org;
+	@Autowired
+	private GatewayDAO gatewayDAO;
 	
 	@Test
 	public void testOrg() {
@@ -45,4 +50,6 @@ public class JPATest {
 		OrganizationPO org0 = org.findByOrganizationid(1);
 		System.out.println(org0.getOrganizationid());
 	}
+
+
 }

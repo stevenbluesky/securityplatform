@@ -1,6 +1,7 @@
 package cn.com.isurpass.house.dao;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
@@ -17,4 +18,6 @@ public interface GatewayuserDAO extends CrudRepository<GatewayUserPO, Integer> {
 	// GatewayUserPO findUseridByDeviceid(String deviceid);
 
 	List<GatewayUserPO> findByDeviceidIn(List<String> citynamedeviceidlist);
+
+    List<GatewayUserPO> findByUseridIn(Set<Integer> useridset);
 }
