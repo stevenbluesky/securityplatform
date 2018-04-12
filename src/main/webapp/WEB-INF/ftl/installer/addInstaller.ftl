@@ -50,7 +50,7 @@
                         <div class="row text-left">
                             <div class="col-sm-4">
                                 <select name="country" id="country" class="selectpicker"
-                                        title="<@spring.message code="label.choosecity"/>">
+                                        title="<@spring.message code="label.choosecountry"/>">
                                 </select>
                             </div>
                             <div class="col-sm-4">
