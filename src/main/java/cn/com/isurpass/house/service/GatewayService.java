@@ -86,23 +86,28 @@ public class GatewayService {
 	@Transactional(readOnly = true)
 	public Map<String, Object> listNUllGateway(Pageable pageable, EmployeePO emp) {
 		Long count = 0L;
-		List<GatewayPO> gateList = new ArrayList<>();
+		List<GatewayPO> gateList = new ArrayList<>();//网关集合
 		Map<String, Object> map = new HashMap<>();//返回的map
 		List<TypeGatewayInfoVO> list = new ArrayList<>();//返回的list对象
-		List<String> orgglist = new ArrayList<>();
+		List<String> orgglist = new ArrayList<>();//网关id集合
+
 		Integer organizationid = emp.getOrganizationid();
-		OrganizationPO org = od.findByOrganizationid(organizationid);
+		OrganizationPO org = od.findByOrganizationid(organizationid);//当前用户所属机构
 		if("1".equals(org.getOrgtype()+"")){//为服务商,拿本身及旗下安装商的网关
-			List<OrganizationPO> pid = od.findByParentorgid(organizationid);
-			List<Integer> oolist = new ArrayList<>();
-			for(OrganizationPO o : pid){
-				oolist.add(o.getOrganizationid());
+			List<OrganizationPO> pid = od.findByParentorgid(organizationid);//拿到旗下安装商
+			List<Integer> oolist = new ArrayList<>();//机构id集合
+			Set<Integer> useridset = new TreeSet<>();//用户id集合
+			if(pid.size()!=0&&pid!=null) {
+				for (OrganizationPO o : pid) {
+					oolist.add(o.getOrganizationid());
+				}
 			}
-			oolist.add(organizationid);
-			List<GatewayBindingPO> olist = gbd.findByOrganizationidIn(oolist);
-			for(GatewayBindingPO s : olist){
-				orgglist.add(s.getDeviceid());
-			}
+			List<UserPO> byOrganizationid = ud.findByOrganizationid(organizationid);//拿到本服务商下用户
+			List<UserPO> byInstallerorgidIn = ud.findByInstallerorgidIn(oolist);//拿到旗下安装商用户
+			byOrganizationid.forEach(single ->{useridset.add(single.getUserid());});
+			byInstallerorgidIn.forEach(single ->{useridset.add(single.getUserid());});
+			List<GatewayUserPO> byUseridIn = gud.findByUseridIn(useridset);
+			byUseridIn.forEach(single ->{orgglist.add(single.getDeviceid());});
 			gateList = gd.findByDeviceidIn(orgglist,pageable);
 			count = gd.countByDeviceidIn(orgglist);
 		}else if("2".equals(org.getOrgtype()+"")){//为安装商，拿自己的网关
@@ -110,20 +115,18 @@ public class GatewayService {
 			List<Integer> emprolelist = new ArrayList<>();
 			List<Integer> useridlist = new ArrayList<>();
 			elist.forEach(single ->{emprolelist.add(single.getRoleid());});
-			if(emprolelist.contains(Constants.ROLE_INSTALLER)){//包含安装员id
+			if(emprolelist.contains(Constants.ROLE_INSTALLER)&&emprolelist.size()==1){//只是安装员id
 				List<UserPO> byInstallerid = ud.findByInstallerid(emp.getEmployeeid());
 				byInstallerid.forEach(single ->{useridlist.add(single.getUserid());});
-				List<GatewayUserPO> byUseridIn = gud.findByUseridIn(useridlist);
-				byUseridIn.forEach(single ->{orgglist.add(single.getDeviceid());});
 			}else {
-				List<GatewayBindingPO> olist = gbd.findByOrganizationid(organizationid);
-				for (GatewayBindingPO s : olist) {
-					orgglist.add(s.getDeviceid());
-				}
+				//List<GatewayBindingPO> olist = gbd.findByOrganizationid(organizationid);//网关绑定表只能跟ameta绑定，暂认为无用
+				List<UserPO> byInstallerorgid = ud.findByInstallerorgid(organizationid);
+				byInstallerorgid.forEach(single ->{useridlist.add(single.getUserid());});
 			}
+			List<GatewayUserPO> byUseridIn = gud.findByUseridIn(useridlist);
+			byUseridIn.forEach(single ->{orgglist.add(single.getDeviceid());});
 			gateList = gd.findByDeviceidIn(orgglist,pageable);
 			count = gd.countByDeviceidIn(orgglist);
-
 		}else{//为ameta管理员，拿所有网关
 			Page<GatewayPO> all = gd.findAll(pageable);
 			count = gd.count();
@@ -173,32 +176,35 @@ public class GatewayService {
 		Integer organizationid = emp.getOrganizationid();
 		OrganizationPO org = od.findByOrganizationid(organizationid);
 		if("1".equals(org.getOrgtype()+"")){//为服务商,拿本身及旗下安装商的网关
-			List<OrganizationPO> pid = od.findByParentorgid(organizationid);
-			List<Integer> oolist = new ArrayList<>();
-			for(OrganizationPO o : pid){
-				oolist.add(o.getOrganizationid());
+			List<OrganizationPO> pid = od.findByParentorgid(organizationid);//拿到旗下安装商
+			List<Integer> oolist = new ArrayList<>();//机构id集合
+			Set<Integer> useridset = new TreeSet<>();//用户id集合
+			if(pid.size()!=0&&pid!=null) {
+				for (OrganizationPO o : pid) {
+					oolist.add(o.getOrganizationid());
+				}
 			}
-			oolist.add(organizationid);
-			List<GatewayBindingPO> olist = gbd.findByOrganizationidIn(oolist);
-			for(GatewayBindingPO s : olist){
-				orgglist.add(s.getDeviceid());
-			}
+			List<UserPO> byOrganizationid = ud.findByOrganizationid(organizationid);//拿到本服务商下用户
+			List<UserPO> byInstallerorgidIn = ud.findByInstallerorgidIn(oolist);//拿到旗下安装商用户
+			byOrganizationid.forEach(single ->{useridset.add(single.getUserid());});
+			byInstallerorgidIn.forEach(single ->{useridset.add(single.getUserid());});
+			List<GatewayUserPO> byUseridIn = gud.findByUseridIn(useridset);
+			byUseridIn.forEach(single ->{orgglist.add(single.getDeviceid());});
 		}else if("2".equals(org.getOrgtype()+"")){//为安装商，拿自己的网关
 			List<EmployeeRolePO> elist = employeeroleDAO.findByEmployeeid(emp.getEmployeeid());
 			List<Integer> emprolelist = new ArrayList<>();
 			List<Integer> useridlist = new ArrayList<>();
 			elist.forEach(single ->{emprolelist.add(single.getRoleid());});
-			if(emprolelist.contains(Constants.ROLE_INSTALLER)){//包含安装员id
+			if(emprolelist.contains(Constants.ROLE_INSTALLER)&&emprolelist.size()==1){//只是安装员id
 				List<UserPO> byInstallerid = ud.findByInstallerid(emp.getEmployeeid());
 				byInstallerid.forEach(single ->{useridlist.add(single.getUserid());});
-				List<GatewayUserPO> byUseridIn = gud.findByUseridIn(useridlist);
-				byUseridIn.forEach(single ->{orgglist.add(single.getDeviceid());});
 			}else {
-				List<GatewayBindingPO> olist = gbd.findByOrganizationid(organizationid);
-				for (GatewayBindingPO s : olist) {
-					orgglist.add(s.getDeviceid());
-				}
+				//List<GatewayBindingPO> olist = gbd.findByOrganizationid(organizationid);//网关绑定表只能跟ameta绑定，暂认为无用
+				List<UserPO> byInstallerorgid = ud.findByInstallerorgid(organizationid);
+				byInstallerorgid.forEach(single ->{useridlist.add(single.getUserid());});
 			}
+			List<GatewayUserPO> byUseridIn = gud.findByUseridIn(useridlist);
+			byUseridIn.forEach(single ->{orgglist.add(single.getDeviceid());});
 		}else{//为ameta管理员，拿所有网关
 			for(String s : gdlist){
 				orgglist.add(s);
@@ -264,7 +270,10 @@ public class GatewayService {
 		List<String> citynamedeviceidlist = new ArrayList<String>();
 		List<String> codelist = new ArrayList<String>();
 		List<Integer> citynameuseridlist = new ArrayList<Integer>();
+		Long start = System.currentTimeMillis();
 		List<CityPO> findByCityname = cd.findByCitynameContaining(cityname);
+		Long stop = System.currentTimeMillis();
+		System.out.println((stop-start)/1000+"秒");
 		if(findByCityname.size()==0){
 			return null;
 		}
@@ -316,18 +325,18 @@ public class GatewayService {
 	}
 	//TODO
 	/**
-	 * 根据网关名称模糊查询对应网关id列表
+	 * 根据设备名称模糊查询对应网关id列表
 	 * @param devicename
 	 * @return
 	 */
 	@Transactional(readOnly = true)
 	public List<String> findIdListByDevicename(String devicename){
 		List<String> devicenamedeviceidlist = new ArrayList<String>();
-		List<GatewayPO> findByNameContaining = gd.findByNameContaining(devicename);
-		if(findByNameContaining.size()==0){
+		List<ZwaveDevicePO> byNameContaining = zdd.findByNameContaining(devicename);
+		if(byNameContaining.size()==0){
 			return null;
 		}
-		for (GatewayPO gatewayPO : findByNameContaining) {
+		for (ZwaveDevicePO gatewayPO : byNameContaining) {
 			devicenamedeviceidlist.add(gatewayPO.getDeviceid());
 		}
 		return devicenamedeviceidlist;
@@ -341,7 +350,7 @@ public class GatewayService {
 	public List<String> findIdListByCustomer(String customer){
 		List<String> customerdeviceidlist = new ArrayList<String>();
 		List<Integer> customeruseridlist = new ArrayList<Integer>();
-		List<UserPO> userlist = ud.findByNameContaining(customer);
+		List<UserPO> userlist = ud.findByLoginnameContaining(customer);
 		if(userlist.size()==0){
 			return null;
 		}
@@ -366,20 +375,24 @@ public class GatewayService {
 	public List<String> findIdListByServiceprovider(String serviceprovider){
 		List<String> serviceproviderdeviceidlist = new ArrayList<String>();
 		List<Integer> serviceprovideridlist = new ArrayList<Integer>();
+		List<Integer> useridlist = new ArrayList<Integer>();
 		List<OrganizationPO> orglist = od.findByOrgtypeAndNameContaining(Constants.ORGTYPE_SUPPLIER,serviceprovider);
 		if(orglist.size()==0){
 			return null;
 		}
 		for (OrganizationPO organizationPO : orglist) {
-			serviceprovideridlist.add(organizationPO.getOrganizationid());
+			serviceprovideridlist.add(organizationPO.getOrganizationid());//拿到服务商id集合
 		}
-		List<GatewayBindingPO> gatewaybindinglist = gbd.findAllByOrganizationidInAndBindingtype(serviceprovideridlist,Constants.ORGTYPE_SUPPLIER);
-		if(gatewaybindinglist.size()==0){
+		List<UserPO> byOrganizationidIn = ud.findByOrganizationidIn(serviceprovideridlist);//用户集合
+		if(byOrganizationidIn==null||byOrganizationidIn.size()==0){
 			return null;
 		}
-		for (GatewayBindingPO gatewayBindingPO : gatewaybindinglist) {
-			serviceproviderdeviceidlist.add(gatewayBindingPO.getDeviceid());
+		byOrganizationidIn.forEach(s->{useridlist.add(s.getUserid());});
+		List<GatewayUserPO> byUseridIn = gud.findByUseridIn(useridlist);
+		if(byUseridIn==null||byUseridIn.size()==0){
+			return null;
 		}
+		byUseridIn.forEach(s->{serviceproviderdeviceidlist.add(s.getDeviceid());});
 		return serviceproviderdeviceidlist;
 	}
 	/**
@@ -391,20 +404,24 @@ public class GatewayService {
 	public List<String> findIdListByInstallerorg(String installerorg){
 		List<String> installerorgdeviceidlist = new ArrayList<String>();
 		List<Integer> installerorgidlist = new ArrayList<Integer>();
+		List<Integer> useridlist = new ArrayList<Integer>();
 		List<OrganizationPO> orglist2 = od.findByOrgtypeAndNameContaining(Constants.ORGTYPE_INSTALLER,installerorg);
 		if(orglist2.size()==0){
 			return null;
 		}
 		for (OrganizationPO organizationPO : orglist2) {
-			installerorgidlist.add(organizationPO.getOrganizationid());
+			installerorgidlist.add(organizationPO.getOrganizationid());//拿到安装商id集合
 		}
-		List<GatewayBindingPO> gatewaybindinglist2 = gbd.findAllByOrganizationidInAndBindingtype(installerorgidlist,Constants.ORGTYPE_INSTALLER);
-		if(gatewaybindinglist2.size()==0){
+		List<UserPO> byInstallerorgidIn = ud.findByInstallerorgidIn(installerorgidlist);//用户集合
+		if(byInstallerorgidIn==null||byInstallerorgidIn.size()==0){
 			return null;
 		}
-		for (GatewayBindingPO gatewayBindingPO : gatewaybindinglist2) {
-			installerorgdeviceidlist.add(gatewayBindingPO.getDeviceid());
+		byInstallerorgidIn.forEach(s->{useridlist.add(s.getUserid());});
+		List<GatewayUserPO> byUseridIn = gud.findByUseridIn(useridlist);
+		if(byUseridIn==null||byUseridIn.size()==0){
+			return null;
 		}
+		byUseridIn.forEach(s->{installerorgdeviceidlist.add(s.getDeviceid());});
 		return installerorgdeviceidlist;
 	}
 	/**
@@ -422,9 +439,9 @@ public class GatewayService {
 			return null;
 		}
 		for (EmployeePO employeePO : emplist) {
-			employeeidlist.add(employeePO.getEmployeeid());
+			employeeidlist.add(employeePO.getEmployeeid());//拿到安装员id集合
 		}
-		List<UserPO> userlist2 = ud.findByInstalleridIn(employeeidlist);
+		List<UserPO> userlist2 = ud.findByInstalleridIn(employeeidlist);//拿到用户集合
 		if(userlist2.size()==0){
 			return null;
 		}
@@ -484,18 +501,20 @@ public class GatewayService {
 			}
 			//电话卡信息
 			PhonecardUserPO puPO = pud.findByUserid(user.getUserid());
-			PhonecardPO pc = pd.findByPhonecardid(puPO.getPhonecardid());
-			if(pc!=null) {
-				gate.setPhonecardserialnumber(pc.getSerialnumber());
-				gate.setPhonecardmodel(pc.getModel());
-				gate.setPhonecardstatus(pc.getStatus());
-				gate.setRateplan(pc.getRateplan());
-				gate.setPhonecardfirmwareversion(pc.getFirmwareversion());
-				gate.setActivationdate(pc.getActivationdate());
-				gate.setFirstprogrammedon(pc.getFirstprogrammedondate());
-				gate.setLastprogrammedon(pc.getLastprogrammedondate());
-				gate.setOrderingdate(pc.getOrderingdate());
-				gate.setExpiredate(pc.getExpiredate());
+			if(puPO!=null) {
+				PhonecardPO pc = pd.findByPhonecardid(puPO.getPhonecardid());
+				if(pc!=null) {
+					gate.setPhonecardserialnumber(pc.getSerialnumber());
+					gate.setPhonecardmodel(pc.getModel());
+					gate.setPhonecardstatus(pc.getStatus());
+					gate.setRateplan(pc.getRateplan());
+					gate.setPhonecardfirmwareversion(pc.getFirmwareversion());
+					gate.setActivationdate(pc.getActivationdate());
+					gate.setFirstprogrammedon(pc.getFirstprogrammedondate());
+					gate.setLastprogrammedon(pc.getLastprogrammedondate());
+					gate.setOrderingdate(pc.getOrderingdate());
+					gate.setExpiredate(pc.getExpiredate());
+				}
 			}
 		}
 		List<ZwaveDevicePO> zdlist = zdd.findByDeviceid(deviceid);
