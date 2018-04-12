@@ -2,6 +2,7 @@ package cn.com.isurpass.house.web.controller;
 
 import java.util.Map;
 
+import cn.com.isurpass.house.po.EmployeePO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +21,8 @@ import cn.com.isurpass.house.service.PhonecardService;
 import cn.com.isurpass.house.util.PageResult;
 import cn.com.isurpass.house.vo.TransferVO;
 import cn.com.isurpass.house.vo.TypeGatewayInfoVO;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Controller
 @RequestMapping("phonecard")
@@ -72,12 +75,12 @@ public class PhonecardController {
 	 */
 	@ResponseBody
 	@RequestMapping(value="update",method = RequestMethod.POST)
-	public String update(@RequestBody TransferVO tf){
-		String s = "";
+	public String update(@RequestBody TransferVO tf, HttpServletRequest request){
+		EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
 		String hope = tf.getHope();
 		Object[] ids = tf.getIds();
 		try {
-			s = ps.updatePhonecardStatus(hope, ids);
+			ps.updatePhonecardStatus(hope, ids,emp);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return e.getMessage();

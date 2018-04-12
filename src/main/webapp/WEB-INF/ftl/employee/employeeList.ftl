@@ -47,13 +47,13 @@
     <tr>
         <th data-field=""></th>
         <th data-field="employeeid" data-visible="false">ID</th>
-        <th data-field="name"><@spring.message code="label.name"/></th>
-        <th data-field="parentOrgName"><@spring.message code="label.parentorg"/></th>
-        <th data-field="code"><@spring.message code="label.empcode"/></th>
-        <th data-field="status" data-formatter='formatter_status'><@spring.message code="label.status"/></th>
-        <th data-field="employeeroleid"><@spring.message code="label.privilege"/></th>
+        <th data-field="name" class="text-center"><@spring.message code="label.name"/></th>
+        <th data-field="parentOrgName" class="text-center"><@spring.message code="label.parentorg"/></th>
+        <th data-field="code" class="text-center"><@spring.message code="label.empcode"/></th>
+        <th data-field="status" data-formatter='formatter_status' class="text-center"><@spring.message code="label.status"/></th>
+        <th data-field="employeeroleid" class="text-center"><@spring.message code="label.privilege"/></th>
         <th data-field="operate" data-formatter="formatter_op"
-            data-events="operateEvents" data-visible="false"><@spring.message code="label.operate"/></th>
+            data-events="operateEvents" data-visible="false" class="text-center"><@spring.message code="label.operate"/></th>
     </tr>
     </thead>
 </table>

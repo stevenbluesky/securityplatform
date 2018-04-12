@@ -477,7 +477,7 @@ public class GatewayService {
 		List<GatewayUserPO> gu = gud.findByDeviceid(deviceid);
 		if(gu!=null&&gu.size()!=0) {//网关用户表匹配到了数据，该网关已跟用户绑定
 			UserPO user = ud.findByUserid(gu.get(0).getUserid());
-			gate.setCustomer(user.getName());
+			gate.setCustomer(user.getLoginname());
 			if(user.getInstallerid()!=null) {
 				EmployeePO emp = ed.findByEmployeeid(user.getInstallerid());
 				gate.setInstaller(emp.getLoginname());

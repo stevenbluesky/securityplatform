@@ -73,12 +73,12 @@
     <tr>
         <th data-field=""></th>
         <th data-field="userid" data-visible="false">ID</th>
-        <th data-field="name"><@spring.message code='label.name'/></th>
-        <th data-field="phonenumber"><@spring.message code='label.phonenumber'/></th>
-        <th data-field="city"><@spring.message code='label.city'/></th>
-        <th data-field="suppliername"><@spring.message code='label.serviceprovider'/></th>
-        <th data-field="status" data-formatter="formatter_status"><@spring.message code='label.status'/></th>
-        <th data-field="operate" data-visible="false"><@spring.message code='label.operate'/></th>
+        <th data-field="name" class="text-center"><@spring.message code='label.name'/></th>
+        <th data-field="phonenumber" class="text-center"><@spring.message code='label.phonenumber'/></th>
+        <th data-field="city" class="text-center"><@spring.message code='label.city'/></th>
+        <th data-field="suppliername" class="text-center"><@spring.message code='label.serviceprovider'/></th>
+        <th data-field="status" class="text-center" data-formatter="formatter_status"><@spring.message code='label.status'/></th>
+        <th data-field="operate" class="text-center" data-visible="false"><@spring.message code='label.operate'/></th>
     </tr>
     </thead>
 </table>

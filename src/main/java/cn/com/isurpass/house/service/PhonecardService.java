@@ -6,7 +6,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cn.com.isurpass.house.dao.OrganizationDAO;
 import cn.com.isurpass.house.dao.PhonecarduserDAO;
+import cn.com.isurpass.house.dao.UserDAO;
+import cn.com.isurpass.house.po.*;
 import cn.com.isurpass.house.util.PhoneCardInterfaceCallUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,14 +20,18 @@ import org.springframework.util.StringUtils;
 
 import cn.com.isurpass.house.dao.PhonecardDAO;
 import cn.com.isurpass.house.exception.MyArgumentNullException;
-import cn.com.isurpass.house.po.GatewayPO;
-import cn.com.isurpass.house.po.PhonecardPO;
 import cn.com.isurpass.house.util.Constants;
 import cn.com.isurpass.house.vo.TypeGatewayInfoVO;
 @Service
 public class PhonecardService {
 	@Autowired
 	private PhonecardDAO pd;
+	@Autowired
+	private OrganizationDAO organizationDAO;
+	@Autowired
+	private UserDAO userDAO;
+	@Autowired
+	private PhonecarduserDAO phonecarduserDAO;
 	/**
 	 * 新增网关信息
 	 * @param pc
@@ -87,23 +94,36 @@ public class PhonecardService {
 		return map;
 	}
 	@Transactional(rollbackFor = Exception.class)
-	public String updatePhonecardStatus(String hope, Object [] ids) throws Exception {
-		String s = "";
+	public void updatePhonecardStatus(String hope, Object [] ids, EmployeePO emp) throws Exception {
+		OrganizationPO org = organizationDAO.findByOrganizationid(emp.getOrganizationid());
+		if(!"0".equals(org.getOrgtype()+"")){//如果该员工不是ameta员工，则需要判断其希望修改的电话卡id是否是属于他的公司
+			List<UserPO> userlist = userDAO.findByOrganizationid(emp.getOrganizationid());
+			List<Integer> useridlist = new ArrayList<>();//用户id集合
+			List<Integer> pclist = new ArrayList<>();//电话卡id集合
+			userlist.forEach(s->{useridlist.add(s.getUserid());});
+			List<PhonecardUserPO> pulist = phonecarduserDAO.findByUseridIn(useridlist);
+			pulist.forEach(s->{pclist.add(s.getPhonecardid());});
+			for(Object o : ids){
+                PhonecardPO phonecardpo = pd.findByPhonecardid(o);
+				if(!pclist.contains(phonecardpo.getSerialnumber())){
+					throw new MyArgumentNullException("You have not access to modify the SIM status!");
+				}
+			}
+		}
 		for (Object string : ids) {
 			PhonecardPO phonecardpo = pd.findByPhonecardid(string);
 			if("start".equals(hope)){
-				s = PhoneCardInterfaceCallUtils.updateStatus(phonecardpo.getSerialnumber(), Constants.ACTIVATED);
+				PhoneCardInterfaceCallUtils.updateStatus(phonecardpo.getSerialnumber(), Constants.ACTIVATED);
 				phonecardpo.setStatus(Constants.STATUS_NORMAL);
 			}else if("freeze".equals(hope)){
-				s = PhoneCardInterfaceCallUtils.updateStatus(phonecardpo.getSerialnumber(),Constants.INVENTORY);
+				PhoneCardInterfaceCallUtils.updateStatus(phonecardpo.getSerialnumber(),Constants.INVENTORY);
 				phonecardpo.setStatus(Constants.STATUS_SUSPENCED);
 			}else if("delete".equals(hope)){
-				s = PhoneCardInterfaceCallUtils.updateStatus(phonecardpo.getSerialnumber(),Constants.DEACTIVATED);
+				PhoneCardInterfaceCallUtils.updateStatus(phonecardpo.getSerialnumber(),Constants.DEACTIVATED);
 				phonecardpo.setStatus(Constants.STATUS_DELETED);
 			}
 			pd.save(phonecardpo);
 		}
-		return s;
 	}
 	
 }
