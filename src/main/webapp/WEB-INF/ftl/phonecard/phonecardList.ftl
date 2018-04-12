@@ -43,12 +43,12 @@
 	        <tr>
 	        	<th data-field="id">复选框</th>
 	        	<th data-field="phonecardid" data-visible="false">主键</th>
-	            <th data-field="serialnumber"><@spring.message code='label.serialnumber'/></th>
-	            <th data-field="status" data-formatter="formatter_status"><@spring.message code='label.status'/></th>
-	            <th data-field="model"><@spring.message code='label.model'/></th>
-	            <th data-field="firmwareversion"><@spring.message code='label.firmwareversion'/></th>
-	            <th data-field="rateplan">Rate Plan</th>
-	            <th data-field="activationdate" data-formatter="formatter_date">Activation Date</th>
+	            <th data-field="serialnumber" class="text-center"><@spring.message code='label.serialnumber'/></th>
+	            <th data-field="status" data-formatter="formatter_status" class="text-center"><@spring.message code='label.status'/></th>
+	            <th data-field="model" class="text-center"><@spring.message code='label.model'/></th>
+	            <th data-field="firmwareversion" class="text-center"><@spring.message code='label.firmwareversion'/></th>
+	            <th data-field="rateplan" class="text-center">Rate Plan</th>
+	            <th data-field="activationdate" data-formatter="formatter_date" class="text-center">Activation Date</th>
 	           <#-- <th data-field="employeeroleid">Dealer</th>-->
 	        </tr>
 	    </thead>

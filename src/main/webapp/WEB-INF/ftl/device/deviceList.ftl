@@ -79,18 +79,18 @@
     <tr>
         <th data-field=""></th>
         <th data-field="zwavedeviceid" data-visible="false">ID</th>
-        <th data-field="name"><@spring.message code="label.dname"/></th>
-        <th data-field="devicetype"
+        <th data-field="name" class="text-center"><@spring.message code="label.dname"/></th>
+        <th data-field="devicetype" class="text-center"
             data-formatter='formatter_devicetype'><@spring.message code="label.devicetype"/></th>
-        <th data-field="warningstatuses"
+        <th data-field="warningstatuses" class="text-center"
             data-formatter='formatter_warnigstatuses'><@spring.message code="label.alarmstatus"/></th>
-        <th data-field="status" data-formatter='formatter_devicestatus'><@spring.message code="label.status"/></th>
-        <th data-field="battery"><@spring.message code="label.energy"/></th>
-        <th data-field="city"><@spring.message code="label.area"/></th>
-        <th data-field="organizationname"><@spring.message code="label.serviceprovider"/></th>
-        <th data-field="installerorgname"><@spring.message code="label.installerorg"/></th>
-        <th data-field="installername"><@spring.message code="label.installer"/></th>
-        <th data-field="username"><@spring.message code="label.user"/></th>
+        <th data-field="status" class="text-center" data-formatter='formatter_devicestatus'><@spring.message code="label.status"/></th>
+        <th data-field="battery" class="text-center"><@spring.message code="label.energy"/></th>
+        <th data-field="city" class="text-center"><@spring.message code="label.area"/></th>
+        <th data-field="organizationname" class="text-center"><@spring.message code="label.serviceprovider"/></th>
+        <th data-field="installerorgname" class="text-center"><@spring.message code="label.installerorg"/></th>
+        <th data-field="installername" class="text-center"><@spring.message code="label.installer"/></th>
+        <th data-field="username" class="text-center"><@spring.message code="label.user"/></th>
     </tr>
     </thead>
 </table>

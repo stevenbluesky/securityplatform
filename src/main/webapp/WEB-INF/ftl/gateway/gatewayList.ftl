@@ -75,15 +75,15 @@
     <thead>
     <tr>
         <th data-field="">复选框列</th>
-        <th data-field="name"><@spring.message code="label.dname"/></th>
+        <th data-field="name" class="text-center"><@spring.message code="label.dname"/></th>
         <#--<th data-field=""><@spring.message code="label.alarmstatus"/></th>-->
-        <th data-field="status" data-formatter="formatter_gatewaystatus"><@spring.message code="label.status"/></th>
-        <th data-field="deviceid"><@spring.message code="label.gatewayID"/></th>
-        <th data-field="cityname"><@spring.message code="label.area"/></th>
-        <th data-field="serviceprovider"><@spring.message code="label.serviceprovider"/></th>
-        <th data-field="installerorg"><@spring.message code="label.installerorg"/></th>
-        <th data-field="installer"><@spring.message code="label.installer"/></th>
-        <th data-field="customer"><@spring.message code="label.user"/></th>
+        <th data-field="status" class="text-center" data-formatter="formatter_gatewaystatus"><@spring.message code="label.status"/></th>
+        <th data-field="deviceid" class="text-center"><@spring.message code="label.gatewayID"/></th>
+        <th data-field="cityname" class="text-center"><@spring.message code="label.area"/></th>
+        <th data-field="serviceprovider" class="text-center"><@spring.message code="label.serviceprovider"/></th>
+        <th data-field="installerorg" class="text-center"><@spring.message code="label.installerorg"/></th>
+        <th data-field="installer" class="text-center"><@spring.message code="label.installer"/></th>
+        <th data-field="customer" class="text-center"><@spring.message code="label.user"/></th>
         <#--<th data-field=""><@spring.message code="label.businessstatus"/></th>-->
 	<#--<th data-field="operate" data-formatter="formatter_operate"><@spring.message code="label.operate"/></th>-->
     </tr>
