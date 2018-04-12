@@ -49,13 +49,16 @@ function formatter_devicetype(value, row, index) {
     if (row.devicetype == '1') {
         return lan.smokesensor;
     }
+    if (row.devicetype == '2') {
+        return lan.leaksensor;
+    }
     if (row.devicetype == '3') {
         return lan.gassensor;
     }
     if (row.devicetype == '4') {
         return lan.doorlock;
     }
-    if (row.devicetype == '2') {
+    if (row.devicetype == '5') {
         return lan.leaksensor;
     }
     if (row.devicetype == '6') {
@@ -84,6 +87,21 @@ function formatter_devicestatus(value, row, index) {
                     return lan.open;
                 case 251:
                     return lan.takepart;
+            }
+        case '5':
+            switch (row.status) {
+                case -1:
+                    return lan.error;
+                case 1:
+                    return lan.dooropen0;
+                case 255:
+                    return lan.doorlock0;
+                case 251:
+                    return lan.takepart;
+                case 300:
+                    return lan.pswfail;
+                case 301:
+                    return lan.keyerror;
             }
         case '1':
             switch (row.status) {
@@ -165,6 +183,27 @@ function formatter_zwavewarning(devicetype, warningstatuses){
                     return lan.dooropen;
                 case 251:
                     return lan.takepart;
+            }
+        case '5':
+            switch (warningstatuses) {
+                case 1:
+                    return lan.dooropen0
+                case 255:
+                    return lan.dooropen;
+                case 251:
+                    return lan.takepart;
+                case 300:
+                    return lan.pswfail;
+                case 301:
+                    return lan.keyerror;
+                case 302:
+                    return lan.alarm0;
+                case 303:
+                    return lan.status0;
+                case 304:
+                    return lan.keyalarm;
+                case 305:
+                    return lan.closefail;
             }
         case '1':
             switch (warningstatuses) {
