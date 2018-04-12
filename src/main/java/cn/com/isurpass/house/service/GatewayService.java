@@ -325,18 +325,18 @@ public class GatewayService {
 	}
 	//TODO
 	/**
-	 * 根据网关名称模糊查询对应网关id列表
+	 * 根据设备名称模糊查询对应网关id列表
 	 * @param devicename
 	 * @return
 	 */
 	@Transactional(readOnly = true)
 	public List<String> findIdListByDevicename(String devicename){
 		List<String> devicenamedeviceidlist = new ArrayList<String>();
-		List<GatewayPO> findByNameContaining = gd.findByNameContaining(devicename);
-		if(findByNameContaining.size()==0){
+		List<ZwaveDevicePO> byNameContaining = zdd.findByNameContaining(devicename);
+		if(byNameContaining.size()==0){
 			return null;
 		}
-		for (GatewayPO gatewayPO : findByNameContaining) {
+		for (ZwaveDevicePO gatewayPO : byNameContaining) {
 			devicenamedeviceidlist.add(gatewayPO.getDeviceid());
 		}
 		return devicenamedeviceidlist;
@@ -350,7 +350,7 @@ public class GatewayService {
 	public List<String> findIdListByCustomer(String customer){
 		List<String> customerdeviceidlist = new ArrayList<String>();
 		List<Integer> customeruseridlist = new ArrayList<Integer>();
-		List<UserPO> userlist = ud.findByNameContaining(customer);
+		List<UserPO> userlist = ud.findByLoginnameContaining(customer);
 		if(userlist.size()==0){
 			return null;
 		}
@@ -375,20 +375,24 @@ public class GatewayService {
 	public List<String> findIdListByServiceprovider(String serviceprovider){
 		List<String> serviceproviderdeviceidlist = new ArrayList<String>();
 		List<Integer> serviceprovideridlist = new ArrayList<Integer>();
+		List<Integer> useridlist = new ArrayList<Integer>();
 		List<OrganizationPO> orglist = od.findByOrgtypeAndNameContaining(Constants.ORGTYPE_SUPPLIER,serviceprovider);
 		if(orglist.size()==0){
 			return null;
 		}
 		for (OrganizationPO organizationPO : orglist) {
-			serviceprovideridlist.add(organizationPO.getOrganizationid());
+			serviceprovideridlist.add(organizationPO.getOrganizationid());//拿到服务商id集合
 		}
-		List<GatewayBindingPO> gatewaybindinglist = gbd.findAllByOrganizationidInAndBindingtype(serviceprovideridlist,Constants.ORGTYPE_SUPPLIER);
-		if(gatewaybindinglist.size()==0){
+		List<UserPO> byOrganizationidIn = ud.findByOrganizationidIn(serviceprovideridlist);//用户集合
+		if(byOrganizationidIn==null||byOrganizationidIn.size()==0){
 			return null;
 		}
-		for (GatewayBindingPO gatewayBindingPO : gatewaybindinglist) {
-			serviceproviderdeviceidlist.add(gatewayBindingPO.getDeviceid());
+		byOrganizationidIn.forEach(s->{useridlist.add(s.getUserid());});
+		List<GatewayUserPO> byUseridIn = gud.findByUseridIn(useridlist);
+		if(byUseridIn==null||byUseridIn.size()==0){
+			return null;
 		}
+		byUseridIn.forEach(s->{serviceproviderdeviceidlist.add(s.getDeviceid());});
 		return serviceproviderdeviceidlist;
 	}
 	/**
@@ -400,20 +404,24 @@ public class GatewayService {
 	public List<String> findIdListByInstallerorg(String installerorg){
 		List<String> installerorgdeviceidlist = new ArrayList<String>();
 		List<Integer> installerorgidlist = new ArrayList<Integer>();
+		List<Integer> useridlist = new ArrayList<Integer>();
 		List<OrganizationPO> orglist2 = od.findByOrgtypeAndNameContaining(Constants.ORGTYPE_INSTALLER,installerorg);
 		if(orglist2.size()==0){
 			return null;
 		}
 		for (OrganizationPO organizationPO : orglist2) {
-			installerorgidlist.add(organizationPO.getOrganizationid());
+			installerorgidlist.add(organizationPO.getOrganizationid());//拿到安装商id集合
 		}
-		List<GatewayBindingPO> gatewaybindinglist2 = gbd.findAllByOrganizationidInAndBindingtype(installerorgidlist,Constants.ORGTYPE_INSTALLER);
-		if(gatewaybindinglist2.size()==0){
+		List<UserPO> byInstallerorgidIn = ud.findByInstallerorgidIn(installerorgidlist);//用户集合
+		if(byInstallerorgidIn==null||byInstallerorgidIn.size()==0){
 			return null;
 		}
-		for (GatewayBindingPO gatewayBindingPO : gatewaybindinglist2) {
-			installerorgdeviceidlist.add(gatewayBindingPO.getDeviceid());
+		byInstallerorgidIn.forEach(s->{useridlist.add(s.getUserid());});
+		List<GatewayUserPO> byUseridIn = gud.findByUseridIn(useridlist);
+		if(byUseridIn==null||byUseridIn.size()==0){
+			return null;
 		}
+		byUseridIn.forEach(s->{installerorgdeviceidlist.add(s.getDeviceid());});
 		return installerorgdeviceidlist;
 	}
 	/**
@@ -431,9 +439,9 @@ public class GatewayService {
 			return null;
 		}
 		for (EmployeePO employeePO : emplist) {
-			employeeidlist.add(employeePO.getEmployeeid());
+			employeeidlist.add(employeePO.getEmployeeid());//拿到安装员id集合
 		}
-		List<UserPO> userlist2 = ud.findByInstalleridIn(employeeidlist);
+		List<UserPO> userlist2 = ud.findByInstalleridIn(employeeidlist);//拿到用户集合
 		if(userlist2.size()==0){
 			return null;
 		}

@@ -49,8 +49,6 @@ public interface UserDAO extends CrudRepository<UserPO, Integer> {
 
     Integer countByInstallerorgid(Integer organizationid);
 
-    List<UserPO> findByNameContaining(String customer);
-
     List<UserPO> findAll(Specification<UserPO> specification);
 
     Page<UserPO> findAll(Specification<UserPO> specification, Pageable pageable);
@@ -86,4 +84,8 @@ public interface UserDAO extends CrudRepository<UserPO, Integer> {
     List<UserPO> findByInstalleridInAndOrganizationidIn(List<Integer> empidlist, Integer organizationid);
 
     List<UserPO> findByInstallerorgidAndInstalleridIn(Integer organizationid, List<Integer> empidlist);
+
+    List<UserPO> findByLoginnameContaining(String customer);
+
+    List<UserPO> findByNameContaining(String searchName);
 }
