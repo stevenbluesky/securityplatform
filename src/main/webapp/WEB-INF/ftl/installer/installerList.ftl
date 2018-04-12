@@ -46,11 +46,11 @@
     <tr>
         <th data-field=""></th>
         <th data-field="organizationid" data-visible="false">ID</th>
-        <th data-field="name"><@spring.message code="label.pname"/></th>
-        <th data-field="code"><@spring.message code="label.code"/></th>
-        <th data-field="city"><@spring.message code="label.city"/></th>
-        <th data-field="status" data-formatter="formatter_status"><@spring.message code="label.status"/></th>
-        <th data-field="operate" data-formatter="formatter_op"
+        <th data-field="name" class="text-center"><@spring.message code="label.pname"/></th>
+        <th data-field="code" class="text-center"><@spring.message code="label.code"/></th>
+        <th data-field="city" class="text-center"><@spring.message code="label.city"/></th>
+        <th data-field="status" class="text-center" data-formatter="formatter_status"><@spring.message code="label.status"/></th>
+        <th data-field="operate" class="text-center" data-formatter="formatter_op"
             data-events="installeraddEvents" data-visible="false"><@spring.message code="label.operate"/></th>
     </tr>
     </thead>

@@ -15,4 +15,6 @@ public interface PhonecarduserDAO extends CrudRepository<PhonecardUserPO,Integer
 	PhonecardUserPO findByPhonecardid(Integer phonecardid);
 
     List<PhonecardUserPO> findByPhonecardidIn(List<Integer> phonecardidlist);
+
+    List<PhonecardUserPO> findByUseridIn(List<Integer> useridlist);
 }
