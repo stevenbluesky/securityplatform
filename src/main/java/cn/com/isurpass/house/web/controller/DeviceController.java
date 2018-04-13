@@ -2,6 +2,7 @@ package cn.com.isurpass.house.web.controller;
 
 import java.util.Map;
 
+import cn.com.isurpass.house.result.JsonResult;
 import cn.com.isurpass.house.util.FormUtils;
 import cn.com.isurpass.house.vo.DeviceSearchVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -47,4 +49,20 @@ public class DeviceController {
 		model.addAttribute("zwave",ds.findDeviceDetail(zwavedeviceid));
 		return "device/deviceDetail";
 	}
+
+	@RequestMapping("toggleDeviceStatus")
+	@ResponseBody
+	public JsonResult toggleDeviceStatus(HttpServletRequest request,Integer zwavedeviceid,Integer toStatus){
+        JsonResult jr = new JsonResult();
+        try {
+            String s = ds.toggleDeviceStatus(toStatus, zwavedeviceid, request);
+            jr.setStatus(1);
+            return jr;
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            jr.setStatus(-1);
+            jr.setMsg(e.getMessage());
+            return jr;
+        }
+    }
 }

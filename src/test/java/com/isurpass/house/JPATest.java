@@ -42,6 +42,8 @@ public class JPATest {
 	OrganizationDAO org;
 	@Autowired
 	private GatewayDAO gatewayDAO;
+	@Autowired
+	UserDAO ud;
 	
 	@Test
 	public void testOrg() {

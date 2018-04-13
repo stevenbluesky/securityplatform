@@ -269,4 +269,15 @@ function formatterReturnStatus(status){
     }
 }
 
+//可进行开关操作的设备
+function toggleStatusAbleDevicetype(devicetype){
+    var changeableDevicetypeList=[11,46];
+    for (var d in changeableDevicetypeList) {
+        if (devicetype == changeableDevicetypeList[d]) {
+            return true;
+        }
+    }
+    return false;
+}
+
 

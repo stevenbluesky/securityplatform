@@ -17,6 +17,7 @@ var lan = {
     addgatewayerror:"网关不存在!",//-109
     duplicatephonecarduser:"此电话卡已经绑定了用户.",//-110
     simdontexsit:"电话卡未录入",//-111
+    devicenoexist:"设备不存在",//-112
 
     normal: "正常",
     unvalid: '未生效',
