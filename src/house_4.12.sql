@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50556
 File Encoding         : 65001
 
-Date: 2018-04-11 15:14:47
+Date: 2018-04-12 11:46:43
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -29,7 +29,7 @@ CREATE TABLE `address` (
   `fax` varchar(128) DEFAULT NULL,
   `phonenumber` varchar(128) DEFAULT NULL,
   PRIMARY KEY (`addressid`)
-) ENGINE=InnoDB AUTO_INCREMENT=135 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=138 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of address
@@ -65,6 +65,9 @@ INSERT INTO `address` VALUES ('131', '中国', '湖北省', '荆州', 'asfs', nu
 INSERT INTO `address` VALUES ('132', '中国', '湖北省', '荆州', 'fadsfaf', 'sfdsafasdf', null, null);
 INSERT INTO `address` VALUES ('133', '中国', '湖北省', '荆州', '', 'sadfasdf', null, null);
 INSERT INTO `address` VALUES ('134', '中国', '湖北省', '荆州', 'dsafdasf', 'fsdafasdf', null, null);
+INSERT INTO `address` VALUES ('135', '中国', '湖北省', '荆州', '', '', null, null);
+INSERT INTO `address` VALUES ('136', '中国', '湖北省', '荆州', 'safasdf', null, null, null);
+INSERT INTO `address` VALUES ('137', '中国', '湖北省', '荆州', '', null, null, null);
 
 -- ----------------------------
 -- Table structure for city
@@ -126,7 +129,7 @@ CREATE TABLE `employee` (
   `expiredate` datetime DEFAULT NULL,
   `createtime` datetime NOT NULL,
   PRIMARY KEY (`employeeid`)
-) ENGINE=InnoDB AUTO_INCREMENT=78 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=81 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of employee
@@ -151,6 +154,9 @@ INSERT INTO `employee` VALUES ('74', 'ameta11', '', 'ffff', 'gpdMn1zf6OeUyXJoI8h
 INSERT INTO `employee` VALUES ('75', 'xixitest', 'fadsfasd', '', 'DSHO/nRoO2q1+1ceGDIl/DFtoOJ0a7UC', '64', '', '2xbWhNuw2tFvyreAHwy2hyUOAiJNmS0y', '1', null, null, '2018-04-11 14:59:22', '2018-04-11 14:59:22');
 INSERT INTO `employee` VALUES ('76', 'suptest', '', '', 'r2z2xLv9HXXFXNat+kodg2thYd787i83', '56', '', '9ayRNLGx34Rx1pHLUMDWvuYuLJS5r8mD', '1', null, null, '2018-04-11 15:00:41', '2018-04-11 15:00:41');
 INSERT INTO `employee` VALUES ('77', 'fwsadmin', null, null, 'J94TzCqOzbRzODAGVCI5Qj4Kja//TdRk', '77', 'q', 'i7SSEKMUbrMwUfmRD9hhKkO9is0//V+M', '1', null, null, null, '2018-04-11 15:13:53');
+INSERT INTO `employee` VALUES ('78', 'yg001', 'yg001', '', '9oUKVsPD+Ff9DME4vtflR8AqKLjpdLXi', '64', '123', 'boYACmYwFl9COaPEH1mw66YEoUhBodmG', '1', null, null, '2018-04-11 16:40:50', '2018-04-11 16:40:50');
+INSERT INTO `employee` VALUES ('79', 'fws1admin', null, null, 'juFvc/51cxs+cL30cC2rRAPRCU63iab3', '78', '', 'zwEDgLRL8XDmCfpPYArONotJ+1LvSOhZ', '1', null, null, null, '2018-04-11 16:48:38');
+INSERT INTO `employee` VALUES ('80', 'azy1', 'azy1', '', 'Vc5GSROiv2Q/Dh9bphhXAm2Vs/K8meEl', '66', '', 'dW11ZiDD4YrxxZoNVFLijrwarla+KPe+', '1', null, null, '2018-04-11 17:31:10', '2018-04-11 17:31:10');
 
 -- ----------------------------
 -- Table structure for employeerole
@@ -162,7 +168,7 @@ CREATE TABLE `employeerole` (
   `roleid` int(11) NOT NULL,
   `createtime` datetime NOT NULL,
   PRIMARY KEY (`employeeroleid`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of employeerole
@@ -188,6 +194,9 @@ INSERT INTO `employeerole` VALUES ('18', '74', '5', '2018-04-10 15:33:02');
 INSERT INTO `employeerole` VALUES ('19', '75', '4', '2018-04-11 14:59:22');
 INSERT INTO `employeerole` VALUES ('20', '76', '6', '2018-04-11 15:00:41');
 INSERT INTO `employeerole` VALUES ('21', '77', '2', '2018-04-11 15:13:53');
+INSERT INTO `employeerole` VALUES ('22', '78', '4', '2018-04-11 16:40:50');
+INSERT INTO `employeerole` VALUES ('23', '79', '2', '2018-04-11 16:48:38');
+INSERT INTO `employeerole` VALUES ('24', '80', '4', '2018-04-11 17:31:10');
 
 -- ----------------------------
 -- Table structure for gateway
@@ -207,6 +216,7 @@ CREATE TABLE `gateway` (
 -- ----------------------------
 -- Records of gateway
 -- ----------------------------
+INSERT INTO `gateway` VALUES ('123321123', null, '1', 'fsadf', null, '2018-04-11 19:55:12', '1321');
 INSERT INTO `gateway` VALUES ('fdsfasd', null, '1', 'fsdfsadf', null, '2018-04-04 19:03:48', 'fsdsdafasdf');
 INSERT INTO `gateway` VALUES ('fsdfsadfasd', null, '1', 'fsdfsda', null, '2018-04-04 19:02:47', 'asdfasdfasd');
 INSERT INTO `gateway` VALUES ('iRemote8005000000001', '8005001', '0', '001-1', '98', '2018-03-23 11:50:05', '0.0.1');
@@ -227,7 +237,7 @@ CREATE TABLE `gatewaybinding` (
   `status` int(9) NOT NULL COMMENT '1:正常 2:冻结',
   `createtime` datetime NOT NULL,
   PRIMARY KEY (`gatewaybindingid`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of gatewaybinding
@@ -240,6 +250,7 @@ INSERT INTO `gatewaybinding` VALUES ('5', 'fdsfasd', '1', '0', '1', '2018-04-04 
 INSERT INTO `gatewaybinding` VALUES ('6', 'zhulei', '1', '0', '1', '2018-04-08 19:07:42');
 INSERT INTO `gatewaybinding` VALUES ('7', 'iRemote8005000000004', '1', '0', '1', '2018-04-09 11:29:35');
 INSERT INTO `gatewaybinding` VALUES ('8', 'iRemote8005000000005', '1', '1', '1', '2018-04-09 11:35:33');
+INSERT INTO `gatewaybinding` VALUES ('9', '123321123', '1', '0', '1', '2018-04-11 19:55:12');
 
 -- ----------------------------
 -- Table structure for gatewayuser
@@ -251,7 +262,7 @@ CREATE TABLE `gatewayuser` (
   `userid` int(11) NOT NULL,
   `createtime` datetime NOT NULL,
   PRIMARY KEY (`gatewayuserbindingid`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of gatewayuser
@@ -261,6 +272,8 @@ INSERT INTO `gatewayuser` VALUES ('3', 'iRemote8005000000002', '13', '2018-03-28
 INSERT INTO `gatewayuser` VALUES ('4', 'iRemote8005000000003', '15', '2018-03-30 17:15:21');
 INSERT INTO `gatewayuser` VALUES ('5', 'fsdfsadfasd', '16', '2018-04-04 20:21:30');
 INSERT INTO `gatewayuser` VALUES ('6', 'iRemote8005000000005', '17', '2018-04-09 11:46:18');
+INSERT INTO `gatewayuser` VALUES ('7', '123321123', '18', '2018-04-11 19:55:55');
+INSERT INTO `gatewayuser` VALUES ('8', 'zhulei', '19', '2018-04-12 11:30:23');
 
 -- ----------------------------
 -- Table structure for operationlog
@@ -304,7 +317,7 @@ CREATE TABLE `organization` (
   PRIMARY KEY (`organizationid`),
   UNIQUE KEY `name` (`name`),
   UNIQUE KEY `code` (`code`)
-) ENGINE=InnoDB AUTO_INCREMENT=78 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=79 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of organization
@@ -322,6 +335,7 @@ INSERT INTO `organization` VALUES ('66', 'ins1', '1', 'suptest1ins', '65', '2', 
 INSERT INTO `organization` VALUES ('68', 'ins3', '1', 'suptest1ins3', '65', '2', '1', '122', null, null, '', null, null, '2018-04-09 18:59:05');
 INSERT INTO `organization` VALUES ('76', 'ins2', '1', 'suptest1ins2', '65', '2', '1', '130', null, null, '', null, null, '2018-04-09 19:07:56');
 INSERT INTO `organization` VALUES ('77', 'fws', '1', 'fws', '1', '1', '1', '132', '134', '97', 'fasdfas', '133', '98', '2018-04-11 15:13:53');
+INSERT INTO `organization` VALUES ('78', 'fws1', '1', 'fws1', '1', '1', '1', '135', null, null, '', null, null, '2018-04-11 16:48:38');
 
 -- ----------------------------
 -- Table structure for orgrole
@@ -357,7 +371,7 @@ CREATE TABLE `person` (
   `fax` varchar(128) DEFAULT NULL,
   `addressid` int(9) DEFAULT NULL,
   PRIMARY KEY (`personid`)
-) ENGINE=InnoDB AUTO_INCREMENT=99 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=102 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of person
@@ -373,6 +387,8 @@ INSERT INTO `person` VALUES ('95', 'asdfdsa', null, null, null, null, null, 'asd
 INSERT INTO `person` VALUES ('96', 'ffff', 'ff', '0', 'ff', 'ff', 'ff', 'ff', 'ff', 'ff', '131');
 INSERT INTO `person` VALUES ('97', 'sadfasd', null, null, null, null, null, 'fasdfasdf', 'asdfasdfda', 'sadfasdf', null);
 INSERT INTO `person` VALUES ('98', 'asfasdfda', null, null, null, null, null, 'sfsadfads', 'fasdfasfa', 'fasdfasddfasd', null);
+INSERT INTO `person` VALUES ('99', 'asfdsasfsadf', 'sdfasd', '1', null, 'asfdsa', 'sfsadf', 'sdfdasfdas', '', '', '136');
+INSERT INTO `person` VALUES ('101', 'sdafsdasdafsadf', 'sadfsadf', null, null, 'sdafsda', 'sdafsadf', '', '', '', '137');
 
 -- ----------------------------
 -- Table structure for phonecard
@@ -393,7 +409,7 @@ CREATE TABLE `phonecard` (
   `lastprogrammedondate` datetime DEFAULT NULL,
   `lastsavedondate` datetime DEFAULT NULL,
   PRIMARY KEY (`phonecardid`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of phonecard
@@ -406,6 +422,8 @@ INSERT INTO `phonecard` VALUES ('5', 'fdsaf', 'dsfasdf', '1', 'sdfasd', 'fasdf',
 INSERT INTO `phonecard` VALUES ('6', '89302690201003397984\r\n', 'dsfasdf', '1', 'sdfasd', 'fasdf', '2018-04-09 11:06:46', '2018-04-09 11:06:50', '2018-04-19 11:06:54', '2018-04-09 11:18:27', '2018-04-18 11:06:58', '2018-05-28 11:07:01', '2018-04-09 11:18:35');
 INSERT INTO `phonecard` VALUES ('7', '89302690201003397976', 'fsdasdf', '1', 'fdsaf', 'fasdfas', '2018-04-09 11:19:31', '2018-04-09 11:19:35', '2018-04-09 11:19:38', '2018-04-18 11:19:51', '2018-04-11 11:19:54', '2018-04-24 11:19:58', '2018-04-23 11:20:02');
 INSERT INTO `phonecard` VALUES ('8', '89302690201003397968', 'fdsafa', '2', 'sadfsadfasdf', 'sdafsadf', null, null, null, null, null, null, null);
+INSERT INTO `phonecard` VALUES ('9', '123321123', '123123', '1', '123123123', '3123123', '2018-04-04 00:00:00', '2018-04-11 00:00:00', '2018-04-04 00:00:00', null, '2018-04-10 00:00:00', '2018-04-19 00:00:00', null);
+INSERT INTO `phonecard` VALUES ('10', 'zhulei', '123', '1', '312313', '13123', null, null, null, null, null, null, null);
 
 -- ----------------------------
 -- Table structure for phonecarduser
@@ -417,7 +435,7 @@ CREATE TABLE `phonecarduser` (
   `userid` int(11) NOT NULL,
   `createtime` datetime NOT NULL,
   PRIMARY KEY (`phonecarduserbindingid`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of phonecarduser
@@ -428,6 +446,8 @@ INSERT INTO `phonecarduser` VALUES ('3', '3', '14', '2018-04-09 11:03:11');
 INSERT INTO `phonecarduser` VALUES ('4', '4', '15', '2018-04-09 11:03:36');
 INSERT INTO `phonecarduser` VALUES ('5', '5', '1', '2018-04-19 11:07:12');
 INSERT INTO `phonecarduser` VALUES ('6', '8', '17', '2018-04-09 11:46:18');
+INSERT INTO `phonecarduser` VALUES ('7', '9', '18', '2018-04-11 19:55:55');
+INSERT INTO `phonecarduser` VALUES ('8', '10', '19', '2018-04-12 11:30:23');
 
 -- ----------------------------
 -- Table structure for privilege
@@ -522,7 +542,7 @@ CREATE TABLE `roleprivilege` (
   `privilegeid` int(11) NOT NULL,
   `createtime` datetime NOT NULL,
   PRIMARY KEY (`roleprivilegeid`)
-) ENGINE=InnoDB AUTO_INCREMENT=78 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=80 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of roleprivilege
@@ -544,13 +564,12 @@ INSERT INTO `roleprivilege` VALUES ('14', '1', '14', '2018-04-08 11:59:14');
 INSERT INTO `roleprivilege` VALUES ('15', '1', '15', '2018-04-08 11:59:15');
 INSERT INTO `roleprivilege` VALUES ('16', '1', '16', '2018-04-08 11:59:15');
 INSERT INTO `roleprivilege` VALUES ('17', '1', '17', '2018-04-09 15:22:00');
-INSERT INTO `roleprivilege` VALUES ('18', '4', '16', '2018-04-09 15:52:42');
+INSERT INTO `roleprivilege` VALUES ('18', '4', '14', '2018-04-09 15:52:42');
 INSERT INTO `roleprivilege` VALUES ('21', '2', '4', '2018-04-09 18:07:32');
 INSERT INTO `roleprivilege` VALUES ('22', '2', '5', '2018-04-09 18:07:32');
 INSERT INTO `roleprivilege` VALUES ('23', '2', '6', '2018-04-09 18:07:32');
 INSERT INTO `roleprivilege` VALUES ('24', '2', '7', '2018-04-09 18:07:32');
 INSERT INTO `roleprivilege` VALUES ('25', '2', '8', '2018-04-09 18:07:32');
-INSERT INTO `roleprivilege` VALUES ('26', '2', '9', '2018-04-09 18:07:33');
 INSERT INTO `roleprivilege` VALUES ('27', '2', '10', '2018-04-09 18:07:33');
 INSERT INTO `roleprivilege` VALUES ('28', '2', '11', '2018-04-09 18:07:33');
 INSERT INTO `roleprivilege` VALUES ('29', '2', '12', '2018-04-09 18:07:33');
@@ -561,7 +580,6 @@ INSERT INTO `roleprivilege` VALUES ('33', '2', '16', '2018-04-09 18:07:33');
 INSERT INTO `roleprivilege` VALUES ('34', '3', '6', '2018-04-09 18:08:37');
 INSERT INTO `roleprivilege` VALUES ('35', '3', '7', '2018-04-09 18:08:38');
 INSERT INTO `roleprivilege` VALUES ('36', '3', '8', '2018-04-09 18:08:38');
-INSERT INTO `roleprivilege` VALUES ('37', '3', '9', '2018-04-09 18:08:38');
 INSERT INTO `roleprivilege` VALUES ('38', '3', '10', '2018-04-09 18:08:38');
 INSERT INTO `roleprivilege` VALUES ('39', '3', '11', '2018-04-09 18:08:38');
 INSERT INTO `roleprivilege` VALUES ('40', '3', '12', '2018-04-09 18:08:38');
@@ -592,7 +610,6 @@ INSERT INTO `roleprivilege` VALUES ('66', '6', '5', '2018-04-11 14:56:56');
 INSERT INTO `roleprivilege` VALUES ('67', '6', '6', '2018-04-11 14:56:56');
 INSERT INTO `roleprivilege` VALUES ('68', '6', '7', '2018-04-11 14:56:56');
 INSERT INTO `roleprivilege` VALUES ('69', '6', '8', '2018-04-11 14:56:56');
-INSERT INTO `roleprivilege` VALUES ('70', '6', '9', '2018-04-11 14:56:56');
 INSERT INTO `roleprivilege` VALUES ('71', '6', '10', '2018-04-11 14:56:56');
 INSERT INTO `roleprivilege` VALUES ('72', '6', '11', '2018-04-11 14:56:56');
 INSERT INTO `roleprivilege` VALUES ('73', '6', '12', '2018-04-11 14:56:56');
@@ -600,6 +617,8 @@ INSERT INTO `roleprivilege` VALUES ('74', '6', '13', '2018-04-11 14:56:56');
 INSERT INTO `roleprivilege` VALUES ('75', '6', '14', '2018-04-11 14:56:56');
 INSERT INTO `roleprivilege` VALUES ('76', '6', '15', '2018-04-11 14:56:56');
 INSERT INTO `roleprivilege` VALUES ('77', '6', '16', '2018-04-11 14:56:56');
+INSERT INTO `roleprivilege` VALUES ('78', '4', '8', '2018-04-11 17:19:46');
+INSERT INTO `roleprivilege` VALUES ('79', '4', '11', '2018-04-11 17:19:56');
 
 -- ----------------------------
 -- Table structure for systemparameter
@@ -635,7 +654,7 @@ CREATE TABLE `user` (
   `installerid` int(11) DEFAULT NULL,
   `status` int(9) NOT NULL,
   PRIMARY KEY (`userid`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of user
@@ -645,6 +664,8 @@ INSERT INTO `user` VALUES ('13', 'afsdasf', 'lei zhu', '1', '1', '56', '', 'amet
 INSERT INTO `user` VALUES ('15', 'asddfas', 'adfasd fdsafasdf', '1', '1', '1', 'as', 'ametaasddfas', '92', '2018-03-30 17:15:21', '28', '1');
 INSERT INTO `user` VALUES ('16', 'sadfsadf', 'sadfsad sadfsadf', '1', '1', '1', 'sadfsadf', 'ametasadfsadf', '93', '2018-04-04 20:21:30', '28', '1');
 INSERT INTO `user` VALUES ('17', 'fdsafasd', 'fsadfsadfsadf', '1', '1', '1', 'asf', 'ametafdsafasd', '94', '2018-04-09 11:46:18', '28', '1');
+INSERT INTO `user` VALUES ('18', 'sdfdasfdas', 'asfdsasfsadf', '1', '1', '1', 'safasd', 'ametasdfdasfdas', '99', '2018-04-11 19:55:55', '28', '1');
+INSERT INTO `user` VALUES ('19', '', 'sdafsdasdafsadf', '1', '1', '1', '', 'ameta', '101', '2018-04-12 11:30:23', '28', '1');
 
 -- ----------------------------
 -- Table structure for zwavedevice

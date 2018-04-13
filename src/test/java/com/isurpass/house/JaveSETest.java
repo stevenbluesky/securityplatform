@@ -5,10 +5,11 @@ import com.alibaba.fastjson.JSON;
 import cn.com.isurpass.house.vo.LoginVO;
 import com.alibaba.fastjson.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class JaveSETest {
-	public static void main(String[] args) throws IllegalArgumentException, IllegalAccessException {
+	public static void main(String[] args) throws IllegalArgumentException, IllegalAccessException, InterruptedException {
 		/*LoginVO login = new LoginVO();
 		login.setLoginname("name");
 		login.setPassword("12312");
@@ -46,13 +47,13 @@ public class JaveSETest {
 		while (i.hasNext()) {
 			System.out.println(i.next().toString());
 		}*/
-		Random rand = new Random();
-		for (int i = 0; i < 20; i++) {
-            int i1 = rand.nextInt(6) + 1;
-            System.out.println("iRemote800500000000"+i1);
-            System.out.println(i1);
-		}
-
+//		Random rand = new Random();
+//		for (int i = 0; i < 20; i++) {
+//            int i1 = rand.nextInt(6) + 1;
+//            System.out.println("iRemote800500000000"+i1);
+//            System.out.println(i1);
+//		}
+		System.out.println(new SimpleDateFormat().format(new Date()));
 	}
 
 }

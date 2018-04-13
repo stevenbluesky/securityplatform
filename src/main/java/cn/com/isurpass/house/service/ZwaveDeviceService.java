@@ -2,11 +2,14 @@ package cn.com.isurpass.house.service;
 
 import cn.com.isurpass.house.dao.*;
 import cn.com.isurpass.house.po.*;
+import cn.com.isurpass.house.request.HttpsUtils;
+import cn.com.isurpass.house.util.CodeConstants;
 import cn.com.isurpass.house.util.Constants;
 import cn.com.isurpass.house.util.FormUtils;
 import cn.com.isurpass.house.vo.DeviceDetailVO;
 import cn.com.isurpass.house.vo.DeviceSearchVO;
 import cn.com.isurpass.house.vo.ZwaveDeviceListVO;
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -159,6 +162,7 @@ public class ZwaveDeviceService {
         dd.setDevicename(zwave.getName());
         dd.setDevicetype(zwave.getDevicetype());
         dd.setSuppliename(gs.findOrgnameBydeviceId(deviceid));
+        dd.setZwavedeviceid(zwave.getZwavedeviceid());
         return dd;
     }
 
@@ -327,8 +331,8 @@ public class ZwaveDeviceService {
     }
 
     private void setProperties(Page<ZwaveDevicePO> listpage, List<ZwaveDeviceListVO> listVO) {
-        ZwaveDeviceListVO z = new ZwaveDeviceListVO();
         listpage.forEach(zw -> {
+            ZwaveDeviceListVO z = new ZwaveDeviceListVO();
             z.setZwavedeviceid(zw.getZwavedeviceid());
             z.setName(zw.getName());
             z.setDevicetype(zw.getDevicetype());
@@ -336,14 +340,63 @@ public class ZwaveDeviceService {
             z.setStatus(zw.getStatus());
             z.setBattery(zw.getBattery());
 //            if (gud.findByDeviceid(zw.getDeviceid()) != null) {
-                z.setUsername(gs.findUsernameByDeviceid(zw.getDeviceid()));
-                z.setCity(gs.findCityBydeviceid(zw.getDeviceid()));
-                z.setOrganizationname(gs.findOrgnameBydeviceId(zw.getDeviceid()));
-                z.setInstallerorgname(gs.findInstallerOrgnameBydeviceId(zw.getDeviceid()));
-                z.setInstallername(gs.findInstallernameBydeviceid(zw.getDeviceid()));
+            z.setUsername(gs.findUsernameByDeviceid(zw.getDeviceid()));
+            z.setCity(gs.findCityBydeviceid(zw.getDeviceid()));
+            z.setOrganizationname(gs.findOrgnameBydeviceId(zw.getDeviceid()));
+            z.setInstallerorgname(gs.findInstallerOrgnameBydeviceId(zw.getDeviceid()));
+            z.setInstallername(gs.findInstallernameBydeviceid(zw.getDeviceid()));
 //            }
             listVO.add(z);
         });
     }
 
+    public String toggleDeviceStatus(Integer toStatus, Integer zwavedeviceid, HttpServletRequest request){
+        //首先判断操作人是否有操作权限
+        ZwaveDevicePO zw = zd.findByZwavedeviceid(zwavedeviceid);
+        if (zw == null) {
+            throw new RuntimeException(CodeConstants.CODE_STATUS_DEVICE_NOT_EXISIT.toString());
+        }
+        List<GatewayUserPO> gupo = gud.findByDeviceid(zw.getDeviceid());
+        EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
+        List<Integer> roleids = erd.findByEmployeeid(emp.getEmployeeid()).stream().map(EmployeeRolePO::getRoleid).collect(toList());
+        if (roleids.size() == 0) {
+            throw new RuntimeException(CodeConstants.CODE_STATUS_NO_PERMISSION.toString());
+        }
+        if (!roleids.contains(Constants.ROLE_AMETA_ADMIN) && !roleids.contains(Constants.ROLE_SUPPLIER_ADMIN)) {
+            //登录的角色不包涵ameta管理员或者服务商管理员角色,则无法继续执行
+            throw new RuntimeException(CodeConstants.CODE_STATUS_NO_PERMISSION.toString());
+        }
+        if (!roleids.contains(Constants.ROLE_AMETA_ADMIN) && roleids.contains(Constants.ROLE_SUPPLIER_ADMIN)) {
+            //登录的角色不是ameta的管理员,且具有服务商管理员的角色时
+            List<GatewayUserPO> byDeviceid = gud.findByDeviceid(zw.getDeviceid());
+            if (byDeviceid == null || byDeviceid.size() == 0) {
+                throw new RuntimeException(CodeConstants.CODE_STATUS_NO_PERMISSION.toString());
+            }
+            if (emp.getOrganizationid() != ud.findByUserid(byDeviceid.get(0).getUserid()).getOrganizationid()) {
+                throw new RuntimeException(CodeConstants.NO_PERMISSION.toString());
+            }
+        }
+            String s = "";
+            if (toStatus == 255) {
+                //开
+                s = HttpsUtils.openDevice(zwavedeviceid);
+            } else {//关
+                s = HttpsUtils.closeDevice(zwavedeviceid);
+            }
+            JSONObject jo = JSONObject.parseObject(s);
+            if (jo == null || jo.isEmpty()) {
+                throw new RuntimeException(CodeConstants.CODE_STATUS_ERROR.toString());
+            }
+            if (jo.getInteger("resultCode") == 0) {
+                return s;
+            } else if (jo.getInteger("resultCode") == 10023) {
+                throw new RuntimeException(CodeConstants.CODE_STATUS_DEVICE_NOT_EXISIT.toString());
+            } else if (jo.getInteger("resultCode") == 10022) {
+                throw new RuntimeException(CodeConstants.CODE_STATUS_NO_PERMISSION.toString());
+            }
+            else {//返回的错误还有很多,这里没作具体的显示//10023找不到指定的设备 22离线
+                System.out.println(jo.toString());
+                throw new RuntimeException(CodeConstants.CODE_STATUS_ERROR.toString());
+            }
+    }
 }

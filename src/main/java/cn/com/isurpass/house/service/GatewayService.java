@@ -2,6 +2,7 @@ package cn.com.isurpass.house.service;
 
 import java.util.*;
 
+import ch.qos.logback.core.net.SyslogOutputStream;
 import cn.com.isurpass.house.dao.*;
 import cn.com.isurpass.house.po.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,7 +94,7 @@ public class GatewayService {
 
 		Integer organizationid = emp.getOrganizationid();
 		OrganizationPO org = od.findByOrganizationid(organizationid);//当前用户所属机构
-		if("1".equals(org.getOrgtype()+"")){//为服务商,拿本身及旗下安装商的网关
+		if(org.getOrgtype()==Constants.ORGTYPE_SUPPLIER){//为服务商,拿本身及旗下安装商的网关
 			List<OrganizationPO> pid = od.findByParentorgid(organizationid);//拿到旗下安装商
 			List<Integer> oolist = new ArrayList<>();//机构id集合
 			Set<Integer> useridset = new TreeSet<>();//用户id集合
@@ -110,7 +111,7 @@ public class GatewayService {
 			byUseridIn.forEach(single ->{orgglist.add(single.getDeviceid());});
 			gateList = gd.findByDeviceidIn(orgglist,pageable);
 			count = gd.countByDeviceidIn(orgglist);
-		}else if("2".equals(org.getOrgtype()+"")){//为安装商，拿自己的网关
+		}else if(org.getOrgtype()==Constants.ORGTYPE_INSTALLER){//为安装商，拿自己的网关
 			List<EmployeeRolePO> elist = employeeroleDAO.findByEmployeeid(emp.getEmployeeid());
 			List<Integer> emprolelist = new ArrayList<>();
 			List<Integer> useridlist = new ArrayList<>();
@@ -135,7 +136,7 @@ public class GatewayService {
 		for(GatewayPO o : gateList) {//使用for循环比lamaba表达式提高50ms响应,根据目前数据库数据少，耗时占总时间1/3左右
 			TypeGatewayInfoVO gateVO = new TypeGatewayInfoVO();
 			gateVO.setDeviceid(o.getDeviceid());
-			List<GatewayUserPO> userlist = gud.findByDeviceid(o.getDeviceid());//TODO
+			List<GatewayUserPO> userlist = gud.findByDeviceid(o.getDeviceid());
 			if (userlist != null && userlist.size() != 0) {//网关用户表匹配到了数据，该网关已跟用户绑定
 				UserPO upo = ud.findByUserid(userlist.get(0).getUserid());
 				gateVO.setCityname(cd.findByCitycode(upo.getCitycode()).getCityname());
@@ -168,14 +169,10 @@ public class GatewayService {
 	public Map<String, Object> listGateway(Pageable pageable, TypeGatewayInfoVO tgiv, EmployeePO emp) {
 		Map<String, Object> map = new HashMap<>();//返回的map
 		List<TypeGatewayInfoVO> list = new ArrayList<>();//返回的list对象
-		Iterable<GatewayPO> geted = gd.findAll();//拿到网关列表所有记录
-		List<String> gdlist = new ArrayList<>();
-		geted.forEach(single ->{gdlist.add(single.getDeviceid());});//网关表所有记录的id集合
-		List<Integer> orglist = new ArrayList<>();
-		List<String> orgglist = new ArrayList<>();
+		List<String> orgglist = new ArrayList<>();//根据用户所属机构查找出来的网关id集合
 		Integer organizationid = emp.getOrganizationid();
 		OrganizationPO org = od.findByOrganizationid(organizationid);
-		if("1".equals(org.getOrgtype()+"")){//为服务商,拿本身及旗下安装商的网关
+		if(org.getOrgtype()==Constants.ORGTYPE_SUPPLIER){//为服务商,拿本身及旗下安装商的网关
 			List<OrganizationPO> pid = od.findByParentorgid(organizationid);//拿到旗下安装商
 			List<Integer> oolist = new ArrayList<>();//机构id集合
 			Set<Integer> useridset = new TreeSet<>();//用户id集合
@@ -190,7 +187,7 @@ public class GatewayService {
 			byInstallerorgidIn.forEach(single ->{useridset.add(single.getUserid());});
 			List<GatewayUserPO> byUseridIn = gud.findByUseridIn(useridset);
 			byUseridIn.forEach(single ->{orgglist.add(single.getDeviceid());});
-		}else if("2".equals(org.getOrgtype()+"")){//为安装商，拿自己的网关
+		}else if(org.getOrgtype()==Constants.ORGTYPE_INSTALLER){//为安装商，拿自己的网关
 			List<EmployeeRolePO> elist = employeeroleDAO.findByEmployeeid(emp.getEmployeeid());
 			List<Integer> emprolelist = new ArrayList<>();
 			List<Integer> useridlist = new ArrayList<>();
@@ -199,47 +196,44 @@ public class GatewayService {
 				List<UserPO> byInstallerid = ud.findByInstallerid(emp.getEmployeeid());
 				byInstallerid.forEach(single ->{useridlist.add(single.getUserid());});
 			}else {
-				//List<GatewayBindingPO> olist = gbd.findByOrganizationid(organizationid);//网关绑定表只能跟ameta绑定，暂认为无用
 				List<UserPO> byInstallerorgid = ud.findByInstallerorgid(organizationid);
 				byInstallerorgid.forEach(single ->{useridlist.add(single.getUserid());});
 			}
 			List<GatewayUserPO> byUseridIn = gud.findByUseridIn(useridlist);
 			byUseridIn.forEach(single ->{orgglist.add(single.getDeviceid());});
 		}else{//为ameta管理员，拿所有网关
-			for(String s : gdlist){
-				orgglist.add(s);
-			}
+				orgglist.add("-2");
 		}
+		List<String > tlist = new ArrayList<>();//标记作用，当搜索条件为空时，标记
+		tlist.add("-1");
 		//如果传入参数为空，则默认查网关列表的全部
-		List<String> citynamedeviceidlist = StringUtils.isEmpty(tgiv.getCityname())?gdlist:findIdListByCityname(tgiv.getCityname());
-		List<String> citycodedeviceidlist = StringUtils.isEmpty(tgiv.getCitycode())?gdlist:findIdListByCitycode(tgiv.getCitycode());
-		List<String> devicenamedeviceidlist = StringUtils.isEmpty(tgiv.getName())?gdlist:findIdListByDevicename(tgiv.getName());
-		List<String> customerdeviceidlist = StringUtils.isEmpty(tgiv.getCustomer())?gdlist:findIdListByCustomer(tgiv.getCustomer());
-		List<String> serviceproviderdeviceidlist = StringUtils.isEmpty(tgiv.getServiceprovider())?gdlist:findIdListByServiceprovider(tgiv.getServiceprovider());
-		List<String> installerorgdeviceidlist = StringUtils.isEmpty(tgiv.getInstallerorg())?gdlist:findIdListByInstallerorg(tgiv.getInstallerorg());
-		List<String> installerdeviceidlist = StringUtils.isEmpty(tgiv.getInstaller())?gdlist:findIdListByInstaller(tgiv.getInstaller());
-		List<String> deviceiddeviceidlist = StringUtils.isEmpty(tgiv.getDeviceid())?gdlist:findIdListByDeviceid(tgiv.getDeviceid());
-		//处理各获取id列表方法的返回值
+		List<String> citynamedeviceidlist = StringUtils.isEmpty(tgiv.getCityname())?tlist:findIdListByCityname(tgiv.getCityname());
+		List<String> citycodedeviceidlist = StringUtils.isEmpty(tgiv.getCitycode())?tlist:findIdListByCitycode(tgiv.getCitycode());
+		List<String> devicenamedeviceidlist = StringUtils.isEmpty(tgiv.getName())?tlist:findIdListByDevicename(tgiv.getName());
+		List<String> customerdeviceidlist = StringUtils.isEmpty(tgiv.getCustomer())?tlist:findIdListByCustomer(tgiv.getCustomer());
+		List<String> serviceproviderdeviceidlist = StringUtils.isEmpty(tgiv.getServiceprovider())?tlist:findIdListByServiceprovider(tgiv.getServiceprovider());
+		List<String> installerorgdeviceidlist = StringUtils.isEmpty(tgiv.getInstallerorg())?tlist:findIdListByInstallerorg(tgiv.getInstallerorg());
+		List<String> installerdeviceidlist = StringUtils.isEmpty(tgiv.getInstaller())?tlist:findIdListByInstaller(tgiv.getInstaller());
+		List<String> deviceiddeviceidlist = StringUtils.isEmpty(tgiv.getDeviceid())?tlist:findIdListByDeviceid(tgiv.getDeviceid());
+		//当有任意一个集合为空时，返回空数据
 		if(citynamedeviceidlist==null||devicenamedeviceidlist==null||serviceproviderdeviceidlist==null||installerdeviceidlist==null||citycodedeviceidlist==null||customerdeviceidlist==null||installerorgdeviceidlist==null||deviceiddeviceidlist==null){
 			map.put("total", 0);
 			map.put("rows", list);
 			return map;
 		}
-		//取8个搜索条件的id交集
-		citynamedeviceidlist.retainAll(citycodedeviceidlist);
-		devicenamedeviceidlist.retainAll(customerdeviceidlist);
-		serviceproviderdeviceidlist.retainAll(installerorgdeviceidlist);
-		installerdeviceidlist.retainAll(deviceiddeviceidlist);
-		citynamedeviceidlist.retainAll(devicenamedeviceidlist);
-		serviceproviderdeviceidlist.retainAll(installerdeviceidlist);
-		citynamedeviceidlist.retainAll(serviceproviderdeviceidlist);
-		citynamedeviceidlist.retainAll(orgglist);
-		List<GatewayPO> gateList = gd.findByDeviceidIn(pageable,citynamedeviceidlist);//从网关表中拿基本数据
+		//求8个网关id集合的交集
+		List<String> result = reretain(citynamedeviceidlist,devicenamedeviceidlist,serviceproviderdeviceidlist,installerdeviceidlist,citycodedeviceidlist,customerdeviceidlist,installerorgdeviceidlist,deviceiddeviceidlist);
+		//当用户未ameta管理员时，不进行筛选，否则筛选出自己的网关列表
+		if(orgglist.size()==1&&orgglist.get(0).equals("-2")){
+		}else {
+			result.retainAll(orgglist);
+		}
+		List<GatewayPO> gateList = gd.findByDeviceidIn(pageable,result);//从网关表中拿基本数据
 		map.put("total",gd.countByDeviceidIn(citynamedeviceidlist));
-		for(GatewayPO o : gateList) {//使用for循环比lamaba表达式提高50ms响应,根据目前数据库数据少，耗时占总时间1/3左右
+		for(GatewayPO o : gateList) {//将查询出来的一页数据进行完整
 			TypeGatewayInfoVO gateVO = new TypeGatewayInfoVO();
 			gateVO.setDeviceid(o.getDeviceid());
-			List<GatewayUserPO> userlist = gud.findByDeviceid(o.getDeviceid());//TODO
+			List<GatewayUserPO> userlist = gud.findByDeviceid(o.getDeviceid());
 			if (userlist != null && userlist.size() != 0) {//网关用户表匹配到了数据，该网关已跟用户绑定
 				UserPO upo = ud.findByUserid(userlist.get(0).getUserid());
 				gateVO.setCityname(cd.findByCitycode(upo.getCitycode()).getCityname());
@@ -270,10 +264,7 @@ public class GatewayService {
 		List<String> citynamedeviceidlist = new ArrayList<String>();
 		List<String> codelist = new ArrayList<String>();
 		List<Integer> citynameuseridlist = new ArrayList<Integer>();
-		Long start = System.currentTimeMillis();
 		List<CityPO> findByCityname = cd.findByCitynameContaining(cityname);
-		Long stop = System.currentTimeMillis();
-		System.out.println((stop-start)/1000+"秒");
 		if(findByCityname.size()==0){
 			return null;
 		}
@@ -323,7 +314,6 @@ public class GatewayService {
 		}
 		return citycodedeviceidlist;
 	}
-	//TODO
 	/**
 	 * 根据设备名称模糊查询对应网关id列表
 	 * @param devicename
@@ -543,5 +533,55 @@ public class GatewayService {
 		}
 	}
 
+	/**
+	 * 传递8个搜索条件查询出来的网关id集合，进行交集处理
+	 * @param list1
+	 * @param list2
+	 * @param list3
+	 * @param list4
+	 * @param list5
+	 * @param list6
+	 * @param list7
+	 * @param list8
+	 * @return
+	 */
+	private List<String> reretain(List<String> list1, List<String> list2, List<String> list3, List<String> list4, List<String> list5, List<String> list6, List<String> list7, List<String> list8){
+		List<Object> list = new ArrayList<>();
+		if(!"-1".equals(list1.get(0))){//有搜索条件，有搜索结果
+			list.add(list1);
+		}
+		if(!"-1".equals(list2.get(0))){
+			list.add(list2);
+		}
+		if(!"-1".equals(list3.get(0))){
+			list.add(list3);
+		}
+		if(!"-1".equals(list4.get(0))){
+			list.add(list4);
+		}
+		if(!"-1".equals(list5.get(0))){
+			list.add(list5);
+		}if(!"-1".equals(list6.get(0))){
+			list.add(list6);
+		}
+		if(!"-1".equals(list7.get(0))){
+			list.add(list7);
+		}
+		if(!"-1".equals(list8.get(0))){
+			list.add(list8);
+		}
+		if(list.size()==0) {
+			return null;
+		}else if(list.size()==1){
+			return (List<String>) list.get(0);
+		}else {
+			List<String> listlist = (List<String>) list.get(0);
+			for (int i = 1; i < list.size(); i++) {
+				List<String> temlist = (List<String>) list.get(i);
+				listlist.retainAll(temlist);
+			}
+			return listlist;
+		}
+	}
 
 }

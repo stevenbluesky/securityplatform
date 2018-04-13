@@ -12,7 +12,7 @@ import cn.com.isurpass.house.po.GatewayUserPO;
 @Repository
 public interface GatewayuserDAO extends CrudRepository<GatewayUserPO, Integer> {
 
-	List<GatewayUserPO> findByDeviceid(String deviceid);
+	List<GatewayUserPO> findByDeviceid(String deviceid);//一个deviceid只能绑定一个用户
 
 	List<GatewayUserPO> findByUseridIn(List<Integer> userid);
 	// GatewayUserPO findUseridByDeviceid(String deviceid);

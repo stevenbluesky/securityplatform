@@ -32,4 +32,6 @@ public class Constants {
 	public static final Integer ROLE_AMETA_EMPLOYEE=5;
 	public static final Integer ROLE_SUPPLIER_EMPLOYEE=6;
 	public static final Integer ROLE_EMPLOYEE=7;  //此用户没有权限.一般情况下不会有员工为此角色,除非新增了机构角色.
+
+//	public static final Long TOKEN_EXPIRED_TIME = 7200000L;//1000*60*60*2
 }

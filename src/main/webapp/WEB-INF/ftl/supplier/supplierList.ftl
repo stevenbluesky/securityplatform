@@ -188,7 +188,6 @@
                     alert("<@spring.message code='label.updatefailed'/>");
                     $('#table').bootstrapTable('refresh');
                 }
-
             });
         }
     </script>
