@@ -1,5 +1,7 @@
 package com.isurpass.house;
 
+import java.awt.print.PrinterGraphics;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -50,6 +52,14 @@ public class JPATest {
 		OrganizationPO org0 = org.findByOrganizationid(1);
 		System.out.println(org0.getOrganizationid());
 	}
-
+	@Test
+	public void mytest(){
+		List<Integer> list1 = new ArrayList<>();
+		list1.add(1);
+		list1.add(3);
+		List<Integer> list2 = new ArrayList<>();
+		list1.retainAll(list2);
+		System.out.println(list1.size());
+	}
 
 }
