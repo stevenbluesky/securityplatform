@@ -5,7 +5,9 @@ import java.util.List;
 import cn.com.isurpass.house.po.ZwaveDevicePO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import cn.com.isurpass.house.po.EmployeePO;
@@ -81,4 +83,5 @@ public interface EmployeeDAO extends CrudRepository<EmployeePO,Integer>{
 	List<EmployeePO> findByAddressidIn(List<Integer> list);
 
     List<EmployeePO> findByNameContaining(String searchinstaller);
+
 }
