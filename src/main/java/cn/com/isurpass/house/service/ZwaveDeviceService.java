@@ -323,19 +323,21 @@ public class ZwaveDeviceService {
 
     private void setProperties(Page<ZwaveDevicePO> listpage, List<ZwaveDeviceListVO> listVO) {
         listpage.forEach(zw -> {
-        ZwaveDeviceListVO z = new ZwaveDeviceListVO();
-        z.setZwavedeviceid(zw.getZwavedeviceid());
-        z.setName(zw.getName());
-        z.setDevicetype(zw.getDevicetype());
-        z.setWarningstatuses(zw.getWarningstatuses());
-        z.setStatus(zw.getStatus());
-        z.setBattery(zw.getBattery());
-        z.setUsername(gs.findUsernameByDeviceid(zw.getDeviceid()));
-        z.setCity(gs.findCityBydeviceid(zw.getDeviceid()));
-        z.setOrganizationname(gs.findOrgnameBydeviceId(zw.getDeviceid()));
-        z.setInstallerorgname(gs.findInstallerOrgnameBydeviceId(zw.getDeviceid()));
-        z.setInstallername(gs.findInstallernameBydeviceid(zw.getDeviceid()));
-        listVO.add(z);
+            ZwaveDeviceListVO z = new ZwaveDeviceListVO();
+            z.setZwavedeviceid(zw.getZwavedeviceid());
+            z.setName(zw.getName());
+            z.setDevicetype(zw.getDevicetype());
+            z.setWarningstatuses(zw.getWarningstatuses());
+            z.setStatus(zw.getStatus());
+            z.setBattery(zw.getBattery());
+//            if (gud.findByDeviceid(zw.getDeviceid()) != null) {
+                z.setUsername(gs.findUsernameByDeviceid(zw.getDeviceid()));
+                z.setCity(gs.findCityBydeviceid(zw.getDeviceid()));
+                z.setOrganizationname(gs.findOrgnameBydeviceId(zw.getDeviceid()));
+                z.setInstallerorgname(gs.findInstallerOrgnameBydeviceId(zw.getDeviceid()));
+                z.setInstallername(gs.findInstallernameBydeviceid(zw.getDeviceid()));
+//            }
+            listVO.add(z);
         });
     }
 
