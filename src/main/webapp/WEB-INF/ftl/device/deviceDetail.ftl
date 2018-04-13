@@ -55,7 +55,7 @@
         <script type="text/javascript">
             $(function () {
                 formatterwarning();
-                if (${(zwave.stauts)!"-1"} == 0){
+                if (${(zwave.status)!"-1"} == 0){
                     $("#operate").text("<@spring.message code="label.open"/>");
                 }else{
                     $("#operate").text("<@spring.message code="label.close"/>");
