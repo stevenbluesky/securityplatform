@@ -118,7 +118,11 @@ public class ZwaveDeviceService {
         }
         List<String> deviceidlist = gs.findGatewayidListByUserList(userList);
 //        List<ZwaveDevicePO> zdevicelist0 = findZDeviceByDeviceidList(deviceidlist);
+        long start0 = System.currentTimeMillis(); //获取开始时间
+
         List<ZwaveDevicePO> zdevicelist0 = zd.findByDeviceidIn(deviceidlist);
+        long end0 = System.currentTimeMillis(); //获取结束时间
+
 //        map.put("total", zdevicelist.getTotalElements());
 
         List<String> filterlist = gs.filterDevice(zdevicelist0);//只显示与用户绑定了的设备
@@ -134,6 +138,7 @@ public class ZwaveDeviceService {
         map.put("rows", list);
         map.put("total", zd.countByDeviceidIn(filterlist));
         System.out.println("timer： " + (end - start) + "ms");
+        System.out.println("timer0： " + (end0 - start0) + "ms");
         return map;
     }
 
@@ -322,8 +327,8 @@ public class ZwaveDeviceService {
     }
 
     private void setProperties(Page<ZwaveDevicePO> listpage, List<ZwaveDeviceListVO> listVO) {
+        ZwaveDeviceListVO z = new ZwaveDeviceListVO();
         listpage.forEach(zw -> {
-            ZwaveDeviceListVO z = new ZwaveDeviceListVO();
             z.setZwavedeviceid(zw.getZwavedeviceid());
             z.setName(zw.getName());
             z.setDevicetype(zw.getDevicetype());

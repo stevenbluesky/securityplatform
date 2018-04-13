@@ -5,7 +5,9 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import cn.com.isurpass.house.po.UserPO;
@@ -88,4 +90,10 @@ public interface UserDAO extends CrudRepository<UserPO, Integer> {
     List<UserPO> findByLoginnameContaining(String customer);
 
     List<UserPO> findByNameContaining(String searchName);
+
+    @Query(value = "select userid from user where loginname=:loginname",nativeQuery = true)
+    Integer getUserid(@Param("loginname") String loginname);
+
+    @Query(value ="select u.name from user u left join gatewayuser gu on gu.userid=u.userid where gu.deviceid=:deviceid" ,nativeQuery = true)
+    String getUsernameByDeviceid(@Param("deviceid") String deviceid);
 }
