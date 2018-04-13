@@ -36,6 +36,7 @@ public class JaveSETest {
 		System.out.println(list);
 		Object o = JSONObject.toJSON(list);
 		System.out.println(o.toString());*/
+		/*
 		Set<Object> set = new HashSet<>();
 		set.add("sdfasdf");
 		set.add("sdfsdaafdsa");
@@ -44,7 +45,14 @@ public class JaveSETest {
 		Iterator<Object> i = set.iterator();
 		while (i.hasNext()) {
 			System.out.println(i.next().toString());
+		}*/
+		Random rand = new Random();
+		for (int i = 0; i < 20; i++) {
+            int i1 = rand.nextInt(6) + 1;
+            System.out.println("iRemote800500000000"+i1);
+            System.out.println(i1);
 		}
+
 	}
 
 }

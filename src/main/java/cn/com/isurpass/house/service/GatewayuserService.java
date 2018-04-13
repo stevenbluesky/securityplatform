@@ -43,6 +43,9 @@ public class GatewayuserService {
     @Transactional(readOnly = true)
     public UserPO findUserBydeviceid(String deviceid) {
         List<GatewayUserPO> gulist = gd.findByDeviceid(deviceid);
+        if (gulist == null || gulist.isEmpty()) {
+            return null;
+        }
         GatewayUserPO gu = gulist.get(0);
         if (gu == null) {
             return null;

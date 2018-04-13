@@ -12,10 +12,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.persistence.criteria.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import static java.util.stream.Collectors.toList;
 
@@ -33,6 +30,8 @@ public class OPDatabase {
     EmployeeroleDAO erd;
     @Autowired
     UserDAO ud;
+    @Autowired
+    ZwaveDeviceDAO zdd;
 
     @Test
     public void addRP() {
@@ -66,8 +65,28 @@ public class OPDatabase {
     }
 
     @Test
-    public void search() {
-        List byAddressidIn = emp.findByAddressidIn(null);
-        System.out.println(byAddressidIn);
+    public void search() throws InterruptedException {
+        Random rand = new Random();
+        ZwaveDevicePO z = new ZwaveDevicePO();
+        z.setBattery(100);
+        z.setDevicetype("4");
+        z.setCreatetime(new Date());
+        z.setStatus(255);
+        z.setStatuses(null);
+        z.setWarningstatuses("[255]");
+
+        for (int i = 11545; i < 20001; i++) {
+            int i1 = rand.nextInt(6) + 1;
+            z.setZwavedeviceid(i);
+            z.setDeviceid("iRemote800500000000"+i1);//[1,7)
+            z.setName("testzwavedevice"+i1);
+            zdd.save(z);
+            Thread.sleep(10);
+        }
+    }
+
+    @Test
+    public void search1() throws InterruptedException {
+
     }
 }

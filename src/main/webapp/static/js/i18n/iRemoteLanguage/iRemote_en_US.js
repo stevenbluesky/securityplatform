@@ -26,7 +26,13 @@ var lan = {
     loaderror: "Loading Data Error",
 
 
+    dooropen0:"door open",
+    doorclose0:"door close",
+    pswfail:"连续5次密码错误",
+    keyerror:"机械钥匙不匹配报警",
+
     doorlock: "门磁",
+    doorlock0: "门锁",
     smokesensor:"烟雾传感器",
     gassensor:"燃气传感器",
     leaksensor: "漏水传感器",
