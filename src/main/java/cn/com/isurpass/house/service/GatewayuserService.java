@@ -31,7 +31,8 @@ public class GatewayuserService {
      */
     @Transactional(readOnly = true)
     public String findUsernameByDeviceid(String deviceid) {
-        return findUserBydeviceid(deviceid).getName();
+        UserPO up = findUserBydeviceid(deviceid);
+        return up == null ? null : up.getName();
     }
 
     /**
@@ -63,8 +64,8 @@ public class GatewayuserService {
      */
     @Transactional(readOnly = true)
     public String findCityBydeviceid(String deviceid) {
-        String code = findUserBydeviceid(deviceid).getCitycode();
-        return cd.findByCitycode(code).getCityname();
+        UserPO up = findUserBydeviceid(deviceid);
+        return up == null ? null : cd.findByCitycode(up.getCitycode()).getCityname();
     }
 
     /**
@@ -75,27 +76,25 @@ public class GatewayuserService {
      */
     @Transactional(readOnly = true)
     public OrganizationPO findOrgBydeviceid(String deviceid) {
-        Integer organizationid = findUserBydeviceid(deviceid).getOrganizationid();
-        return od.findByOrganizationid(organizationid);
+        UserPO up = findUserBydeviceid(deviceid);
+        return up == null ? null : od.findByOrganizationid(up.getOrganizationid());
     }
 
     @Transactional(readOnly = true)
     public OrganizationPO findInstallOrgBydeviceid(String deviceid) {
-        Integer organizationid = findUserBydeviceid(deviceid).getInstallerorgid();
-        return od.findByOrganizationid(organizationid);
+        UserPO up = findUserBydeviceid(deviceid);
+        return up == null ? null : od.findByOrganizationid(up.getOrganizationid());
     }
 
     @Transactional(readOnly = true)
     public EmployeePO findInstallerByDeviceid(String deviceid) {
-        Integer installerid = findUserBydeviceid(deviceid).getInstallerid();
-        return ed.findByEmployeeid(installerid);
+        UserPO up = findUserBydeviceid(deviceid);
+        return up == null ? null : ed.findByEmployeeid(up.getInstallerid());
     }
     @Transactional(readOnly = true)
     public String findInstallernameBydeviceid(String deviceid) {
-        if (findInstallerByDeviceid(deviceid) == null) {
-            return null;
-        }
-        return findInstallerByDeviceid(deviceid).getName();
+        EmployeePO ep = findInstallerByDeviceid(deviceid);
+        return ep == null ? null : ep.getName();
     }
 
     /**
@@ -106,15 +105,14 @@ public class GatewayuserService {
      */
     @Transactional(readOnly = true)
     public String findOrgnameBydeviceId(String deviceid) {
-        return findOrgBydeviceid(deviceid).getName();
+        OrganizationPO org = findOrgBydeviceid(deviceid);
+        return org == null ? null : org.getName();
     }
 
     @Transactional(readOnly = true)
     public String findInstallerOrgnameBydeviceId(String deviceid) {
-        if (findInstallOrgBydeviceid(deviceid) == null) {
-            return null;
-        }
-        return findInstallOrgBydeviceid(deviceid).getName();
+        OrganizationPO org = findInstallOrgBydeviceid(deviceid);
+        return org == null ? null : org.getName();
     }
 
     /**
