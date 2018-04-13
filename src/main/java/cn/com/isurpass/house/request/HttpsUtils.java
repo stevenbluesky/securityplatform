@@ -1,5 +1,7 @@
 package cn.com.isurpass.house.request;
 
+import cn.com.isurpass.house.util.CodeConstants;
+import cn.com.isurpass.house.util.TokenKeeper;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.collections.MapUtils;
 import org.apache.http.*;
@@ -19,14 +21,12 @@ import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.util.EntityUtils;
+import org.aspectj.apache.bcel.classfile.Code;
 
 import java.io.IOException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class HttpsUtils {
     private static final String HTTP = "http";
@@ -67,7 +67,7 @@ public class HttpsUtils {
      * @return 可能为空 需要处理
      * @throws Exception
      */
-    public static String post(String url, Map<String, String> header, Map<String, String> param, HttpEntity entity) throws Exception {
+    public static String post(String url, Map<String, String> header, Map<String, String> param, HttpEntity entity){
         String result = "";
         CloseableHttpClient httpClient = null;
         try {
@@ -102,10 +102,15 @@ public class HttpsUtils {
                 readHttpResponse(httpResponse);
             }
         } catch (Exception e) {
-            throw e;
+//            throw e;
+            e.printStackTrace();
         } finally {
             if (httpClient != null) {
-                httpClient.close();
+                try {
+                    httpClient.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
         return result;
@@ -141,6 +146,34 @@ public class HttpsUtils {
         return builder.toString();
     }
 
+    public static String toggleDevice(Integer zwavedeviceid,Integer channel,String url){
+//        String url = "https://app.aibasecloud.com/iremote/thirdpart/zufang/closedevice";
+        Map<String, String> map = new HashMap<>();
+        map.put("token", TokenKeeper.getToken());
+        map.put("zwavedeviceid", zwavedeviceid.toString());
+        map.put("channel", channel.toString());
+        String post = HttpsUtils.post(url, null, map, null);
+        JSONObject jo = JSONObject.parseObject(post);
+        if (jo == null || jo.getInteger("resultCode") == 30300) {
+            TokenKeeper.getNewToken();
+            map.put("token", TokenKeeper.getToken());
+            map.put("zwavedeviceid", zwavedeviceid.toString());
+            map.put("channel", channel.toString());
+            System.out.println(TokenKeeper.getToken());
+            return HttpsUtils.post(url, null, map, null);
+        }
+//        System.out.println(TokenKeeper.getToken());
+        return post;
+    }
+    public static String openDevice(Integer zwavedeviceid){
+        String url = "https://app.aibasecloud.com/iremote/thirdpart/zufang/closedevice";
+        return toggleDevice(zwavedeviceid, 1, url);
+    }
+    public static String closeDevice(Integer zwavedeviceid){
+        String url = "https://app.aibasecloud.com/iremote/thirdpart/zufang/opendevice";
+        return toggleDevice(zwavedeviceid, 1, url);
+    }
+
     public static void main(String[] args) throws Exception {
       /*  for (int i = 0; i < 100; i++) {
             Map<String, String> map = new HashMap<>();
@@ -155,11 +188,21 @@ public class HttpsUtils {
             System.out.println(post);
             Thread.sleep(50);
         }*/
-        Map<String, String> map = new HashMap<>();
-        map.put("token", "f4e20a8b432d47c4b4e8fbab35e0af34292496");
-        map.put("zwavedeviceid", "11542");
-//        map.put("channel", "2");
-        String post = HttpsUtils.post("https://test.isurpass.com.cn/iremote/thirdpart/zufang/unlock", null, map, null);
-        System.out.println(post);
+
+//      String url = "https://app.aibasecloud.com/iremote/thirdpart/login";
+//      url = "https://app.aibasecloud.com/iremote/thirdpart/zufang/closedevice";
+//        Map<String, String> map = new HashMap<>();
+////        map.put("code", "tp_jwzh_ameta_all");
+////        map.put("password", "H8yAETIfB50f1rEElR5yZ68B");
+//        map.put("token", "a5ed58fe42184cc0a015c4368fe50b78340097");
+//        map.put("zwavedeviceid", "20");
+//        map.put("channel", "1");
+////        String post = HttpsUtils.post("https://app.aibasecloud.com/iremote/thirdpart/login", null, map, null);
+//        String post = HttpsUtils.post(url, null, map, null);
+//        JSONObject jo = JSONObject.parseObject(post);
+//
+//        System.out.println(jo.getString("resultCode"));
+        String s = openDevice(11542);
+        System.out.println(s);
     }
 }

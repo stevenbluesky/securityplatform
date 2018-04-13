@@ -8,6 +8,7 @@ import java.util.List;
 
 import cn.com.isurpass.house.dao.GatewayDAO;
 import cn.com.isurpass.house.dao.OrganizationDAO;
+import cn.com.isurpass.house.dao.UserDAO;
 import cn.com.isurpass.house.dao.ZwaveDeviceDAO;
 import cn.com.isurpass.house.po.OrganizationPO;
 import cn.com.isurpass.house.po.ZwaveDevicePO;
@@ -41,6 +42,8 @@ public class JPATest {
 	OrganizationDAO org;
 	@Autowired
 	private GatewayDAO gatewayDAO;
+	@Autowired
+	UserDAO ud;
 	
 	@Test
 	public void testOrg() {
@@ -108,5 +111,13 @@ public class JPATest {
 //        ZwaveDevicePO z = zd.findByZwavedeviceid(11541);
 //        System.out.println(z.getZwavedeviceid());
 //        System.out.println(z.getGatewayPO().getGatewayUserPO());
+    }
+
+    @Test
+    public void testNativeSQL(){
+        Integer id = ud.getUserid("fdsafasd");
+        String id1 = ud.getUsernameByDeviceid("iRemote8005000000002");
+        System.out.println(id);
+        System.out.println(id1);
     }
 }

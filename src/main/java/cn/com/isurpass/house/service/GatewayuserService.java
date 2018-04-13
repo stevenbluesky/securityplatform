@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.util.stream.Collectors.toList;
+
 @Service("gatewayuser")
 public class GatewayuserService {
 
@@ -123,11 +125,13 @@ public class GatewayuserService {
      */
     @Transactional(readOnly = true)
     public List<String> findGatewayidListByUserList(List<UserPO> list) {
-        List<Integer> l = new ArrayList<>();
+      /*  List<Integer> l = new ArrayList<>();
         List<String> gid = new ArrayList<>();
         list.forEach(li -> l.add(li.getUserid()));
         List<GatewayUserPO> gupo = gd.findByUseridIn(l);
-        gupo.forEach(g -> gid.add(g.getDeviceid()));
+        gupo.forEach(g -> gid.add(g.getDeviceid()));*/
+        List<Integer> userids = list.stream().map(UserPO::getUserid).collect(toList());
+        List<String> gid = gd.findByUseridIn(userids).stream().map(GatewayUserPO::getDeviceid).collect(toList());
         return gid;
     }
 
@@ -138,13 +142,16 @@ public class GatewayuserService {
      */
     @Transactional(readOnly = true)
     public List<String> filterDevice(List<ZwaveDevicePO> zdevicelist) {
-        List<String> list0 = new ArrayList<>();
+   /*     List<String> list0 = new ArrayList<>();
         List<String> list1 = new ArrayList<>();
         zdevicelist.forEach(z -> list1.add(z.getDeviceid()));
         List<GatewayUserPO> list = gd.findByDeviceidIn(list1);
         if (!list.isEmpty()) {
             list.forEach(l -> list0.add(l.getDeviceid()));
         }
+*/
+        List<String> deviceids = zdevicelist.stream().map(ZwaveDevicePO::getDeviceid).collect(toList());
+        List<String> list0 = gd.findByDeviceidIn(deviceids).stream().map(GatewayUserPO::getDeviceid).collect(toList());
         return list0;
     }
 }

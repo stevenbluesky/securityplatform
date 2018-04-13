@@ -7,6 +7,15 @@ public class DeviceDetailVO {
     private String suppliename;
     private String warningstatuses;
     private Integer status;
+    private Integer zwavedeviceid;
+
+    public Integer getZwavedeviceid() {
+        return zwavedeviceid;
+    }
+
+    public void setZwavedeviceid(Integer zwavedeviceid) {
+        this.zwavedeviceid = zwavedeviceid;
+    }
 
     public String getDevicename() {
         return devicename;
