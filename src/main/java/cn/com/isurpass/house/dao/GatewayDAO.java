@@ -36,7 +36,7 @@ public interface GatewayDAO extends CrudRepository<GatewayPO,Integer>{
 	//ameta
 	@Query(value = "SELECT g.deviceid as deviceid,IFNULL(g.name,'') AS name,g.status as status,IFNULL(u.loginname,'') AS customer,IFNULL(c.cityname,'')AS cityname,IFNULL(o1.name,'') AS serviceprovider,IFNULL(o2.name,'') AS installerorg,IFNULL(e.loginname,'') AS installer FROM gateway g\n" +
 			"\tLEFT JOIN gatewayuser gu ON g.deviceid=gu.deviceid\n" +
-			"\tLEFT JOIN USER u ON u.userid=gu.userid\n" +
+			"\tLEFT JOIN user u ON u.userid=gu.userid\n" +
 			"\tLEFT JOIN city c ON u.citycode=c.citycode\n" +
 			"\tLEFT JOIN organization o1 ON u.organizationid=o1.organizationid\n" +
 			"\tLEFT JOIN organization o2 ON u.installerorgid=o2.organizationid\n" +
@@ -45,7 +45,7 @@ public interface GatewayDAO extends CrudRepository<GatewayPO,Integer>{
 	//服务商
 	@Query(value = "SELECT g.deviceid as deviceid,IFNULL(g.name,'') AS name,g.status as status,IFNULL(u.loginname,'') AS customer,IFNULL(c.cityname,'')AS cityname,IFNULL(o1.name,'') AS serviceprovider,IFNULL(o2.name,'') AS installerorg,IFNULL(e.loginname,'') AS installer FROM gateway g\n" +
 			"\tJOIN gatewayuser gu ON g.deviceid=gu.deviceid\n" +
-			"\tJOIN USER u ON u.userid=gu.userid AND u.organizationid=:id\n" +
+			"\tJOIN user u ON u.userid=gu.userid AND u.organizationid=:id\n" +
 			"\tJOIN city c ON u.citycode=c.citycode\n" +
 			"\tJOIN organization o1 ON u.organizationid=o1.organizationid\n" +
 			"\tJOIN organization o2 ON u.installerorgid=o2.organizationid\n" +
@@ -53,7 +53,7 @@ public interface GatewayDAO extends CrudRepository<GatewayPO,Integer>{
 	List<Object[]> findInfoBySupplier(@Param("id") Integer id, Pageable pageable);
 	@Query(value = "SELECT COUNT(*) FROM gateway g\n" +
 			"\tJOIN gatewayuser gu ON g.deviceid=gu.deviceid\n" +
-			"\tJOIN USER u ON u.userid=gu.userid AND u.organizationid=:id\n" +
+			"\tJOIN user u ON u.userid=gu.userid AND u.organizationid=:id\n" +
 			"\tJOIN city c ON u.citycode=c.citycode\n" +
 			"\tJOIN organization o1 ON u.organizationid=o1.organizationid\n" +
 			"\tJOIN organization o2 ON u.installerorgid=o2.organizationid\n" +
@@ -62,7 +62,7 @@ public interface GatewayDAO extends CrudRepository<GatewayPO,Integer>{
 	//安装员
 	@Query(value = "SELECT g.deviceid as deviceid,IFNULL(g.name,'') AS name,g.status as status,IFNULL(u.loginname,'') AS customer,IFNULL(c.cityname,'')AS cityname,IFNULL(o1.name,'') AS serviceprovider,IFNULL(o2.name,'') AS installerorg,IFNULL(e.loginname,'') AS installer FROM gateway g\n" +
 			"\tJOIN gatewayuser gu ON g.deviceid=gu.deviceid\n" +
-			"\tJOIN USER u ON u.userid=gu.userid AND u.installerid=:id\n" +
+			"\tJOIN user u ON u.userid=gu.userid AND u.installerid=:id\n" +
 			"\tJOIN city c ON u.citycode=c.citycode\n" +
 			"\tJOIN organization o1 ON u.organizationid=o1.organizationid\n" +
 			"\tJOIN organization o2 ON u.installerorgid=o2.organizationid\n" +
@@ -70,7 +70,7 @@ public interface GatewayDAO extends CrudRepository<GatewayPO,Integer>{
 	List<Object[]> findInfoByInstaller(@Param("id")Integer id, Pageable pageable);
 	@Query(value = "SELECT COUNT(*) FROM gateway g\n" +
 			"\tJOIN gatewayuser gu ON g.deviceid=gu.deviceid\n" +
-			"\tJOIN USER u ON u.userid=gu.userid AND u.installerid=:id\n" +
+			"\tJOIN user u ON u.userid=gu.userid AND u.installerid=:id\n" +
 			"\tJOIN city c ON u.citycode=c.citycode\n" +
 			"\tJOIN organization o1 ON u.organizationid=o1.organizationid\n" +
 			"\tJOIN organization o2 ON u.installerorgid=o2.organizationid\n" +
@@ -79,7 +79,7 @@ public interface GatewayDAO extends CrudRepository<GatewayPO,Integer>{
 	//安装商
 	@Query(value = "SELECT g.deviceid as deviceid,IFNULL(g.name,'') AS name,g.status as status,IFNULL(u.loginname,'') AS customer,IFNULL(c.cityname,'')AS cityname,IFNULL(o1.name,'') AS serviceprovider,IFNULL(o2.name,'') AS installerorg,IFNULL(e.loginname,'') AS installer FROM gateway g\n" +
 			"\tJOIN gatewayuser gu ON g.deviceid=gu.deviceid\n" +
-			"\tJOIN USER u ON u.userid=gu.userid AND u.installerorgid=:id\n" +
+			"\tJOIN user u ON u.userid=gu.userid AND u.installerorgid=:id\n" +
 			"\tJOIN city c ON u.citycode=c.citycode\n" +
 			"\tJOIN organization o1 ON u.organizationid=o1.organizationid\n" +
 			"\tJOIN organization o2 ON u.installerorgid=o2.organizationid\n" +
@@ -87,7 +87,7 @@ public interface GatewayDAO extends CrudRepository<GatewayPO,Integer>{
 	List<Object[]> findInfoByInstallerorg(@Param("id")Integer id, Pageable pageable);
 	@Query(value = "SELECT COUNT(*) FROM gateway g\n" +
 			"\tJOIN gatewayuser gu ON g.deviceid=gu.deviceid\n" +
-			"\tJOIN USER u ON u.userid=gu.userid AND u.installerorgid=:id\n" +
+			"\tJOIN user u ON u.userid=gu.userid AND u.installerorgid=:id\n" +
 			"\tJOIN city c ON u.citycode=c.citycode\n" +
 			"\tJOIN organization o1 ON u.organizationid=o1.organizationid\n" +
 			"\tJOIN organization o2 ON u.installerorgid=o2.organizationid\n" +

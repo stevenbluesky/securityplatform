@@ -72,7 +72,7 @@ public interface ZwaveDeviceDAO extends CrudRepository<ZwaveDevicePO, Integer> {
             " e. NAME AS installername,u. NAME AS username" +
             " FROM zwavedevice z" +
             " JOIN gatewayuser gu ON z.deviceid = gu.deviceid" +
-            " JOIN USER u ON gu.userid = u.userid" +
+            " JOIN user u ON gu.userid = u.userid" +
             " JOIN city c ON u.citycode = c.citycode" +
             " JOIN organization o ON o.organizationid = u.organizationid" +
             " JOIN organization o1 ON o1.organizationid = u.installerorgid" +
@@ -84,7 +84,7 @@ public interface ZwaveDeviceDAO extends CrudRepository<ZwaveDevicePO, Integer> {
     @Query(value = "SELECT count(z.zwavedeviceid)" +
             "FROM zwavedevice z" +
             " JOIN gatewayuser gu ON z.deviceid = gu.deviceid" +
-            " JOIN USER u ON gu.userid = u.userid" +
+            " JOIN user u ON gu.userid = u.userid" +
             " JOIN city c ON u.citycode = c.citycode" +
             " JOIN organization o ON o.organizationid = u.organizationid" +
             " JOIN organization o1 ON o1.organizationid = u.installerorgid" +
@@ -97,7 +97,7 @@ public interface ZwaveDeviceDAO extends CrudRepository<ZwaveDevicePO, Integer> {
             " e. NAME AS installername,u. NAME AS username" +
             " FROM zwavedevice z" +
             " JOIN gatewayuser gu ON z.deviceid = gu.deviceid" +
-            " JOIN USER u ON gu.userid = u.userid" +
+            " JOIN user u ON gu.userid = u.userid" +
             " JOIN city c ON u.citycode = c.citycode" +
             " JOIN organization o ON o.organizationid = u.organizationid" +
             " JOIN organization o1 ON o1.organizationid = u.installerorgid" +
@@ -109,7 +109,7 @@ public interface ZwaveDeviceDAO extends CrudRepository<ZwaveDevicePO, Integer> {
     @Query(value = "SELECT count(z.zwavedeviceid)" +
             " FROM zwavedevice z" +
             " JOIN gatewayuser gu ON z.deviceid = gu.deviceid" +
-            " JOIN USER u ON gu.userid = u.userid" +
+            " JOIN user u ON gu.userid = u.userid" +
             " JOIN city c ON u.citycode = c.citycode" +
             " JOIN organization o ON o.organizationid = u.organizationid" +
             " JOIN organization o1 ON o1.organizationid = u.installerorgid" +
@@ -121,7 +121,7 @@ public interface ZwaveDeviceDAO extends CrudRepository<ZwaveDevicePO, Integer> {
     @Query(value = "SELECT count(z.zwavedeviceid)" +
             " FROM zwavedevice z" +
             " JOIN gatewayuser gu ON z.deviceid = gu.deviceid" +
-            " JOIN USER u ON gu.userid = u.userid" +
+            " JOIN user u ON gu.userid = u.userid" +
             " JOIN city c ON u.citycode = c.citycode" +
             " JOIN organization o ON o.organizationid = u.organizationid" +
             " JOIN organization o1 ON o1.organizationid = u.installerorgid" +
@@ -134,7 +134,7 @@ public interface ZwaveDeviceDAO extends CrudRepository<ZwaveDevicePO, Integer> {
             " e. NAME AS installername,u. NAME AS username" +
             " FROM zwavedevice z" +
             " JOIN gatewayuser gu ON z.deviceid = gu.deviceid" +
-            " JOIN USER u ON gu.userid = u.userid" +
+            " JOIN user u ON gu.userid = u.userid" +
             " JOIN city c ON u.citycode = c.citycode" +
             " JOIN organization o ON o.organizationid = u.organizationid" +
             " JOIN organization o1 ON o1.organizationid = u.installerorgid" +

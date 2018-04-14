@@ -9,7 +9,6 @@ import cn.com.isurpass.house.util.FormUtils;
 import cn.com.isurpass.house.vo.OrgAddVO;
 import cn.com.isurpass.house.vo.OrgListVO;
 import cn.com.isurpass.house.vo.OrgSearchVO;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -420,7 +419,7 @@ public class OrganizationService {
     }
 
     @Transactional(readOnly = true)
-    public Map<String, Object> search(Pageable pageable, OrgSearchVO search, HttpServletRequest request,Integer orgtype1) {
+    public Map<String, Object> search(Pageable pageable, OrgSearchVO search, HttpServletRequest request, Integer orgtype1) {
 //        Integer orgtype = getOrgtypeByReqeust(request);
 
         String name = "";
@@ -440,8 +439,8 @@ public class OrganizationService {
 
         Map<String, Object> map = new HashMap<>();
         if (search.getSearchcity() == null || search.getSearchcity() == "") {
-            map.put("total", od.countByNameLikeAndCitycodeLikeAndOrgtype(name, citycode,orgtype1));
-            orgList = od.findByNameLikeAndCitycodeLikeAndOrgtype(pageable, name, citycode,orgtype1);
+            map.put("total", od.countByNameLikeAndCitycodeLikeAndOrgtype(name, citycode, orgtype1));
+            orgList = od.findByNameLikeAndCitycodeLikeAndOrgtype(pageable, name, citycode, orgtype1);
         } else {
             //先通过citycode和city查找相似的,再通过返回的List集合中的citycode在organization表中查找
             List<CityPO> list = city.findByCitycodeLikeAndCitynameLike(citycode, city1);
@@ -458,8 +457,8 @@ public class OrganizationService {
                 findChildrenOrgid(orgid, list1);
                 list1.add(orgid);
                 map.put("total", od.countByNameLikeAndCitycodeInAndOrgtypeAndOrganizationidIn(name, list0, orgtype1, list1));
-                orgList = od.findByNameLikeAndCitycodeInAndOrgtypeAndOrganizationidIn(name, list0, orgtype1, list1,pageable);
-            }else {
+                orgList = od.findByNameLikeAndCitycodeInAndOrgtypeAndOrganizationidIn(name, list0, orgtype1, list1, pageable);
+            } else {
                 map.put("total", od.countByNameLikeAndCitycodeInAndOrgtype(name, list0, orgtype1));
                 orgList = od.findByNameLikeAndCitycodeInAndOrgtype(name, list0, orgtype1, pageable);
             }
@@ -477,12 +476,16 @@ public class OrganizationService {
      * @param request
      */
     public void toggleOrganizationStatus(Integer id, Integer toStatus, HttpServletRequest request) {
+        EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
+        if (!hasPermissionOperateOrg(emp.getEmployeeid(), id)) {
+            throw new RuntimeException("-99");
+        }
         if (toStatus == null) {
             throw new RuntimeException("-101");
         }
-        if (!hasProvilege(id, request)) {
-            throw new RuntimeException("-99");
-        }
+//        if (!hasProvilege(id, request)) {
+//            throw new RuntimeException("-99");
+//        }
         OrganizationPO org = od.findByOrganizationid(id);
         org.setStatus(toStatus);
         od.save(org);
@@ -490,11 +493,12 @@ public class OrganizationService {
 
     /**
      * 通过要操作的员工id和request判断当前登录的员工是否有权限操作此机构
-     *
+     * @Deprecated 此方法是不安全的,请使用hasPermissionOperateOrg(Integer empid,Integer orgid)
      * @param organizationid
      * @param request
      * @return
      */
+    @Deprecated
     @Transactional(readOnly = true)
     public boolean hasProvilege(Integer organizationid, HttpServletRequest request) {
         OrganizationPO org = od.findByOrganizationid(organizationid);//要操作的员工的机构
@@ -512,7 +516,7 @@ public class OrganizationService {
         return false;
     }
 
-//    @RequiresPermissions("fasf")
+    //    @RequiresPermissions("fasf")
     public void toggleOrganizationStatus0(String hope, Object[] ids, HttpServletRequest request) {
         if ("unsuspence".equals(hope)) {
             for (Object id : ids) {
@@ -549,4 +553,25 @@ public class OrganizationService {
         }
         return emp.getOrganizationid();
     }
+
+    //判断用户是否有权限操作此机构
+    @Transactional(readOnly = true)
+    public boolean hasPermissionOperateOrg(Integer empid, Integer orgid) {
+        List<EmployeeRolePO> emprolelist = erd.findByEmployeeid(empid);
+        Integer orgtype = od.findByOrganizationid(orgid).getOrgtype();
+        if (emprolelist.contains(Constants.ROLE_AMETA_ADMIN)) {
+            return true;
+        } else if (orgtype == Constants.ORGTYPE_SUPPLIER && emprolelist.contains(Constants.ROLE_SUPPLIER_ADMIN)) {
+            EmployeePO emp = ed.findByEmployeeidAndOrganizationid(empid, orgid);
+            return emp != null;
+        }else if(orgtype == Constants.ORGTYPE_INSTALLER && emprolelist.contains(Constants.ROLE_SUPPLIER_ADMIN)){
+            List<OrganizationPO> org = od.findByParentorgid(orgid);
+            return org.contains(orgid);
+        }else if(orgtype == Constants.ORGTYPE_INSTALLER && emprolelist.contains(Constants.ROLE_INSTALLER_ADMILN)){
+            EmployeePO emp = ed.findByEmployeeidAndOrganizationid(empid, orgid);
+            return emp != null;
+        }
+        return false;
+    }
+
 }

@@ -96,7 +96,10 @@
                         if (data["status"] == 1) {
                             alert("<@spring.message code='label.updatesuccess'/>");
                             window.location.href="deviceDetail?zwavedeviceid=${(zwave.zwavedeviceid)}";
-                        }else {
+                        }else if(data["msg"] == 10022) {
+                            alert("<@spring.message code='label.deviceoffline'/>");
+                        }
+                        else {
                             alert("<@spring.message code='label.updatefailed'/>");
                         }
                     },
