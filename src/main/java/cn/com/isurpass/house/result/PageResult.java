@@ -1,4 +1,4 @@
-package cn.com.isurpass.house.util;
+package cn.com.isurpass.house.result;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
