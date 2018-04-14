@@ -1,13 +1,13 @@
 package cn.com.isurpass.house.service;
 
+import cn.com.isurpass.house.result.PageResult;
 import cn.com.isurpass.house.dao.*;
 import cn.com.isurpass.house.po.*;
 import cn.com.isurpass.house.request.HttpsUtils;
-import cn.com.isurpass.house.util.CodeConstants;
-import cn.com.isurpass.house.util.Constants;
-import cn.com.isurpass.house.util.FormUtils;
+import cn.com.isurpass.house.util.*;
 import cn.com.isurpass.house.vo.DeviceDetailVO;
 import cn.com.isurpass.house.vo.DeviceSearchVO;
+import cn.com.isurpass.house.vo.RequestExpendVO;
 import cn.com.isurpass.house.vo.ZwaveDeviceListVO;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +44,8 @@ public class ZwaveDeviceService {
     CityDAO city;
     @Autowired
     EmployeeDAO ed;
+    @Autowired
+    RequestUtils requtils;
 
   /*   @Transactional(readOnly = true)
     public Map<String, Object> listDevice0(Pageable pageable, HttpServletRequest request) {
@@ -75,6 +77,7 @@ public class ZwaveDeviceService {
         return null;
     }*/
 
+    @Deprecated
     @Transactional(readOnly = true)
     public Map<String, Object> listDevice(Pageable pageable, HttpServletRequest request) {
         Map<String, Object> map = new HashMap<>();
@@ -350,7 +353,7 @@ public class ZwaveDeviceService {
         });
     }
 
-    public String toggleDeviceStatus(Integer toStatus, Integer zwavedeviceid, HttpServletRequest request){
+    public String toggleDeviceStatus(Integer toStatus, Integer zwavedeviceid, HttpServletRequest request) {
         //首先判断操作人是否有操作权限
         ZwaveDevicePO zw = zd.findByZwavedeviceid(zwavedeviceid);
         if (zw == null) {
@@ -376,27 +379,131 @@ public class ZwaveDeviceService {
                 throw new RuntimeException(CodeConstants.NO_PERMISSION.toString());
             }
         }
-            String s = "";
-            if (toStatus == 255) {
-                //开
-                s = HttpsUtils.openDevice(zwavedeviceid);
-            } else {//关
-                s = HttpsUtils.closeDevice(zwavedeviceid);
-            }
-            JSONObject jo = JSONObject.parseObject(s);
-            if (jo == null || jo.isEmpty()) {
-                throw new RuntimeException(CodeConstants.CODE_STATUS_ERROR.toString());
-            }
-            if (jo.getInteger("resultCode") == 0) {
-                return s;
-            } else if (jo.getInteger("resultCode") == 10023) {
-                throw new RuntimeException(CodeConstants.CODE_STATUS_DEVICE_NOT_EXISIT.toString());
-            } else if (jo.getInteger("resultCode") == 10022) {
-                throw new RuntimeException(CodeConstants.CODE_STATUS_NO_PERMISSION.toString());
-            }
-            else {//返回的错误还有很多,这里没作具体的显示//10023找不到指定的设备 22离线
-                System.out.println(jo.toString());
-                throw new RuntimeException(CodeConstants.CODE_STATUS_ERROR.toString());
-            }
+        String s = "";
+        if (toStatus == 255) {
+            //开
+            s = HttpsUtils.openDevice(zwavedeviceid);
+        } else {//关
+            s = HttpsUtils.closeDevice(zwavedeviceid);
+        }
+        JSONObject jo = JSONObject.parseObject(s);
+        if (jo == null || jo.isEmpty()) {
+            throw new RuntimeException(CodeConstants.CODE_STATUS_ERROR.toString());
+        }
+        if (jo.getInteger("resultCode") == 0) {
+            return s;
+        } else if (jo.getInteger("resultCode") == 10023) {
+            throw new RuntimeException(CodeConstants.CODE_STATUS_DEVICE_NOT_EXISIT.toString());
+        } else if (jo.getInteger("resultCode") == 10022) {
+            throw new RuntimeException(CodeConstants.CODE_STATUS_NO_PERMISSION.toString());
+        } else {//返回的错误还有很多,这里没作具体的显示//10023找不到指定的设备 22离线
+            System.out.println(jo.toString());
+            throw new RuntimeException(CodeConstants.CODE_STATUS_ERROR.toString());
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public Map<String, Object> newListZwaveDevice(PageResult pr, HttpServletRequest request) {
+//        zd.lilstZwaveDeviceListVO();
+//        RequestExpendVO empreq = new RequestUtils().getEmployeeInfo(request);
+        RequestExpendVO empreq = requtils.getEmployeeInfo(request);
+        Map<String, Object> map = new HashMap<>();
+
+        if (empreq.getEmployeerole().contains(Constants.ROLE_AMETA_ADMIN) || empreq.getEmployeerole().contains(Constants.ROLE_AMETA_EMPLOYEE)) {
+            List<ZwaveDeviceListVO> zwaveDeviceListVOS = ConvertQueryResultToVOUtils.convertZwaveDevice(zd.listZwaveDeviceListVO(pr.getStart(), pr.getRows()));
+            map.put("rows", zwaveDeviceListVOS);
+            map.put("total", zd.getCountDeviceListVO());
+        } else if (empreq.getEmployeerole().contains(Constants.ROLE_SUPPLIER_ADMIN) || empreq.getEmployeerole().contains(Constants.ROLE_SUPPLIER_EMPLOYEE)) {
+            List<ZwaveDeviceListVO> zwaveDeviceListVOS = ConvertQueryResultToVOUtils.convertZwaveDevice(zd.listZwaveDeviceListVOSupplier(empreq.getOrgid(), pr.getStart(), pr.getRows()));
+            map.put("rows", zwaveDeviceListVOS);
+            map.put("total", zd.getCountDeviceListVOSupplier(empreq.getOrgid()));
+        } else if (empreq.getEmployeerole().contains(Constants.ROLE_INSTALLER_ADMILN)) {
+            List<ZwaveDeviceListVO> zwaveDeviceListVOS = ConvertQueryResultToVOUtils.convertZwaveDevice(zd.listZwaveDeviceListVOInstallerorg(empreq.getOrgid(), pr.getStart(), pr.getRows()));
+            map.put("rows", zwaveDeviceListVOS);
+            map.put("total", zd.getCountDeviceListVOInstallerorg(empreq.getOrgid()));
+        } else if (empreq.getEmployeerole().contains(Constants.ROLE_INSTALLER)) {
+            List<ZwaveDeviceListVO> zwaveDeviceListVOS = ConvertQueryResultToVOUtils.convertZwaveDevice(zd.listZwaveDeviceListVOInstaller(empreq.getEmployeeid(), pr.getStart(), pr.getRows()));
+            map.put("rows", zwaveDeviceListVOS);
+            map.put("total", zd.getCountDeviceListVOInstaller(empreq.getOrgid()));
+        }
+        return map;
+    }
+
+    @Transactional(readOnly = true)
+    public Map<String, Object> newSearchZwaveDevice(PageResult pr, DeviceSearchVO dsv, HttpServletRequest request) {
+        RequestExpendVO empreq = requtils.getEmployeeInfo(request);
+        Map<String, Object> map = new HashMap<>();
+        List<Integer> z0 = Collections.EMPTY_LIST;
+        List<Integer> z1 = Collections.EMPTY_LIST;
+        List<Integer> z2 = Collections.EMPTY_LIST;
+        List<Integer> z3 = Collections.EMPTY_LIST;
+        List<Integer> z4 = Collections.EMPTY_LIST;
+        List<Integer> z5 = Collections.EMPTY_LIST;
+        List<Integer> z6 = Collections.EMPTY_LIST;
+        List<Integer> z7 = Collections.EMPTY_LIST;
+        List<Integer> z8 = Collections.EMPTY_LIST;
+        Set<List<Integer>> set = new HashSet<>();
+
+        if (!FormUtils.isEmpty(dsv.getSearchname())) {
+            z0 = zd.findByNameContaining(dsv.getSearchname()).stream().map(ZwaveDevicePO::getZwavedeviceid).collect(toList());
+            set.add(z0);
+        }
+        if (!FormUtils.isEmpty(dsv.getSearchcityname())) {
+            z1 = zd.listByCityname("%"+dsv.getSearchcityname()+"%");
+            set.add(z1);
+        }
+        if (!FormUtils.isEmpty(dsv.getSearchcitycode())) {
+            z2 = zd.listByCitycode("%"+dsv.getSearchcitycode()+"%");
+            set.add(z2);
+        }
+        if (!FormUtils.isEmpty(dsv.getSearchcustomer())) {
+            z3 = zd.listByCusumer("%"+dsv.getSearchcustomer()+"%");
+            set.add(z3);
+        }
+        if (!FormUtils.isEmpty(dsv.getSearchserviceprovider())) {
+            z4 = zd.listBySupplier("%"+dsv.getSearchserviceprovider()+"%");
+            set.add(z4);
+        }
+        if (!FormUtils.isEmpty(dsv.getSearchinstallerorg())) {
+            z5 = zd.listByInstallerorg("%"+dsv.getSearchinstallerorg()+"%");
+            set.add(z5);
+        }
+        if (!FormUtils.isEmpty(dsv.getSearchinstaller())) {
+            z6 = zd.listByInstaller("%"+dsv.getSearchinstaller()+"%");
+            set.add(z6);
+        }
+        if (!FormUtils.isEmpty(dsv.getSearchgatewayid())) {
+            z7 = zd.findByDeviceid("%"+dsv.getSearchgatewayid()+"%").stream().map(ZwaveDevicePO::getZwavedeviceid).collect(toList());
+            set.add(z7);
+        }
+
+        if (empreq.getEmployeerole().contains(Constants.ROLE_AMETA_ADMIN) || empreq.getEmployeerole().contains(Constants.ROLE_AMETA_EMPLOYEE)) {
+
+        } else if (empreq.getEmployeerole().contains(Constants.ROLE_SUPPLIER_ADMIN) || empreq.getEmployeerole().contains(Constants.ROLE_SUPPLIER_EMPLOYEE)) {
+            z8 = zd.listZwavedeivceidBySupplier(empreq.getOrgid());
+            set.add(z8);
+        } else if (empreq.getEmployeerole().contains(Constants.ROLE_INSTALLER_ADMILN)) {
+            z8 = zd.listZwavedeivceidByInstallerorg(empreq.getOrgid());
+            set.add(z8);
+        } else if (empreq.getEmployeerole().contains(Constants.ROLE_INSTALLER)) {
+            z8 = zd.listZwavedeivceidByInstaller(empreq.getEmployeeid());
+            set.add(z8);
+        }
+//        set.remove(null);
+        Iterator<List<Integer>> iterator = set.iterator();
+        List<Integer> ux = iterator.next();
+        while (iterator.hasNext()) {
+            ux.retainAll(iterator.next());
+        }
+        if (ux.isEmpty()) {
+            map.put("total",0);
+            map.put("rows", Collections.EMPTY_LIST);
+            return map;
+        }
+        List<ZwaveDeviceListVO> zwavevo = ConvertQueryResultToVOUtils.convertZwaveDevice(zd.listZwaveDeviceListVOList(pr.getStart(), pr.getRows(), ux));
+
+        map.put("rows",zwavevo);
+        map.put("total", ux.size());
+        return map;
     }
 }

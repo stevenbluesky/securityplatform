@@ -101,4 +101,21 @@ public class ZwaveDeviceListVO {
 	public void setUsername(String username) {
 		this.username = username;
 	}
+
+	@Override
+	public String toString() {
+		return "ZwaveDeviceListVO{" +
+				"zwavedeviceid=" + zwavedeviceid +
+				", name='" + name + '\'' +
+				", devicetype='" + devicetype + '\'' +
+				", warningstatuses='" + warningstatuses + '\'' +
+				", status=" + status +
+				", battery=" + battery +
+				", city='" + city + '\'' +
+				", organizationname='" + organizationname + '\'' +
+				", installerorgname='" + installerorgname + '\'' +
+				", installername='" + installername + '\'' +
+				", username='" + username + '\'' +
+				'}';
+	}
 }

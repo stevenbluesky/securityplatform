@@ -11,16 +11,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import cn.com.isurpass.house.exception.MyArgumentNullException;
 import cn.com.isurpass.house.po.PhonecardPO;
 import cn.com.isurpass.house.service.PhonecardService;
-import cn.com.isurpass.house.util.PageResult;
+import cn.com.isurpass.house.result.PageResult;
 import cn.com.isurpass.house.vo.TransferVO;
-import cn.com.isurpass.house.vo.TypeGatewayInfoVO;
 
 import javax.servlet.http.HttpServletRequest;
 

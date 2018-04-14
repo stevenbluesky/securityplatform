@@ -5,12 +5,10 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.transaction.Transactional;
 
 import cn.com.isurpass.house.util.FormUtils;
 import cn.com.isurpass.house.vo.OrgSearchVO;
 import cn.com.isurpass.house.vo.TransferVO;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,7 +24,7 @@ import cn.com.isurpass.house.po.OrganizationPO;
 import cn.com.isurpass.house.result.JsonResult;
 import cn.com.isurpass.house.service.OrganizationService;
 import cn.com.isurpass.house.util.Constants;
-import cn.com.isurpass.house.util.PageResult;
+import cn.com.isurpass.house.result.PageResult;
 import cn.com.isurpass.house.vo.OrgAddVO;
 
 /**

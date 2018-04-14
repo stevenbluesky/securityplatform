@@ -90,6 +90,8 @@ public interface UserDAO extends CrudRepository<UserPO, Integer> {
     List<UserPO> findByLoginnameContaining(String customer);
 
     List<UserPO> findByNameContaining(String searchName);
+    @Query(value = "SELECT * FROM USER WHERE userid =:userid",nativeQuery = true)
+    UserPO findUserByUserid(@Param("userid") Integer userid);
 
     @Query(value = "select userid from user where loginname=:loginname",nativeQuery = true)
     Integer getUserid(@Param("loginname") String loginname);

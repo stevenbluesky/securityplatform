@@ -532,6 +532,7 @@ public class OrganizationService {
      * @param request
      * @return
      */
+    @Deprecated
     public Integer getOrgtypeByReqeust(HttpServletRequest request) {
         EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
         if (emp == null) {
@@ -540,6 +541,7 @@ public class OrganizationService {
         return od.findByOrganizationid(emp.getOrganizationid()).getOrgtype();
     }
 
+    @Deprecated
     public Integer getOrganizationidByReqeust(HttpServletRequest request) {
         EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
         if (emp == null) {
