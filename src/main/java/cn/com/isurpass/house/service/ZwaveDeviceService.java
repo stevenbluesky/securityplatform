@@ -179,6 +179,7 @@ public class ZwaveDeviceService {
         return zd.findByDeviceidIn(deviceidlist);
     }
 
+    @Deprecated
     @Transactional(readOnly = true)
     public Map<String, Object> search(Pageable pageable, DeviceSearchVO dsv, HttpServletRequest request) {
         EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");

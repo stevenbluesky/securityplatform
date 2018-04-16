@@ -1,19 +1,10 @@
 package com.isurpass.house;
 
-import java.awt.print.PrinterGraphics;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-
 import cn.com.isurpass.house.dao.GatewayDAO;
 import cn.com.isurpass.house.dao.OrganizationDAO;
 import cn.com.isurpass.house.dao.UserDAO;
-import cn.com.isurpass.house.dao.ZwaveDeviceDAO;
 import cn.com.isurpass.house.po.OrganizationPO;
-import cn.com.isurpass.house.po.ZwaveDevicePO;
 import cn.com.isurpass.house.util.Constants;
-import com.alibaba.druid.util.StringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,17 +12,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import cn.com.isurpass.house.dao.OrganizationDAO;
-import cn.com.isurpass.house.po.OrganizationPO;
-import cn.com.isurpass.house.util.Constants;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)  

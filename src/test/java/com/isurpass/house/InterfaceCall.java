@@ -2,11 +2,16 @@ package com.isurpass.house;
 
 import cn.com.isurpass.house.util.Constants;
 import cn.com.isurpass.house.util.PhoneCardInterfaceCallUtils;
-import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.methods.*;
+import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.httpclient.methods.InputStreamRequestEntity;
+import org.apache.commons.httpclient.methods.PutMethod;
+import org.apache.commons.httpclient.methods.RequestEntity;
 import org.junit.Test;
-import java.io.*;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 
 public class InterfaceCall {
     @Test
