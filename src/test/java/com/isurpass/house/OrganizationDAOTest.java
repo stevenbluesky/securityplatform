@@ -4,7 +4,6 @@ package com.isurpass.house;
 import cn.com.isurpass.house.dao.OrganizationDAO;
 import cn.com.isurpass.house.po.OrganizationPO;
 import cn.com.isurpass.house.vo.OrgSearchVO;
-import org.hibernate.boot.jaxb.SourceType;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import java.util.Optional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:application.xml")

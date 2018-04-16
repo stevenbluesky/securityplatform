@@ -2,14 +2,12 @@ package com.isurpass.house.service;
 
 import cn.com.isurpass.house.dao.*;
 import cn.com.isurpass.house.po.*;
-import cn.com.isurpass.house.service.OrganizationService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -21,7 +19,7 @@ import static java.util.stream.Collectors.toSet;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:application.xml")
 public class OrganizationServiceTest {
-    @Resource
+    @Autowired
     OrganizationDAO od;
     @Autowired
     EmployeeroleDAO erd;

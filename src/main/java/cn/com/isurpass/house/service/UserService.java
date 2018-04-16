@@ -236,101 +236,6 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public Map<String, Object> search(Pageable pageable, UserSearchVO usv, HttpServletRequest request) {
-        /*Specification<UserPO> specification = new Specification<UserPO>() {
-            @Override
-            public Predicate toPredicate(Root<UserPO> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
-                List<Predicate> predicates = new ArrayList<Predicate>();
-                Predicate predicate = null;
-                Expression<String> namePath = null;
-
-                List<String> citycodelist = null;
-                List<Integer> personidlist = null;
-                List<Integer> useridlist = null;
-                List<Integer> useridlist0 = null;
-                List<Integer> orgidlist = null;
-                if (!FormUtils.isEmpty(usv.getSearchCity())) {
-                    citycodelist = city.findByCitynameContaining(usv.getSearchCity()).stream().map(CityPO::getCitycode).collect(toList());
-                }
-                if (!FormUtils.isEmpty(usv.getSearchPhonenumber())) {
-                    personidlist = pd.findByPhonenumberContaining(usv.getSearchPhonenumber()).stream().map(PersonPO::getPersonid).collect(toList());
-                }
-                if (!FormUtils.isEmpty(usv.getSearchGatewayid())) {
-                    List<String> gatewayidlist = gateway.findByDeviceidContaining(usv.getSearchGatewayid()).stream().map(GatewayPO::getDeviceid).collect(toList());
-                    useridlist = gd.findByDeviceidIn(gatewayidlist).stream().map(GatewayUserPO::getUserid).collect(toList());
-                }
-                if (!FormUtils.isEmpty(usv.getSearchSerialnumber())) {
-                    List<Integer> phonecardidlist = pcard.findBySerialnumberContaining(usv.getSearchSerialnumber()).stream().map(PhonecardPO::getPhonecardid).collect(toList());
-                    useridlist0 = pcud.findByPhonecardidIn(phonecardidlist).stream().map(PhonecardUserPO::getUserid).collect(toList());
-                }
-                if (!FormUtils.isEmpty(usv.getSearchDealername())) {
-                    orgidlist = od.findByOrgtypeAndNameContaining(Constants.ORGTYPE_SUPPLIER, usv.getSearchName()).stream().map(OrganizationPO::getOrganizationid).collect(toList());
-                }
-                if (citycodelist.size() == 0 || personidlist.size() == 0 || useridlist.size() == 0 || useridlist0.size() == 0 || orgidlist.size() == 0) {
-                    return null;
-                } else {
-                    if (usv.getSearchName() != null && usv.getSearchName() != "") {
-                        namePath = root.get("name");
-                        predicates.add(builder.like(namePath, "%" + usv.getSearchName() + "%"));
-                    }
-                    if (citycodelist != null) {
-                        namePath = root.get("citycode");
-                        predicates.add(namePath.in(citycodelist));
-                    }
-                    if (personidlist != null) {
-                        namePath = root.get("personid");
-//                        predicate = builder.in(namePath.in(personidlist));
-                        predicates.add(namePath.in(personidlist));
-                    }
-                    if (useridlist != null) {
-                        namePath = root.get("userid");
-                        predicates.add(namePath.in(useridlist));
-                    }
-                    if (useridlist0 != null) {
-                        namePath = root.get("userid");
-//                        predicate = builder.in(namePath.in(useridlist0));
-                        predicates.add(namePath.in(useridlist0));
-                    }
-                    if (orgidlist != null) {
-                        namePath = root.get("organizationid");
-                        predicates.add(namePath.in(orgidlist));
-                    }
-                    //如果角色是安装员的话,返回user中安装员id和他一样的
-                    EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
-                    List<EmployeeRolePO> erpolist = erd.findByEmployeeid(emp.getEmployeeid());
-                    if (erpolist == null) {
-                        return null;
-                    }
-                    if (erpolist.contains(Constants.ROLE_AMETA_ADMI)) {
-
-                    } else if (erpolist.contains(Constants.ROLE_SUPPLIER_ADMIN)) {
-                        namePath = root.get("organizationid");
-                        predicates.add(namePath.in(emp.getOrganizationid()));
-                    } else if (erpolist.contains(Constants.ROLE_INSTALLER_ADMILN)) {
-                        namePath = root.get("installerorgid");
-                        predicates.add(namePath.in(emp.getOrganizationid()));
-                    } else if (erpolist.contains(Constants.ROLE_INSTALLER)) {
-                        namePath = root.get("intallerid");
-                        predicates.add(namePath.in(emp.getEmployeeid()));
-                    }
-                    query.where(predicates.toArray(new Predicate[predicates.size()]));
-                    return query.getRestriction();
-                }
-            }
-        };
-//        System.out.println(ud.findAll(specification));
-        Map<String, Object> map = new HashMap<>();
-        if (specification == null) {
-            map.put("rows", Collections.EMPTY_LIST);
-            map.put("total", 0);
-            return map;
-        }
-        Page<UserPO> list = ud.findAll(specification, pageable);
-        System.out.println(list);
-        List<UserInfoListVO> listvo = new ArrayList<>();
-        setProperties(list, listvo);
-        map.put("rows", listvo);
-        map.put("total", ud.count(specification));
-        return map;*/
         List<UserPO> u0 = Collections.EMPTY_LIST;
         List<UserPO> u1 = Collections.EMPTY_LIST;
         List<UserPO> u2 = Collections.EMPTY_LIST;
@@ -411,21 +316,17 @@ public class UserService {
 
     private void setProperties(Page<UserPO> list, List<UserInfoListVO> listvo) {
         list.forEach(u -> {
-            PersonPO personPO = pd.findByPersonid(u.getPersonid());
             UserInfoListVO user = new UserInfoListVO();
-            AddressPO adrs = null;
-            if (personPO != null) {
-                adrs = ad.findByAddressid(personPO.getAddressid());
-                user.setPhonenumber(personPO.getPhonenumber());
-            }
+            PersonPO personPO = pd.findByPersonid(u.getPersonid());
+            CityPO citypo = city.findByCitycode(u.getCitycode());
+            OrganizationPO orgpo = od.findByOrganizationid(u.getOrganizationid());
+
             user.setUserid(u.getUserid());
             user.setName(u.getName());
-            if (adrs != null) {
-                user.setCity(adrs.getCity());
-            }
-            if (od.findByOrganizationid(u.getOrganizationid()) != null)
-                user.setSuppliername(od.findByOrganizationid(u.getOrganizationid()).getName());
             user.setStatus(u.getStatus());
+            user.setPhonenumber(personPO==null?null:personPO.getPhonenumber());
+            user.setCity(citypo==null?null:citypo.getCityname());
+            user.setSuppliername(orgpo==null?null:orgpo.getName());
             listvo.add(user);
         });
     }

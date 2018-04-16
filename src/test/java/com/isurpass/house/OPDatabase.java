@@ -2,14 +2,19 @@ package com.isurpass.house;
 
 
 import cn.com.isurpass.house.dao.*;
-import cn.com.isurpass.house.po.*;
+import cn.com.isurpass.house.po.EmployeePO;
+import cn.com.isurpass.house.po.EmployeeRolePO;
+import cn.com.isurpass.house.po.RolePrivilegePO;
+import cn.com.isurpass.house.po.ZwaveDevicePO;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Random;
 
 import static java.util.stream.Collectors.toList;
 

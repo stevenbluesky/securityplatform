@@ -98,4 +98,8 @@ public interface UserDAO extends CrudRepository<UserPO, Integer> {
 
     @Query(value ="select u.name from user u left join gatewayuser gu on gu.userid=u.userid where gu.deviceid=:deviceid" ,nativeQuery = true)
     String getUsernameByDeviceid(@Param("deviceid") String deviceid);
+
+//
+//    @Query(value = "select * from user u join gatewayuser gb on u.userid = gb.deviceid join gateway g on gb.deviceid=g.deviceid where g.deviceid LIKE :gatewayid", nativeQuery = true)
+//    List<Integer> listUserByGateway(@Param("gatewayid") String gatewayid);
 }
