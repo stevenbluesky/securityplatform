@@ -6,6 +6,7 @@ import cn.com.isurpass.house.po.*;
 import cn.com.isurpass.house.util.Constants;
 import cn.com.isurpass.house.util.Encrypt;
 import cn.com.isurpass.house.util.FormUtils;
+import cn.com.isurpass.house.util.RequestUtils;
 import cn.com.isurpass.house.vo.EmployeeAddVO;
 import cn.com.isurpass.house.vo.EmployeeListVO;
 import cn.com.isurpass.house.vo.EmployeeParentOrgIdVO;
@@ -392,8 +393,15 @@ public class EmployeeService {
             }
         }
         return false;*/
+//        EmployeePO emp = ed.findByEmployeeid(employeeid);
+//        return os.hasProvilege(emp.getOrganizationid(), request);
+        EmployeePO loginemp = (EmployeePO) request.getSession().getAttribute("emp");
         EmployeePO emp = ed.findByEmployeeid(employeeid);
-        return os.hasProvilege(emp.getOrganizationid(), request);
+        if (emp == null) {
+            return false;
+        }
+        //如果登录的用户有权限操作此用户所在的机构,此也有权限操作这个用户
+        return os.hasPermissionOperateOrg(loginemp.getEmployeeid(),emp.getOrganizationid());
     }
 
     @Transactional(readOnly = true)

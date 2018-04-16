@@ -1,25 +1,19 @@
 package cn.com.isurpass.house.service;
 
-import java.lang.reflect.Type;
-import java.util.*;
-
-import ch.qos.logback.core.net.SyslogOutputStream;
 import cn.com.isurpass.house.dao.*;
+import cn.com.isurpass.house.exception.MyArgumentNullException;
 import cn.com.isurpass.house.po.*;
+import cn.com.isurpass.house.util.Constants;
+import cn.com.isurpass.house.vo.GatewayDetailVO;
+import cn.com.isurpass.house.vo.TypeGatewayInfoVO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import cn.com.isurpass.house.exception.MyArgumentNullException;
-import cn.com.isurpass.house.util.Constants;
-import cn.com.isurpass.house.vo.GatewayDetailVO;
-import cn.com.isurpass.house.vo.TypeGatewayInfoVO;
-
 import javax.servlet.http.HttpServletRequest;
+import java.util.*;
 
 @Service
 public class GatewayService {

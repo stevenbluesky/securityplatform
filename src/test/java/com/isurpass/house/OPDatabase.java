@@ -3,15 +3,12 @@ package com.isurpass.house;
 
 import cn.com.isurpass.house.dao.*;
 import cn.com.isurpass.house.po.*;
-import org.apache.commons.lang3.ObjectUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import javax.persistence.criteria.*;
 import java.util.*;
 
 import static java.util.stream.Collectors.toList;
@@ -75,18 +72,31 @@ public class OPDatabase {
         z.setStatuses(null);
         z.setWarningstatuses("[255]");
 
-        for (int i = 11545; i < 20001; i++) {
-            int i1 = rand.nextInt(6) + 1;
+        for (int i = 2000; i < 4000; i++) {
+//            int i1 = rand.nextInt(6) + 1;
             z.setZwavedeviceid(i);
-            z.setDeviceid("iRemote800500000000"+i1);//[1,7)
-            z.setName("testzwavedevice"+i1);
+            z.setDeviceid("iRemote8005000000001");//[1,7)
+            z.setName("testzwavedevice"+i);
             zdd.save(z);
-            Thread.sleep(10);
+//            Thread.sleep(10);
         }
     }
 
     @Test
     public void search1() throws InterruptedException {
-
+//        List<ZwaveDeviceListVO> zwaveDeviceListVOS = zdd.lilstZwaveDeviceListVO(0, 10);
+//        List<Object[]> lists = zdd.listZwaveDeviceListVO(0, 10);
+//        List<ZwaveDeviceListVO> zwaveDeviceListVOS = ConvertQueryResultToVOUtils.convertZwaveDevice(lists);
+//        for (ZwaveDeviceListVO zwaveDeviceListVO : zwaveDeviceListVOS) {
+//            System.out.println(zwaveDeviceListVO);
+//        }
+//        String test = zdd.test("SELECT z.name form zwavedevice z where z.zwavedeviceid=1;");
+//        System.out.println(test);
+//        Object[] objects = zdd.lilstZwaveDeviceListVO0(0, 10);
+//        for (Object object : objects) {
+//            Object[] cells = (Object[]) object;
+//            System.out.println(cells[0]);
+//        }
+//        System.out.println(o.toString());
     }
 }
