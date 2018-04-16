@@ -84,4 +84,5 @@ public interface EmployeeDAO extends CrudRepository<EmployeePO,Integer>{
 
     List<EmployeePO> findByNameContaining(String searchinstaller);
 
+    EmployeePO findByEmployeeidAndOrganizationid(Integer empid, Integer orgid);
 }

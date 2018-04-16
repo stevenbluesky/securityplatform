@@ -1,23 +1,19 @@
 package cn.com.isurpass.house.service;
 
-import java.util.*;
-
-import ch.qos.logback.core.net.SyslogOutputStream;
 import cn.com.isurpass.house.dao.*;
+import cn.com.isurpass.house.exception.MyArgumentNullException;
 import cn.com.isurpass.house.po.*;
+import cn.com.isurpass.house.util.Constants;
+import cn.com.isurpass.house.vo.GatewayDetailVO;
+import cn.com.isurpass.house.vo.TypeGatewayInfoVO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import cn.com.isurpass.house.exception.MyArgumentNullException;
-import cn.com.isurpass.house.util.Constants;
-import cn.com.isurpass.house.vo.GatewayDetailVO;
-import cn.com.isurpass.house.vo.TypeGatewayInfoVO;
-
 import javax.servlet.http.HttpServletRequest;
+import java.util.*;
 
 @Service
 public class GatewayService {
@@ -86,34 +82,32 @@ public class GatewayService {
 	@Transactional(readOnly = true)
 	public Map<String, Object> listNUllGateway(Pageable pageable, EmployeePO emp) {
 		Long count = 0L;
-		List<GatewayPO> gateList = new ArrayList<>();//网关集合
 		Map<String, Object> map = new HashMap<>();//返回的map
 		List<TypeGatewayInfoVO> list = new ArrayList<>();//返回的list对象
-		List<String> orgglist = new ArrayList<>();//网关id集合
 		Integer organizationid = emp.getOrganizationid();
 		OrganizationPO org = od.findByOrganizationid(organizationid);//当前用户所属机构
 		if(org.getOrgtype()==Constants.ORGTYPE_SUPPLIER){//为服务商,拿本身及旗下安装商的网关
-			orgglist = gud.findDeviceidByOwnSupplier(organizationid,Constants.STATUS_NORMAL,Constants.ORGTYPE_SUPPLIER);
-			gateList = gd.findByDeviceidIn(orgglist,pageable);
-			count = gd.countByDeviceidIn(orgglist);
+			List<Object[]> obj = gd.findInfoBySupplier(organizationid,pageable);
+			count = gd.countBySupplier(organizationid);
+			list = newtransfer(obj);
 		}else if(org.getOrgtype()==Constants.ORGTYPE_INSTALLER){//为安装商，拿自己的网关
 			List<EmployeeRolePO> elist = employeeroleDAO.findByEmployeeid(emp.getEmployeeid());
 			List<Integer> emprolelist = new ArrayList<>();
 			elist.forEach(single ->{emprolelist.add(single.getRoleid());});
 			if(emprolelist.contains(Constants.ROLE_INSTALLER)&&emprolelist.size()==1){//只是安装员id
-				orgglist = gud.findDeviceidByOwnInstaller(emp.getEmployeeid());
+				List<Object[]> obj = gd.findInfoByInstaller(emp.getEmployeeid(),pageable);
+				count = gd.countByInstaller(emp.getEmployeeid());
+				list = newtransfer(obj);
 			}else {
-				orgglist = gud.findDeviceidByOwnInstallerorg(org.getOrganizationid());
+				List<Object[]> obj = gd.findInfoByInstallerorg(emp.getEmployeeid(),pageable);
+				count = gd.countByInstallerorg(emp.getEmployeeid());
+				list = newtransfer(obj);
 			}
-			gateList = gd.findByDeviceidIn(orgglist,pageable);
-			count = gd.countByDeviceidIn(orgglist);
 		}else{//为ameta管理员，拿所有网关
-			Page<GatewayPO> all = gd.findAll(pageable);
+			List<Object[]> obj = gd.findInforByPage(pageable);
 			count = gd.count();
-			gateList = all.getContent();
+			list = newtransfer(obj);
 		}
-		//填充分页详细数据
-		list =transfer(gateList);
 		map.put("total",count);
 		map.put("rows",list);
 		return map;
@@ -324,6 +318,28 @@ public class GatewayService {
 				gd.save(gatewaypo);
 			}
 		}
+	}
+	/**
+	 * 填充数据
+	 * @param obj
+	 * @return
+	 */
+	private List<TypeGatewayInfoVO> newtransfer(List<Object[]> obj){
+		List<TypeGatewayInfoVO> list = new ArrayList<>();//返回的list对象
+		for(Object[] o:obj){
+			TypeGatewayInfoVO gateVO = new TypeGatewayInfoVO();
+			gateVO.setDeviceid((String) o[0]);
+			gateVO.setName((String) o[1]);
+			gateVO.setStatus((Integer) o[2]);
+			gateVO.setCustomer((String) o[3]);
+			gateVO.setCityname((String) o[4]);
+			gateVO.setServiceprovider((String) o[5]);
+			gateVO.setInstallerorg((String) o[6]);
+			gateVO.setInstaller((String) o[7]);
+			list.add(gateVO);
+		}
+
+		return list;
 	}
 	/**
 	 * 填充数据

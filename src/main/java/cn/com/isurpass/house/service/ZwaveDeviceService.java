@@ -396,7 +396,10 @@ public class ZwaveDeviceService {
             throw new RuntimeException(CodeConstants.CODE_STATUS_DEVICE_NOT_EXISIT.toString());
         } else if (jo.getInteger("resultCode") == 10022) {
             throw new RuntimeException(CodeConstants.CODE_STATUS_NO_PERMISSION.toString());
-        } else {//返回的错误还有很多,这里没作具体的显示//10023找不到指定的设备 22离线
+        }else if (jo.getInteger("resultCode") == 30312) {
+            throw new RuntimeException(CodeConstants.CODE_DEVICE_OFFLINE.toString());
+        }
+        else {//返回的错误还有很多,这里没作具体的显示//10023找不到指定的设备 12离线
             System.out.println(jo.toString());
             throw new RuntimeException(CodeConstants.CODE_STATUS_ERROR.toString());
         }
