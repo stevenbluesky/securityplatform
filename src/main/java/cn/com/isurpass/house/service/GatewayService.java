@@ -6,7 +6,6 @@ import java.util.*;
 import ch.qos.logback.core.net.SyslogOutputStream;
 import cn.com.isurpass.house.dao.*;
 import cn.com.isurpass.house.po.*;
-import cn.com.isurpass.house.vo.TestTransfer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
