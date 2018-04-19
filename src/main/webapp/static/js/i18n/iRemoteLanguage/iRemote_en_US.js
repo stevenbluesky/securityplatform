@@ -17,13 +17,13 @@ var lan = {
     addgatewayerror:"Gateway doesn't exsit!",//-109
     duplicatephonecarduser:"Dupliacate SIM for User, please input others!.",//-110
     simdontexsit:"SIM doesn't exsit",//-111
+    devicenoexist:"Device does not exist",//-112
+    connectdbfail:"Database connect failed",//-113
 
     normal: "Normal",
     unvalid: 'Ready',
     suspenced: "Suspected",
     deleted: "Delete",
-    // notempty: "Mandatory",
-    loaderror: "Loading Data Error",
     alarm0:"Stress warning",//?
     status0:"NONE",
     keyalarm:"Key Alarm",//当有人试图用钥匙开锁时
@@ -66,5 +66,4 @@ var lan = {
     enteringuserinfo:"Input User Inforamation",
     phonecardlist:"SIM Card List",
     enteringphonecardinfo:"Input SIM Card Information"
-
 };

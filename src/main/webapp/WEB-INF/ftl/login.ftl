@@ -43,7 +43,7 @@
                        class="col-sm-2 control-label"><@spring.message code='label.organizationcode'/></label>
                 <div class="col-sm-10">
                     <input type="text" class="form-control" id="code" name="code"
-                           placeholder="<@spring.message code='label.organizationcode'/>" value="002">
+                           placeholder="<@spring.message code='label.organizationcode'/>" value="">
                 </div>
             </div>
 
@@ -112,6 +112,13 @@
                         }
                     }
                 },
+                code: {
+                    validators: {
+                        notEmpty: {
+                            message: 'The Organization Code is required and cannot be empty'
+                        }
+                    }
+                },
                 password: {
                     validators: {
                         notEmpty: {
@@ -146,9 +153,9 @@
                     alert("error");
                 }
             });
-        } else {
+        } /*else {
             alert(lan.loaderror);
-        }
+        }*/
     });
 
 </script>

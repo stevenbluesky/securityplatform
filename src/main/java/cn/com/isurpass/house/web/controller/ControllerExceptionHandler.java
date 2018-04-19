@@ -2,6 +2,7 @@ package cn.com.isurpass.house.web.controller;
 
 import cn.com.isurpass.house.util.WebUtilsPro;
 import com.alibaba.fastjson.JSONObject;
+import com.mysql.jdbc.CommunicationsException;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -25,6 +26,13 @@ public class ControllerExceptionHandler {
     public JsonResult runtimeExceptionHandler(Exception e) {
         e.printStackTrace();
         return new JsonResult(-1, "-1");
+    }
+
+    @ExceptionHandler(CommunicationsException.class)
+    @ResponseBody
+    public JsonResult communicationsException(Exception e) {
+        e.printStackTrace();
+        return new JsonResult(-1, "-113");
     }
 
     /**
