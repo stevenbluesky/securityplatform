@@ -18,6 +18,7 @@ var lan = {
     duplicatephonecarduser:"此电话卡已经绑定了用户.",//-110
     simdontexsit:"电话卡未录入",//-111
     devicenoexist:"设备不存在",//-112
+    connectdbfail:"连接数据库出错",//-113
 
     normal: "正常",
     unvalid: '未生效',
@@ -27,6 +28,7 @@ var lan = {
     status0:"NONE",
     keyalarm:"钥匙告警",//当有人试图用钥匙开锁时
     closefail:"关锁失败",
+
     dooropen0:"开门",
     doorclose0:"关门",
     pswfail:"连续5次密码错误",

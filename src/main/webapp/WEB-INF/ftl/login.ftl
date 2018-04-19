@@ -8,32 +8,17 @@
     <title><@spring.message code='label.logintitle'/></title>
     <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
     <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
-    <#--<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>-->
     <script src="static/js/jquery.min.js"></script>
-    <#--<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"
-          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">-->
     <link rel="stylesheet" href="static/css/bootstrap.min.css">
-    <#--<link href="https://cdn.bootcss.com/bootstrap-select/2.0.0-beta1/css/bootstrap-select.min.css" rel="stylesheet">-->
     <link href="static/css/bootstrap-select.min.css" rel="stylesheet">
-    <#--<link href="https://cdn.bootcss.com/bootstrap-table/1.12.1/bootstrap-table.min.css" rel="stylesheet">-->
     <link href="static/css/bootstrap-table.min.css" rel="stylesheet">
     <link href="static/css/bootstrapValidator.min.css" rel="stylesheet">
     <script src="static/js/bootstrapValidator.min.js"></script>
-    <#--<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"
-            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-            crossorigin="anonymous"></script>-->
     <script src="static/js/bootstrap.min.js"></script>
-    <#--<script src="https://cdn.bootcss.com/bootstrap-select/2.0.0-beta1/js/bootstrap-select.min.js"></script>
-    <script src="https://cdn.bootcss.com/bootstrap-table/1.12.1/bootstrap-table.min.js"></script>-->
     <script src="static/js/bootstrap-select.min.js"></script>
     <script src="static/js/bootstrap-table.min.js"></script>
     <script src="static/js/i18n/iRemoteLanguage/<@spring.message code="label.language.js"/>"></script>
     <script src="static/js/formatter.js"></script>
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <!--<script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-    <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>-->
     <script src="static/js/html5shiv.min.js"></script>
     <script src="static/js/respond.min.js"></script>
     <![endif]-->
@@ -42,24 +27,23 @@
             margin-bottom: 10px;
         }
     </style>
+    <link href="static/css/login.css" rel="stylesheet" type="text/css" />
 </head>
-<body style="overflow: hidden;">
-<div class="row">
-    <div class="col-md-3"></div>
-    <div class="col-md-6">
-        <form id="defaultForm" method="POST">
-            <br>
-            <br>
-            <br>
-            <br>
-            <div class="text-center" style="margin-bottom:70px;"><h1><@spring.message code='label.logintitle'/></h1>
+<body style="overflow-x: hidden;">
+        <div class="login_box">
+            <div style="text-align:center;">
+                <h1><@spring.message code='label.logintitle'/></h1>
             </div>
+            <div class="login_l_img"><img src="image/login-img.png" /></div>
+            <div class="login">
+
+        <form id="defaultForm" method="POST">
             <div class="form-group">
                 <label for="code"
                        class="col-sm-2 control-label"><@spring.message code='label.organizationcode'/></label>
                 <div class="col-sm-10">
                     <input type="text" class="form-control" id="code" name="code"
-                           placeholder="<@spring.message code='label.organizationcode'/>" value="002">
+                           placeholder="<@spring.message code='label.organizationcode'/>" value="">
                 </div>
             </div>
 
@@ -82,23 +66,22 @@
             <div class="form-group">
                 <label for="captchacode"
                        class="col-sm-2 control-label"><@spring.message code='label.captchcode'/></label>
-                <div class="col-sm-6">
+                <div class="col-sm-4">
                     <input type="text" class="form-control" id="captchacode" name="captchacode"
                            placeholder="<@spring.message code='label.captchcode'/> ">
                 </div>
-                <div class="col-sm-4">
+                <div class="col-sm-6">
                     <img id="validateCode" class="img-responsive" src=""
                          onclick="this.src='login/getCode?time='+new Date().getTime();"
                          style="height:35px;float: right"/>
                 </div>
             </div>
             <button id="btn-submit" class="btn btn-default  btn-lg"
-                    style="float:right;"><@spring.message code='label.login'/></button>
+                    style="float:right;;width: 400px"><@spring.message code='label.login'/></button>
         </form>
-    </div>
-
-    <div class="col-md-3"></div>
-</div>
+            </div>
+            <#--<div class="copyright">公司 版权所有©2016-2018 技术支持电话：000-00000000</div>-->
+        </div>
 
 <script type="text/javascript">
     $("#validateCode").click();
@@ -126,6 +109,13 @@
                         regexp: {
                             regexp: /^[a-zA-Z0-9_\.]+$/,
                             message: 'The username can only consist of alphabetical, number, dot and underscore'
+                        }
+                    }
+                },
+                code: {
+                    validators: {
+                        notEmpty: {
+                            message: 'The Organization Code is required and cannot be empty'
                         }
                     }
                 },
@@ -163,9 +153,9 @@
                     alert("error");
                 }
             });
-        } else {
+        } /*else {
             alert(lan.loaderror);
-        }
+        }*/
     });
 
 </script>
