@@ -1,64 +1,70 @@
 <#include "/_head0.ftl"/>
 <#include "/_head1.ftl"/>
-           <form class="form-inline" action="" method="POST">
-               <div class="row" >
+           <form class="form-horizontal" action="" method="POST">
                    <div class="text-center"><h1><@spring.message code='label.userlist'/></h1></div>
                    <hr>
-                   <div class="form-group col-md-3" align="right">
-                       <div>
-                           <b><@spring.message code='label.name'/></b>
+                   <div class="form-group col-md-4" align="right">
+                       <label for="searchinstallerorg" class="col-md-5 control-label"><@spring.message code='label.name'/></label>
+                       <div class="col-md-7">
                            <input type="text" class="form-control" id="searchName" name="searchName"
                                   placeholder="<@spring.message code='label.name'/>">
                        </div>
                    </div>
-                   <div class="form-group col-md-3" align="right">
-                       <div>
-                           <b><@spring.message code='label.city'/></b>
+                   <div class="form-group col-md-4" align="right">
+                       <label for="searchCity" class="col-md-5 control-label"><@spring.message code='label.city'/></label>
+                       <div class="col-md-7">
                            <input type="text" class="form-control" id="searchCity" name="searchCity"
                                   placeholder="<@spring.message code='label.city'/>">
                        </div>
                    </div>
-                   <div class="form-group col-md-3" align="right">
-                       <div>
-                           <b><@spring.message code='label.phonenumber'/></b>
+                   <div class="form-group col-md-4" align="right">
+                       <label for="searchPhonenumber" class="col-md-6 control-label"><@spring.message code='label.phonenumber'/></label>
+                       <div class="col-md-6">
                            <input type="text" class="form-control" id="searchPhonenumber" name="searchPhonenumber"
                                   placeholder="<@spring.message code='label.phonenumber'/>">
                        </div>
                    </div>
-                   <div class="form-group col-md-3" align="right"></div>
-               </div>
-               <div class="row">
-                   <div class="form-group col-md-3" align="right">
-                       <div>
-                           <b><@spring.message code='label.gatewayID'/></b>
+                   <#--<div class="form-group col-md-4" align="right">-->
+                       <#--<div class="col-md-12" style="visibility: hidden;">-->
+                           <#--<input type="text" class="form-control" />-->
+                       <#--</div>-->
+                   <#--</div>-->
+
+                   <div class="form-group col-md-4" align="right">
+                       <label for="searchGatewayid" class="col-md-5 control-label"><@spring.message code='label.gatewayID'/></label>
+                       <div class="col-md-7">
                            <input type="text" class="form-control" id="searchGatewayid" name="searchGatewayid"
                                   placeholder="<@spring.message code='label.gatewayID'/>">
                        </div>
                    </div>
 
-                   <div class="form-group col-md-3" align="right">
-                       <div>
-                           <b><@spring.message code='label.phonecardid0'/></b>
+                   <div class="form-group col-md-4" align="right">
+                       <label for="searchSerialnumber" class="col-md-5 control-label"><@spring.message code='label.phonecardid0'/></label>
+                       <div class="col-md-7">
                            <input type="text" class="form-control" id="searchSerialnumber" name="searchSerialnumber"
                                   placeholder="<@spring.message code='label.phonecardid'/>">
                        </div>
                    </div>
 
-                   <div class="form-group col-md-3" align="right">
-                       <div>
-                           <b><@spring.message code='label.serviceprovider'/></b>
+                   <div class="form-group col-md-4" align="right">
+                       <label for="searchDealername" class="col-md-5 control-label"><@spring.message code='label.serviceprovider'/></label>
+                       <div class="col-md-7">
                            <input type="text" class="form-control" id="searchDealername" name="searchDealername"
                                   placeholder="<@spring.message code='label.serviceprovider'/>">
                        </div>
                    </div>
-                   <div class="form-group col-md-3" align="center">
+                   <div class="form-group col-md-12" align="right">
+                       <div class="col-md-7"></div>
+                       <div class="col-md-4">
                        <button id="searchbtn" type="button" class="btn btn-default"
-                               style="width:28%;"><@spring.message code='label.search'/></button>
-                   </div>
+                               style=""><@spring.message code='label.search'/></button>
+                       </div>
+                       <div class="col-md-1"></div>
+                       </div>
            </form>
-          </div>
-          <hr>
 
+<#--<button  class='btn btn-default' style="float: right;visibility: hidden;">asdfaf</button>-->
+<#--<button  class='btn btn-default' style="float: right;margin-top:-20px;visibility: hidden;">asdfaf</button>-->
 <@shiro.hasPermission name="button:changeStatus">
             <button style="float: right;" class='btn btn-default'
                     onclick='toggleUserStatus0("unsuspence");'><@spring.message code='label.unsuspence'/></button>

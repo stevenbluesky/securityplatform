@@ -29,6 +29,9 @@
         .form-group > div {
             margin-bottom: 10px;
         }
+        div.form-group>label {
+            text-align: left;
+        }
     </style>
 </head>
 <body style="overflow-x: hidden;">
@@ -48,7 +51,7 @@
 </div>
 <br>
 <div class="row">
-    <div id="wrap" class="col-md-2">
+    <div id="wrap" class="col-md-2" >
         <div class="container">
             <div class="row">
                 <div class="col-sm-3">
@@ -58,9 +61,9 @@
         </div>
     </div>
 
-    <div class="col-md-10" style="height: 800px;">
-        <iframe class="embed-responsive-item" id="right" name="right" frameborder="0" src="welcome.html"
-                style="height: 100%;width: 100%;"></iframe>
+    <div class="col-md-10" style="height: 800px;overflow: hidden;z-index: 999;">
+        <iframe class="" id="right" name="right" frameborder="0" src="welcome.html"
+                style="height: 100%;width: 100%;overflow-x: hidden;" ></iframe>
     </div>
 </div>
 

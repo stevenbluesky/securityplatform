@@ -1,73 +1,80 @@
 <#include "../_head0.ftl"/>
 <#include "../_head1.ftl"/>
-<form class="form-inline" id="searchForm" method="POST">
-    <div class="text-center"><h1><@spring.message code="label.devicelist"/></h1></div>
+<form class="form-horizontal" id="searchForm" method="POST">
+    <div class="text-center"><h1><@spring.message code="label.gatewaylist"/></h1></div>
     <hr>
-    <div class="row">
-        <div class="form-group col-md-4" align="right">
-            <div>
-                <b><@spring.message code="label.devicename"/></b>
-                <input type="text" class="form-control" id="searchname" name="name"
-                       placeholder=<@spring.message code="label.devicename"/>>
-            </div>
-        </div>
-        <div class="form-group col-md-4" align="right">
-            <div>
-                <b><@spring.message code="label.city"/></b>
-                <input type="text" class="form-control" id="searchcityname" name="cityname"
-                       placeholder=<@spring.message code="label.city"/>>
-            </div>
-        </div>
 
-        <div class="form-group col-md-4" align="right">
-            <div>
-                <b><@spring.message code="label.citycode"/></b>
-                <input type="text" class="form-control" id="searchcitycode" name="citycode"
-                       placeholder=<@spring.message code="label.citycode"/>>
-            </div>
+    <div class="form-group col-md-4" align="right">
+        <label for="searchname" class="col-md-5 control-label"><@spring.message code="label.devicename"/></label>
+        <div class="col-md-7">
+            <input class="form-control" type="text" id="searchname" name="name"
+                   placeholder=<@spring.message code="label.devicename"/>>
         </div>
     </div>
-    <div class="row">
-        <div class="form-group col-md-4" align="right">
-            <div>
-                <b><@spring.message code="label.customer"/></b>
-                <input type="text" class="form-control" id="searchcustomer" name="customer"
-                       placeholder=<@spring.message code="label.customer"/>>
-            </div>
-        </div>
-        <div class="form-group col-md-4" align="right">
-            <div>
-                <b><@spring.message code="label.serviceprovider"/></b>
-                <input type="text" class="form-control" id="searchserviceprovider" name="serviceprovider"
-                       placeholder=<@spring.message code="label.serviceprovider"/>>
-            </div>
-        </div>
-        <div class="form-group col-md-4" align="right">
-            <div>
-                <b><@spring.message code="label.installerorg"/></b>
-                <input type="text" class="form-control" id="searchinstallerorg" name="installerorg"
-                       placeholder=<@spring.message code="label.installerorg"/>>
-            </div>
+
+    <div class="form-group col-md-4" align="right">
+        <label for="searchcityname" class="col-md-5 control-label"><@spring.message code="label.city"/></label>
+        <div class="col-md-7">
+            <input type="text" class="form-control" id="searchcityname" name="cityname"
+                   placeholder=<@spring.message code="label.city"/>>
         </div>
     </div>
-    <div class="row">
-        <div class="form-group col-md-4" align="right">
-            <div>
-                <b><@spring.message code="label.installer"/></b>
-                <input type="text" class="form-control" id="searchinstaller" name="installer"
-                       placeholder=<@spring.message code="label.installer"/>>
-            </div>
+
+    <div class="form-group col-md-4" align="right">
+        <label for="searchcitycode" class="col-md-5 control-label"><@spring.message code="label.citycode"/></label>
+        <div class="col-md-7">
+            <input type="text" class="form-control" id="searchcitycode" name="citycode"
+                   placeholder=<@spring.message code="label.citycode"/>>
         </div>
-        <div class="form-group col-md-4" align="right">
-            <div>
-                <b><@spring.message code="label.gatewayID"/></b>
-                <input type="text" class="form-control" id="searchgatewayid" name="deviceid"
-                       placeholder=<@spring.message code="label.gatewayID"/>>
-            </div>
+    </div>
+
+    <div class="form-group col-md-4" align="right">
+        <label for="searchcustomer" class="col-md-5 control-label"><@spring.message code="label.customer"/></label>
+        <div class="col-md-7">
+            <input type="text" class="form-control" id="searchcustomer" name="customer"
+                   placeholder=<@spring.message code="label.customer"/>>
         </div>
-        <div class="form-group col-md-4" align="right">
+    </div>
+
+    <div class="form-group col-md-4" align="right">
+        <label for="searchserviceprovider"
+               class="col-md-5 control-label"><@spring.message code="label.serviceprovider"/></label>
+        <div class="col-md-7">
+            <input type="text" class="form-control" id="searchserviceprovider" name="serviceprovider"
+                   placeholder=<@spring.message code="label.serviceprovider"/>>
+        </div>
+    </div>
+
+    <div class="form-group col-md-4" align="right">
+        <label for="searchinstallerorg"
+               class="col-md-5 control-label"><@spring.message code="label.installerorg"/></label>
+        <div class="col-md-7">
+            <input type="text" class="form-control" id="searchinstallerorg" name="installerorg"
+                   placeholder=<@spring.message code="label.installerorg"/>>
+        </div>
+    </div>
+
+    <div class="form-group col-md-4" align="right">
+        <label for="searchinstaller" class="col-md-5 control-label"><@spring.message code="label.installer"/></label>
+        <div class="col-md-7">
+            <input type="text" class="form-control" id="searchinstaller" name="installer"
+                   placeholder=<@spring.message code="label.installer"/>>
+        </div>
+    </div>
+
+    <div class="form-group col-md-4" align="right">
+        <label for="searchinstallerorg" class="col-md-5 control-label"><@spring.message code="label.gatewayID"/></label>
+        <div class="col-md-7">
+            <input type="text" class="form-control" id="searchgatewayid" name="deviceid"
+                   placeholder=<@spring.message code="label.gatewayID"/>>
+        </div>
+    </div>
+
+    <div class="form-group col-md-4" align="right">
+        <div class="col-md-5"></div>
+        <div class="col-md-7">
             <button type="button" id="searchsubmit" class="btn btn-default"
-                    style="width:28%;"><@spring.message code="label.search"/></button>
+                    style="width:100%;"><@spring.message code="label.search"/></button>
         </div>
     </div>
 </form>

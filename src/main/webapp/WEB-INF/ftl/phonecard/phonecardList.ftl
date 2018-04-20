@@ -3,22 +3,22 @@
  <#import "/spring.ftl" as spring />       
           <div class="row">
               <div class="text-center"><h1><@spring.message code='label.phonecardlist'/></h1></div><hr>
-           <form id="searchForm" class="form-inline" method="POST">
-              <div class="form-group col-md-3">   
-                <div>
-                  <b><@spring.message code='label.serialnumber'/></b>
+           <form id="searchForm" class="form-inline" method="POST"  style="text-align: right;">
+              <div class="form-group col-md-3">
+                  <b class="col-md-5"><@spring.message code='label.serialnumber'/></b>
+                  <div class="col-md-7">
                  <input type="text" class="form-control" id="searchserialnumber" name="serialnumber" placeholder="<@spring.message code='label.serialnumber'/>" style="width:160px;">
                 </div>
               </div>
               <div class="form-group col-md-3">
-                <div>
-                  <b>Rate Plan</b>
+                  <b class="col-md-5">Rate Plan</b>
+                  <div class="col-md-7">
                  <input type="text" class="form-control" id="searchrateplan" name="rateplan" placeholder="Rate Plan" style="width:160px;">
                 </div>
               </div>
               <div class="form-group col-md-4">
-                <div>
-                  <b><@spring.message code='label.status'/></b>
+                  <b class="col-md-5"><@spring.message code='label.status'/></b>
+                  <div class="col-md-7">
                  <select id="searchstatus" name="status" class="selectpicker" title="<@spring.message code='label.choosestatus'/>" >
                       <option value="1"><@spring.message code='label.all'/></option>
                       <option value="2"><@spring.message code='label.normal'/></option>

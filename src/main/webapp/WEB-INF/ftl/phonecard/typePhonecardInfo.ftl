@@ -4,47 +4,44 @@
     <div class="row-horizontal">
         <div class="col-md-1"></div>
         <div class="col-md-10">
-          <form id="typeform" action="add" method="POST">
+          <form class="form-horizontal" id="typeform" action="add" method="POST">
           
               <div class="text-center"><h1><@spring.message code='label.enteringphonecardinfo'/></h1></div>
-             
+              <hr>
               <div  class="form-group">
-                <label for="name"  class="col-sm-2 control-label"><@spring.message code='label.serialnumber'/>*</label>
+                <label for="name"  class="col-sm-2 control-label"  style="text-align: left;"><@spring.message code='label.serialnumber'/>*</label>
                 <div class="col-sm-10">
                  <input type="text" class="form-control" id="serialnumber" name="serialnumber"  placeholder="<@spring.message code='label.serialnumber'/>" <#if serialnumber??>value=${serialnumber}</#if>>
                 </div>
               </div>
               <div  class="form-group">
-                <label for="code"  class="col-sm-2 control-label"><@spring.message code='label.model'/>*</label>
+                <label for="code"  class="col-sm-2 control-label"  style="text-align: left;"><@spring.message code='label.model'/>*</label>
                 <div class="col-sm-10">
                  <input type="text" class="form-control" id="model" name="model" placeholder="<@spring.message code='label.model'/>" <#if model??>value=${model}</#if> >
                 </div>
               </div>
               <div  class="form-group">
-                <label for="answer"  class="col-sm-2 control-label"><@spring.message code='label.firmwareversion'/>*</label>
+                <label for="answer"  class="col-sm-2 control-label"  style="text-align: left;"><@spring.message code='label.firmwareversion'/>*</label>
                 <div class="col-sm-10">
                  <input type="text" class="form-control" id="firmwareversion" name="firmwareversion"  placeholder="<@spring.message code='label.firmwareversion'/>" <#if firmwareversion??>value=${firmwareversion}</#if>>
                </div>
               </div>
               <div  class="form-group">
-                <label for="name"  class="col-sm-2 control-label">Rate Plan*</label>
+                <label for="name"  class="col-sm-2 control-label"  style="text-align: left;">Rate Plan*</label>
                 <div class="col-sm-10">
                  <input type="text" class="form-control" id="rateplan" name="rateplan"  placeholder="Rate Plan" <#if rateplan??>value=${rateplan}</#if>>
                 </div>
               </div>
               
               <div  class="form-group">
-                <label for="code"  class="col-sm-2 control-label">Activation Date</label>
-                <div class="col-sm-10">
+                <label for="code"  class="col-sm-2 control-label"  style="text-align: left;">Activation Date</label>
+                <div class="col-sm-10"  align="left">
                  <#--<input type="text" class="form-control" id="activationdate" name="activationdate"  placeholder="Activation Date">-->
-                 
-                	 <div  class="form-group" align="left">
 		                <div class="col-sm-5 input-group date form_datetime">
 		                  <input class="form-control" size="16" name="activationdate" type="text" readonly placeholder="Activation Date" <#if activationdate?exists>value=${activationdate?string("yyyy-MM-dd")!}</#if>>
 		                  <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
 						  <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
 		                </div>	
-               		</div>
                 </div>
               </div>
             
@@ -61,67 +58,57 @@
                -->
               
               <div  class="form-group">
-                <label for="answer"  class="col-sm-2 control-label">First programmed On</label>
-                <div class="col-sm-10">
-                	<div  class="form-group" align="left">
+                <label for="answer"  class="col-sm-2 control-label"  style="text-align: left;">First programmed On</label>
+                <div class="col-sm-10" align="left">
 		                <div class="col-sm-5 input-group date form_datetime">
 		                  <input class="form-control" size="16" name="firstprogrammedondate" type="text" readonly placeholder="First programmed On" <#if firstprogrammedondate?exists>value=${firstprogrammedondate?string("yyyy-MM-dd")!}</#if>>
 		                  <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
 						  <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
 		                </div>	
                		</div>
-               </div>
               </div>
               
               <div  class="form-group">
-                <label for="name"  class="col-sm-2 control-label">Last Programmed On</label>
-                <div class="col-sm-10">
-                	 <div  class="form-group" align="left">
+                <label for="name"  class="col-sm-2 control-label" style="text-align: left;">Last Programmed On</label>
+                <div class="col-sm-10"  align="left">
 		                <div class="col-sm-5 input-group date form_datetime">
 		                  <input class="form-control" size="16" name="lastprogrammedondate" type="text" readonly placeholder="Last Programmed On" <#if lastprogrammedondate?exists>value=${lastprogrammedondate?string("yyyy-MM-dd")!}</#if>>
 		                  <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
 						  <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
 		                </div>	
-               		</div>
                 </div>
               </div>
               
               <div  class="form-group">
-                <label for="code"  class="col-sm-2 control-label">Last Saved On</label>
-                <div class="col-sm-10">
-              		  <div  class="form-group" align="left">
+                <label for="code"  class="col-sm-2 control-label" style="text-align: left;">Last Saved On</label>
+                <div class="col-sm-10"  align="left">
 		                <div class="col-sm-5 input-group date form_datetime">
 		                  <input class="form-control" size="16" name="lastsavedondate" type="text" readonly placeholder="Last Saved On" <#if lastsavedondate?exists>value=${lastsavedondate?string("yyyy-MM-dd")!}</#if>>
 		                  <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
 						  <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
 		                </div>	
-               		</div>
                 </div>
               </div>
               
               <div  class="form-group">
-                <label for="answer"  class="col-sm-2 control-label">Ordering Date</label>
-                <div class="col-sm-10">
-                	<div  class="form-group" align="left">
+                <label for="answer"  class="col-sm-2 control-label" style="text-align: left;">Ordering Date</label>
+                <div class="col-sm-10"  align="left">
 		                <div class="col-sm-5 input-group date form_datetime">
 		                  <input class="form-control" size="16" name="orderingdate" type="text" readonly placeholder="Ordering Date" <#if orderingdate?exists>value=${orderingdate?string("yyyy-MM-dd")!}</#if>>
 		                  <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
 						  <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
 		                </div>	
-               		</div>
                </div>
               </div>
               
               <div  class="form-group">
-                <label for="answer"  class="col-sm-2 control-label">Expiredate Date</label>
-                <div class="col-sm-10">
-                	<div  class="form-group" align="left">
+                <label for="answer"  class="col-sm-2 control-label" style="text-align: left;">Expiredate Date</label>
+                <div class="col-sm-10"  align="left">
 		                <div class="col-sm-5 input-group date form_datetime">
 		                  <input class="form-control" size="16" name="expiredate" type="text" readonly placeholder="Expiredate Date" <#if expiredate?exists>value=${expiredate?string("yyyy-MM-dd")!}</#if>>
 		                  <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
 						  <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
 		                </div>	
-               		</div>
                </div>
               </div>
               

@@ -1,5 +1,7 @@
 package com.isurpass.house;
 
+import com.isurpass.house.domain.PhoneUser;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -48,7 +50,17 @@ public class JaveSETest {
 //            System.out.println("iRemote800500000000"+i1);
 //            System.out.println(i1);
 //		}
-		System.out.println(new SimpleDateFormat().format(new Date()));
-	}
+//		System.out.println(new SimpleDateFormat().format(new Date()));
+
+		PhoneUser user = new PhoneUser();
+		user.setCountrycode("86");
+		user.setUsertype(1);
+		if (!("86".equals(user.getCountrycode()) && user.getUsertype() == 0)) {
+			System.out.println("true");
+		}else{
+			System.out.println("false");
+		}
+
+}
 
 }

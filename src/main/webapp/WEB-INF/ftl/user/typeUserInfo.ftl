@@ -6,7 +6,7 @@
           <form id="defaultForm" method="POST">
           
               <div class="text-center"><h1><@spring.message code='label.enteringuserinfo'/></h1></div>
-             
+              <hr>
               <div  class="form-group">
                 <label for="firstname"  class="col-sm-2 control-label"><@spring.message code='label.firstname'/>*</label>
                 <div class="col-sm-10">
