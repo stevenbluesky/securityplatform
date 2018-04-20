@@ -159,7 +159,7 @@
                     alert("<@spring.message code='label.chooseonepls'/>");
                     return ;
                 }else {
-                    window.location.href="addSupplierPage?organizationid=" + ids[0];
+                    window.location.href="addInstallerPage?organizationid=" + ids[0];
                     return;
                 }
             }
