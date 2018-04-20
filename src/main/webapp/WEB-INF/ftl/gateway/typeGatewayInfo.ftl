@@ -7,7 +7,8 @@
         <div class="col-md-1"></div>
         <div class="col-md-10">
           <form id="typeform" action="add" method="get">
-              <div class="text-center"><h1><@spring.message code="label.enteringgatewayinfo"/></h1></div>            
+              <div class="text-center"><h1><@spring.message code="label.enteringgatewayinfo"/></h1></div>
+              <hr>
               <div  class="form-group">
                 <label for="name"  class="col-sm-2 control-label"><@spring.message code="label.gatewayID"/>*</label>
                 <div class="col-sm-10">

@@ -4,31 +4,34 @@
                   <div class="row">
                       <div class="text-center"><h1><@spring.message code="label.supplierlist"/></h1></div>
                       <hr>
-                      <form id="searchform" class="form-inline">
+                      <form id="searchform" class="form-horizontal">
                           <div class="form-group col-md-3">
-                              <div>
-                                  <b><@spring.message code="label.pname"/></b>
+                              <label for="searchname" class="col-md-4 control-label"><@spring.message code="label.pname"/></label>
+                              <div  class="col-md-8">
                                   <input type="text" class="form-control" id="searchname" name="searchname"
                                          placeholder="<@spring.message code="label.pname"/>">
                               </div>
                           </div>
                           <div class="form-group col-md-3">
-                              <div>
-                                  <b><@spring.message code="label.city"/></b>
+                              <label for="searchcity" class="col-md-4 control-label"><@spring.message code="label.city"/></label>
+                              <div class="col-md-8">
                                   <input type="text" class="form-control" id="searchcity" name="searchcity"
                                          placeholder="<@spring.message code="label.city"/>">
                               </div>
                           </div>
                           <div class="form-group col-md-3">
-                              <div>
-                                  <b><@spring.message code="label.citycode"/></b>
+                              <label for="searchcitycode" class="col-md-5 control-label"><@spring.message code="label.citycode"/></label>
+                              <div class="col-md-7">
                                   <input type="text" class="form-control" id="searchcitycode" name="searchcitycode"
                                          placeholder="<@spring.message code="label.citycode"/>">
                               </div>
                           </div>
-                          <div class=" col-md-3">
+                          <div class="form-group col-md-3">
+                              <div class="col-md-2"></div>
+                              <div class="col-md-10">
                               <button id="searchbtn" type="button"
                                       class="btn btn-default"><@spring.message code="label.search"/></button>
+                              </div>
                           </div>
                       </form>
                   </div>

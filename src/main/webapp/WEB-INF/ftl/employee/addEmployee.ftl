@@ -3,17 +3,19 @@
     <div class="row-horizontal">
         <div class="col-md-1"></div>
         <div class="col-md-10">
-            <form id="defaultForm" method="POST">
+            <form class="form-horizontal" id="defaultForm" method="POST">
               <#if empInfo??>
                 <div class="text-center"><h1><@spring.message code="label.modifyemployee"/></h1></div>
               <#else>
               <div class="text-center"><h1><@spring.message code="label.addemployee"/></h1></div>
               </#if>
+                <hr>
                 <div class="text-left"><h4><@spring.message code="label.employeeinfo"/></h4></div>
+                <hr>
               <#if emp?? && emp.organizationid == 1>
               <div class="form-group">
                   <label for="organizationid"
-                         class="col-sm-2 control-label"><@spring.message code="label.parentorg"/></label>
+                         class="col-sm-2 control-label"  style="text-align: left;"><@spring.message code="label.parentorg"/></label>
                   <div class="col-sm-10">
                       <select name="organizationid" id="organizationid" class="selectpicker" data-live-search="true"
                               title="<@spring.message code="label.chooseorg"/>">
@@ -23,7 +25,7 @@
               </#if>
                 <div class="form-group">
                     <label for="loginname"
-                           class="col-sm-2 control-label"><@spring.message code="label.loginname"/></label>
+                           class="col-sm-2 control-label"  style="text-align: left;"><@spring.message code="label.loginname"/></label>
                     <div class="col-sm-10">
                         <input type="text" class="form-control" id="loginname" name="loginname"
                                value="${(empInfo.loginname)!}" placeholder="<@spring.message code="label.loginname"/>">
@@ -32,7 +34,7 @@
 
                 <div class="form-group">
                     <label for="password"
-                           class="col-sm-2 control-label"><@spring.message code="label.password"/></label>
+                           class="col-sm-2 control-label"  style="text-align: left;"><@spring.message code="label.password"/></label>
                     <div class="col-sm-10">
                         <input type="password" class="form-control" id="password" maxlength='16' name="password"
                                placeholder="<@spring.message code="label.password"/>">
@@ -41,7 +43,7 @@
 
                 <div class="form-group">
                     <label for="repassword"
-                           class="col-sm-2 control-label"><@spring.message code="label.repassword"/></label>
+                           class="col-sm-2 control-label"  style="text-align: left;"><@spring.message code="label.repassword"/></label>
                     <div class="col-sm-10">
                         <input type="password" class="form-control" id="repassword" maxlength='16' name="repassword"
                                placeholder="<@spring.message code="label.repassword"/>">
@@ -50,7 +52,7 @@
 
                 <div class="form-group">
                     <label for="question"
-                           class="col-sm-2 control-label"><@spring.message code="label.pquestion"/></label>
+                           class="col-sm-2 control-label"  style="text-align: left;"><@spring.message code="label.pquestion"/></label>
                     <div class="col-sm-10">
                         <input type="text" class="form-control" id="question" name="question"
                                value="${(empInfo.question)!}" placeholder="<@spring.message code="label.pquestion"/>">
@@ -58,7 +60,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="answer" class="col-sm-2 control-label"><@spring.message code="label.panswer"/></label>
+                    <label for="answer" class="col-sm-2 control-label"  style="text-align: left;"><@spring.message code="label.panswer"/></label>
                     <div class="col-sm-10">
                         <input type="text" class="form-control" id="answer" name="answer"
                                placeholder="<@spring.message code="label.panswer"/>">
@@ -66,7 +68,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="code" class="col-sm-2 control-label"><@spring.message code="label.empcode"/></label>
+                    <label for="code" class="col-sm-2 control-label"  style="text-align: left;"><@spring.message code="label.empcode"/></label>
                     <div class="col-sm-10">
                         <input type="text" class="form-control" id="code" name="code" value="${(empInfo.code)!}"
                                placeholder="<@spring.message code="label.ifnewinstallerpleaseinputcode"/>">
@@ -76,7 +78,7 @@
                 <div class="form-group">
                     <label for="expiredate" class="col-sm-2 control-label" data-date="1979-09-16T05:25:07Z"
                            data-date-format="dd MM yyyy - HH:ii p"
-                           data-link-field="dtp_input1"><@spring.message code="label.expiredate"/></label>
+                           data-link-field="dtp_input1"  style="text-align: left;"><@spring.message code="label.expiredate"/></label>
                     <div class="col-sm-10" align="left">
                         <div class="col-sm-4 input-group date form_datetime">
                             <input class="form-control" size="16" name="expiredate" type="text"
@@ -89,7 +91,7 @@
                 <input type="hidden" id="dtp_input1" value=""/>
 
                 <div class="form-group">
-                    <label for="status" class="col-sm-2 control-label"><@spring.message code="label.status"/></label>
+                    <label for="status" class="col-sm-2 control-label"  style="text-align: left;"><@spring.message code="label.status"/></label>
                     <div class="col-sm-10">
                         <select id="status" name="status" class="selectpicker"
                                 title="<@spring.message code="label.choosestatus"/>">
@@ -101,14 +103,15 @@
                     </div>
                 </div>
 
-                <div class="text-left"><h4><@spring.message code="label.empprivilege"/></h4></div>
-                <hr>
+                <div class="text-left" hidden><h4><@spring.message code="label.empprivilege"/></h4></div>
+                <hr hidden>
 
+                <div style="visibility: hidden;">br</div>
                 <div class="text-left"><h4><@spring.message code="label.personinfo"/></h4></div>
-
+                <hr>
                 <div class="form-group">
                     <label for="lastname"
-                           class="col-sm-2 control-label"><@spring.message code="label.lastname"/></label>
+                           class="col-sm-2 control-label"  style="text-align: left;"><@spring.message code="label.lastname"/></label>
                     <div class="col-sm-10">
                         <input type="text" class="form-control" id="lastname" name="lastname"
                                value="${(empInfo.lastname)!}" placeholder="<@spring.message code="label.lastname"/>">
@@ -116,7 +119,7 @@
                 </div>
                 <div class="form-group">
                     <label for="firstname"
-                           class="col-sm-2 control-label"><@spring.message code="label.firstname"/></label>
+                           class="col-sm-2 control-label"  style="text-align: left;"><@spring.message code="label.firstname"/></label>
                     <div class="col-sm-10">
                         <input type="text" class="form-control" id="firstname" name="firstname"
                                value="${(empInfo.firstname)!}" placeholder="<@spring.message code="label.firstname"/>">
@@ -124,7 +127,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="title" class="col-sm-2 control-label"><@spring.message code="label.ptitle"/></label>
+                    <label for="title" class="col-sm-2 control-label"  style="text-align: left;"><@spring.message code="label.ptitle"/></label>
                     <div class="col-sm-10">
                         <input type="text" class="form-control" id="title" name="title" value="${(empInfo.title)!}"
                                placeholder="<@spring.message code="label.ptitle"/>">
@@ -132,14 +135,14 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="ssn" class="col-sm-2 control-label"><@spring.message code="label.ssn"/></label>
+                    <label for="ssn" class="col-sm-2 control-label"  style="text-align: left;"><@spring.message code="label.ssn"/></label>
                     <div class="col-sm-10">
                         <input type="text" class="form-control" id="ssn" name="ssn" value="${(empInfo.ssn)!}"
                                placeholder="<@spring.message code="label.ssn"/>">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="gender" class="col-sm-2 control-label"><@spring.message code="label.gender"/></label>
+                    <label for="gender" class="col-sm-2 control-label"  style="text-align: left;"><@spring.message code="label.gender"/></label>
                     <div class="col-sm-10">
                         <select name="gender" class="selectpicker" title="<@spring.message code="label.choosegender"/>">
                             <option value=""><@spring.message code="label.choosegender"/></option>
@@ -152,7 +155,7 @@
 
                 <div class="form-group">
                     <label for="phonenumber"
-                           class="col-sm-2 control-label"><@spring.message code="label.phonenumber"/></label>
+                           class="col-sm-2 control-label"  style="text-align: left;"><@spring.message code="label.phonenumber"/></label>
                     <div class="col-sm-10">
                         <input type="text" class="form-control" id="phonenumber" name="phonenumber"
                                value="${(empInfo.phonenumber)!}"
@@ -161,7 +164,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="email" class="col-sm-2 control-label"><@spring.message code="label.email"/></label>
+                    <label for="email" class="col-sm-2 control-label" style="text-align: left;"><@spring.message code="label.email"/></label>
                     <div class="col-sm-10">
                         <input type="text" class="form-control" id="email" name="email" value="${(empInfo.email)!}"
                                placeholder="<@spring.message code="label.email"/>">
@@ -169,7 +172,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="fax" class="col-sm-2 control-label"><@spring.message code="label.fax"/></label>
+                    <label for="fax" class="col-sm-2 control-label" style="text-align: left;"><@spring.message code="label.fax"/></label>
                     <div class="col-sm-10">
                         <input type="text" class="form-control" id="fax" name="fax" value="${(empInfo.fax)!}"
                                placeholder="<@spring.message code="label.fax"/>">
@@ -178,7 +181,7 @@
 
                 <div class="form-group">
                     <label for="address"
-                           class="col-sm-2 control-label"><@spring.message code="label.chooseaddress"/></label>
+                           class="col-sm-2 control-label" style="text-align: left;"><@spring.message code="label.chooseaddress"/></label>
                     <div class="col-sm-10">
                         <div class="row text-left">
 
@@ -205,13 +208,16 @@
 
                 <div class="form-group">
                     <label for="detailaddress"
-                           class="col-sm-2 control-label"><@spring.message code="label.detailaddress"/></label>
+                           class="col-sm-2 control-label" style="text-align: left;"><@spring.message code="label.detailaddress"/></label>
                     <div class="col-sm-10">
                         <input type="text" class="form-control" id="detailaddress" name="detailaddress"
                                value="${(empInfo.detailaddress)!}"
                                placeholder="<@spring.message code="label.detailaddress"/>">
                     </div>
                 </div>
+
+                <div style="visibility: hidden;">br</div>
+                <hr>
 
                 <div class="row">
                     <div class="col-sm-4"></div>
