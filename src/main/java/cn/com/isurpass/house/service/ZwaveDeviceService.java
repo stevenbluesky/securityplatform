@@ -377,7 +377,7 @@ public class ZwaveDeviceService {
                 throw new RuntimeException(CodeConstants.CODE_STATUS_NO_PERMISSION.toString());
             }
             if (emp.getOrganizationid() != ud.findByUserid(byDeviceid.get(0).getUserid()).getOrganizationid()) {
-                throw new RuntimeException(CodeConstants.NO_PERMISSION.toString());
+                throw new RuntimeException(CodeConstants.CODE_STATUS_NO_PERMISSION.toString());
             }
         }
         String s = "";
