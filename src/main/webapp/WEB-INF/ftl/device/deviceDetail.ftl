@@ -92,15 +92,11 @@
                     traditional: true,
                     data: JSON.parse(JSON.stringify(data0)),
                     success: function (data) {//返回json结果
-                        // var parse = $.parseJSON(data);
-                        if (data["status"] == 1) {
+                        if (data['status'] == 1) {
                             alert("<@spring.message code='label.updatesuccess'/>");
                             window.location.href="deviceDetail?zwavedeviceid=${(zwave.zwavedeviceid)}";
-                        }else if(data["msg"] == "-116") {
-                            alert("<@spring.message code='label.deviceoffline'/>");
-                        }
-                        else {
-                            alert("<@spring.message code='label.updatefailed'/>");
+                        } else {
+                            alert(formatterReturnStatus(data['msg']));
                         }
                     },
                     error: function () {// 请求失败处理函数

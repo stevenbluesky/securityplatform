@@ -266,7 +266,12 @@ function formatterReturnStatus(status){
         case '-110':return lan.duplicatephonecarduser;
         case '-111':return lan.simdontexsit;
         case '-112': return lan.devicenoexist;
-        case '-113':return lan.connectdbfail;
+        case '-113':return lan.apinopermission;
+        case '-114':return lan.codeorpassworderror;
+        case '-115':return lan.codeorpassworderror;
+        case '-116':return lan.deviceoffline;
+        case '-117':return lan.nopermission;
+        case '-1113':return lan.connectdbfail;
         default:return lan.error0;
     }
 }

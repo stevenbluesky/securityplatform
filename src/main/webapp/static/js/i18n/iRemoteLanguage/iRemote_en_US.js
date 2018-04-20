@@ -18,7 +18,11 @@ var lan = {
     duplicatephonecarduser:"Dupliacate SIM for User, please input others!.",//-110
     simdontexsit:"SIM doesn't exsit",//-111
     devicenoexist:"Device does not exist",//-112
-    connectdbfail:"Database connect failed",//-113
+    apinopermission:"No permission",//-113
+    codeorpassworderror:"Remote returned some errors ",//-114//-115
+    deviceoffline:"Device offline",//-116
+    nopermission:"No permission",//-117
+    connectdbfail:"Database connect failed",//-1113
 
     normal: "Normal",
     unvalid: 'Ready',

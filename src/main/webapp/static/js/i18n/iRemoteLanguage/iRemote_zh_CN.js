@@ -18,7 +18,11 @@ var lan = {
     duplicatephonecarduser:"此电话卡已经绑定了用户.",//-110
     simdontexsit:"电话卡未录入",//-111
     devicenoexist:"设备不存在",//-112
-    connectdbfail:"连接数据库出错",//-113
+    apinopermission:"远程操作无权限",//-113
+    codeorpassworderror:"远程操作出错",//-114//-115
+    deviceoffline:"设备离线",//-116
+    nopermission:"无权限",//-117
+    connectdbfail:"连接数据库出错",//-1113
 
     normal: "正常",
     unvalid: '未生效',
