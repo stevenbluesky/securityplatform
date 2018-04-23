@@ -45,7 +45,7 @@ public class ZwaveDeviceService {
     @Autowired
     EmployeeDAO ed;
     @Autowired
-    RequestUtils requtils;
+    EmployeeService es;
 
   /*   @Transactional(readOnly = true)
     public Map<String, Object> listDevice0(Pageable pageable, HttpServletRequest request) {
@@ -410,7 +410,7 @@ public class ZwaveDeviceService {
     public Map<String, Object> newListZwaveDevice(PageResult pr, HttpServletRequest request) {
 //        zd.lilstZwaveDeviceListVO();
 //        RequestExpendVO empreq = new RequestUtils().getEmployeeInfo(request);
-        RequestExpendVO empreq = requtils.getEmployeeInfo(request);
+        RequestExpendVO empreq = es.getEmployeeInfo(request);
         Map<String, Object> map = new HashMap<>();
 
         if (empreq.getEmployeerole().contains(Constants.ROLE_AMETA_ADMIN) || empreq.getEmployeerole().contains(Constants.ROLE_AMETA_EMPLOYEE)) {
@@ -435,7 +435,7 @@ public class ZwaveDeviceService {
 
     @Transactional(readOnly = true)
     public Map<String, Object> newSearchZwaveDevice(PageResult pr, DeviceSearchVO dsv, HttpServletRequest request) {
-        RequestExpendVO empreq = requtils.getEmployeeInfo(request);
+        RequestExpendVO empreq = es.getEmployeeInfo(request);
         Map<String, Object> map = new HashMap<>();
         List<Integer> z0 = Collections.EMPTY_LIST;
         List<Integer> z1 = Collections.EMPTY_LIST;

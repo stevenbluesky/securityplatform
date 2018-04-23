@@ -12,7 +12,7 @@ import java.lang.reflect.Method;
  * @Date: 2018/3/27
  * @Time: 21:59
  */
-public class BeaCopyUtils {
+public class BeanCopyUtils {
 
     public static void main(String[] args) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
 //        Student student = new Student();

@@ -78,6 +78,9 @@
                 /phonecard/phonecardList = authc,perms[label.SIMCardList]
                 /phonecard/typePhonecardInfo = authc,perms[label.InputSIMCardInformation]
                 /phonecard/add = authc,perms[label.InputSIMCardInformation]
+                /role/roleList = authc,perms[label.RoleList]
+                /role/employeeList = authc,perms[label.EmployeeList]
+                /role/modifyEmployeeRole = authc,perms[label.ModifyEmployeeRole]
                 <!--/success.jsp = authc-->
                 <!-- 表示需要认证才能访问的页面 -->
                 <!--/home = authc, perms[/home]  &lt;!&ndash; perms 表示需要该权限才能访问的页面 &ndash;&gt;-->

@@ -6,11 +6,7 @@ import cn.com.isurpass.house.po.*;
 import cn.com.isurpass.house.util.Constants;
 import cn.com.isurpass.house.util.Encrypt;
 import cn.com.isurpass.house.util.FormUtils;
-import cn.com.isurpass.house.util.RequestUtils;
-import cn.com.isurpass.house.vo.EmployeeAddVO;
-import cn.com.isurpass.house.vo.EmployeeListVO;
-import cn.com.isurpass.house.vo.EmployeeParentOrgIdVO;
-import cn.com.isurpass.house.vo.OrgSearchVO;
+import cn.com.isurpass.house.vo.*;
 import net.sf.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -401,7 +397,7 @@ public class EmployeeService {
             return false;
         }
         //如果登录的用户有权限操作此用户所在的机构,此也有权限操作这个用户
-        return os.hasPermissionOperateOrg(loginemp.getEmployeeid(),emp.getOrganizationid());
+        return os.hasPermissionOperateOrg(loginemp.getEmployeeid(), emp.getOrganizationid());
     }
 
     @Transactional(readOnly = true)
@@ -530,6 +526,7 @@ public class EmployeeService {
 
     /**
      * 根据登录员工的角色、权限拿到对应的菜单
+     *
      * @param emp
      * @param request
      * @return
@@ -565,7 +562,7 @@ public class EmployeeService {
                 parmap.put("href", href);
                 Map<String, String> m = new HashMap<>();
                 m.put("expanded", "true");
-                parmap.put("state",m);
+                parmap.put("state", m);
                 List<PrivilegePO> sonlist = privilegeDAO.findByParentprivilegeid(p.getPrivilegeid());
                 if (sonlist.size() > 0) {
                     List<Object> pplist = new ArrayList<>();
@@ -581,8 +578,8 @@ public class EmployeeService {
                     }
                     JSONArray jj = JSONArray.fromObject(pplist);
                     parmap.put("nodes", jj);
-                }else{
-                    parmap.put("nodes",new ArrayList<>());
+                } else {
+                    parmap.put("nodes", new ArrayList<>());
                 }
             } else if (p.getParentprivilegeid() != null && !idlist.contains(p.getParentprivilegeid())) {
                 String text = resourceBundle.getString(p.getCode());
@@ -591,8 +588,8 @@ public class EmployeeService {
                 parmap.put("href", href);
                 Map<String, String> m = new HashMap<>();
                 m.put("expanded", "true");
-                parmap.put("state",m);
-                parmap.put("nodes",new ArrayList<>());
+                parmap.put("state", m);
+                parmap.put("nodes", new ArrayList<>());
             }
             if (parmap.size() > 0) {
                 parlist.add(parmap);
@@ -600,5 +597,45 @@ public class EmployeeService {
         }
         JSONArray json = JSONArray.fromObject(parlist);
         return String.valueOf(json);
+    }
+
+    public RequestExpendVO getEmployeeInfo(HttpServletRequest request) {
+        RequestExpendVO req = new RequestExpendVO();
+        EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
+        req.setEmployeerole(erd.findByEmployeeid(emp.getEmployeeid()).stream().map(EmployeeRolePO::getRoleid).collect(toList()));
+        req.setEmployeeid(emp.getEmployeeid());
+        req.setOrgid(emp.getOrganizationid());
+        req.setOrgtype(od.findByOrganizationid(emp.getOrganizationid()).getOrgtype());
+        return req;
+    }
+
+    public EmployeeVO getEmployeeInfo(Integer employeeid) {
+        EmployeePO employeePO = ed.findByEmployeeid(employeeid);
+        if (employeePO == null) {
+            return null;
+        }
+        EmployeeVO employee = new EmployeeVO();
+        employee.setEmployeeid(employeePO.getEmployeeid());
+        employee.setName(employeePO.getName());
+        return employee;
+    }
+
+    /**
+     * 通过角色信息判断此用户是否是ameta管理员
+     *
+     * @param id
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public boolean isAmetaAdmin(Integer id) {
+        List<EmployeeRolePO> list = erd.findByEmployeeid(id);
+        if (list != null && list.size() != 0) {
+            for (EmployeeRolePO emp : list) {
+                if (emp.getRoleid() == Constants.ROLE_AMETA_ADMIN) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
