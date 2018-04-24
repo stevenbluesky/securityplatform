@@ -2,6 +2,8 @@ package cn.com.isurpass.house.shiro;
 
 import cn.com.isurpass.house.dao.PrivilegeDAO;
 import cn.com.isurpass.house.po.PrivilegePO;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.shiro.config.Ini;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.util.CollectionUtils;
@@ -18,7 +20,7 @@ public class ShiroPermissionFactory extends ShiroFilterFactoryBean {
     public static String definition = "";
     @Autowired
     private PrivilegeDAO privilegeDAO;
-
+    public static Log log= LogFactory.getLog(ShiroPermissionFactory.class);
     /**
      * 初始化设置过滤链
      */
@@ -37,25 +39,25 @@ public class ShiroPermissionFactory extends ShiroFilterFactoryBean {
         }
 
         Map<String,String> otherChains = new HashMap<>();
-//        for (String url : urls) {
-        for (int i = 0; i <urls.size(); i++) {
+         for (String url : urls) {
+//        for (int i = 0; i <urls.size(); i++) {
             StringBuilder roleOrFilters = new StringBuilder();
-            /*for (int i = 0; i < rolesPermissions.size(); i++) {
+            for (int i = 0; i < rolesPermissions.size(); i++) {
                 if (Objects.equals(url, rolesPermissions.get(i).getLabel())) {
                     if (i == 0) {
                         roleOrFilters.append(rolesPermissions.get(i).getCode());
                     }else{
                         roleOrFilters.append(",").append(rolesPermissions.get(i).getCode());
                     }
+                    rolesPermissions.remove(rolesPermissions.get(i));
                 }
-            }*/
-            roleOrFilters.append(rolesPermissions.get(i).getCode());
+            }
+//            roleOrFilters.append(rolesPermissions.get(i).getCode());
             String rolesStr = roleOrFilters.toString();
             if (!"".equals(rolesStr)) {
-                otherChains.put(rolesPermissions.get(i).getLabel(), "perms["+rolesStr+"]"); //  /discover/newstag  authc,roles[user,admin]
+                otherChains.put("/"+/*rolesPermissions.get(i).getLabel()*/url, "authc,perms["+rolesStr+"]"); //  /discover/newstag  authc,roles[user,admin]
             }
         }
-        System.out.println(otherChains.toString());
         //加载配置默认的过滤链
         Ini ini = new Ini();
         ini.load(definitions);
@@ -63,9 +65,13 @@ public class ShiroPermissionFactory extends ShiroFilterFactoryBean {
         if (CollectionUtils.isEmpty(section)) {
             section = ini.getSection(Ini.DEFAULT_SECTION_NAME);
         }
+
         //加上数据库中过滤链
         section.putAll(otherChains);
+//        section.put("/###/@@@/**", "authc");
         section.put("/**", "anon");
+        log.warn("----------");
+        System.out.println(section.toString());
         setFilterChainDefinitionMap(section);
     }
 }

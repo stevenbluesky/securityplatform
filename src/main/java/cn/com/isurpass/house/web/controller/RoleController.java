@@ -3,11 +3,13 @@ package cn.com.isurpass.house.web.controller;
 import cn.com.isurpass.house.dao.PrivilegeDAO;
 import cn.com.isurpass.house.dao.RoleDAO;
 import cn.com.isurpass.house.dao.RolePrivilegeDAO;
+import cn.com.isurpass.house.po.PrivilegePO;
 import cn.com.isurpass.house.po.RolePO;
 import cn.com.isurpass.house.result.JsonResult;
 import cn.com.isurpass.house.result.PageResult;
 import cn.com.isurpass.house.service.EmployeeService;
 import cn.com.isurpass.house.service.RoleService;
+import cn.com.isurpass.house.util.FormUtils;
 import cn.com.isurpass.house.vo.EmployeeVO;
 import cn.com.isurpass.house.vo.RoleChangeVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +22,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.List;
 import java.util.Map;
+
+import static cn.com.isurpass.house.util.CodeConstants.PRIVILEGE_EXISIT;
 
 @Controller
 @RequestMapping("role")
@@ -102,6 +107,21 @@ public class RoleController {
         return new JsonResult(1, "1");
     }
 
+    @RequestMapping("addPrivilege")
+    @ResponseBody
+    public JsonResult addPrivilege(String privilegecode, String privilegelabel){
+        if (!FormUtils.checkNUll(privilegecode) || !FormUtils.checkNUll(privilegelabel)){
+            //有为空时
+            return new JsonResult(-1, "-100");
+        }
+        List<PrivilegePO> list = privilegeDAO.findByCodeAndLabel(privilegecode, privilegelabel);
+        if (list != null && list.size() != 0) {
+            return new JsonResult(-1, PRIVILEGE_EXISIT.toString());
+        }
+        JsonResult jr = roleService.addPrivilege(privilegecode, privilegelabel);
+        return jr;
+    }
+
     @RequestMapping("roleList")
     public String roleList() {
         return "role/roleList";
@@ -112,4 +132,8 @@ public class RoleController {
         return "role/employeeList";
     }
 
+    @RequestMapping("addPrivilegePage")
+    public String addPrivilegePage() {
+        return "role/addPrivilege";
+    }
 }

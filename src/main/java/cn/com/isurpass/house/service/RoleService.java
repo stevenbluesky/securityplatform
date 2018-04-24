@@ -1,12 +1,15 @@
 package cn.com.isurpass.house.service;
 
 import cn.com.isurpass.house.dao.EmployeeroleDAO;
+import cn.com.isurpass.house.dao.PrivilegeDAO;
 import cn.com.isurpass.house.dao.RoleDAO;
 import cn.com.isurpass.house.dao.RolePrivilegeDAO;
 import cn.com.isurpass.house.po.EmployeeRolePO;
+import cn.com.isurpass.house.po.PrivilegePO;
 import cn.com.isurpass.house.po.RolePO;
 import cn.com.isurpass.house.po.RolePrivilegePO;
 import cn.com.isurpass.house.result.JsonResult;
+import cn.com.isurpass.house.shiro.FilterChainDefinitionsService;
 import cn.com.isurpass.house.util.BeanCopyUtils;
 import cn.com.isurpass.house.vo.RoleListVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +34,10 @@ public class RoleService {
     EmployeeroleDAO erd;
     @Autowired
     RolePrivilegeDAO rpd;
+    @Autowired
+    PrivilegeDAO pd;
+    @Autowired
+    FilterChainDefinitionsService fcds;
 
     @Transactional(readOnly = true)
     public Map<String, Object> roleList(Pageable pageable) {
@@ -133,13 +140,26 @@ public class RoleService {
         rpd.saveAll(rplist);
     }
 
+    @Transactional(readOnly = true)
     public List<Integer> oldRole(Integer employeeid) {
         List<Integer> collect = erd.findByEmployeeid(employeeid).stream().map(EmployeeRolePO::getRoleid).collect(toList());
         return collect;
     }
 
+    @Transactional(readOnly = true)
     public List<Integer> findByRoleid(Integer roleid) {
         List<Integer> collect = rpd.findByRoleid(roleid).stream().map(RolePrivilegePO::getPrivilegeid).collect(toList());
         return collect;
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public JsonResult addPrivilege(String privilegecode, String privilegelabel) {
+        PrivilegePO p = new PrivilegePO();
+        p.setCode(privilegecode);
+        p.setLabel(privilegelabel);
+//        p.setParentprivilegeid(null);
+        pd.save(p);
+        fcds.reloadFilterChains();
+        return new JsonResult(1,"1");
     }
 }
