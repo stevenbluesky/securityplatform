@@ -2,9 +2,9 @@
 <#include "../_head1.ftl"/>
 
 <#if role??>
-    Role Name: ${(role.name)!}
+Role Name: ${(role.name)!}
 <#else >
-    Role Name:<input id="rolename" name="rolename" />
+    Role Name<span style="color:red;">*</span>:<input id="rolename" name="rolename" />
 </#if>
 <hr>
 <@spring.message code="label.RolePrivilege"/>
@@ -76,6 +76,10 @@
     }
 
     function changeRole(checks) {
+        if (!$("#rolename").val()) {
+            alert(lan.notempty);
+            return null;
+        }
         //异步更新
         $.ajax({
             type: 'post',
