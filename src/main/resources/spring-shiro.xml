@@ -81,6 +81,7 @@
                 /role/roleList = authc,perms[label.RolePrivilege]
                 /role/employeeList = authc,perms[label.EmployeeRole]
                 /role/modifyEmployeeRole = authc,perms[label.ModifyEmployeeRole]
+                /role/listRolePrivilege = authc,perms[label.ListRolePrivilege]
                 <!--/success.jsp = authc-->
                 <!-- 表示需要认证才能访问的页面 -->
                 <!--/home = authc, perms[/home]  &lt;!&ndash; perms 表示需要该权限才能访问的页面 &ndash;&gt;-->
