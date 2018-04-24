@@ -6,21 +6,24 @@
               <hr>
               <form id="searchform" class="form-horizontal">
                   <div class="form-group col-md-3">
-                      <label for="searchname" class="col-md-4 control-label"><@spring.message code="label.pname"/></label>
-                      <div  class="col-md-8">
+                      <label for="searchname"
+                             class="col-md-4 control-label"><@spring.message code="label.pname"/></label>
+                      <div class="col-md-8">
                           <input type="text" class="form-control" id="searchname" name="searchname"
                                  placeholder="<@spring.message code="label.pname"/>">
                       </div>
                   </div>
                   <div class="form-group col-md-3">
-                      <label for="searchcity" class="col-md-4 control-label"><@spring.message code="label.city"/></label>
+                      <label for="searchcity"
+                             class="col-md-4 control-label"><@spring.message code="label.city"/></label>
                       <div class="col-md-8">
                           <input type="text" class="form-control" id="searchcity" name="searchcity"
                                  placeholder="<@spring.message code="label.city"/>">
                       </div>
                   </div>
                   <div class="form-group col-md-3">
-                      <label for="searchcitycode" class="col-md-5 control-label"><@spring.message code="label.citycode"/></label>
+                      <label for="searchcitycode"
+                             class="col-md-5 control-label"><@spring.message code="label.citycode"/></label>
                       <div class="col-md-7">
                           <input type="text" class="form-control" id="searchcitycode" name="searchcitycode"
                                  placeholder="<@spring.message code="label.citycode"/>">
@@ -29,33 +32,36 @@
                   <div class="form-group col-md-3">
                       <div class="col-md-2"></div>
                       <div class="col-md-10">
-                          <button id="searchbtn" type="button"class="btn btn-default"><@spring.message code="label.search"/></button>
+                          <button id="searchbtn" type="button"
+                                  class="btn btn-default"><@spring.message code="label.search"/></button>
                       </div>
                   </div>
               </form>
           </div>
           <hr>
 <@shiro.hasPermission name="button:changeStatus">
-           <#--    <button style="float: right;" class='btn btn-default'
-                       onclick='toggleEmployeeStatus0("unsuspence");'><@spring.message code='label.unsuspence'/></button>
-			<button style="float: right;" class='btn btn-default'
-                    onclick='toggleEmployeeStatus0("suspence");'><@spring.message code='label.suspenced'/></button>
-            <button onclick="window.location.href='addEmployeePage'" style="float: right;"
-                    class="btn btn-default"><@spring.message code="label.addnew"/></button>
-           <button style="float: right;" class='btn btn-default' id='btn1'  onclick='toggleEmployeeStatus0("modify");'><@spring.message code='label.modify'/></button>-->
+<#--    <button style="float: right;" class='btn btn-default'
+            onclick='toggleEmployeeStatus0("unsuspence");'><@spring.message code='label.unsuspence'/></button>
+ <button style="float: right;" class='btn btn-default'
+         onclick='toggleEmployeeStatus0("suspence");'><@spring.message code='label.suspenced'/></button>
+ <button onclick="window.location.href='addEmployeePage'" style="float: right;"
+         class="btn btn-default"><@spring.message code="label.addnew"/></button>
+<button style="float: right;" class='btn btn-default' id='btn1'  onclick='toggleEmployeeStatus0("modify");'><@spring.message code='label.modify'/></button>-->
 </@shiro.hasPermission>
 <table id="table" data-toggle="table">
     <thead>
     <tr>
-        <th data-field=""></th>
-        <th data-field="employeeid" data-visible="false">ID</th>
+    <#--<th data-field=""></th>-->
         <th data-field="name" class="text-center"><@spring.message code="label.name"/></th>
+        <th data-field="employeeid" data-visible="false">ID</th>
         <th data-field="parentOrgName" class="text-center"><@spring.message code="label.parentorg"/></th>
         <th data-field="code" class="text-center"><@spring.message code="label.empcode"/></th>
-        <th data-field="status" data-formatter='formatter_status' class="text-center"><@spring.message code="label.status"/></th>
+        <th data-field="status" data-formatter='formatter_status'
+            class="text-center"><@spring.message code="label.status"/></th>
         <th data-field="employeeroleid" class="text-center"><@spring.message code="label.privilege"/></th>
         <th data-field="operate" data-formatter="formatter_op"
-            data-events="operateEvents" data-visible="false" class="text-center"><@spring.message code="label.operate"/></th>
+            data-events="operateEvents" data-visible="false"
+            class="text-center"><@spring.message code="label.operate"/></th>
     </tr>
     </thead>
 </table>
@@ -99,7 +105,7 @@
                 return temp;
             },
             columns: [{
-                checkbox: true,
+                // checkbox: true,
                 visible: true,
             }],
             onLoadSuccess: function () {
@@ -109,7 +115,7 @@
             },
             onDblClickRow: function (row, $element) {
                 var id = row.employeeid;
-                window.location.href = "listEmployeeRole?employeeid="+id;
+                window.location.href = "listEmployeeRole?employeeid=" + id;
             }
         });
 
