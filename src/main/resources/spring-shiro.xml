@@ -50,7 +50,7 @@
     </bean>
 
      	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
-   <!-- <bean id="shiroFilter" class="cn.com.isurpass.house.shiro.ShiroFilterFactoryBeanWrapper">-->
+    <!--<bean id="shiroFilter" class="cn.com.isurpass.house.shiro.ShiroPermissionFactory">-->
         <property name="securityManager" ref="securityManager"/>
         <property name="loginUrl" value="/login"/>
         <!-- 认证成功统一跳转到first.action，建议不配置，shiro认证成功自动到上一个请求路径-->
@@ -59,8 +59,8 @@
         <property name="filterChainDefinitions">
             <value>
                 /index = authc
-                /org/supplierList = authc,perms[label.DealerList]
-                /org/addSupplierPage = authc,perms[label.AddDealer]
+                /org/supplierList = authc,perms[label.DistributorList]
+                /org/addSupplierPage = authc,perms[label.AddDistributor]
                 /org/installerList = authc,perms[label.InstallerList]
                 /org/addInstallerPage = authc,perms[label.AddInstaller]
                 /employee/employeeList = authc,perms[label.EmployeeList]
@@ -78,8 +78,8 @@
                 /phonecard/phonecardList = authc,perms[label.SIMCardList]
                 /phonecard/typePhonecardInfo = authc,perms[label.InputSIMCardInformation]
                 /phonecard/add = authc,perms[label.InputSIMCardInformation]
-                /role/roleList = authc,perms[label.RoleList]
-                /role/employeeList = authc,perms[label.EmployeeList]
+                /role/roleList = authc,perms[label.RolePrivilege]
+                /role/employeeList = authc,perms[label.EmployeeRole]
                 /role/modifyEmployeeRole = authc,perms[label.ModifyEmployeeRole]
                 <!--/success.jsp = authc-->
                 <!-- 表示需要认证才能访问的页面 -->

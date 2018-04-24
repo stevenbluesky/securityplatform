@@ -1,15 +1,16 @@
 <#include "../_head0.ftl"/>
 <#include "../_head1.ftl"/>
 <div class="text-center"><h1><@spring.message code="label.RoleList"/></h1></div>
+<hr>
 <@shiro.hasPermission name="button:changeStatus">
             <button style="float: right;" class='btn btn-default'
                     onclick='toggleOrganizationStatus("unsuspence");'><@spring.message code='label.unsuspence'/></button>
             <button style="float: right;" class='btn btn-default'
                     onclick='toggleOrganizationStatus("suspence");'><@spring.message code='label.suspenced'/></button>
-            <button onclick="window.location.href='addSupplierPage'" style="float: right;"
+            <button onclick="window.location.href='listRolePrivilege?addNew=1'" style="float: right;"
                     class="btn btn-default"><@spring.message code="label.addnew"/></button>
-            <button style="float: right;" class='btn btn-default' id='btn1'
-                    onclick='toggleOrganizationStatus("modify");'><@spring.message code='label.modify'/></button>
+          <#--  <button style="float: right;" class='btn btn-default' id='btn1'
+                    onclick='toggleOrganizationStatus("modify");'><@spring.message code='label.modify'/></button>-->
 </@shiro.hasPermission>
 <table id="table" data-toggle="table">
     <thead>
@@ -17,7 +18,7 @@
         <th data-field=""></th>
         <th data-field="roleid" data-visible="false">ID</th>
         <!--<th data-field="organizationid">ID</th>-->
-        <th data-field="name" class="text-center"><@spring.message code="label.pname"/></th>
+        <th data-field="name" class="text-center"><@spring.message  code="label.pname"/></th>
         <th data-field="status" data-formatter="formatter_status"
             class="text-center"><@spring.message code="label.status"/></th>
         <th data-field="description" class="text-center">Description</th>

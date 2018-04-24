@@ -2,7 +2,7 @@
 <#include "../_head1.ftl"/>
 
           <div class="row">
-              <div class="text-center"><h1><@spring.message code="label.employeelist"/></h1></div>
+              <div class="text-center"><h1><@spring.message code="label.RoleList"/></h1></div>
               <hr>
               <form id="searchform" class="form-horizontal">
                   <div class="form-group col-md-3">
@@ -36,13 +36,13 @@
           </div>
           <hr>
 <@shiro.hasPermission name="button:changeStatus">
-               <button style="float: right;" class='btn btn-default'
+           <#--    <button style="float: right;" class='btn btn-default'
                        onclick='toggleEmployeeStatus0("unsuspence");'><@spring.message code='label.unsuspence'/></button>
 			<button style="float: right;" class='btn btn-default'
                     onclick='toggleEmployeeStatus0("suspence");'><@spring.message code='label.suspenced'/></button>
             <button onclick="window.location.href='addEmployeePage'" style="float: right;"
                     class="btn btn-default"><@spring.message code="label.addnew"/></button>
-           <button style="float: right;" class='btn btn-default' id='btn1'  onclick='toggleEmployeeStatus0("modify");'><@spring.message code='label.modify'/></button>
+           <button style="float: right;" class='btn btn-default' id='btn1'  onclick='toggleEmployeeStatus0("modify");'><@spring.message code='label.modify'/></button>-->
 </@shiro.hasPermission>
 <table id="table" data-toggle="table">
     <thead>
@@ -83,7 +83,7 @@
             minimumCountColumns: 2,             //最少允许的列数
             clickToSelect: true,                //是否启用点击选中行
             //height: 500,                      //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
-            uniqueId: "id",                     //每一行的唯一标识，一般为主键列
+            uniqueId: "employeeid",                     //每一行的唯一标识，一般为主键列
             showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
             cardView: false,                    //是否显示详细视图
             detailView: false,                  //是否显示父子表
@@ -91,9 +91,6 @@
             queryParams: function (params) {
                 //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
                 var temp = {
-                    searchname: $("#searchname").val(),
-                    searchcity: $("#searchcity").val(),
-                    searchcitycode: $("#searchcitycode").val(),
                     rows: params.limit,                         //页面大小
                     page: (params.offset / params.limit) + 1,   //页码
                     sort: params.sort,      //排序列名

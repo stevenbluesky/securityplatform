@@ -1,16 +1,21 @@
 <#include "../_head0.ftl"/>
 <#include "../_head1.ftl"/>
 
-${(role.name)!}
+<#if role??>
+    Role Name: ${(role.name)!}
+<#else >
+    Role Name:<input id="rolename" name="rolename" />
+</#if>
 <hr>
-权限列表
+<@spring.message code="label.RolePrivilege"/>
 <hr>
 <#list privilegeList as privilege>
     <#if privilege_index== 0 || (privilege_index)%3 == 0>
     <div class="row" style="text-align: left; margin-top: 20px;">
     </#if>
-        <div  class="col-md-4">
-        <input type="checkbox" value="${(privilege.privilegeid)!}"/><span style="margin-right: 80px;">${(privilege.code)!}</span>
+        <div class="col-md-4">
+            <span style="margin-right: 10px;"><input id="privilege_${(privilege.privilegeid)!}" type="checkbox" value="${(privilege.privilegeid)!}"/></span>
+                <span style="margin-right: 80px;">${(privilege.code)!}</span>
         </div>
     <#if (privilege_index+1)%3 == 0 || !privilege_has_next>
     </div>
@@ -18,10 +23,26 @@ ${(role.name)!}
 </#list>
 <br>
 <br>
-<input class="btn btn-default" value="<@spring.message code="label.submit"/>" type="button" onclick="submit0()">
+<input class="btn btn-default" value="Toggle" type="button" style="margin-right: 30px;" onclick="$('input').iCheck('toggle');" />
+<input class="btn btn-default" value="Clear" type="button" style="margin-right: 30px;" onclick="$('input').iCheck('uncheck');" />
+<input class="btn btn-default" value="<@spring.message code="label.save"/>" type="button" onclick="submit0()">
 <script src="https://cdn.bootcss.com/iCheck/1.0.2/icheck.min.js"></script>
 <link href="https://cdn.bootcss.com/iCheck/1.0.2/skins/square/blue.css" rel="stylesheet">
 <script type="text/javascript">
+    $(function(){
+        var oldPrivilege =[];
+        //初始化将测试集包含的用例存在数组里面
+       <#if oldPrivilege??>
+           <#list oldPrivilege as item>
+                 oldPrivilege.push("${item}");
+           </#list>
+       </#if>
+        // alert(oldRole);
+        for(var i in oldPrivilege) {
+            $("#privilege_"+oldPrivilege[i]).iCheck('check');
+        }
+    });
+
     //基础使用方法
     $('input').iCheck({
         checkboxClass: 'icheckbox_square-blue',
@@ -39,14 +60,29 @@ ${(role.name)!}
         changeRole(checks);
     }
 
+    function addNew() {
+        if (!"${(role.name)!}") {
+            return "addRole";
+        }
+        return "changeRolePrivilege";
+    }
+
+    function putData(checks){
+        if (!"${(role.name)!}") {
+            let rolename = $("#rolename").val();
+            return "{\"id\":\"" + ${(role.roleid)!"null"} +"\",\"list\":" + JSON.stringify(checks) + ",\"rolename\":" + JSON.stringify(rolename) + "}";
+        }
+        return "{\"id\":\"" + ${(role.roleid)!"null"} +"\",\"list\":" + JSON.stringify(checks) + "}";
+    }
+
     function changeRole(checks) {
         //异步更新
         $.ajax({
             type: 'post',
-            url: 'changeRolePrivilege',
+            url: /*'changeRolePrivilege',*/addNew(),
             contentType: 'application/json',
             traditional: true,
-            data: "{\"roleid\":\"" + ${(role.roleid)!} +"\",\"privileges\":" + JSON.stringify(checks) + "}",
+            data: putData(checks),
             success: function (data) {//返回json结果
                 alert("<@spring.message code='label.updatesuccess'/>");
                 window.location.href = "roleList";

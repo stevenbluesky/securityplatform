@@ -2,6 +2,7 @@ package cn.com.isurpass.house.web.controller;
 
 import cn.com.isurpass.house.dao.PrivilegeDAO;
 import cn.com.isurpass.house.dao.RoleDAO;
+import cn.com.isurpass.house.dao.RolePrivilegeDAO;
 import cn.com.isurpass.house.po.RolePO;
 import cn.com.isurpass.house.result.JsonResult;
 import cn.com.isurpass.house.result.PageResult;
@@ -41,37 +42,62 @@ public class RoleController {
     }
 
     @RequestMapping("listEmployeeRole")
-    public String listEmployeeRole(Integer employeeid, Model model) {
+    public String listEmployeeRole(Integer employeeid,Integer addNew, Model model) {
         EmployeeVO emp = es.getEmployeeInfo(employeeid);
-        if (emp == null) {
+        if (emp == null&& !Integer.valueOf(1).equals(1)) {
             return "role/employeeList";
         }
-        model.addAttribute("emp", emp);
+        model.addAttribute("cemp", emp);
         model.addAttribute("roleList", roleService.listEmployeeRole());
+        model.addAttribute("oldRole", roleService.oldRole(employeeid));
         return "role/employeeRole";
     }
 
     @RequestMapping("listRolePrivilege")
-    public String listRolePrivilege(Integer roleid, Model model){
+    public String listRolePrivilege(Integer roleid,Integer addNew, Model model){
         RolePO rolePO = role.findByRoleid(roleid);
-        if (rolePO == null) {
+        if (rolePO == null && !Integer.valueOf(1).equals(addNew)) {
             return "role/roleList";
         }
         model.addAttribute("role",rolePO);
         model.addAttribute("privilegeList", privilegeDAO.findAll());
+        model.addAttribute("oldPrivilege", roleService.findByRoleid(roleid));
         return "role/rolePrivilege";
     }
 
     @RequestMapping("changeRoles")
     @ResponseBody
     public JsonResult changRoles(@RequestBody RoleChangeVO roleChangeVO) {
+       /* if (roleChangeVO.isNew()) {
+            roleService.addRole(rolename, roleChangeVO.getList());
+            return new JsonResult(1, "1");
+        }*/
         roleService.changeRoles(roleChangeVO.getId(), roleChangeVO.getList());
+        return new JsonResult(1, "1");
+    }
+
+    @RequestMapping("addRole")
+    @ResponseBody
+    public JsonResult addRole(@RequestBody RoleChangeVO roleChangeVO) {
+        if (!roleChangeVO.isNew()) {
+            roleService.changeRoles(roleChangeVO.getId(), roleChangeVO.getList());
+            return new JsonResult(1, "1");
+        }
+        if (roleChangeVO.getRolename() == null || "".equals(roleChangeVO.getRolename())) {
+            return new JsonResult(1, "-100");
+        }
+        roleService.addRole(roleChangeVO.getRolename(), roleChangeVO.getList());
         return new JsonResult(1, "1");
     }
 
     @RequestMapping("changeRolePrivilege")
     @ResponseBody
     public JsonResult changeRolePrivilege(@RequestBody RoleChangeVO roleChangeVO) {
+       if (roleChangeVO.isNew()) {
+            assert (roleChangeVO.getRolename() != null && !roleChangeVO.getRolename().isEmpty());
+            roleService.addRole(roleChangeVO.getRolename(), roleChangeVO.getList());
+            return new JsonResult(1, "1");
+       }
         roleService.changePrivilege(roleChangeVO.getId(), roleChangeVO.getList());
         return new JsonResult(1, "1");
     }
