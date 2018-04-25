@@ -44,7 +44,7 @@ public class ControllerExceptionHandler {
             // 输出JSON
             Map<String, Object> map = new HashMap<>();
             map.put("code", "-998");
-            map.put("message", "无权限");
+            map.put("msg", "无权限");
             writeJson(map, response);
             return null;
         } else {

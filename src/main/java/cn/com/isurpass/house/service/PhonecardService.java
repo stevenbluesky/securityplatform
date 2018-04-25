@@ -11,6 +11,7 @@ import cn.com.isurpass.house.dao.PhonecarduserDAO;
 import cn.com.isurpass.house.dao.UserDAO;
 import cn.com.isurpass.house.po.*;
 import cn.com.isurpass.house.util.PhoneCardInterfaceCallUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -113,17 +114,28 @@ public class PhonecardService {
 		for (Object string : ids) {
 			PhonecardPO phonecardpo = pd.findByPhonecardid(string);
 			if("start".equals(hope)){
-				PhoneCardInterfaceCallUtils.updateStatus(phonecardpo.getSerialnumber(), Constants.ACTIVATED);
-				phonecardpo.setStatus(Constants.STATUS_NORMAL);
+				updatePhonecardStatusNormal(phonecardpo);
 			}else if("freeze".equals(hope)){
-				PhoneCardInterfaceCallUtils.updateStatus(phonecardpo.getSerialnumber(),Constants.INVENTORY);
-				phonecardpo.setStatus(Constants.STATUS_SUSPENCED);
+				updatePhonecardStatusSuspenced(phonecardpo);
 			}else if("delete".equals(hope)){
-				PhoneCardInterfaceCallUtils.updateStatus(phonecardpo.getSerialnumber(),Constants.DEACTIVATED);
-				phonecardpo.setStatus(Constants.STATUS_DELETED);
+				updatePhonecardStatusDeleted(phonecardpo);
 			}
 			pd.save(phonecardpo);
 		}
+	}
+
+	@RequiresPermissions("label.Activated")
+	private void updatePhonecardStatusNormal(PhonecardPO phonecardpo) throws Exception {
+		PhoneCardInterfaceCallUtils.updateStatus(phonecardpo.getSerialnumber(), Constants.ACTIVATED);
+		phonecardpo.setStatus(Constants.STATUS_NORMAL);
+	}
+	private void updatePhonecardStatusSuspenced(PhonecardPO phonecardpo) throws Exception {
+		PhoneCardInterfaceCallUtils.updateStatus(phonecardpo.getSerialnumber(),Constants.INVENTORY);
+		phonecardpo.setStatus(Constants.STATUS_SUSPENCED);
+	}
+	private void updatePhonecardStatusDeleted(PhonecardPO phonecardpo) throws Exception {
+		PhoneCardInterfaceCallUtils.updateStatus(phonecardpo.getSerialnumber(),Constants.DEACTIVATED);
+		phonecardpo.setStatus(Constants.STATUS_DELETED);
 	}
 	
 }

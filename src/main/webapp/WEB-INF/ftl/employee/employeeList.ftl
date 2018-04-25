@@ -6,21 +6,24 @@
               <hr>
               <form id="searchform" class="form-horizontal">
                   <div class="form-group col-md-3">
-                      <label for="searchname" class="col-md-4 control-label"><@spring.message code="label.pname"/></label>
-                      <div  class="col-md-8">
+                      <label for="searchname"
+                             class="col-md-4 control-label"><@spring.message code="label.pname"/></label>
+                      <div class="col-md-8">
                           <input type="text" class="form-control" id="searchname" name="searchname"
                                  placeholder="<@spring.message code="label.pname"/>">
                       </div>
                   </div>
                   <div class="form-group col-md-3">
-                      <label for="searchcity" class="col-md-4 control-label"><@spring.message code="label.city"/></label>
+                      <label for="searchcity"
+                             class="col-md-4 control-label"><@spring.message code="label.city"/></label>
                       <div class="col-md-8">
                           <input type="text" class="form-control" id="searchcity" name="searchcity"
                                  placeholder="<@spring.message code="label.city"/>">
                       </div>
                   </div>
                   <div class="form-group col-md-3">
-                      <label for="searchcitycode" class="col-md-5 control-label"><@spring.message code="label.citycode"/></label>
+                      <label for="searchcitycode"
+                             class="col-md-5 control-label"><@spring.message code="label.citycode"/></label>
                       <div class="col-md-7">
                           <input type="text" class="form-control" id="searchcitycode" name="searchcitycode"
                                  placeholder="<@spring.message code="label.citycode"/>">
@@ -36,6 +39,10 @@
               </form>
           </div>
           <hr>
+<@shiro.hasPermission name="label.ModifyEmployeeRole">
+<button style="float: right;" class='btn btn-default'
+        onclick='modifyEmployeeRole();'><@spring.message code='label.Modifyemprole'/></button>
+</@shiro.hasPermission>
 <@shiro.hasPermission name="button:changeStatus">
                <button style="float: right;" class='btn btn-default'
                        onclick='toggleEmployeeStatus0("unsuspence");'><@spring.message code='label.unsuspence'/></button>
@@ -43,7 +50,8 @@
                     onclick='toggleEmployeeStatus0("suspence");'><@spring.message code='label.suspenced'/></button>
             <button onclick="window.location.href='addEmployeePage'" style="float: right;"
                     class="btn btn-default"><@spring.message code="label.addnew"/></button>
-           <button style="float: right;" class='btn btn-default' id='btn1'  onclick='toggleEmployeeStatus0("modify");'><@spring.message code='label.modify'/></button>
+           <button style="float: right;" class='btn btn-default' id='btn1'
+                   onclick='toggleEmployeeStatus0("modify");'><@spring.message code='label.modify'/></button>
 </@shiro.hasPermission>
 <table id="table" data-toggle="table">
     <thead>
@@ -53,10 +61,12 @@
         <th data-field="name" class="text-center"><@spring.message code="label.name"/></th>
         <th data-field="parentOrgName" class="text-center"><@spring.message code="label.parentorg"/></th>
         <th data-field="code" class="text-center"><@spring.message code="label.empcode"/></th>
-        <th data-field="status" data-formatter='formatter_status' class="text-center"><@spring.message code="label.status"/></th>
+        <th data-field="status" data-formatter='formatter_status'
+            class="text-center"><@spring.message code="label.status"/></th>
         <th data-field="employeeroleid" class="text-center"><@spring.message code="label.privilege"/></th>
         <th data-field="operate" data-formatter="formatter_op"
-            data-events="operateEvents" data-visible="false" class="text-center"><@spring.message code="label.operate"/></th>
+            data-events="operateEvents" data-visible="false"
+            class="text-center"><@spring.message code="label.operate"/></th>
     </tr>
     </thead>
 </table>
@@ -120,24 +130,6 @@
         $("#searchbtn").click(function () {
             $("#table").bootstrapTable("refreshOptions", {pageNumber: 1})
         });
-/*
-        window.operateEvents =
-                {
-                    "click #btn1": function (e, value, row, index) {
-                        // alert(row.name);
-                        window.location.href = "addEmployeePage?id=" + row.employeeid;
-                    },
-                    "click #btn2": function (e, value, row, index) {
-                        toggleStatus(e, value, row, index, 'toggleEmployeeStatus', row.employeeid, 2);
-                    },
-                    "click #btn3": function (e, value, row, index) {
-                        toggleStatus(e, value, row, index, 'toggleEmployeeStatus', row.employeeid, 1);
-                    },
-                    "click #btn9": function (e, value, row, index) {
-                        toggleStatus(e, value, row, index, 'toggleEmployeeStatus', row.employeeid, 9);
-                    }
-
-                };*/
 
         // <#--获取复选框选中的列的id数组-->
         function getCheckedId() {
@@ -149,6 +141,17 @@
             return ids;
         }
 
+        function modifyEmployeeRole() {
+            if (getCheckedId() == null || getCheckedId().length == 0) {
+                alert("<@spring.message code='label.nochecked'/>");
+                return;
+            } else if (getCheckedId().length > 1) {
+                alert("<@spring.message code='label.chooseonepls'/>");
+                return;
+            }
+            window.location.href = "../role/listEmployeeRole?employeeid=" + getCheckedId()[0];
+        }
+
         // $("#table").bootstrapTable('getSelections')[1].organizationid
         function toggleEmployeeStatus0(obj) {
             var ids = getCheckedId();
@@ -158,11 +161,11 @@
                 return;
             }
             if (obj == "modify") {
-                if(ids.length>1) {
+                if (ids.length > 1) {
                     alert("<@spring.message code='label.chooseonepls'/>");
-                    return ;
-                }else {
-                    window.location.href="addEmployeePage?id=" + ids[0];
+                    return;
+                } else {
+                    window.location.href = "addEmployeePage?id=" + ids[0];
                     return;
                 }
             }

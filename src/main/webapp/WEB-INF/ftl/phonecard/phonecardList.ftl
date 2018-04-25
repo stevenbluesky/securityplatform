@@ -31,11 +31,13 @@
             </form>
           </div>
           <hr>
- <@shiro.hasPermission name="button:changeStatus">
  <#--新增，启用，停用按钮-->
+ <@shiro.hasPermission name="button:changeStatus">
             <button style="float: right;"  type="button" id='deletePhonecard' class='btn btn-default' onclick='updatePhonecardStatus("delete");'><@spring.message code='label.delete'/></button>
 			<button style="float: right;"  type="button" id='stopPhonecard' class='btn btn-default' onclick='updatePhonecardStatus("freeze");'><@spring.message code='label.freeze'/></button>
+		 <@shiro.hasPermission name="label.Activated">
 			<button style="float: right;"  type="button" id='startPhonecard' class='btn btn-default' onclick='updatePhonecardStatus("start");'><@spring.message code='label.start'/></button>
+	 </@shiro.hasPermission>
            	<button style="float: right;"  type="button" class="btn btn-default" onclick="window.location.href='typePhonecardInfo'"><@spring.message code="label.entering"/></button>
  </@shiro.hasPermission>
 	<table id="table" data-toggle="table">
@@ -187,10 +189,10 @@
 	        traditional:true, 
 	        data:"{\"hope\":\""+obj+"\",\"ids\":"+JSON.stringify(trans)+"}",  
 	        success:function(data){//返回json结果        
-                if("success"==data) {
+                if("1"==data["msg"]) {
                     alert("<@spring.message code='label.updatesuccess'/>");
                 }else{
-                    alert("<@spring.message code='label.updatefailed'/>"+"("+data+")");
+                    alert("<@spring.message code='label.updatefailed'/>"+"("+data['msg']+")");
                 }
 	            $('#table').bootstrapTable('refresh');    
 	        },

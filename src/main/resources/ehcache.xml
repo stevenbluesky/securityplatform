@@ -46,7 +46,7 @@
            overflowToDisk="false"
            statistics="true">
     </cache>
-    <cache name="shiro_cache"
+    <cache name="shiroCache"
            maxElementsInMemory="2000"
            maxEntriesLocalHeap="2000"
            eternal="false"

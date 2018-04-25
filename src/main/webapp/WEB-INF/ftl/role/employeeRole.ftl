@@ -31,7 +31,6 @@ Employee Name: ${(cemp.name)!}
 <script type="text/javascript">
     $(function(){
         var oldRole =[];
-        //初始化将测试集包含的用例存在数组里面
        <#if oldRole??>
            <#list oldRole as item>
                  oldRole.push("${item}");

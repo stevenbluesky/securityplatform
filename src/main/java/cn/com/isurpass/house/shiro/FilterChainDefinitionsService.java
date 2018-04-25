@@ -9,20 +9,18 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
-/**
- * Created by Administrator on 2017/8/15 0015.
- */
 @Component
 public class FilterChainDefinitionsService {
+
     @Autowired
-    private ShiroPermissionFactory permissFactory;
+    private ShiroPermissionFactory permissionFactory;
 
     public void reloadFilterChains() {
-        synchronized (permissFactory) {   //强制同步，控制线程安全
+        synchronized (FilterChainDefinitionsService.class) {   //强制同步，控制线程安全
             AbstractShiroFilter shiroFilter = null;
 
             try {
-                shiroFilter = (AbstractShiroFilter) permissFactory.getObject();
+                shiroFilter = (AbstractShiroFilter) permissionFactory.getObject();
 
                 PathMatchingFilterChainResolver resolver = (PathMatchingFilterChainResolver) shiroFilter
                         .getFilterChainResolver();
@@ -30,20 +28,19 @@ public class FilterChainDefinitionsService {
                 DefaultFilterChainManager manager = (DefaultFilterChainManager) resolver.getFilterChainManager();
                 // 清除权限配置
                 manager.getFilterChains().clear();
-                permissFactory.getFilterChainDefinitionMap().clear();
+                permissionFactory.getFilterChainDefinitionMap().clear();
                 // 重新设置权限
-                permissFactory.setFilterChainDefinitions(ShiroPermissionFactory.definition);//传入配置中的filterchains
+                permissionFactory.setFilterChainDefinitions(ShiroPermissionFactory.filterChainDefinitions);//传入配置中的filterchains
 
-                Map<String, String> chains = permissFactory.getFilterChainDefinitionMap();
+                Map<String, String> chains = permissionFactory.getFilterChainDefinitionMap();
                 //重新生成过滤链
                 if (!CollectionUtils.isEmpty(chains)) {
-                    chains.forEach((url, definitionChains) -> {
-                        manager.createChain(url, definitionChains.trim().replace(" ", ""));
-                    });
+                    for (Map.Entry<String, String> chain : chains.entrySet()) {
+                        manager.createChain(chain.getKey(), chain.getValue().replace(" ", ""));
+                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-    }
-}
+    }}

@@ -5,14 +5,17 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
                  http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
 
+    <bean id="myCacheManager" class="org.apache.shiro.cache.MemoryConstrainedCacheManager"/>
     <bean id="myShiroRealm" class="cn.com.isurpass.house.shiro.MyShiroUtil"></bean>
+
     <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
         <property name="realm" ref="myShiroRealm"></property>
         <property name="cacheManager" ref="cacheManager"/>
+        <!--<property name="cacheManager" ref="myCacheManager"/>-->
     </bean>
 
     <!--<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">-->
-        <bean id="shiroFilter" class="cn.com.isurpass.house.shiro.ShiroPermissionFactory">
+    <bean id="shiroFilter" class="cn.com.isurpass.house.shiro.ShiroPermissionFactory" scope="singleton">
         <property name="securityManager" ref="securityManager"/>
         <property name="loginUrl" value="/login"/>
         <!-- 认证成功统一跳转到first.action，建议不配置，shiro认证成功自动到上一个请求路径-->
@@ -21,29 +24,29 @@
         <property name="filterChainDefinitions">
             <value>
                 /index = authc
-               <!-- /org/supplierList = authc,perms[label.DistributorList]
-                /org/addSupplierPage = authc,perms[label.AddDistributor]
-                /org/installerList = authc,perms[label.InstallerList]
-                /org/addInstallerPage = authc,perms[label.AddInstaller]
-                /employee/employeeList = authc,perms[label.EmployeeList]
-                /employee/addEmployeePage = authc,perms[label.AddEmployee]
-                /employee/add = authc,perms[label.AddEmployee]
-                /gateway/gatewayList = authc,perms[label.GatewayList]
-                /gateway/typeGatewayInfo = authc,perms[label.InputGatewayInformation]
-                /gateway/gatewayDetail = authc,perms[label.GatewayDetail]
-                /gateway/add = authc,perms[label.InputGatewayInformation]
-                /device/deviceList = authc,perms[label.DeviceList]
-                /device/deviceDetail = authc,perms[label.DeviceDetail]
-                /user/userList = authc,perms[label.UserList]
-                /user/typeUserInfo = authc,perms[label.InputUserInformation]
-                /user/add = authc,perms[label.InputUserInformation]
-                /phonecard/phonecardList = authc,perms[label.SIMCardList]
-                /phonecard/typePhonecardInfo = authc,perms[label.InputSIMCardInformation]
-                /phonecard/add = authc,perms[label.InputSIMCardInformation]
-                /role/roleList = authc,perms[label.RolePrivilege]
-                /role/employeeList = authc,perms[label.EmployeeRole]
-                /role/modifyEmployeeRole = authc,perms[label.ModifyEmployeeRole]
-                /role/listRolePrivilege = authc,perms[label.ListRolePrivilege]-->
+                <!-- /org/supplierList = authc,perms[label.DistributorList]
+                 /org/addSupplierPage = authc,perms[label.AddDistributor]
+                 /org/installerList = authc,perms[label.InstallerList]
+                 /org/addInstallerPage = authc,perms[label.AddInstaller]
+                 /employee/employeeList = authc,perms[label.EmployeeList]
+                 /employee/addEmployeePage = authc,perms[label.AddEmployee]
+                 /employee/add = authc,perms[label.AddEmployee]
+                 /gateway/gatewayList = authc,perms[label.GatewayList]
+                 /gateway/typeGatewayInfo = authc,perms[label.InputGatewayInformation]
+                 /gateway/gatewayDetail = authc,perms[label.GatewayDetail]
+                 /gateway/add = authc,perms[label.InputGatewayInformation]
+                 /device/deviceList = authc,perms[label.DeviceList]
+                 /device/deviceDetail = authc,perms[label.DeviceDetail]
+                 /user/userList = authc,perms[label.UserList]
+                 /user/typeUserInfo = authc,perms[label.InputUserInformation]
+                 /user/add = authc,perms[label.InputUserInformation]
+                 /phonecard/phonecardList = authc,perms[label.SIMCardList]
+                 /phonecard/typePhonecardInfo = authc,perms[label.InputSIMCardInformation]
+                 /phonecard/add = authc,perms[label.InputSIMCardInformation]
+                 /role/roleList = authc,perms[label.RolePrivilege]
+                 /role/employeeList = authc,perms[label.EmployeeRole]
+                 /role/modifyEmployeeRole = authc,perms[label.ModifyEmployeeRole]
+                 /role/listRolePrivilege = authc,perms[label.ListRolePrivilege]-->
                 <!--/success.jsp = authc-->
                 <!-- 表示需要认证才能访问的页面 -->
                 <!--/home = authc, perms[/home]  &lt;!&ndash; perms 表示需要该权限才能访问的页面 &ndash;&gt;-->
@@ -52,23 +55,31 @@
         </property>
     </bean>
 
+    <!-- 会话DAO -->
+    <bean id="sessionDAO" class="org.apache.shiro.session.mgt.eis.MemorySessionDAO"/>
+
+    <!-- 会话管理器 -->
+    <bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
+        <property name="sessionDAO" ref="sessionDAO"/>
+    </bean>
+
     <!-- shiro缓存管理器开始 -->
     <bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
         <property name="cacheManager" ref="ehCacheManager"/>
     </bean>
-    <bean id="ehCacheManager"
-          class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+
+    <bean id="ehCacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
         <property name="configLocation" value="classpath:ehcache.xml"/>
         <property name="shared" value="true"></property>
     </bean>
 
     <!-- 保证实现了Shiro内部lifecycle函数的bean执行 -->
-    <!--<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>-->
+   <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"></bean>
     <!--<bean
-            class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"
-            depends-on="lifecycleBeanPostProcessor">
-        <property name="proxyTargetClass" value="true"></property>
-    </bean>-->
+           class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"
+           depends-on="lifecycleBeanPostProcessor">
+       <property name="proxyTargetClass" value="true"></property>
+   </bean>-->
     <aop:config proxy-target-class="true"/>
     <bean
             class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">

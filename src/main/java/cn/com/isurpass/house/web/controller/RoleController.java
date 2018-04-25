@@ -70,7 +70,7 @@ public class RoleController {
         return "role/rolePrivilege";
     }
 
-    @RequestMapping("changeRoles")
+    @RequestMapping("modifyEmployeeRole")
     @ResponseBody
     public JsonResult changRoles(@RequestBody RoleChangeVO roleChangeVO) {
        /* if (roleChangeVO.isNew()) {

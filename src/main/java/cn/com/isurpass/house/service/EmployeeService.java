@@ -555,11 +555,14 @@ public class EmployeeService {
         List<Object> parlist = new ArrayList<>();
         for (PrivilegePO p : privilegelist) {
             Map<String, Object> parmap = new LinkedHashMap<>();
-            if ("0".equals(p.getParentprivilegeid() + "")) {//为父节点
+            if ("0".equals(p.getParentprivilegeid() + "")  || "-1".equals(p.getParentprivilegeid() + "")) {//为父节点, 为 -1 时,此节点不能点击
                 String text = resourceBundle.getString(p.getCode());
                 String href = p.getLabel();
                 parmap.put("text", text);
                 parmap.put("href", href);
+                if ("-1".equals(p.getParentprivilegeid() + "")) {
+                    parmap.put("selectable", false);
+                }
                 Map<String, String> m = new HashMap<>();
                 m.put("expanded", "true");
                 parmap.put("state", m);
@@ -616,7 +619,7 @@ public class EmployeeService {
         }
         EmployeeVO employee = new EmployeeVO();
         employee.setEmployeeid(employeePO.getEmployeeid());
-        employee.setName(employeePO.getName());
+        employee.setName(employeePO.getLoginname());
         return employee;
     }
 

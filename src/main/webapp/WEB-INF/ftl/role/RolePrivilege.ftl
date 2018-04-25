@@ -23,8 +23,8 @@ Role Name: ${(role.name)!}
 </#list>
 <br>
 <br>
-<input class="btn btn-default" value="Toggle" type="button" style="margin-right: 30px;" onclick="$('input').iCheck('toggle');" />
-<input class="btn btn-default" value="Clear" type="button" style="margin-right: 30px;" onclick="$('input').iCheck('uncheck');" />
+<input class="btn btn-default" value="<@spring.message code="label.toggle"/>" type="button" style="margin-right: 30px;" onclick="$('input').iCheck('toggle');" />
+<input class="btn btn-default" value="<@spring.message code="label.clear"/>" type="button" style="margin-right: 30px;" onclick="$('input').iCheck('uncheck');" />
 <input class="btn btn-default" value="<@spring.message code="label.save"/>" type="button" onclick="submit0()">
 <script src="https://cdn.bootcss.com/iCheck/1.0.2/icheck.min.js"></script>
 <link href="https://cdn.bootcss.com/iCheck/1.0.2/skins/square/blue.css" rel="stylesheet">
@@ -76,7 +76,7 @@ Role Name: ${(role.name)!}
     }
 
     function changeRole(checks) {
-        if (!$("#rolename").val()) {
+        if (!"${(role.name)!}" && !$("#rolename").val()) {
             alert(lan.notempty);
             return null;
         }

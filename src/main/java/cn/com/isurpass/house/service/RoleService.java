@@ -10,14 +10,19 @@ import cn.com.isurpass.house.po.RolePO;
 import cn.com.isurpass.house.po.RolePrivilegePO;
 import cn.com.isurpass.house.result.JsonResult;
 import cn.com.isurpass.house.shiro.FilterChainDefinitionsService;
+import cn.com.isurpass.house.shiro.MyShiroUtil;
+import cn.com.isurpass.house.shiro.ShiroHelper;
 import cn.com.isurpass.house.util.BeanCopyUtils;
 import cn.com.isurpass.house.vo.RoleListVO;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.mgt.RealmSecurityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
@@ -36,7 +41,7 @@ public class RoleService {
     RolePrivilegeDAO rpd;
     @Autowired
     PrivilegeDAO pd;
-    @Autowired
+    @Resource
     FilterChainDefinitionsService fcds;
 
     @Transactional(readOnly = true)
@@ -99,6 +104,7 @@ public class RoleService {
             return emprole;
         }).collect(toList());
         erd.saveAll(employeeRolePOS);
+        ShiroHelper.clearAuth();
         return new JsonResult(1, "1");
     }
 
@@ -117,6 +123,7 @@ public class RoleService {
             return rpp;
         }).collect(toList());
         rpd.saveAll(collect);
+        ShiroHelper.clearAuth();
         return new JsonResult(1, "1");
     }
 
@@ -152,7 +159,6 @@ public class RoleService {
         return collect;
     }
 
-    @Transactional(rollbackFor = Exception.class)
     public JsonResult addPrivilege(String privilegecode, String privilegelabel) {
         PrivilegePO p = new PrivilegePO();
         p.setCode(privilegecode);
@@ -160,6 +166,6 @@ public class RoleService {
 //        p.setParentprivilegeid(null);
         pd.save(p);
         fcds.reloadFilterChains();
-        return new JsonResult(1,"1");
+        return new JsonResult(1, "1");
     }
 }
