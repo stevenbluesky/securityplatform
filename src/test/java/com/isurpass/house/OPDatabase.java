@@ -2,10 +2,7 @@ package com.isurpass.house;
 
 
 import cn.com.isurpass.house.dao.*;
-import cn.com.isurpass.house.po.EmployeePO;
-import cn.com.isurpass.house.po.EmployeeRolePO;
-import cn.com.isurpass.house.po.RolePrivilegePO;
-import cn.com.isurpass.house.po.ZwaveDevicePO;
+import cn.com.isurpass.house.po.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +31,8 @@ public class OPDatabase {
     UserDAO ud;
     @Autowired
     ZwaveDeviceDAO zdd;
+    @Autowired
+    CountryDAO cd;
 
     @Test
     public void addRP() {
@@ -103,5 +102,15 @@ public class OPDatabase {
 //            System.out.println(cells[0]);
 //        }
 //        System.out.println(o.toString());
+    }
+
+    @Test
+    public void addCountry(){
+        for (int i = 0; i < 15; i++) {
+            CountryPO c = new CountryPO();
+            c.setCountryabbreviation("testCountry"+i);
+            c.setCountryname("countryName"+i);
+            cd.save(c);
+        }
     }
 }

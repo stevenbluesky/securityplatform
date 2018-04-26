@@ -129,5 +129,6 @@ public class JPATest {
 //		Date ed = emp.getExpiredate();
 //		System.out.println(ed.before(new Date()));
 //		System.out.println(new Date().after(ed));
+//		System.out.println(new Date().after(null));
 	}
 }
