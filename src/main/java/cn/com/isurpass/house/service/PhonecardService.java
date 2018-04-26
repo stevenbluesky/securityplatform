@@ -76,9 +76,9 @@ public class PhonecardService {
 		//SELECT * FROM  phonecard WHERE serialnumber LIKE '%f%' AND rateplan LIKE '%f%' AND STATUS=1  ORDER BY activationdate ASC LIMIT 0,9;
 		Integer status = pc.getStatus();
 		List<Integer> statuslist = new ArrayList<Integer>();
-		if(status==2){//查询正常记录1
+		if(Integer.valueOf(2).equals(status)){//查询正常记录1
 			statuslist.add(1);
-		}else if(status==3){//查询冻结记录 2
+		}else if(Integer.valueOf(3).equals(status)){//查询冻结记录 2
 			statuslist.add(2);
 		}else{//查询全部记录（暂不包括已删除记录）
 			statuslist.add(1);
@@ -129,10 +129,12 @@ public class PhonecardService {
 		PhoneCardInterfaceCallUtils.updateStatus(phonecardpo.getSerialnumber(), Constants.ACTIVATED);
 		phonecardpo.setStatus(Constants.STATUS_NORMAL);
 	}
+
 	private void updatePhonecardStatusSuspenced(PhonecardPO phonecardpo) throws Exception {
 		PhoneCardInterfaceCallUtils.updateStatus(phonecardpo.getSerialnumber(),Constants.INVENTORY);
 		phonecardpo.setStatus(Constants.STATUS_SUSPENCED);
 	}
+	
 	private void updatePhonecardStatusDeleted(PhonecardPO phonecardpo) throws Exception {
 		PhoneCardInterfaceCallUtils.updateStatus(phonecardpo.getSerialnumber(),Constants.DEACTIVATED);
 		phonecardpo.setStatus(Constants.STATUS_DELETED);
