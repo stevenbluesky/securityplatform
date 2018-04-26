@@ -94,6 +94,7 @@ public class PhonecardService {
 		map.put("rows", list);
 		return map;
 	}
+
 	@Transactional(rollbackFor = Exception.class)
 	public void updatePhonecardStatus(String hope, Object [] ids, EmployeePO emp) throws Exception {
 		OrganizationPO org = organizationDAO.findByOrganizationid(emp.getOrganizationid());
@@ -112,6 +113,7 @@ public class PhonecardService {
 			}
 		}
 		for (Object string : ids) {
+			string = Integer.valueOf(String.valueOf(string));
 			PhonecardPO phonecardpo = pd.findByPhonecardid(string);
 			if("start".equals(hope)){
 				updatePhonecardStatusNormal(phonecardpo);
@@ -134,7 +136,7 @@ public class PhonecardService {
 		PhoneCardInterfaceCallUtils.updateStatus(phonecardpo.getSerialnumber(),Constants.INVENTORY);
 		phonecardpo.setStatus(Constants.STATUS_SUSPENCED);
 	}
-	
+
 	private void updatePhonecardStatusDeleted(PhonecardPO phonecardpo) throws Exception {
 		PhoneCardInterfaceCallUtils.updateStatus(phonecardpo.getSerialnumber(),Constants.DEACTIVATED);
 		phonecardpo.setStatus(Constants.STATUS_DELETED);

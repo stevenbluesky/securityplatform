@@ -50,7 +50,16 @@
             </div>
             <div class="col-md-3">
                 <p><#if (gwd.phonecardserialnumber)??>${gwd.phonecardserialnumber}<#else><@spring.message code="label.none"/></#if></p>
-                <p><#if (gwd.phonecardstatus)?exists&&gwd.phonecardstatus==1><@spring.message code="label.online"/><#else><@spring.message code="label.none"/></#if></p>
+                <p><#if (gwd.phonecardstatus)?exists&&gwd.phonecardstatus==1><@spring.message code="label.normal"/>
+                     <@shiro.hasPermission name="button:changeStatus">
+                    <input style="margin-left: 20px;" class="btn btn-sm" value="<@spring.message code='label.suspenced'/>" type="button" onclick="togglePhonecardStatus('freeze')">
+                     </@shiro.hasPermission>
+                <#else><@spring.message code="label.suspenced"/>
+                    <@shiro.hasPermission name="button:changeStatus"><@shiro.hasPermission name="label.Activated">
+                        <input style="margin-left: 20px;" class="btn btn-sm" value="<@spring.message code='label.normal'/>" type="button" onclick="togglePhonecardStatus('start')">
+                    </@shiro.hasPermission></@shiro.hasPermission>
+                </#if>
+                </p>
                 <p><#if (gwd.phonecardfirmwareversion)??>${gwd.phonecardfirmwareversion}<#else><@spring.message code="label.none"/></#if></p>
                 <p><#if (gwd.firstprogrammedon)??>${gwd.firstprogrammedon?string('yyyy-MM-dd')}<#else><@spring.message code="label.none"/></#if></p>
                 <p><#if (gwd.orderingdate)??>${gwd.orderingdate?string('yyyy-MM-dd')}<#else><@spring.message code="label.none"/></#if></p>
@@ -151,6 +160,27 @@
             return '<@spring.message code="label.offline"/>';
         if(value==1)
             return '<@spring.message code="label.online"/>';
+    }
+    function togglePhonecardStatus(hope){
+        let ids = [${(gwd.phonecardid)!}];
+        //异步更新
+        $.ajax({
+            type:'post',
+            url:'../phonecard/update',
+            contentType:'application/json',
+            traditional:true,
+            data:"{\"hope\":\""+hope+"\",\"ids\":"+JSON.stringify(ids)+"}",
+            success:function(data){//返回json结果
+                if("1"==data["msg"]) {
+                    alert("<@spring.message code='label.updatesuccess'/>");
+                }else{
+                    alert("<@spring.message code='label.updatefailed'/>"+"("+data['msg']+")");
+                }
+            },
+            error : function() {// 请求失败处理函数
+                alert("<@spring.message code='label.updatefailed'/>");
+            }
+        });
     }
 </script>
 <#include "../_foot0.ftl"/>

@@ -281,6 +281,7 @@ public class GatewayService {
 			if(puPO!=null) {
 				PhonecardPO pc = pd.findByPhonecardid(puPO.getPhonecardid());
 				if(pc!=null) {
+					gate.setPhonecardid(pc.getPhonecardid());
 					gate.setPhonecardserialnumber(pc.getSerialnumber());
 					gate.setPhonecardmodel(pc.getModel());
 					gate.setPhonecardstatus(pc.getStatus());

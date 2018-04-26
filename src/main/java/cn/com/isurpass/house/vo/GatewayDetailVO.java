@@ -16,7 +16,8 @@ public class GatewayDetailVO {
 	private Integer businessstatus;//网关业务状态
 	private String customer;//用户
 	private String installer;//安装员
-	
+
+	private  Integer phonecardid;
 	private String phonecardserialnumber;//电话卡序列号
 	private String phonecardmodel;//电话卡型号
 	private Integer phonecardstatus;//电话卡状态
@@ -58,7 +59,15 @@ public class GatewayDetailVO {
 	public void setBattery(Integer battery) {
 		this.battery = battery;
 	}
-	
+
+	public Integer getPhonecardid() {
+		return phonecardid;
+	}
+
+	public void setPhonecardid(Integer phonecardid) {
+		this.phonecardid = phonecardid;
+	}
+
 	public Date getCreatetime() {
 		return createtime;
 	}
