@@ -15,6 +15,7 @@ import cn.com.isurpass.house.shiro.ShiroHelper;
 import cn.com.isurpass.house.util.BeanCopyUtils;
 import cn.com.isurpass.house.vo.RoleListVO;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.mgt.RealmSecurityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

@@ -2,7 +2,7 @@
 <#include "../_head1.ftl"/>
 
 <#if role??>
-Role Name: ${(role.name)!}
+    <@spring.message code="label.rolename"/>: ${(role.name)!}
 <#else >
     <@spring.message code="label.rolename"/><span style="color:red;">*</span>:<input id="rolename" name="rolename" />
 </#if>
@@ -88,8 +88,12 @@ Role Name: ${(role.name)!}
             traditional: true,
             data: putData(checks),
             success: function (data) {//返回json结果
-                alert("<@spring.message code='label.updatesuccess'/>");
-                window.location.href = "roleList";
+                if(data["msg"] == "1"){
+                    alert("<@spring.message code='label.updatesuccess'/>");
+                    window.location.href = "roleList";
+                }else{
+                    alert("<@spring.message code='label.updatefailed'/>"+data["msg"]);
+                }
             },
             error: function () {// 请求失败处理函数
                 alert("<@spring.message code='label.updatefailed'/>");

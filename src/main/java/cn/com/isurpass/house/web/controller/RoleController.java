@@ -108,8 +108,7 @@ public class RoleController {
         return new JsonResult(1, "1");
     }
 
-
-    @RequiresPermissions("%jwzh%")
+    @RequiresPermissions("%jwzh%")//用来控制此路径不可访问
     @RequestMapping("addPrivilege")
     @ResponseBody
     public JsonResult addPrivilege(String privilegecode, String privilegelabel){

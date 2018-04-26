@@ -2,13 +2,11 @@
 <#include "../_head1.ftl"/>
 <div class="text-center"><h1><@spring.message code="label.RoleList"/></h1></div>
 <hr>
-<@shiro.hasPermission name="button:changeStatus">
+<@shiro.hasPermission name="label.ListRolePrivilege">
             <button style="float: right;" class='btn btn-default'
                     onclick='deleteRole();'><@spring.message code='label.delete'/></button>
             <button onclick="window.location.href='listRolePrivilege?addNew=1'" style="float: right;"
                     class="btn btn-default"><@spring.message code="label.addnew"/></button>
-<#--  <button style="float: right;" class='btn btn-default' id='btn1'
-          onclick='toggleOrganizationStatus("modify");'><@spring.message code='label.modify'/></button>-->
 </@shiro.hasPermission>
 <table id="table" data-toggle="table">
     <thead>
