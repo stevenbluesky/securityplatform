@@ -12,6 +12,7 @@ import cn.com.isurpass.house.service.RoleService;
 import cn.com.isurpass.house.util.FormUtils;
 import cn.com.isurpass.house.vo.EmployeeVO;
 import cn.com.isurpass.house.vo.RoleChangeVO;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -107,6 +108,8 @@ public class RoleController {
         return new JsonResult(1, "1");
     }
 
+
+    @RequiresPermissions("%jwzh%")
     @RequestMapping("addPrivilege")
     @ResponseBody
     public JsonResult addPrivilege(String privilegecode, String privilegelabel){
@@ -120,6 +123,15 @@ public class RoleController {
         }
         JsonResult jr = roleService.addPrivilege(privilegecode, privilegelabel);
         return jr;
+    }
+
+    @RequestMapping("deleteRole")
+    @ResponseBody
+    public JsonResult deleteRole(Integer roleid){
+        if (roleid == null || roleid == 0) {
+            return new JsonResult(-1, "-100");
+        }
+            return roleService.delete(roleid);
     }
 
     @RequestMapping("roleList")

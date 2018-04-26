@@ -4,7 +4,7 @@
 <#if role??>
 Role Name: ${(role.name)!}
 <#else >
-    Role Name<span style="color:red;">*</span>:<input id="rolename" name="rolename" />
+    <@spring.message code="label.rolename"/><span style="color:red;">*</span>:<input id="rolename" name="rolename" />
 </#if>
 <hr>
 <@spring.message code="label.RolePrivilege"/>

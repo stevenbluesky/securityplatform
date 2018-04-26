@@ -1,25 +1,25 @@
 package cn.com.isurpass.house.web.controller;
 
+import cn.com.isurpass.house.result.JsonResult;
 import cn.com.isurpass.house.util.WebUtilsPro;
-import com.alibaba.fastjson.JSONObject;
 import com.mysql.jdbc.CommunicationsException;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import cn.com.isurpass.house.result.JsonResult;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 
 @ControllerAdvice
 public class ControllerExceptionHandler {
+
+    public static Log log = LogFactory.getLog(ControllerExceptionHandler.class);
 
     @ExceptionHandler(RuntimeException.class)
     @ResponseBody
@@ -45,33 +45,12 @@ public class ControllerExceptionHandler {
             Map<String, Object> map = new HashMap<>();
             map.put("code", "-998");
             map.put("msg", "无权限");
-            writeJson(map, response);
+            WebUtilsPro.writeJson(map, response);
+            log.info("no permisson");
             return null;
         } else {
+            log.info("no permisson");
             return "redirect:/403";
-        }
-    }
-
-    /**
-     * 输出JSON
-     *
-     * @param response
-     * @author SHANHY
-     * @create 2017年4月4日
-     */
-    private void writeJson(Map<String,Object> map, HttpServletResponse response) {
-        PrintWriter out = null;
-        try {
-            response.setCharacterEncoding("UTF-8");
-            response.setContentType("application/json; charset=utf-8");
-            out = response.getWriter();
-            out.write(JSONObject.toJSONString(map));
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (out != null) {
-                out.close();
-            }
         }
     }
 }

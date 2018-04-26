@@ -168,4 +168,15 @@ public class RoleService {
         fcds.reloadFilterChains();
         return new JsonResult(1, "1");
     }
+
+    @Transactional(rollbackFor = Exception.class)
+    public JsonResult delete(Integer roleid) {
+        try {
+            rd.deleteById(roleid);
+            return new JsonResult(1, "1");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new JsonResult(-1, "-1");
+        }
+    }
 }
