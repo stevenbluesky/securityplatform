@@ -275,6 +275,7 @@ public class EmployeeService {
         OrganizationPO org = null;
         // System.out.println(od.findByCode(code0));
         if ((org = od.findByCode(code0)) != null) {
+            initStatusByExpireTime(org.getOrganizationid(), loginname);
             List<EmployeePO> empList = ed.findByOrganizationidAndLoginnameAndStatus(org.getOrganizationid(), loginname, Constants.STATUS_NORMAL);
             for (int i = 0; !empList.isEmpty() && i < empList.size(); i++) {
                 if (Encrypt.check(loginname, password, code0, empList.get(i).getPassword())) {
@@ -286,6 +287,21 @@ public class EmployeeService {
             return null;
         }
         return null;
+    }
+
+    private void initStatusByExpireTime(Integer organizationid, String loginname) {
+        List<EmployeePO> list = ed.findByOrganizationidAndLoginname(organizationid, loginname);
+        if (list == null || list.size() == 0) {
+            return;
+        }
+        Date expiredate = list.get(0).getExpiredate();
+        if (expiredate == null) {
+            return ;
+        }
+        if (new Date().after(expiredate)) {//用户过期
+            list.get(0).setStatus(Constants.STATUS_SUSPENCED);
+            ed.save(list.get(0));
+        }
     }
 
     /**
@@ -555,7 +571,7 @@ public class EmployeeService {
         List<Object> parlist = new ArrayList<>();
         for (PrivilegePO p : privilegelist) {
             Map<String, Object> parmap = new LinkedHashMap<>();
-            if ("0".equals(p.getParentprivilegeid() + "")  || "-1".equals(p.getParentprivilegeid() + "")) {//为父节点, 为 -1 时,此节点不能点击
+            if ("0".equals(p.getParentprivilegeid() + "") || "-1".equals(p.getParentprivilegeid() + "")) {//为父节点, 为 -1 时,此节点不能点击
                 String text = resourceBundle.getString(p.getCode());
                 String href = p.getLabel();
                 parmap.put("text", text);

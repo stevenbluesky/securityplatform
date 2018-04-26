@@ -1,9 +1,7 @@
 package com.isurpass.house;
 
-import cn.com.isurpass.house.dao.EmployeeroleDAO;
-import cn.com.isurpass.house.dao.GatewayDAO;
-import cn.com.isurpass.house.dao.OrganizationDAO;
-import cn.com.isurpass.house.dao.UserDAO;
+import cn.com.isurpass.house.dao.*;
+import cn.com.isurpass.house.po.EmployeePO;
 import cn.com.isurpass.house.po.EmployeeRolePO;
 import cn.com.isurpass.house.po.OrganizationPO;
 import cn.com.isurpass.house.util.Constants;
@@ -17,7 +15,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import javax.xml.crypto.Data;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)  
@@ -32,6 +32,8 @@ public class JPATest {
 	UserDAO ud;
 	@Autowired
 	EmployeeroleDAO erd;
+	@Autowired
+	EmployeeDAO ed;
 	
 	@Test
 	public void testOrg() {
@@ -115,5 +117,17 @@ public class JPATest {
 		for (EmployeeRolePO emprole : byEmployeeid) {
 			erd.delete(emprole);
 		}
+	}
+
+	@Test
+	public void testExpiredTime(){
+		/*List<EmployeePO> list = ed.findByExpiredateBefore(new Date());
+		for (EmployeePO e : list) {
+			System.out.println(e.getExpiredate());
+		}*/
+//		EmployeePO emp = ed.findByEmployeeid(28);
+//		Date ed = emp.getExpiredate();
+//		System.out.println(ed.before(new Date()));
+//		System.out.println(new Date().after(ed));
 	}
 }
