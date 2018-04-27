@@ -69,7 +69,7 @@ public class PhonecardService {
 	 * @param pc
 	 * @return
 	 */
-	@Transactional(readOnly = true)
+//	@Transactional(readOnly = true)
 	public Map<String, Object> listPhonecard(Pageable pageable, PhonecardPO pc) {
 		Map<String, Object> map = new HashMap<>();
 		//map.put("total", pd.count());
@@ -89,6 +89,7 @@ public class PhonecardService {
 		map.put("total",count);
 		List<PhonecardPO> list = new ArrayList<>();
 		gateList.forEach(o -> {
+			updatePhonecardStatusByExpiredate(o);
 			list.add(o);
 		});
 		map.put("rows", list);
@@ -141,5 +142,17 @@ public class PhonecardService {
 		PhoneCardInterfaceCallUtils.updateStatus(phonecardpo.getSerialnumber(),Constants.DEACTIVATED);
 		phonecardpo.setStatus(Constants.STATUS_DELETED);
 	}
-	
+
+	/**
+	 * 在获取电话卡信息时,通过此方法来同步status和exiredate之间的关系
+	 */
+	public void updatePhonecardStatusByExpiredate(PhonecardPO phonecard){
+		if (phonecard == null || phonecard.getExpiredate() == null) {
+			return ;
+		}
+		if (phonecard.getStatus() == Constants.STATUS_NORMAL && new Date().after(phonecard.getExpiredate())) {//当电话卡产状态为正常且当前时间超过失效日期时,
+			phonecard.setStatus(Constants.STATUS_SUSPENCED);
+			pd.save(phonecard);
+		}
+	}
 }

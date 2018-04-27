@@ -192,7 +192,7 @@ public class EmployeeService {
         }
     }
 
-    @Transactional(readOnly = true)
+//    @Transactional(readOnly = true)
     public Map<String, Object> listEmployee(Pageable pageable, HttpServletRequest request) {
         // 角色不要在里面判断,可以在方法上加上权限注解.(如,管理员才可以访问)
 
@@ -228,7 +228,7 @@ public class EmployeeService {
     }
 
     // @RequiresPermissions("employeeList")
-    @Transactional(readOnly = true)
+//    @Transactional(readOnly = true)
     public Map<String, Object> listAllEmployee(Pageable pageable) {
         // System.out.println(em.toString());
         Map<String, Object> map = new HashMap<>();
@@ -247,6 +247,7 @@ public class EmployeeService {
         emp.setName(e.getName());
         emp.setEmployeeid(e.getEmployeeid());
         emp.setCode(e.getCode());
+        updateEmployeeStatusByExpiredate(e);
         emp.setStatus(e.getStatus());
         if (od.findByOrganizationid(e.getOrganizationid()) != null)
             emp.setParentOrgName(od.findByOrganizationid(e.getOrganizationid()).getName());
@@ -256,18 +257,6 @@ public class EmployeeService {
     @Transactional(readOnly = true)
     public EmployeePO findByLoginname(String loginname) {
         return ed.findByLoginname(loginname);
-    }
-
-    /**
-     * 不要使用此方法,ameta登录时也请传入code来进行密码校验
-     *
-     * @param loginname
-     * @param password
-     * @return
-     */
-    @Deprecated
-    public EmployeePO login(String loginname, String password) {
-        return ed.findByLoginnameAndPassword(loginname, password);
     }
 
     @Transactional(readOnly = true)
@@ -294,14 +283,7 @@ public class EmployeeService {
         if (list == null || list.size() == 0) {
             return;
         }
-        Date expiredate = list.get(0).getExpiredate();
-        if (expiredate == null) {
-            return ;
-        }
-        if (new Date().after(expiredate)) {//用户过期
-            list.get(0).setStatus(Constants.STATUS_SUSPENCED);
-            ed.save(list.get(0));
-        }
+        updateEmployeeStatusByExpiredate(list.get(0));
     }
 
     /**
@@ -331,7 +313,7 @@ public class EmployeeService {
      * @param id
      * @return
      */
-    @Transactional(readOnly = true)
+//    @Transactional(readOnly = true)
     public EmployeeAddVO getEmployeeVOInfo(Integer id) {
         EmployeeAddVO emp = new EmployeeAddVO();
         EmployeePO empPO = ed.findByEmployeeid(id);
@@ -340,6 +322,7 @@ public class EmployeeService {
         emp.setQuestion(empPO.getQuestion());
         emp.setCode(empPO.getCode());
         emp.setExpiredate(empPO.getExpiredate());
+        updateEmployeeStatusByExpiredate(empPO);
         emp.setStatus(empPO.getStatus());
         ps.findPeronInfo(empPO.getPersonid(), emp);
         as.findAddressInfo(empPO.getAddressid(), emp);
@@ -388,25 +371,6 @@ public class EmployeeService {
      */
     @Transactional(readOnly = true)
     public boolean hasProvilege(Integer employeeid, HttpServletRequest request) {
-     /*   EmployeePO emp = ed.findByEmployeeid(employeeid);
-        OrganizationPO org = od.findByOrganizationid(emp.getOrganizationid());//要操作的员工的机构
-
-        EmployeePO emp1 = (EmployeePO) request.getSession().getAttribute("emp");
-        OrganizationPO org1 = od.findByOrganizationid(emp1.getOrganizationid());
-
-        if (org1.getOrgtype() == Constants.ORGTYPE_AMETA) {//如果登录的员工机构是ameta,直接操作
-            return true;
-
-        } else if(org1.getOrgtype() == Constants.ORGTYPE_SUPPLIER){//员工的机构id必须是他的安装商或者服务商
-            if (org1.getOrganizationid() == org.getOrganizationid() || org1.getOrganizationid() == org.getParentorgid()) {
-                return true;
-            } else if (org1.getOrgtype() == Constants.ORGTYPE_INSTALLER && org.getOrganizationid() == org1.getOrganizationid()) {
-                return true;
-            }
-        }
-        return false;*/
-//        EmployeePO emp = ed.findByEmployeeid(employeeid);
-//        return os.hasProvilege(emp.getOrganizationid(), request);
         EmployeePO loginemp = (EmployeePO) request.getSession().getAttribute("emp");
         EmployeePO emp = ed.findByEmployeeid(employeeid);
         if (emp == null) {
@@ -416,7 +380,7 @@ public class EmployeeService {
         return os.hasPermissionOperateOrg(loginemp.getEmployeeid(), emp.getOrganizationid());
     }
 
-    @Transactional(readOnly = true)
+//    @Transactional(readOnly = true)
     public Map<String, Object> search(Pageable pageable, OrgSearchVO search, HttpServletRequest request) {
         EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
         Integer orgid = emp.getOrganizationid();
@@ -656,5 +620,19 @@ public class EmployeeService {
             }
         }
         return false;
+    }
+
+
+    /**
+     * 在获取员工信息时,通过此方法来同步status和exiredate之间的关系
+     */
+    private void updateEmployeeStatusByExpiredate(EmployeePO emp){
+        if (emp == null || emp.getExpiredate() == null) {
+            return ;
+        }
+        if (emp.getStatus() == Constants.STATUS_NORMAL && new Date().after(emp.getExpiredate())) {//当用户状态为正常且当前时间超过失效日期时,
+            emp.setStatus(Constants.STATUS_SUSPENCED);
+            ed.save(emp);
+        }
     }
 }

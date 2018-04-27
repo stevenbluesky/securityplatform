@@ -1,10 +1,11 @@
 package cn.com.isurpass.house.web.controller;
 
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
+import cn.com.isurpass.house.exception.MyArgumentNullException;
+import cn.com.isurpass.house.result.JsonResult;
+import cn.com.isurpass.house.result.PageResult;
+import cn.com.isurpass.house.service.EmployeeService;
 import cn.com.isurpass.house.util.FormUtils;
+import cn.com.isurpass.house.vo.EmployeeAddVO;
 import cn.com.isurpass.house.vo.OrgSearchVO;
 import cn.com.isurpass.house.vo.TransferVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import cn.com.isurpass.house.exception.MyArgumentNullException;
-import cn.com.isurpass.house.result.JsonResult;
-import cn.com.isurpass.house.service.EmployeeService;
-import cn.com.isurpass.house.result.PageResult;
-import cn.com.isurpass.house.vo.EmployeeAddVO;
+import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 @Controller
 @RequestMapping("employee")
@@ -98,4 +96,5 @@ public class EmployeeController {
         }
         return "success";
     }
+
 }

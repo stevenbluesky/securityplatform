@@ -38,6 +38,8 @@ public class GatewayService {
 	@Autowired
 	private PhonecardDAO pd;
 	@Autowired
+	private PhonecardService phonecardService;
+	@Autowired
 	private OrganizationService os;
 	@Autowired
 	private EmployeeroleDAO employeeroleDAO;
@@ -256,7 +258,7 @@ public class GatewayService {
 	 * @param deviceid
 	 * @return
 	 */
-	@Transactional(readOnly = true)
+//	@Transactional(readOnly = true)
 	public GatewayDetailVO findByDeviceid(String deviceid) {
 		GatewayDetailVO gate = new GatewayDetailVO();
 		GatewayPO gateway = gd.findByDeviceid(deviceid);
@@ -284,6 +286,7 @@ public class GatewayService {
 					gate.setPhonecardid(pc.getPhonecardid());
 					gate.setPhonecardserialnumber(pc.getSerialnumber());
 					gate.setPhonecardmodel(pc.getModel());
+					phonecardService.updatePhonecardStatusByExpiredate(pc);
 					gate.setPhonecardstatus(pc.getStatus());
 					gate.setRateplan(pc.getRateplan());
 					gate.setPhonecardfirmwareversion(pc.getFirmwareversion());
