@@ -29,7 +29,7 @@ var lan = {
     suspenced: "冻结",
     deleted: "删除",
     alarm0:"胁迫告警",
-    status0:"NONE",
+    status0:"无",
     keyalarm:"钥匙告警",//当有人试图用钥匙开锁时
     closefail:"关锁失败",
 

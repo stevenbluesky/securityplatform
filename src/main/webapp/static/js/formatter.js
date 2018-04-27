@@ -7,6 +7,8 @@ function formatter_status(value, row, index) {
         return lan.suspenced;
     if (value == 9)
         return lan.deleted;
+    if(value == -1)
+        return lan.status0;
 }
 
 function toggleStatus(e, value, row, index, url, id, status) {

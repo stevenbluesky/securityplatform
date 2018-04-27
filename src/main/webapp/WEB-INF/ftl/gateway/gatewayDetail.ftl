@@ -39,7 +39,8 @@
             </div>
         </div>
         <br>
-        <div class="text-left"><h4><@spring.message code="label.phonecardinfo"/></h4></div><hr>
+        <div class="text-left"><h4><@spring.message code="label.phonecardinfo"/></h4></div>
+        <hr>
         <div class="row">
             <div class="col-md-3">
                 <p><@spring.message code="label.serialnumber"/></p>
@@ -50,13 +51,17 @@
             </div>
             <div class="col-md-3">
                 <p><#if (gwd.phonecardserialnumber)??>${gwd.phonecardserialnumber}<#else><@spring.message code="label.none"/></#if></p>
-                <p><#if (gwd.phonecardstatus)?exists&&gwd.phonecardstatus==1><@spring.message code="label.normal"/>
-                     <@shiro.hasPermission name="button:changeStatus">
-                    <input style="margin-left: 20px;" class="btn btn-sm" value="<@spring.message code='label.suspenced'/>" type="button" onclick="togglePhonecardStatus('freeze')">
-                     </@shiro.hasPermission>
-                <#else><@spring.message code="label.suspenced"/>
+                <p><span id="phonecardstatus"></span>
+                <#if (gwd.phonecardstatus)?exists&&gwd.phonecardstatus==1>
+                    <@shiro.hasPermission name="button:changeStatus">
+                     <input style="margin-left: 20px;" class="btn btn-sm" value="<@spring.message code="label.freeze"/>"
+                            type="button" onclick="togglePhonecardStatus('freeze')">
+                    </@shiro.hasPermission>
+                <#elseif (gwd.phonecardstatus)?exists>
                     <@shiro.hasPermission name="button:changeStatus"><@shiro.hasPermission name="label.Activated">
-                        <input style="margin-left: 20px;" class="btn btn-sm" value="<@spring.message code='label.normal'/>" type="button" onclick="togglePhonecardStatus('start')">
+                    <input style="margin-left: 20px;" class="btn btn-sm  btn-success"
+                           value="<@spring.message code="label.unsuspence"/>" type="button"
+                           onclick="togglePhonecardStatus('start')">
                     </@shiro.hasPermission></@shiro.hasPermission>
                 </#if>
                 </p>
@@ -79,15 +84,19 @@
                 <p><#if (gwd.expiredate)??>${gwd.expiredate?string('yyyy-MM-dd')}<#else><@spring.message code="label.none"/></#if></p>
             </div>
         </div>
-        <div class="text-left"><h4><@spring.message code="label.associatedequipment"/></h4></div><hr>
+        <div class="text-left"><h4><@spring.message code="label.associatedequipment"/></h4></div>
+        <hr>
         <table id="table" data-toggle="table">
             <thead>
             <tr>
                 <th data-field="zwavedeviceid">ID</th><!--复选框-->
                 <th data-field="name" class="text-center"><@spring.message code="label.pname"/></th>
-                <th data-field="devicetype" class="text-center" data-formatter='formatter_devicetype'><@spring.message code="label.devicetype"/></th>
-                <th data-field="warningstatuses" class="text-center" data-formatter='formatter_warnigstatuses'><@spring.message code="label.alarmstatus"/></th>
-                <th data-field="status" class="text-center" data-formatter='formatter_devicestatus'><@spring.message code="label.status"/></th>
+                <th data-field="devicetype" class="text-center"
+                    data-formatter='formatter_devicetype'><@spring.message code="label.devicetype"/></th>
+                <th data-field="warningstatuses" class="text-center"
+                    data-formatter='formatter_warnigstatuses'><@spring.message code="label.alarmstatus"/></th>
+                <th data-field="status" class="text-center"
+                    data-formatter='formatter_devicestatus'><@spring.message code="label.status"/></th>
                 <th data-field="battery" class="text-center"><@spring.message code="label.energy"/></th>
             </tr>
             </thead>
@@ -99,7 +108,7 @@
 <!-- JavaScript 部分 -->
 <script type="text/javascript">
     var id = getCookie("id");
-    if(id!=null) {
+    if (id != null) {
         $('#table').bootstrapTable({
             url: "gatewayDeviceDetail?deviceid=" + id + "",
             method: 'GET',                      //请求方式（*）
@@ -150,37 +159,50 @@
             }
         });
     }
-    function getCookie(name)
-    {
-        var arr = document.cookie.match(new RegExp("(^| )"+name+"=([^;]*)(;|$)"));
-        if(arr !=null) return unescape(arr[2]); return null;
+
+    function getCookie(name) {
+        var arr = document.cookie.match(new RegExp("(^| )" + name + "=([^;]*)(;|$)"));
+        if (arr != null) return unescape(arr[2]);
+        return null;
     }
-    function formatter_gatewaystatus(value,row,index){
-        if(value==0)
+
+    function formatter_gatewaystatus(value, row, index) {
+        if (value == 0)
             return '<@spring.message code="label.offline"/>';
-        if(value==1)
+        if (value == 1)
             return '<@spring.message code="label.online"/>';
     }
-    function togglePhonecardStatus(hope){
+
+    function togglePhonecardStatus(hope) {
         let ids = [${(gwd.phonecardid)!}];
         //异步更新
         $.ajax({
-            type:'post',
-            url:'../phonecard/update',
-            contentType:'application/json',
-            traditional:true,
-            data:"{\"hope\":\""+hope+"\",\"ids\":"+JSON.stringify(ids)+"}",
-            success:function(data){//返回json结果
-                if("1"==data["msg"]) {
+            type: 'post',
+            url: '../phonecard/update',
+            contentType: 'application/json',
+            traditional: true,
+            data: "{\"hope\":\"" + hope + "\",\"ids\":" + JSON.stringify(ids) + "}",
+            success: function (data) {//返回json结果
+                if ("1" == data["msg"]) {
                     alert("<@spring.message code='label.updatesuccess'/>");
-                }else{
-                    alert("<@spring.message code='label.updatefailed'/>"+"("+data['msg']+")");
+                } else {
+                    alert("<@spring.message code='label.updatefailed'/>" + "(" + data['msg'] + ")");
                 }
             },
-            error : function() {// 请求失败处理函数
+            error: function () {// 请求失败处理函数
                 alert("<@spring.message code='label.updatefailed'/>");
             }
         });
     }
+
+    function formatterwarning() {
+        let phonecardstatus = ${(gwd.phonecardstatus)!"-1"};
+        var formatterStatus = formatter_status(phonecardstatus, null, null);
+        $("#phonecardstatus").text(formatterStatus);
+    }
+
+    $(function () {
+        formatterwarning();
+    });
 </script>
 <#include "../_foot0.ftl"/>

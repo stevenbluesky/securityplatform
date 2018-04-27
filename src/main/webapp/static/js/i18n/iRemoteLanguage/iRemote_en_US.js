@@ -29,7 +29,7 @@ var lan = {
     suspenced: "Suspected",
     deleted: "Delete",
     alarm0:"Stress warning",//?
-    status0:"NONE",
+    status0:"None",
     keyalarm:"Key Alarm",//当有人试图用钥匙开锁时
     closefail:"Close lock failure",
 
