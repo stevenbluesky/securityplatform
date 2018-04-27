@@ -557,7 +557,7 @@ public class OrganizationService {
     //判断用户是否有权限操作此机构
     @Transactional(readOnly = true)
     public boolean hasPermissionOperateOrg(Integer empid, Integer orgid) {
-        List<EmployeeRolePO> emprolelist = erd.findByEmployeeid(empid);
+        List<Integer> emprolelist = erd.findByEmployeeid(empid).stream().map(EmployeeRolePO::getRoleid).collect(toList());
         Integer orgtype = od.findByOrganizationid(orgid).getOrgtype();
         if (emprolelist.contains(Constants.ROLE_AMETA_ADMIN)) {
             return true;

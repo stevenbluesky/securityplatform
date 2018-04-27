@@ -85,16 +85,16 @@ public class EmployeeController {
 
     @RequestMapping("toggleEmployeeStatus0")
     @ResponseBody
-    public String toggleEmployeeStatus0(@RequestBody TransferVO tf, HttpServletRequest request) {
+    public JsonResult toggleEmployeeStatus0(@RequestBody TransferVO tf, HttpServletRequest request) {
         String hope = tf.getHope();
         Object[] ids = tf.getIds();
         try {
             es.toggleEmployeeStatus0(hope, ids, request);
         } catch (RuntimeException e) {
             e.printStackTrace();
-            return "fail";
+            return new JsonResult(-1, e.getMessage());
         }
-        return "success";
+        return new JsonResult(1, "success");
     }
 
 }

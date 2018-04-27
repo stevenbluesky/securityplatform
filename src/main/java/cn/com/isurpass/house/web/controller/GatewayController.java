@@ -120,7 +120,7 @@ public class GatewayController {
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value="update",method = RequestMethod.POST)
+//	@RequestMapping(value="update",method = RequestMethod.POST)
 	public String update(@RequestBody TransferVO tf){
 		String hope = tf.getHope();
 		Object[] ids = tf.getIds();

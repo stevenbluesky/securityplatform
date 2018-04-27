@@ -83,10 +83,6 @@
 <button  class='btn btn-default' style="float: right;margin-top: -10px;visibility: hidden;">asdfaf</button>
 <@shiro.hasPermission name="button:changeStatus">
 <#--新增，启用，停用按钮-->
-<button style="float: right;" type="button" id='stopGateway' class='btn btn-default'
-        onclick='updateGatewayStatus("stop");'><@spring.message code='label.stop'/></button>
-<button style="float: right;" type="button" id='startGateway' class='btn btn-default'
-        onclick='updateGatewayStatus("start");'><@spring.message code='label.start'/></button>
 <button style="float: right;" type="button" class="btn btn-default"
         onclick="window.location.href='typeGatewayInfo'"><@spring.message code="label.entering"/></button>
 </@shiro.hasPermission>
@@ -199,61 +195,7 @@
         if (value == 1)
             return '<@spring.message code="label.online"/>';
     }
-    <#--获取复选框选中的列的id数组-->
-    function getCheckedId() {
-        var tbodyObj = document.getElementById('table');
-        var ids = [];
-        $("table :checkbox").each(function (key, value) {
-            if ($(value).prop('checked')) {
-                if (key != 0) {
-                    ids[key - 1] = tbodyObj.rows[key].cells[3].innerHTML;
-                }
-            }
-        })
-        if (ids.length == 0) {
-            return new Array("-1");
-        }
-        return ids;
-    }
 
-    function updateGatewayStatus(obj) {
-        var checkedIds = getCheckedId();
-        var trans = [];
-        if (checkedIds[0] == -1) {
-            alert("<@spring.message code="label.nochecked"/>");
-            return;
-        }
-        if (obj == "start") {
-            if (!confirm("<@spring.message code='label.startconfirm'/>")) {
-                return;
-            }
-        }
-        if (obj == "stop") {
-            if (!confirm("<@spring.message code='label.stopconfirm'/>")) {
-                return;
-            }
-        }
-        for (var index in checkedIds) {
-            trans.push(checkedIds[index]);
-        }
-        //异步更新     
-        $.ajax({
-            type: 'post',
-            url: 'update',
-            contentType: 'application/json',
-            traditional: true,
-            data: "{\"hope\":\"" + obj + "\",\"ids\":" + JSON.stringify(trans) + "}",
-            success: function (data) {//返回json结果
-                alert("<@spring.message code='label.updatesuccess'/>");
-                $('#table').bootstrapTable('refresh');
-            },
-            error: function () {// 请求失败处理函数
-                alert("<@spring.message code='label.updatefailed'/>");
-                $('#table').bootstrapTable('refresh');
-            }
-
-        });
-    }
 </script>
 <!-- 模态框（Modal） -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

@@ -323,6 +323,13 @@ public class GatewayService {
 			}
 		}
 	}
+
+	private boolean isAccessChangeGatewayStatus(Object[] ids){
+		for (Object obj : ids) {
+
+		}
+		return false;
+	}
 	/**
 	 * 填充数据
 	 * @param obj
@@ -352,7 +359,7 @@ public class GatewayService {
 	 */
 	private List<TypeGatewayInfoVO> transfer(List<GatewayPO> gateList){
 		List<TypeGatewayInfoVO> list = new ArrayList<>();//返回的list对象
-		for(GatewayPO o : gateList) {//使用for循环比lamaba表达式提高50ms响应,根据目前数据库数据少，耗时占总时间1/3左右
+		for(GatewayPO o : gateList) {
 			TypeGatewayInfoVO gateVO = new TypeGatewayInfoVO();
 			gateVO.setDeviceid(o.getDeviceid());
 			List<GatewayUserPO> userlist = gud.findByDeviceid(o.getDeviceid());
