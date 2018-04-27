@@ -1,4 +1,4 @@
-<#include "../_head0.ftl"/>
+include "../_head0.ftl"/>
 <#include "../_head1.ftl"/>
 
           <div class="row">

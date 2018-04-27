@@ -42,9 +42,9 @@ public class OrganizationController {
     @Autowired
     OrganizationService ss;
 
-    @RequestMapping("toggleOrganizationStatus0")
+    @RequestMapping("toggleOrganizationStatus")
     @ResponseBody
-    public JsonResult toggleOrganizationStatus0(@RequestBody TransferVO tf, HttpServletRequest request) {
+    public JsonResult toggleOrganizationStatus(@RequestBody TransferVO tf, HttpServletRequest request) {
         String hope = tf.getHope();
         Object[] ids = tf.getIds();
         try {
@@ -56,9 +56,9 @@ public class OrganizationController {
         return new JsonResult(1, "1");
     }
 
-    @RequestMapping("toggleOrganizationStatus")
+//    @RequestMapping("toggleOrganizationStatus0")
     @ResponseBody
-    public JsonResult toggleOrganizationStatus(Integer id, Integer toStatus, HttpServletRequest request) {
+    public JsonResult toggleOrganizationStatus0(Integer id, Integer toStatus, HttpServletRequest request) {
         try {
             ss.toggleOrganizationStatus(id, toStatus, request);
         } catch (RuntimeException e) {

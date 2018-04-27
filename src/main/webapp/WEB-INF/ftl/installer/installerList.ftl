@@ -176,7 +176,7 @@
             //异步更新
             $.ajax({
                 type: 'post',
-                url: '../org/toggleOrganizationStatus0',
+                url: '../org/toggleOrganizationStatus',
                 contentType: 'application/json',
                 traditional: true,
                 data: "{\"hope\":\"" + obj + "\",\"ids\":" + JSON.stringify(ids) + "}",

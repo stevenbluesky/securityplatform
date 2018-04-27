@@ -182,7 +182,7 @@
             //异步更新
             $.ajax({
                 type: 'post',
-                url: '../employee/toggleEmployeeStatus0',
+                url: '../employee/toggleEmployeeStatus',
                 contentType: 'application/json',
                 traditional: true,
                 data: "{\"hope\":\"" + obj + "\",\"ids\":" + JSON.stringify(ids) + "}",

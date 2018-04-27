@@ -68,24 +68,24 @@ public class EmployeeController {
             e.printStackTrace();
             return new JsonResult(-1, "-1");
         }
-        return new JsonResult(1, "success");
+        return new JsonResult(1, "1");
     }
 
-    @RequestMapping("toggleEmployeeStatus")
+//    @RequestMapping("toggleEmployeeStatus0")
     @ResponseBody
-    public JsonResult toggleEmployeeStatus(Integer id,Integer toStatus,HttpServletRequest request){
+    public JsonResult toggleEmployeeStatus0(Integer id,Integer toStatus,HttpServletRequest request){
         try {
             es.toggleEmployeeStatus(id,toStatus, request);
         } catch (RuntimeException e) {
             e.printStackTrace();
             return new JsonResult(-1, e.getMessage());
         }
-        return new JsonResult(1, "success");
+        return new JsonResult(1, "1");
     }
 
-    @RequestMapping("toggleEmployeeStatus0")
+    @RequestMapping("toggleEmployeeStatus")
     @ResponseBody
-    public JsonResult toggleEmployeeStatus0(@RequestBody TransferVO tf, HttpServletRequest request) {
+    public JsonResult toggleEmployeeStatus(@RequestBody TransferVO tf, HttpServletRequest request) {
         String hope = tf.getHope();
         Object[] ids = tf.getIds();
         try {
@@ -94,7 +94,7 @@ public class EmployeeController {
             e.printStackTrace();
             return new JsonResult(-1, e.getMessage());
         }
-        return new JsonResult(1, "success");
+        return new JsonResult(1, "1");
     }
 
 }

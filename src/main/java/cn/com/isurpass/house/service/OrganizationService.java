@@ -516,7 +516,6 @@ public class OrganizationService {
         return false;
     }
 
-    //    @RequiresPermissions("fasf")
     public void toggleOrganizationStatus0(String hope, Object[] ids, HttpServletRequest request) {
         if ("unsuspence".equals(hope)) {
             for (Object id : ids) {
