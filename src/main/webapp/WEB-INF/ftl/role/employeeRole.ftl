@@ -73,7 +73,7 @@ Employee Name: ${(cemp.name)!}
             data: "{\"id\":" + ${(cemp.employeeid)!} + ",\"list\":" + JSON.stringify(checks) + "}",
             success: function (data) {//返回json结果
                 alert("<@spring.message code='label.updatesuccess'/>");
-                window.location.href = "employeeList";
+                window.location.href = "../employee/employeeList";
             },
             error: function () {// 请求失败处理函数
                 alert("<@spring.message code='label.updatefailed'/>");
