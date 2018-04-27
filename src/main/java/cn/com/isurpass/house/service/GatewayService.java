@@ -101,8 +101,8 @@ public class GatewayService {
 				count = gd.countByInstaller(emp.getEmployeeid());
 				list = newtransfer(obj);
 			}else {
-				List<Object[]> obj = gd.findInfoByInstallerorg(emp.getEmployeeid(),pageable);
-				count = gd.countByInstallerorg(emp.getEmployeeid());
+				List<Object[]> obj = gd.findInfoByInstallerorg(organizationid, pageable);
+				count = gd.countByInstallerorg(organizationid);
 				list = newtransfer(obj);
 			}
 		}else{//为ameta管理员，拿所有网关
