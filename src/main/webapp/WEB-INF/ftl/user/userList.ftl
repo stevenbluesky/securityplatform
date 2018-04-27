@@ -185,7 +185,7 @@
             //异步更新
             $.ajax({
                 type: 'post',
-                url: '../user/toggleUserStatus0',
+                url: '../user/toggleUserStatus',
                 contentType: 'application/json',
                 traditional: true,
                 data: "{\"hope\":\"" + obj + "\",\"ids\":" + JSON.stringify(ids) + "}",

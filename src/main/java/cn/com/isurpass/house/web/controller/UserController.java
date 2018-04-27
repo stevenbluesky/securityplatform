@@ -52,7 +52,7 @@ public class UserController {
 		return us.listUserInfo(pageable,request);
 	}
 
-	@RequestMapping("toggleUserStatus0")
+	@RequestMapping("toggleUserStatus")
 	@ResponseBody
 	public String toggleUserStatus0(@RequestBody TransferVO tf, HttpServletRequest request) {
 		String hope = tf.getHope();

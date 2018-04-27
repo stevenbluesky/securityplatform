@@ -194,7 +194,7 @@ public class UserService {
         return userList;
     }
 
-    public void toggleUserStatus0(String hope, Object[] ids, HttpServletRequest request) throws MyArgumentNullException {
+    public void  toggleUserStatus0(String hope, Object[] ids, HttpServletRequest request) throws MyArgumentNullException {
         if ("unsuspence".equals(hope)) {
             for (Object id : ids) {
                 toggleUserStatus(Integer.valueOf(id.toString()), Constants.STATUS_NORMAL, request);
@@ -218,6 +218,12 @@ public class UserService {
         ud.save(user);
     }
 
+    /**
+     * 判断当前用户是否有权限操作此员工
+     * @param userid
+     * @param request
+     * @return
+     */
     private boolean hasProvilege(Integer userid, HttpServletRequest request) {
         UserPO user = ud.findByUserid(userid);
         EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
