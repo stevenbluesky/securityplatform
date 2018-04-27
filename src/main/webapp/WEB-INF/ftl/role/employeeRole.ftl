@@ -67,10 +67,10 @@ Employee Name: ${(cemp.name)!}
         //异步更新
         $.ajax({
             type: 'post',
-            url: 'changeRoles',
+            url: 'modifyEmployeeRole',
             contentType: 'application/json',
             traditional: true,
-            data: "{\"id\":\"" + ${(cemp.employeeid)!} + "\",\"list\":" + JSON.stringify(checks) + "}",
+            data: "{\"id\":" + ${(cemp.employeeid)!} + ",\"list\":" + JSON.stringify(checks) + "}",
             success: function (data) {//返回json结果
                 alert("<@spring.message code='label.updatesuccess'/>");
                 window.location.href = "employeeList";
