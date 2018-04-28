@@ -1,7 +1,9 @@
 package cn.com.isurpass.house.shiro;
 
-import java.util.List;
-
+import cn.com.isurpass.house.po.EmployeePO;
+import cn.com.isurpass.house.service.EmployeeService;
+import cn.com.isurpass.house.vo.LoginVO;
+import com.alibaba.fastjson.JSON;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -9,15 +11,11 @@ import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
+import org.apache.shiro.cache.Cache;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import com.alibaba.fastjson.JSON;
-
-import cn.com.isurpass.house.po.EmployeePO;
-import cn.com.isurpass.house.service.EmployeeService;
-import cn.com.isurpass.house.vo.LoginVO;
+import org.springframework.stereotype.Component;
 
 /**
  * 权限认证 reaml
@@ -38,6 +36,14 @@ public class MyShiroUtil extends AuthorizingRealm {
         super.clearCachedAuthenticationInfo(principals);
     }
 
+    public void clearAllCachedAuthorizationInfo() {
+        Cache<Object, AuthorizationInfo> cache = getAuthorizationCache();
+        if (cache != null) {
+            for (Object key : cache.keys()) {
+                cache.remove(key);
+            }
+        }
+    }
     /*
      * 授权获得用户权限信息的方法 获得用户的 角色 及 权限 信息
      *

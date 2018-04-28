@@ -18,8 +18,8 @@
                        </div>
                    </div>
                    <div class="form-group col-md-4" align="right">
-                       <label for="searchPhonenumber" class="col-md-6 control-label"><@spring.message code='label.phonenumber'/></label>
-                       <div class="col-md-6">
+                       <label for="searchPhonenumber" class="col-md-5 control-label"><@spring.message code='label.phonenumber'/></label>
+                       <div class="col-md-7">
                            <input type="text" class="form-control" id="searchPhonenumber" name="searchPhonenumber"
                                   placeholder="<@spring.message code='label.phonenumber'/>">
                        </div>

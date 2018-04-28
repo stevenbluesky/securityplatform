@@ -5,7 +5,13 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
                  http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
 
-    <bean id="myShiroRealm" class="cn.com.isurpass.house.shiro.MyShiroUtil"></bean>
+    <bean id="myShiroRealm" class="cn.com.isurpass.house.shiro.MyShiroUtil">
+        <property name="cachingEnabled" value="true" />
+        <property name="authenticationCachingEnabled" value="true" />
+        <property name="authenticationCacheName" value="authenticationCache" />
+        <property name="authorizationCachingEnabled" value="true" />
+        <property name="authorizationCacheName" value="authorizationCache" />
+    </bean>
 
     <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
         <property name="realm" ref="myShiroRealm"></property>
@@ -44,7 +50,9 @@
 
     <!-- shiro缓存管理器开始 -->
     <bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
+        <!-- 注册配置文件的路径 -->
         <property name="cacheManager" ref="ehCacheManager"/>
+        <property name="cacheManagerConfigFile" value="classpath:ehcache.xml"></property>
     </bean>
 
     <bean id="ehCacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">

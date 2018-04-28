@@ -45,6 +45,9 @@ public class RoleService {
     @Resource
     FilterChainDefinitionsService fcds;
 
+    @Autowired
+    ShiroHelper shiroHelper;
+
     @Transactional(readOnly = true)
     public Map<String, Object> roleList(Pageable pageable) {
         Map<String, Object> map = new HashMap<>();
@@ -105,7 +108,7 @@ public class RoleService {
             return emprole;
         }).collect(toList());
         erd.saveAll(employeeRolePOS);
-        ShiroHelper.clearAuth();
+        shiroHelper.clearAuth();
         return new JsonResult(1, "1");
     }
 
@@ -124,7 +127,7 @@ public class RoleService {
             return rpp;
         }).collect(toList());
         rpd.saveAll(collect);
-        ShiroHelper.clearAuth();
+        shiroHelper.clearAuth();
         return new JsonResult(1, "1");
     }
 
