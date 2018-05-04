@@ -33,6 +33,11 @@ public class IndexController {
         return "login";
     }
 
+    @RequestMapping("login2")
+    public String login2() {
+        return "login2";
+    }
+
     @RequestMapping("logout")
     public String logout(HttpServletRequest request) {
         Subject subject = SecurityUtils.getSubject();
