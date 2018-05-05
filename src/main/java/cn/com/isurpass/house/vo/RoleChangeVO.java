@@ -17,7 +17,7 @@ public class RoleChangeVO {
     }
 
     public Integer getId() {
-        return Integer.valueOf(id);
+        return id;
     }
 
     public void setId(String id) {
@@ -39,7 +39,7 @@ public class RoleChangeVO {
     }
 
     public boolean isNew(){
-        if (this.id == null || "".equals(this.id)) {
+        if (this.id == null || "".equals(String.valueOf(this.id))) {
             return true;
         }
         return false;

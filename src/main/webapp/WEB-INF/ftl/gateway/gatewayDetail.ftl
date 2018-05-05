@@ -185,6 +185,7 @@
             success: function (data) {//返回json结果
                 if ("1" == data["msg"]) {
                     alert("<@spring.message code='label.updatesuccess'/>");
+                    window.location.reload();
                 } else {
                     alert("<@spring.message code='label.updatefailed'/>" + "(" + data['msg'] + ")");
                 }
