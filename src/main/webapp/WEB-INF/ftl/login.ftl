@@ -93,6 +93,9 @@
 <script type="text/javascript">
     $("#validateCode").click();
     $(document).ready(function () {
+        if(document != window.self.parent.document){
+            window.self.parent.document.location.reload();
+        }
         $('#defaultForm').bootstrapValidator({
 //      live: 'disabled',
             message: 'This value is not valid',

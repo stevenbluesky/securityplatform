@@ -33,7 +33,7 @@
         div.form-group>label {
             text-align: left;
         }
-    </style>
+        </style>
 </head>
 <body style="overflow-x: hidden;">
 <br>
