@@ -16,6 +16,7 @@ function getMenu() {
                 data:jsontree,
                 enableLinks:false
             });
+            $("#right").attr("src",JSON.parse(jsontree)[0].href);
             $('#treeview12').on('nodeSelected', function(event, data) {
                 $("#right").attr("src",data.href);
             });
