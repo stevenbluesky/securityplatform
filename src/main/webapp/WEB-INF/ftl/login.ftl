@@ -93,7 +93,10 @@
 <script type="text/javascript">
     $("#validateCode").click();
     $(document).ready(function () {
+
+
         loginInterceptor();
+
 
         $('#defaultForm').bootstrapValidator({
 //      live: 'disabled',
