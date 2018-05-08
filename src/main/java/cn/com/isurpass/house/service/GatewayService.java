@@ -38,6 +38,8 @@ public class GatewayService {
 	@Autowired
 	private PhonecardDAO pd;
 	@Autowired
+	private PhonecardService phonecardService;
+	@Autowired
 	private OrganizationService os;
 	@Autowired
 	private EmployeeroleDAO employeeroleDAO;
@@ -99,8 +101,8 @@ public class GatewayService {
 				count = gd.countByInstaller(emp.getEmployeeid());
 				list = newtransfer(obj);
 			}else {
-				List<Object[]> obj = gd.findInfoByInstallerorg(emp.getEmployeeid(),pageable);
-				count = gd.countByInstallerorg(emp.getEmployeeid());
+				List<Object[]> obj = gd.findInfoByInstallerorg(organizationid, pageable);
+				count = gd.countByInstallerorg(organizationid);
 				list = newtransfer(obj);
 			}
 		}else{//为ameta管理员，拿所有网关
@@ -256,7 +258,7 @@ public class GatewayService {
 	 * @param deviceid
 	 * @return
 	 */
-	@Transactional(readOnly = true)
+//	@Transactional(readOnly = true)
 	public GatewayDetailVO findByDeviceid(String deviceid) {
 		GatewayDetailVO gate = new GatewayDetailVO();
 		GatewayPO gateway = gd.findByDeviceid(deviceid);
@@ -281,8 +283,10 @@ public class GatewayService {
 			if(puPO!=null) {
 				PhonecardPO pc = pd.findByPhonecardid(puPO.getPhonecardid());
 				if(pc!=null) {
+					gate.setPhonecardid(pc.getPhonecardid());
 					gate.setPhonecardserialnumber(pc.getSerialnumber());
 					gate.setPhonecardmodel(pc.getModel());
+					phonecardService.updatePhonecardStatusByExpiredate(pc);
 					gate.setPhonecardstatus(pc.getStatus());
 					gate.setRateplan(pc.getRateplan());
 					gate.setPhonecardfirmwareversion(pc.getFirmwareversion());
@@ -319,6 +323,13 @@ public class GatewayService {
 			}
 		}
 	}
+
+	private boolean isAccessChangeGatewayStatus(Object[] ids){
+		for (Object obj : ids) {
+
+		}
+		return false;
+	}
 	/**
 	 * 填充数据
 	 * @param obj
@@ -348,7 +359,7 @@ public class GatewayService {
 	 */
 	private List<TypeGatewayInfoVO> transfer(List<GatewayPO> gateList){
 		List<TypeGatewayInfoVO> list = new ArrayList<>();//返回的list对象
-		for(GatewayPO o : gateList) {//使用for循环比lamaba表达式提高50ms响应,根据目前数据库数据少，耗时占总时间1/3左右
+		for(GatewayPO o : gateList) {
 			TypeGatewayInfoVO gateVO = new TypeGatewayInfoVO();
 			gateVO.setDeviceid(o.getDeviceid());
 			List<GatewayUserPO> userlist = gud.findByDeviceid(o.getDeviceid());

@@ -61,17 +61,17 @@
                  <div class="row text-left">
                  
                   <div class="col-sm-4">
-                    <select name="country" id="country" class="selectpicker" title="<@spring.message code='label.choosecountry'/>">
+                    <select name="country" id="country" class="selectpicker" data-size="10" title="<@spring.message code='label.choosecountry'/>">
                     </select>
                   </div>
                   
                   <div class="col-sm-4">
-                    <select id="province" name="province" class="selectpicker" title="<@spring.message code='label.chooseprovince'/>">
+                    <select id="province" name="province" class="selectpicker" data-size="10" title="<@spring.message code='label.chooseprovince'/>">
                     </select>
                   </div>
                   
                   <div class="col-sm-4">
-                    <select id="city" name="city" class="selectpicker" title="<@spring.message code='label.choosecity'/>">
+                    <select id="city" name="city" class="selectpicker" data-size="10" title="<@spring.message code='label.choosecity'/>">
                     </select>
                   </div>
               	 </div>

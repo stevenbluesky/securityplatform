@@ -19,7 +19,7 @@
                     <label for="parentorgid"
                            class="col-sm-2 control-label" style="text-align: left;"><@spring.message code="label.parentsupplier"/></label>
                     <div class="col-sm-10">
-                        <select id="parentorgid" name="parentorgid" class="selectpicker" data-live-search="true"
+                        <select id="parentorgid" name="parentorgid" class="selectpicker" data-live-search="true"  data-size="10"
                                 title="<@spring.message code="label.choosesupplier"/>">
                         </select>
                     </div>
@@ -49,17 +49,17 @@
                     <div class="col-sm-10">
                         <div class="row text-left">
                             <div class="col-sm-4">
-                                <select name="country" id="country" class="selectpicker"
+                                <select name="country" id="country" class="selectpicker" data-size="10"
                                         title="<@spring.message code="label.choosecountry"/>">
                                 </select>
                             </div>
                             <div class="col-sm-4">
-                                <select id="province" name="province" class="selectpicker"
+                                <select id="province" name="province" class="selectpicker" data-size="10"
                                         title="<@spring.message code="label.chooseprovince"/>">
                                 </select>
                             </div>
                             <div class="col-sm-4">
-                                <select id="city" name="city" class="selectpicker"
+                                <select id="city" name="city" class="selectpicker"  data-size="10"
                                         title="<@spring.message code="label.choosecity"/>">
                                 </select>
                             </div>
@@ -92,17 +92,17 @@
                     <div class="col-sm-10">
                         <div class="row text-left">
                             <div class="col-sm-4">
-                                <select name="bcountry" id="bcountry" class="selectpicker"
+                                <select name="bcountry" id="bcountry" class="selectpicker"  data-size="10"
                                         title="<@spring.message code="label.choosecountry"/>">
                                 </select>
                             </div>
                             <div class="col-sm-4">
-                                <select id="bprovince" name="bprovince" class="selectpicker"
+                                <select id="bprovince" name="bprovince" class="selectpicker"  data-size="10"
                                         title="<@spring.message code="label.chooseprovince"/>">
                                 </select>
                             </div>
                             <div class="col-sm-4">
-                                <select id="bcity" name="bcity" class="selectpicker"
+                                <select id="bcity" name="bcity" class="selectpicker" data-size="10"
                                         title="<@spring.message code="label.choosecity"/>">
                                 </select>
                             </div>
@@ -184,17 +184,17 @@
                     <div class="col-sm-10">
                         <div class="row text-left">
                             <div class="col-sm-4">
-                                <select name="cscountry" id="cscountry" class="selectpicker"
+                                <select name="cscountry" id="cscountry" class="selectpicker"  data-size="10"
                                         title="<@spring.message code="label.choosecountry"/>">
                                 </select>
                             </div>
                             <div class="col-sm-4">
-                                <select id="csprovince" name="csprovince" class="selectpicker"
+                                <select id="csprovince" name="csprovince" class="selectpicker" data-size="10"
                                         title="<@spring.message code="label.chooseprovince"/>">
                                 </select>
                             </div>
                             <div class="col-sm-4">
-                                <select id="cscity" name="cscity" class="selectpicker"
+                                <select id="cscity" name="cscity" class="selectpicker" data-size="10"
                                         title="<@spring.message code="label.choosecity"/>">
                                 </select>
                             </div>

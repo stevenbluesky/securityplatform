@@ -11,6 +11,7 @@ import cn.com.isurpass.house.dao.PhonecarduserDAO;
 import cn.com.isurpass.house.dao.UserDAO;
 import cn.com.isurpass.house.po.*;
 import cn.com.isurpass.house.util.PhoneCardInterfaceCallUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -68,16 +69,16 @@ public class PhonecardService {
 	 * @param pc
 	 * @return
 	 */
-	@Transactional(readOnly = true)
+//	@Transactional(readOnly = true)
 	public Map<String, Object> listPhonecard(Pageable pageable, PhonecardPO pc) {
 		Map<String, Object> map = new HashMap<>();
 		//map.put("total", pd.count());
 		//SELECT * FROM  phonecard WHERE serialnumber LIKE '%f%' AND rateplan LIKE '%f%' AND STATUS=1  ORDER BY activationdate ASC LIMIT 0,9;
 		Integer status = pc.getStatus();
 		List<Integer> statuslist = new ArrayList<Integer>();
-		if(status==2){//查询正常记录1
+		if(Integer.valueOf(2).equals(status)){//查询正常记录1
 			statuslist.add(1);
-		}else if(status==3){//查询冻结记录 2
+		}else if(Integer.valueOf(3).equals(status)){//查询冻结记录 2
 			statuslist.add(2);
 		}else{//查询全部记录（暂不包括已删除记录）
 			statuslist.add(1);
@@ -88,11 +89,13 @@ public class PhonecardService {
 		map.put("total",count);
 		List<PhonecardPO> list = new ArrayList<>();
 		gateList.forEach(o -> {
+			updatePhonecardStatusByExpiredate(o);
 			list.add(o);
 		});
 		map.put("rows", list);
 		return map;
 	}
+
 	@Transactional(rollbackFor = Exception.class)
 	public void updatePhonecardStatus(String hope, Object [] ids, EmployeePO emp) throws Exception {
 		OrganizationPO org = organizationDAO.findByOrganizationid(emp.getOrganizationid());
@@ -111,19 +114,45 @@ public class PhonecardService {
 			}
 		}
 		for (Object string : ids) {
+			string = Integer.valueOf(String.valueOf(string));
 			PhonecardPO phonecardpo = pd.findByPhonecardid(string);
 			if("start".equals(hope)){
-				PhoneCardInterfaceCallUtils.updateStatus(phonecardpo.getSerialnumber(), Constants.ACTIVATED);
-				phonecardpo.setStatus(Constants.STATUS_NORMAL);
+				updatePhonecardStatusNormal(phonecardpo);
 			}else if("freeze".equals(hope)){
-				PhoneCardInterfaceCallUtils.updateStatus(phonecardpo.getSerialnumber(),Constants.INVENTORY);
-				phonecardpo.setStatus(Constants.STATUS_SUSPENCED);
+				updatePhonecardStatusSuspenced(phonecardpo);
 			}else if("delete".equals(hope)){
-				PhoneCardInterfaceCallUtils.updateStatus(phonecardpo.getSerialnumber(),Constants.DEACTIVATED);
-				phonecardpo.setStatus(Constants.STATUS_DELETED);
+				updatePhonecardStatusDeleted(phonecardpo);
 			}
 			pd.save(phonecardpo);
 		}
 	}
-	
+
+	@RequiresPermissions("label.Activated")
+	private void updatePhonecardStatusNormal(PhonecardPO phonecardpo) throws Exception {
+		PhoneCardInterfaceCallUtils.updateStatus(phonecardpo.getSerialnumber(), Constants.ACTIVATED);
+		phonecardpo.setStatus(Constants.STATUS_NORMAL);
+	}
+
+	private void updatePhonecardStatusSuspenced(PhonecardPO phonecardpo) throws Exception {
+		PhoneCardInterfaceCallUtils.updateStatus(phonecardpo.getSerialnumber(),Constants.INVENTORY);
+		phonecardpo.setStatus(Constants.STATUS_SUSPENCED);
+	}
+
+	private void updatePhonecardStatusDeleted(PhonecardPO phonecardpo) throws Exception {
+		PhoneCardInterfaceCallUtils.updateStatus(phonecardpo.getSerialnumber(),Constants.DEACTIVATED);
+		phonecardpo.setStatus(Constants.STATUS_DELETED);
+	}
+
+	/**
+	 * 在获取电话卡信息时,通过此方法来同步status和exiredate之间的关系
+	 */
+	public void updatePhonecardStatusByExpiredate(PhonecardPO phonecard){
+		if (phonecard == null || phonecard.getExpiredate() == null) {
+			return ;
+		}
+		if (phonecard.getStatus() == Constants.STATUS_NORMAL && new Date().after(phonecard.getExpiredate())) {//当电话卡产状态为正常且当前时间超过失效日期时,
+			phonecard.setStatus(Constants.STATUS_SUSPENCED);
+			pd.save(phonecard);
+		}
+	}
 }

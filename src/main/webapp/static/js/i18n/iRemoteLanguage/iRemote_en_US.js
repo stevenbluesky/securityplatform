@@ -3,7 +3,7 @@ var lan = {
     addsuccess:"success",//2
     error:"error",//-1
     varificationcodeerror:"Verification Number Error",//-2
-    loginfaied:"Incorrect username or password or Company Number.",//-98
+    loginfaied:"Authentication failure",//-98
     notpermission:"No Permission",//-99
     notempty: "Mandatory",//-100
     statusnull:"Status is Mandatory.",//-101
@@ -29,7 +29,7 @@ var lan = {
     suspenced: "Suspected",
     deleted: "Delete",
     alarm0:"Stress warning",//?
-    status0:"NONE",
+    status0:"None",
     keyalarm:"Key Alarm",//当有人试图用钥匙开锁时
     closefail:"Close lock failure",
 
@@ -55,8 +55,8 @@ var lan = {
     hasperson:"There's someone in the sensor range.",
     highpoweralarm:"High-Power alarm",
     dooropen:"The door's open.",
-    supplierlist:"Dealer List",
-    addsupplier:"Add Dealer",
+    supplierlist:"Distributor List",
+    addsupplier:"Add Distributor",
     installerlist:"Installer List",
     addinstaller:"Add Installer",
     employeelist:"Employee List",

@@ -25,15 +25,6 @@
 		<property name="cookieName" value="clientlanguage"/> <property name="cookieMaxAge" 
 		value="94608000"/> <property name="defaultLocale" value="en" /> </bean> -->
 
-	<!-- formatter转换配置 -->
-	<!-- <bean id="formatService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean"> 
-		<property name="formatters"> <set> <bean class="org.springframework.format.number.CurrencyStyleFormatter"> 
-		</bean> <bean class="org.springframework.format.number.NumberStyleFormatter"> 
-		</bean> <bean class="org.springframework.format.number.PercentStyleFormatter"> 
-		</bean> <bean class="org.springframework.format.datetime.DateFormatter"> 
-		</bean> <bean class="com.sky.locale.demo.formatter.MyDateFormatter" /> <bean 
-		class="com.sky.locale.demo.formatter.MyCurrencyFormatter" /> </set> </property> 
-		</bean> -->
 	<bean id="messageSource"
 		class="org.springframework.context.support.ResourceBundleMessageSource">
 		<property name="basenames">

@@ -1,10 +1,11 @@
 package cn.com.isurpass.house.web.controller;
 
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
+import cn.com.isurpass.house.exception.MyArgumentNullException;
+import cn.com.isurpass.house.result.JsonResult;
+import cn.com.isurpass.house.result.PageResult;
+import cn.com.isurpass.house.service.EmployeeService;
 import cn.com.isurpass.house.util.FormUtils;
+import cn.com.isurpass.house.vo.EmployeeAddVO;
 import cn.com.isurpass.house.vo.OrgSearchVO;
 import cn.com.isurpass.house.vo.TransferVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import cn.com.isurpass.house.exception.MyArgumentNullException;
-import cn.com.isurpass.house.result.JsonResult;
-import cn.com.isurpass.house.service.EmployeeService;
-import cn.com.isurpass.house.result.PageResult;
-import cn.com.isurpass.house.vo.EmployeeAddVO;
+import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 @Controller
 @RequestMapping("employee")
@@ -70,32 +68,33 @@ public class EmployeeController {
             e.printStackTrace();
             return new JsonResult(-1, "-1");
         }
-        return new JsonResult(1, "success");
+        return new JsonResult(1, "1");
     }
 
-    @RequestMapping("toggleEmployeeStatus")
+//    @RequestMapping("toggleEmployeeStatus0")
     @ResponseBody
-    public JsonResult toggleEmployeeStatus(Integer id,Integer toStatus,HttpServletRequest request){
+    public JsonResult toggleEmployeeStatus0(Integer id,Integer toStatus,HttpServletRequest request){
         try {
             es.toggleEmployeeStatus(id,toStatus, request);
         } catch (RuntimeException e) {
             e.printStackTrace();
             return new JsonResult(-1, e.getMessage());
         }
-        return new JsonResult(1, "success");
+        return new JsonResult(1, "1");
     }
 
-    @RequestMapping("toggleEmployeeStatus0")
+    @RequestMapping("toggleEmployeeStatus")
     @ResponseBody
-    public String toggleEmployeeStatus0(@RequestBody TransferVO tf, HttpServletRequest request) {
+    public JsonResult toggleEmployeeStatus(@RequestBody TransferVO tf, HttpServletRequest request) {
         String hope = tf.getHope();
         Object[] ids = tf.getIds();
         try {
             es.toggleEmployeeStatus0(hope, ids, request);
         } catch (RuntimeException e) {
             e.printStackTrace();
-            return "fail";
+            return new JsonResult(-1, e.getMessage());
         }
-        return "success";
+        return new JsonResult(1, "1");
     }
+
 }

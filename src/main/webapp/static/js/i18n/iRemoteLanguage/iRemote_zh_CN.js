@@ -3,7 +3,7 @@ var lan = {
     addsuccess:"添加成功",//2
     error0:"出错啦~",//-1
     varificationcodeerror:"验证码错误",//-2
-    loginfaied:"用户名,密码或机构代码错误",//-98
+    loginfaied:"认证失败",//-98
     notpermission:"无权操作",//-99
     notempty: "必填字段不能为空!",//-100
     statusnull:"status不能为空.",//-101
@@ -29,7 +29,7 @@ var lan = {
     suspenced: "冻结",
     deleted: "删除",
     alarm0:"胁迫告警",
-    status0:"NONE",
+    status0:"无",
     keyalarm:"钥匙告警",//当有人试图用钥匙开锁时
     closefail:"关锁失败",
 

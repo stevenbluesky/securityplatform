@@ -35,7 +35,6 @@ import cn.com.isurpass.house.vo.OrgAddVO;
 
 /**
  * @author jwzh
- *
  */
 @Controller
 @RequestMapping("org")
@@ -43,23 +42,23 @@ public class OrganizationController {
     @Autowired
     OrganizationService ss;
 
-    @RequestMapping("toggleOrganizationStatus0")
+    @RequestMapping("toggleOrganizationStatus")
     @ResponseBody
-    public String toggleOrganizationStatus0(@RequestBody TransferVO tf,HttpServletRequest request) {
+    public JsonResult toggleOrganizationStatus(@RequestBody TransferVO tf, HttpServletRequest request) {
         String hope = tf.getHope();
         Object[] ids = tf.getIds();
         try {
             ss.toggleOrganizationStatus0(hope, ids, request);
         } catch (RuntimeException e) {
             e.printStackTrace();
-            return "fail";
+            return new JsonResult(-1, e.getMessage());
         }
-        return "success";
+        return new JsonResult(1, "1");
     }
 
-    @RequestMapping("toggleOrganizationStatus")
+//    @RequestMapping("toggleOrganizationStatus0")
     @ResponseBody
-    public JsonResult toggleOrganizationStatus(Integer id, Integer toStatus, HttpServletRequest request) {
+    public JsonResult toggleOrganizationStatus0(Integer id, Integer toStatus, HttpServletRequest request) {
         try {
             ss.toggleOrganizationStatus(id, toStatus, request);
         } catch (RuntimeException e) {
@@ -71,6 +70,7 @@ public class OrganizationController {
 
     /**
      * 添加服务商
+     *
      * @param as
      * @param request
      * @return
@@ -123,20 +123,20 @@ public class OrganizationController {
     //只有ameta可以访问
     @RequestMapping("supplierJsonList")
     @ResponseBody
-    public Map<String, Object> supplierJsonList(PageResult pr,OrgSearchVO osv,HttpServletRequest request) {
+    public Map<String, Object> supplierJsonList(PageResult pr, OrgSearchVO osv, HttpServletRequest request) {
         Pageable pageable = PageRequest.of(pr.getPage() - 1, pr.getRows(), Sort.Direction.ASC, "organizationid");
         if (!FormUtils.isEmpty(osv)) {//搜索
-           return ss.search(pageable, osv,request,Constants.ORGTYPE_SUPPLIER);
+            return ss.search(pageable, osv, request, Constants.ORGTYPE_SUPPLIER);
         }
         return ss.listOrgByType(pageable, Constants.ORGTYPE_SUPPLIER);
     }
 
     @RequestMapping("installerJsonList")
     @ResponseBody
-    public Map<String, Object> installerJsonList(PageResult pr,OrgSearchVO osv, HttpServletRequest request) {
+    public Map<String, Object> installerJsonList(PageResult pr, OrgSearchVO osv, HttpServletRequest request) {
         Pageable pageable = PageRequest.of(pr.getPage() - 1, pr.getRows(), Sort.Direction.ASC, "organizationid");
         if (!FormUtils.isEmpty(osv)) {//搜索
-            return ss.search(pageable, osv,request,Constants.ORGTYPE_INSTALLER);
+            return ss.search(pageable, osv, request, Constants.ORGTYPE_INSTALLER);
         }
         return ss.listInstallerOrg(pageable, request);
     }

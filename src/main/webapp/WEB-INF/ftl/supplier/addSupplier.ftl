@@ -1,5 +1,7 @@
 <!-- 新增服务商页面 -->
 <#include "../_head0.ftl"/>
+<style type="text/css">
+</style>
     <div class="row-horizontal">
         <div class="col-md-1"></div>
         <div class="col-md-10">
@@ -37,17 +39,17 @@
                     <div class="col-sm-10">
                         <div class="row">
                             <div class="col-sm-4">
-                                <select name="country" id="country" class="selectpicker"
+                                <select name="country" id="country" class="selectpicker"  data-size="10"
                                         title="<@spring.message code="label.choosecountry"/>">
                                 </select>
                             </div>
                             <div class="col-sm-4">
-                                <select id="province" name="province" class="selectpicker"
+                                <select id="province" name="province" class="selectpicker" data-size="10"
                                         title="<@spring.message code="label.chooseprovince"/>">
                                 </select>
                             </div>
                             <div class="col-sm-4">
-                                <select id="city" name="city" class="selectpicker"
+                                <select id="city" name="city" class="selectpicker" data-size="10"
                                         title="<@spring.message code="label.choosecity"/>">
                                 </select>
                             </div>
@@ -81,17 +83,17 @@
                     <div class="col-sm-10">
                         <div class="row text-left">
                             <div class="col-sm-4">
-                                <select name="bcountry" id="bcountry" class="selectpicker"
+                                <select name="bcountry" id="bcountry" class="selectpicker"  data-size="10"
                                         title="<@spring.message code="label.choosecountry"/>">
                                 </select>
                             </div>
                             <div class="col-sm-4">
-                                <select id="bprovince" name="bprovince" class="selectpicker"
+                                <select id="bprovince" name="bprovince" class="selectpicker"  data-size="10"
                                         title="<@spring.message code="label.chooseprovince"/>">
                                 </select>
                             </div>
                             <div class="col-sm-4">
-                                <select id="bcity" name="bcity" class="selectpicker"
+                                <select id="bcity" name="bcity" class="selectpicker"  data-size="10"
                                         title="<@spring.message code="label.choosecity"/>">
                                 </select>
                             </div>
@@ -176,17 +178,17 @@
                     <div class="col-sm-10">
                         <div class="row text-left">
                             <div class="col-sm-4">
-                                <select name="cscountry" id="cscountry" class="selectpicker"
+                                <select name="cscountry" id="cscountry" class="selectpicker"  data-size="10"
                                         title="<@spring.message code="label.choosecountry"/>">
                                 </select>
                             </div>
                             <div class="col-sm-4">
-                                <select id="csprovince" name="csprovince" class="selectpicker"
+                                <select id="csprovince" name="csprovince" class="selectpicker"  data-size="10"
                                         title="<@spring.message code="label.chooseprovince"/>">
                                 </select>
                             </div>
                             <div class="col-sm-4">
-                                <select id="cscity" name="cscity" class="selectpicker"
+                                <select id="cscity" name="cscity" class="selectpicker"  data-size="10"
                                         title="<@spring.message code="label.choosecity"/>">
                                 </select>
                             </div>
@@ -310,6 +312,7 @@
     <script src="../static/js/validAddress.js"></script>
 
 <script type="text/javascript">
+
     $(document).ready(function () {
         getCountry(-1);
         changeProvince(1);

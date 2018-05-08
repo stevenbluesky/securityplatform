@@ -179,12 +179,16 @@
             //异步更新
             $.ajax({
                 type: 'post',
-                url: '../org/toggleOrganizationStatus0',
+                url: '../org/toggleOrganizationStatus',
                 contentType: 'application/json',
                 traditional: true,
                 data: "{\"hope\":\"" + obj + "\",\"ids\":" + JSON.stringify(ids) + "}",
                 success: function (data) {//返回json结果
-                    alert("<@spring.message code='label.updatesuccess'/>");
+                    if("1"==data["msg"]) {
+                        alert("<@spring.message code='label.updatesuccess'/>");
+                    }else{
+                        alert("<@spring.message code='label.updatefailed'/>"+"("+data['msg']+")");
+                    }
                     $('#table').bootstrapTable('refresh');
                 },
                 error: function () {// 请求失败处理函数

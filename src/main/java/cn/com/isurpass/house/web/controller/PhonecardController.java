@@ -3,6 +3,8 @@ package cn.com.isurpass.house.web.controller;
 import java.util.Map;
 
 import cn.com.isurpass.house.po.EmployeePO;
+import cn.com.isurpass.house.result.JsonResult;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -73,7 +75,7 @@ public class PhonecardController {
 	 */
 	@ResponseBody
 	@RequestMapping(value="update",method = RequestMethod.POST)
-	public String update(@RequestBody TransferVO tf, HttpServletRequest request){
+	public JsonResult update(@RequestBody TransferVO tf, HttpServletRequest request){
 		EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
 		String hope = tf.getHope();
 		Object[] ids = tf.getIds();
@@ -81,9 +83,9 @@ public class PhonecardController {
 			ps.updatePhonecardStatus(hope, ids,emp);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return e.getMessage();
+			return new JsonResult(-1,e.getMessage().toString());
 		}
-		return "success";
+		return new JsonResult(1,"1");
 	}
 	
 	@RequestMapping("phonecardList")

@@ -6,11 +6,7 @@ import cn.com.isurpass.house.po.*;
 import cn.com.isurpass.house.util.Constants;
 import cn.com.isurpass.house.util.Encrypt;
 import cn.com.isurpass.house.util.FormUtils;
-import cn.com.isurpass.house.util.RequestUtils;
-import cn.com.isurpass.house.vo.EmployeeAddVO;
-import cn.com.isurpass.house.vo.EmployeeListVO;
-import cn.com.isurpass.house.vo.EmployeeParentOrgIdVO;
-import cn.com.isurpass.house.vo.OrgSearchVO;
+import cn.com.isurpass.house.vo.*;
 import net.sf.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -196,7 +192,7 @@ public class EmployeeService {
         }
     }
 
-    @Transactional(readOnly = true)
+//    @Transactional(readOnly = true)
     public Map<String, Object> listEmployee(Pageable pageable, HttpServletRequest request) {
         // 角色不要在里面判断,可以在方法上加上权限注解.(如,管理员才可以访问)
 
@@ -232,7 +228,7 @@ public class EmployeeService {
     }
 
     // @RequiresPermissions("employeeList")
-    @Transactional(readOnly = true)
+//    @Transactional(readOnly = true)
     public Map<String, Object> listAllEmployee(Pageable pageable) {
         // System.out.println(em.toString());
         Map<String, Object> map = new HashMap<>();
@@ -251,6 +247,7 @@ public class EmployeeService {
         emp.setName(e.getName());
         emp.setEmployeeid(e.getEmployeeid());
         emp.setCode(e.getCode());
+        updateEmployeeStatusByExpiredate(e);
         emp.setStatus(e.getStatus());
         if (od.findByOrganizationid(e.getOrganizationid()) != null)
             emp.setParentOrgName(od.findByOrganizationid(e.getOrganizationid()).getName());
@@ -262,23 +259,12 @@ public class EmployeeService {
         return ed.findByLoginname(loginname);
     }
 
-    /**
-     * 不要使用此方法,ameta登录时也请传入code来进行密码校验
-     *
-     * @param loginname
-     * @param password
-     * @return
-     */
-    @Deprecated
-    public EmployeePO login(String loginname, String password) {
-        return ed.findByLoginnameAndPassword(loginname, password);
-    }
-
     @Transactional(readOnly = true)
     public EmployeePO login(String loginname, String password, String code0) {
         OrganizationPO org = null;
         // System.out.println(od.findByCode(code0));
         if ((org = od.findByCode(code0)) != null) {
+            initStatusByExpireTime(org.getOrganizationid(), loginname);
             List<EmployeePO> empList = ed.findByOrganizationidAndLoginnameAndStatus(org.getOrganizationid(), loginname, Constants.STATUS_NORMAL);
             for (int i = 0; !empList.isEmpty() && i < empList.size(); i++) {
                 if (Encrypt.check(loginname, password, code0, empList.get(i).getPassword())) {
@@ -290,6 +276,14 @@ public class EmployeeService {
             return null;
         }
         return null;
+    }
+
+    private void initStatusByExpireTime(Integer organizationid, String loginname) {
+        List<EmployeePO> list = ed.findByOrganizationidAndLoginname(organizationid, loginname);
+        if (list == null || list.size() == 0) {
+            return;
+        }
+        updateEmployeeStatusByExpiredate(list.get(0));
     }
 
     /**
@@ -319,7 +313,7 @@ public class EmployeeService {
      * @param id
      * @return
      */
-    @Transactional(readOnly = true)
+//    @Transactional(readOnly = true)
     public EmployeeAddVO getEmployeeVOInfo(Integer id) {
         EmployeeAddVO emp = new EmployeeAddVO();
         EmployeePO empPO = ed.findByEmployeeid(id);
@@ -328,6 +322,7 @@ public class EmployeeService {
         emp.setQuestion(empPO.getQuestion());
         emp.setCode(empPO.getCode());
         emp.setExpiredate(empPO.getExpiredate());
+        updateEmployeeStatusByExpiredate(empPO);
         emp.setStatus(empPO.getStatus());
         ps.findPeronInfo(empPO.getPersonid(), emp);
         as.findAddressInfo(empPO.getAddressid(), emp);
@@ -376,35 +371,16 @@ public class EmployeeService {
      */
     @Transactional(readOnly = true)
     public boolean hasProvilege(Integer employeeid, HttpServletRequest request) {
-     /*   EmployeePO emp = ed.findByEmployeeid(employeeid);
-        OrganizationPO org = od.findByOrganizationid(emp.getOrganizationid());//要操作的员工的机构
-
-        EmployeePO emp1 = (EmployeePO) request.getSession().getAttribute("emp");
-        OrganizationPO org1 = od.findByOrganizationid(emp1.getOrganizationid());
-
-        if (org1.getOrgtype() == Constants.ORGTYPE_AMETA) {//如果登录的员工机构是ameta,直接操作
-            return true;
-
-        } else if(org1.getOrgtype() == Constants.ORGTYPE_SUPPLIER){//员工的机构id必须是他的安装商或者服务商
-            if (org1.getOrganizationid() == org.getOrganizationid() || org1.getOrganizationid() == org.getParentorgid()) {
-                return true;
-            } else if (org1.getOrgtype() == Constants.ORGTYPE_INSTALLER && org.getOrganizationid() == org1.getOrganizationid()) {
-                return true;
-            }
-        }
-        return false;*/
-//        EmployeePO emp = ed.findByEmployeeid(employeeid);
-//        return os.hasProvilege(emp.getOrganizationid(), request);
         EmployeePO loginemp = (EmployeePO) request.getSession().getAttribute("emp");
         EmployeePO emp = ed.findByEmployeeid(employeeid);
         if (emp == null) {
             return false;
         }
         //如果登录的用户有权限操作此用户所在的机构,此也有权限操作这个用户
-        return os.hasPermissionOperateOrg(loginemp.getEmployeeid(),emp.getOrganizationid());
+        return os.hasPermissionOperateOrg(loginemp.getEmployeeid(), emp.getOrganizationid());
     }
 
-    @Transactional(readOnly = true)
+//    @Transactional(readOnly = true)
     public Map<String, Object> search(Pageable pageable, OrgSearchVO search, HttpServletRequest request) {
         EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
         Integer orgid = emp.getOrganizationid();
@@ -530,6 +506,7 @@ public class EmployeeService {
 
     /**
      * 根据登录员工的角色、权限拿到对应的菜单
+     *
      * @param emp
      * @param request
      * @return
@@ -558,14 +535,17 @@ public class EmployeeService {
         List<Object> parlist = new ArrayList<>();
         for (PrivilegePO p : privilegelist) {
             Map<String, Object> parmap = new LinkedHashMap<>();
-            if ("0".equals(p.getParentprivilegeid() + "")) {//为父节点
+            if ("0".equals(p.getParentprivilegeid() + "") || "-1".equals(p.getParentprivilegeid() + "")) {//为父节点, 为 -1 时,此节点不能点击
                 String text = resourceBundle.getString(p.getCode());
                 String href = p.getLabel();
                 parmap.put("text", text);
                 parmap.put("href", href);
+                if ("-1".equals(p.getParentprivilegeid() + "")) {
+                    parmap.put("selectable", false);
+                }
                 Map<String, String> m = new HashMap<>();
                 m.put("expanded", "true");
-                parmap.put("state",m);
+                parmap.put("state", m);
                 List<PrivilegePO> sonlist = privilegeDAO.findByParentprivilegeid(p.getPrivilegeid());
                 if (sonlist.size() > 0) {
                     List<Object> pplist = new ArrayList<>();
@@ -581,8 +561,8 @@ public class EmployeeService {
                     }
                     JSONArray jj = JSONArray.fromObject(pplist);
                     parmap.put("nodes", jj);
-                }else{
-                    parmap.put("nodes",new ArrayList<>());
+                } else {
+                    parmap.put("nodes", new ArrayList<>());
                 }
             } else if (p.getParentprivilegeid() != null && !idlist.contains(p.getParentprivilegeid())) {
                 String text = resourceBundle.getString(p.getCode());
@@ -591,8 +571,8 @@ public class EmployeeService {
                 parmap.put("href", href);
                 Map<String, String> m = new HashMap<>();
                 m.put("expanded", "true");
-                parmap.put("state",m);
-                parmap.put("nodes",new ArrayList<>());
+                parmap.put("state", m);
+                parmap.put("nodes", new ArrayList<>());
             }
             if (parmap.size() > 0) {
                 parlist.add(parmap);
@@ -600,5 +580,59 @@ public class EmployeeService {
         }
         JSONArray json = JSONArray.fromObject(parlist);
         return String.valueOf(json);
+    }
+
+    public RequestExpendVO getEmployeeInfo(HttpServletRequest request) {
+        RequestExpendVO req = new RequestExpendVO();
+        EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
+        req.setEmployeerole(erd.findByEmployeeid(emp.getEmployeeid()).stream().map(EmployeeRolePO::getRoleid).collect(toList()));
+        req.setEmployeeid(emp.getEmployeeid());
+        req.setOrgid(emp.getOrganizationid());
+        req.setOrgtype(od.findByOrganizationid(emp.getOrganizationid()).getOrgtype());
+        return req;
+    }
+
+    public EmployeeVO getEmployeeInfo(Integer employeeid) {
+        EmployeePO employeePO = ed.findByEmployeeid(employeeid);
+        if (employeePO == null) {
+            return null;
+        }
+        EmployeeVO employee = new EmployeeVO();
+        employee.setEmployeeid(employeePO.getEmployeeid());
+        employee.setName(employeePO.getLoginname());
+        return employee;
+    }
+
+    /**
+     * 通过角色信息判断此用户是否是ameta管理员
+     *
+     * @param id
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public boolean isAmetaAdmin(Integer id) {
+        List<EmployeeRolePO> list = erd.findByEmployeeid(id);
+        if (list != null && list.size() != 0) {
+            for (EmployeeRolePO emp : list) {
+                if (emp.getRoleid() == Constants.ROLE_AMETA_ADMIN) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+
+    /**
+     * 在获取员工信息时,通过此方法来同步status和exiredate之间的关系
+     */
+    private void updateEmployeeStatusByExpiredate(EmployeePO emp){
+        if (emp == null || emp.getExpiredate() == null) {
+            return ;
+        }
+        if (emp.getStatus() == Constants.STATUS_NORMAL && new Date().after(emp.getExpiredate())) {//当用户状态为正常且当前时间超过失效日期时,
+            emp.setStatus(Constants.STATUS_SUSPENCED);
+            ed.save(emp);
+        }
     }
 }
