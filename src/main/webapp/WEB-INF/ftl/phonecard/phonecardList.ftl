@@ -207,7 +207,7 @@
                     if ("1" == data["msg"]) {
                         alert("<@spring.message code='label.updatesuccess'/>");
                     } else {
-                        alert("<@spring.message code='label.updatefailed'/>" + "(" + data['msg'] + ")");
+                        alert("<@spring.message code='label.updatefailed'/>");
                     }
                     $('#table').bootstrapTable('refresh');
                 },

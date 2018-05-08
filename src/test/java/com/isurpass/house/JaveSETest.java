@@ -12,7 +12,6 @@ import java.util.Map;
 class JavaSETest {
 
 	public static void main(String[] args) throws IllegalArgumentException, IllegalAccessException, InterruptedException {
-
 	}
 
 	private static void phoneuser() {
