@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import cn.com.isurpass.house.po.EmployeePO;
 import cn.com.isurpass.house.util.FormUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -90,27 +91,27 @@ public class GatewayController {
 	 * @param deviceid
 	 * @return
 	 */
-	//@ResponseBody
 	@RequestMapping("gatewayDetail")
 	public String gatewayDetail(String deviceid,Model model) {
 		if(StringUtils.isEmpty(deviceid)){
 			return null;
 		}
-		GatewayDetailVO gw = gs.findByDeviceid(deviceid);
+		GatewayDetailVO gw = gs.findByDeviceid(deviceid,null);
 		model.addAttribute("gwd", gw);
-		//model.addAttribute("gdd", gw.getDevice());
+//		model.addAttribute("gdd", gw.getDevice());
 		return "gateway/gatewayDetail";
 	}
 	@ResponseBody
 	@RequestMapping("gatewayDeviceDetail")
 	public Map<String,Object> gatewayDeviceDetail(PageResult pr,String deviceid,Model model) {
+		Pageable pageable = PageRequest.of(pr.getPage() - 1, pr.getRows(), Sort.Direction.ASC, "zwavedeviceid");
 		if(StringUtils.isEmpty(deviceid)){
 			return null;
 		}
-		GatewayDetailVO gw = gs.findByDeviceid(deviceid);
+		GatewayDetailVO gw = gs.findByDeviceid(deviceid, pageable);
 		List<ZwaveDevicePO> list= gw.getDevice();
 		Map<String,Object> map = new HashMap<>();
-		map.put("total",list.size());
+		map.put("total",gw.getTotal());
 		map.put("rows",list);
 		return map;
 	}

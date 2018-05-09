@@ -3,16 +3,19 @@ package cn.com.isurpass.house.service;
 import cn.com.isurpass.house.dao.*;
 import cn.com.isurpass.house.exception.MyArgumentNullException;
 import cn.com.isurpass.house.po.*;
+import cn.com.isurpass.house.util.BeanCopyUtils;
 import cn.com.isurpass.house.util.Constants;
 import cn.com.isurpass.house.vo.GatewayDetailVO;
 import cn.com.isurpass.house.vo.TypeGatewayInfoVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 @Service
@@ -259,7 +262,7 @@ public class GatewayService {
 	 * @return
 	 */
 //	@Transactional(readOnly = true)
-	public GatewayDetailVO findByDeviceid(String deviceid) {
+	public GatewayDetailVO findByDeviceid(String deviceid, Pageable pageable) {
 		GatewayDetailVO gate = new GatewayDetailVO();
 		GatewayPO gateway = gd.findByDeviceid(deviceid);
 		//网关信息
@@ -298,10 +301,34 @@ public class GatewayService {
 				}
 			}
 		}
-		List<ZwaveDevicePO> zdlist = zdd.findByDeviceid(deviceid);
-		gate.setDevice(zdlist);
+		if (pageable != null) {
+			long l = zdd.countByDeviceid(deviceid);
+			Page<ZwaveDevicePO> zdlist = zdd.findByDeviceid(deviceid, pageable);
+			gate.setTotal(l);
+			List<ZwaveDevicePO> list = setProperties(zdlist);
+			gate.setDevice(list);
+		}
 		return gate;
 	}
+
+	private List<ZwaveDevicePO> setProperties(Page<ZwaveDevicePO> zdlist) {
+		List<ZwaveDevicePO> list = new ArrayList<>();
+		zdlist.forEach(f ->{
+			ZwaveDevicePO z = new ZwaveDevicePO();
+			try {
+				BeanCopyUtils.copyProperties(f,z);
+			} catch (NoSuchMethodException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			}
+			list.add(z);
+		});
+		return list;
+	}
+
 	/**
 	 * 根据操作和id数组修改状态
 	 * @param hope
