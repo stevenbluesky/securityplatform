@@ -1,3 +1,12 @@
+function formatter_gender(value) {
+    if(value == 0 )
+        return lan.female;
+    if(value == 1 )
+        return lan.male;
+    if(value == 2 )
+        return "LGBT";
+
+}
 function formatter_status(value, row, index) {
     if (value == 1)
         return lan.normal;

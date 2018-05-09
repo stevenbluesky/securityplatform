@@ -9,12 +9,14 @@ import cn.com.isurpass.house.util.FormUtils;
 import cn.com.isurpass.house.vo.OrgAddVO;
 import cn.com.isurpass.house.vo.OrgListVO;
 import cn.com.isurpass.house.vo.OrgSearchVO;
+import cn.com.isurpass.house.vo.RequestExpendVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.lang.model.type.IntersectionType;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
@@ -43,6 +45,8 @@ public class OrganizationService {
     PersonService ps;
     @Autowired
     EmployeeroleDAO erd;
+    @Autowired
+    EmployeeService es;
 
     /**
      * 通过指定员工id和要切换成的方法进行状态的改变
@@ -86,7 +90,8 @@ public class OrganizationService {
     @Transactional(rollbackFor = Exception.class)
     public void addByOrgtype(OrgAddVO as, Integer orgtype, HttpServletRequest request) throws MyArgumentNullException {
         EmployeePO emp0 = (EmployeePO) request.getSession().getAttribute("emp");
-        OrgAddVO orgInfo = (OrgAddVO) request.getSession().getAttribute("orgInfo");//修改时才会存在的机构id
+        //修改时才会存在的机构id
+        OrgAddVO orgInfo = (OrgAddVO) request.getSession().getAttribute("orgInfo");
         if (!FormUtils.checkOrgNull(as)) {
             throw new MyArgumentNullException("-100");
         }
@@ -99,30 +104,24 @@ public class OrganizationService {
         org.setCode(as.getCode());
         org.setStatus(1);
         org.setCentralstationname(as.getCsname());
-        // FormUtils.copyO2O(org, as);// 将一些机构的属性复制到 org 中
-
-        // if (as.getParentorgid() == null) {// 没有填写上级机构id,则表明这是一个服务商
-        // Integer ametaId =
-        // od.findByOrgtype(Constants.ORGTYPE_AMETA).get(0).getOrganizationid();// 取
-        // Ameta 的机构id
-        // as.setParentorgid(ametaId);
-        // }
-        // 不能这么判断,事实上,服务商新增安装商时也是不填上级机构的id(默认为服务商的id)
-
         org.setCreatetime(new Date());
-        if (orgInfo != null) {//不为空说明在进行修改操作
+        //不为空说明在进行修改操作
+        if (orgInfo != null) {
             org.setCreatetime(od.findByOrganizationid(orgInfo.getOrganizationid()).getCreatetime());
             org.setParentorgid(orgInfo.getParentorgid());
             org.setOrgtype(orgInfo.getOrgtype());
         } else {
-            if (Constants.ORGTYPE_SUPPLIER.equals(orgtype)) {// 如果是添加服务商
+            // 如果是添加服务商
+            if (Constants.ORGTYPE_SUPPLIER.equals(orgtype)) {
                 org.setParentorgid(od.findByOrgtype(Constants.ORGTYPE_AMETA).get(0).getOrganizationid());
                 org.setOrgtype(Constants.ORGTYPE_SUPPLIER);
             }
-            if (Constants.ORGTYPE_INSTALLER.equals(orgtype)) {// 安装商
+            // 安装商
+            if (Constants.ORGTYPE_INSTALLER.equals(orgtype)) {
                 // org.setParentorgid(emp0.getOrganizationid());
                 org.setOrgtype(Constants.ORGTYPE_INSTALLER);
-                if (as.getParentorgid() != null) {// 不为空,ameta在进行添加//要进行当前用户是否是ameta员工的判断
+                // 不为空,ameta在进行添加//要进行当前用户是否是ameta员工的判断
+                if (as.getParentorgid() != null) {
                     org.setParentorgid(as.getParentorgid());
                 } else {
                     org.setParentorgid(emp0.getOrganizationid());
@@ -175,7 +174,6 @@ public class OrganizationService {
         AddressPO csAddress = new AddressPO(csCountryname, csProvincename, csCityname, "", as.getCspostal());
         // 服务商总公司联系人
         PersonPO csPerson = new PersonPO(as.getCspname(), as.getCspphonenumber(), as.getCspemail(), as.getCspfax());
-//        EmployeePO emp = new EmployeePO(as.getLoginname(), FormUtils.encrypt(as.getPassword()), as.getQuestion(),FormUtils.encrypt(as.getAnswer()));
         EmployeePO emp = new EmployeePO(as.getLoginname(), Encrypt.encrypt(as.getLoginname(), as.getPassword(), as.getCode()), as.getQuestion(), Encrypt.encrypt(as.getLoginname(), as.getAnswer(), as.getCode()));
 
         if (orgInfo != null) {
@@ -186,7 +184,8 @@ public class OrganizationService {
             csPerson.setPersonid(orgInfo.getCscontactid());
         }
 
-        Integer aId = null;// 公司地址id
+        // 公司地址id
+        Integer aId = null;
         Integer csAId = null;
         Integer bAId = null;
         Integer sPId = null;
@@ -198,9 +197,11 @@ public class OrganizationService {
             csAId = ad.save(csAddress).getAddressid();
         if (!FormUtils.isEmpty(bAddress))
             bAId = ad.save(bAddress).getAddressid();
-        if (!FormUtils.isEmpty(sPerson)) // 服务商联系人不为空
+        // 服务商联系人不为空
+        if (!FormUtils.isEmpty(sPerson))
             sPId = pd.save(sPerson).getPersonid();
-        if (!FormUtils.isEmpty(csPerson)) {// 服务商总公司联系人不为空
+        // 服务商总公司联系人不为空
+        if (!FormUtils.isEmpty(csPerson)) {
             csPId = pd.save(csPerson).getPersonid();
         }
 //        od.findByName(as.getCsname());
@@ -229,13 +230,13 @@ public class OrganizationService {
             EmployeeRolePO erpo = new EmployeeRolePO();
             erpo.setCreatetime(new Date());
             erpo.setEmployeeid(save.getEmployeeid());
-            if (orgtype == Constants.ORGTYPE_AMETA) {
+            if (orgtype.equals(Constants.ORGTYPE_AMETA)) {
                 erpo.setRoleid(1);
             }
-            if (orgtype == Constants.ORGTYPE_SUPPLIER) {
+            if (orgtype.equals(Constants.ORGTYPE_SUPPLIER)) {
                 erpo.setRoleid(2);
             }
-            if (orgtype == Constants.ORGTYPE_INSTALLER) {
+            if (orgtype.equals(Constants.ORGTYPE_INSTALLER)) {
                 erpo.setRoleid(3);
             }
             erd.save(erpo);
@@ -493,10 +494,11 @@ public class OrganizationService {
 
     /**
      * 通过要操作的员工id和request判断当前登录的员工是否有权限操作此机构
-     * @Deprecated 此方法是不安全的,请使用hasPermissionOperateOrg(Integer empid,Integer orgid)
+     *
      * @param organizationid
      * @param request
      * @return
+     * @Deprecated 此方法是不安全的, 请使用hasPermissionOperateOrg(Integer empid, Integer orgid)
      */
     @Deprecated
     @Transactional(readOnly = true)
@@ -504,12 +506,12 @@ public class OrganizationService {
         OrganizationPO org = od.findByOrganizationid(organizationid);//要操作的员工的机构
         EmployeePO emp1 = (EmployeePO) request.getSession().getAttribute("emp");
         OrganizationPO org1 = od.findByOrganizationid(emp1.getOrganizationid());
-        if (org1.getOrgtype() == Constants.ORGTYPE_AMETA) {//如果登录的员工机构是ameta,直接操作
+        if (org1.getOrgtype().equals(Constants.ORGTYPE_AMETA)) {//如果登录的员工机构是ameta,直接操作
             return true;
-        } else if (org1.getOrgtype() == Constants.ORGTYPE_SUPPLIER) {//员工的机构id必须是他的安装商或者服务商
-            if (org1.getOrganizationid() == org.getOrganizationid() || org1.getOrganizationid() == org.getParentorgid()) {
+        } else if (org1.getOrgtype().equals(Constants.ORGTYPE_SUPPLIER)) {//员工的机构id必须是他的安装商或者服务商
+            if (org1.getOrganizationid().equals(org.getOrganizationid()) || org1.getOrganizationid().equals(org.getParentorgid())) {
                 return true;
-            } else if (org1.getOrgtype() == Constants.ORGTYPE_INSTALLER && org.getOrganizationid() == org1.getOrganizationid()) {
+            } else if (org1.getOrgtype().equals(Constants.ORGTYPE_INSTALLER) && org.getOrganizationid().equals(org1.getOrganizationid())) {
                 return true;
             }
         }
@@ -556,21 +558,60 @@ public class OrganizationService {
     //判断用户是否有权限操作此机构
     @Transactional(readOnly = true)
     public boolean hasPermissionOperateOrg(Integer empid, Integer orgid) {
-        List<Integer> emprolelist = erd.findByEmployeeid(empid).stream().map(EmployeeRolePO::getRoleid).collect(toList());
+        List< Integer> emprolelist = erd.findByEmployeeid(empid).stream().map(EmployeeRolePO::getRoleid).collect(toList());
         Integer orgtype = od.findByOrganizationid(orgid).getOrgtype();
         if (emprolelist.contains(Constants.ROLE_AMETA_ADMIN)) {
             return true;
-        } else if (orgtype == Constants.ORGTYPE_SUPPLIER && emprolelist.contains(Constants.ROLE_SUPPLIER_ADMIN)) {
+        } else if (orgtype.equals(Constants.ORGTYPE_SUPPLIER) && emprolelist.contains(Constants.ROLE_SUPPLIER_ADMIN)) {
             EmployeePO emp = ed.findByEmployeeidAndOrganizationid(empid, orgid);
             return emp != null;
-        }else if(orgtype == Constants.ORGTYPE_INSTALLER && emprolelist.contains(Constants.ROLE_SUPPLIER_ADMIN)){
+        } else if (orgtype.equals(Constants.ORGTYPE_INSTALLER) && emprolelist.contains(Constants.ROLE_SUPPLIER_ADMIN)) {
             List<OrganizationPO> org = od.findByParentorgid(orgid);
             return org.contains(orgid);
-        }else if(orgtype == Constants.ORGTYPE_INSTALLER && emprolelist.contains(Constants.ROLE_INSTALLER_ADMILN)){
+        } else if (orgtype.equals(Constants.ORGTYPE_INSTALLER) && emprolelist.contains(Constants.ROLE_INSTALLER_ADMILN)) {
             EmployeePO emp = ed.findByEmployeeidAndOrganizationid(empid, orgid);
             return emp != null;
         }
         return false;
     }
 
+    @Transactional(readOnly = true)
+    public OrgAddVO queryInstallerInfo(HttpServletRequest request, Integer installerid) {
+        return queryOrgInfo(request, installerid,Constants.ORGTYPE_INSTALLER);
+    }
+
+    @Transactional(readOnly = true)
+    public OrgAddVO querySupplierInfo(HttpServletRequest request, Integer supplierid) {
+        return queryOrgInfo(request, supplierid,Constants.ORGTYPE_SUPPLIER);
+    }
+
+    private OrgAddVO queryOrgInfo(HttpServletRequest request, Integer supplierid,Integer orgtype) {
+        RequestExpendVO employeeInfo = es.getEmployeeInfo(request);
+        if (!hasPermissionOperateOrg(employeeInfo.getEmployeeid(), supplierid)) {
+            throw new RuntimeException("-998");
+        }
+        OrgAddVO orgAddVO = new OrgAddVO();
+        OrganizationPO byOrganizationid = od.findByOrganizationid(supplierid);
+        if (byOrganizationid == null) {
+            return null;
+        }
+        orgAddVO.setName(byOrganizationid.getName());
+        orgAddVO.setCode(byOrganizationid.getCode());
+        orgAddVO.setCsname(byOrganizationid.getCentralstationname());
+        as.findAddressInfo(byOrganizationid, orgAddVO);
+        ps.findPersonInfo(byOrganizationid,orgAddVO);
+        EmployeePO admin = null;
+        if (Constants.ORGTYPE_SUPPLIER.equals(orgtype)) {
+            admin = es.findSuppllierAdmin(supplierid);
+            if (admin != null) {
+                orgAddVO.setLoginname(admin.getLoginname());
+            }
+        } else if (Constants.ORGTYPE_INSTALLER.equals(orgtype)) {
+            admin = es.findInstallerInfo(supplierid);
+            if (admin != null) {
+                orgAddVO.setLoginname(admin.getLoginname());
+            }
+        }
+        return orgAddVO;
+    }
 }

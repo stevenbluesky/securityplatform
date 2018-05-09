@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,6 +28,12 @@ public class EmployeeController {
 
     @Autowired
     EmployeeService es;
+
+    @RequestMapping("queryEmployeeInfo")
+    public String queryEmployeeInfo(HttpServletRequest request, Integer employeeid, Model model) {
+        model.addAttribute("empVO", es.queryEmployeeInfo(request, employeeid));
+        return "employee/employeeInfo";
+    }
 
     @RequestMapping("addEmployeePage")
     public String addEmployeePage(@RequestParam(required = false)Integer id, HttpServletRequest request) {
