@@ -51,8 +51,8 @@
         <th data-field=""></th>
         <th data-field="organizationid" data-visible="false">ID</th>
         <!--<th data-field="organizationid">ID</th>-->
-        <th data-field="name" class="text-center"><@spring.message code="label.pname"/></th>
         <th data-field="code" class="text-center"><@spring.message code="label.code"/></th>
+        <th data-field="name" class="text-center"><@spring.message code="label.pname"/></th>
         <th data-field="city" class="text-center"><@spring.message code="label.city"/></th>
         <th data-field="status" data-formatter="formatter_status" class="text-center"><@spring.message code="label.status"/></th>
         <th data-field="operate" data-formatter="formatter_op"
@@ -112,7 +112,9 @@
                 //alert(lan.loaderror);
             },
             onDblClickRow: function (row, $element) {
-                var id = row.id;
+                var id = row.organizationid;
+                $("#iframeDetail").attr("src", 'querySupplierInfo?supplierid='+id);
+                $('#myModal').modal('show');
             }
         });
 
@@ -120,24 +122,6 @@
         $("#searchbtn").click(function () {
             $("#table").bootstrapTable("refreshOptions", {pageNumber: 1})
         });
-/*
-        window.supplieraddEvents =
-                {
-                    "click #btn1": function (e, value, row, index) {
-                        // alert(row.name);
-                        window.location.href = "addSupplierPage?organizationid=" + row.organizationid;
-                    },
-                    "click #btn2": function (e, value, row, index) {
-                        toggleStatus(e, value, row, index, 'toggleOrganizationStatus', row.organizationid, 2);
-                    },
-                    "click #btn3": function (e, value, row, index) {
-                        toggleStatus(e, value, row, index, 'toggleOrganizationStatus', row.organizationid, 1);
-                    },
-                    "click #btn9": function (e, value, row, index) {
-                        toggleStatus(e, value, row, index, 'toggleOrganizationStatus', row.organizationid, 9);
-                    }
-
-                };*/
 
         // <#--获取复选框选中的列的id数组-->
         function getCheckedId() {
@@ -198,5 +182,31 @@
             });
         }
     </script>
+
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width:90%;height:90%;">
+        <div class="modal-content">
+            <div class="modal-header" style="height: 40px;width:100%">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
+                <h4 class="modal-title" id="myModalLabel"><@spring.message code="label.supplierInfo"/></h4>
+            </div>
+        <#--引入网关详情界面-->
+            <div class="modal-body">
+                <div class="col-md-10" style="height:550px;width:100%">
+                    <iframe id="iframeDetail" class="embed-responsive-item" frameborder="0" src=""
+                            style="height:100%;width:100%;"></iframe>
+                </div>
+            </div>
+
+            <div class="col-md-1"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default"
+                        data-dismiss="modal"><@spring.message code="label.close"/></button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <#include "../_foot1.ftl"/>
 <#include "../_foot0.ftl"/>

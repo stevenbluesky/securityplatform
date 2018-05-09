@@ -130,7 +130,7 @@
                 </div>
 
                 <div style="visibility: hidden;">br</div>
-                <div class="text-left"><h4><@spring.message code="label.installerperosn"/></h4></div>
+                <div class="text-left"><h4><@spring.message code="label.installerperson"/></h4></div>
                 <hr>
                 <div class="form-group">
                     <label for="sname" class="col-sm-2 control-label"  style="text-align: left;"><@spring.message code="label.name"/></label>

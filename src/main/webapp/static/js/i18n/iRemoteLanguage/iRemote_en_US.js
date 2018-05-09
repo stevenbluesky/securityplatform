@@ -69,5 +69,7 @@ var lan = {
     userlist:"User List",
     enteringuserinfo:"Input User Inforamation",
     phonecardlist:"SIM Card List",
-    enteringphonecardinfo:"Input SIM Card Information"
+    enteringphonecardinfo:"Input SIM Card Information",
+    male:"male",
+    female:"female",
 };

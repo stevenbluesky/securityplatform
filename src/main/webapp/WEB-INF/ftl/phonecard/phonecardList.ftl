@@ -38,7 +38,7 @@
           </div>
           <hr>
 <#--新增，启用，停用按钮-->
-<@shiro.hasPermission  name="label.ToggelPhonecardStatus">
+<@shiro.hasPermission  name="label.TogglePhonecardStatus">
             <button style="float: right;" type="button" id='deletePhonecard' class='btn btn-default'
                     onclick='updatePhonecardStatus("delete");'><@spring.message code='label.delete'/></button>
 			<button style="float: right;" type="button" id='stopPhonecard' class='btn btn-default'

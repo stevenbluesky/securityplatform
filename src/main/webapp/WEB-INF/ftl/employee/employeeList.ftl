@@ -43,7 +43,7 @@
 <button style="float: right;" class='btn btn-default'
         onclick='modifyEmployeeRole();'><@spring.message code='label.Modifyemprole'/></button>
 </@shiro.hasPermission>
-<@shiro.hasPermission name="button:changeStatus">
+<@shiro.hasPermission name="label.ToggleEmployeeStatus">
                <button style="float: right;" class='btn btn-default'
                        onclick='toggleEmployeeStatus0("unsuspence");'><@spring.message code='label.unsuspence'/></button>
 			<button style="float: right;" class='btn btn-default'
@@ -58,9 +58,9 @@
     <tr>
         <th data-field=""></th>
         <th data-field="employeeid" data-visible="false">ID</th>
+        <th data-field="code" class="text-center"><@spring.message code="label.empcode"/></th>
         <th data-field="name" class="text-center"><@spring.message code="label.name"/></th>
         <th data-field="parentOrgName" class="text-center"><@spring.message code="label.parentorg"/></th>
-        <th data-field="code" class="text-center"><@spring.message code="label.empcode"/></th>
         <th data-field="status" data-formatter='formatter_status'
             class="text-center"><@spring.message code="label.status"/></th>
         <th data-field="employeeroleid" class="text-center"><@spring.message code="label.privilege"/></th>
@@ -94,7 +94,7 @@
             minimumCountColumns: 2,             //最少允许的列数
             clickToSelect: true,                //是否启用点击选中行
             //height: 500,                      //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
-            uniqueId: "id",                     //每一行的唯一标识，一般为主键列
+            uniqueId: "employeeid",                     //每一行的唯一标识，一般为主键列
             showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
             cardView: false,                    //是否显示详细视图
             detailView: false,                  //是否显示父子表
@@ -122,7 +122,9 @@
                 // alert(lan.loaderror);
             },
             onDblClickRow: function (row, $element) {
-                var id = row.ID;
+                var id = row.employeeid;
+                $("#iframeDetail").attr("src", 'queryEmployeeInfo?employeeid='+id);
+                $('#myModal').modal('show');
             }
         });
 
@@ -202,5 +204,31 @@
             });
         }
     </script>
+
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width:90%;height:90%;">
+        <div class="modal-content">
+            <div class="modal-header" style="height: 40px;width:100%">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
+                <h4 class="modal-title" id="myModalLabel"><@spring.message code="label.employeeInfo"/></h4>
+            </div>
+        <#--引入网关详情界面-->
+            <div class="modal-body">
+                <div class="col-md-10" style="height:550px;width:100%">
+                    <iframe id="iframeDetail" class="embed-responsive-item" frameborder="0" src=""
+                            style="height:100%;width:100%;"></iframe>
+                </div>
+            </div>
+
+            <div class="col-md-1"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default"
+                        data-dismiss="modal"><@spring.message code="label.close"/></button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <#include "../_foot1.ftl"/>
 <#include "../_foot0.ftl"/>

@@ -14,6 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -42,6 +43,18 @@ public class OrganizationController {
     @Autowired
     OrganizationService ss;
 
+
+    @RequestMapping("queryInstallerInfo")
+    public String queryInstallerInfo(HttpServletRequest request, Integer installerid, Model model){
+        model.addAttribute("orgVO",ss.queryInstallerInfo(request, installerid));
+        return "installer/installerInfo";
+    }
+
+    @RequestMapping("querySupplierInfo")
+    public String querySupplierInfo(HttpServletRequest request, Integer supplierid, Model model){
+        model.addAttribute("orgVO",ss.querySupplierInfo(request, supplierid));
+        return "supplier/supplierInfo";
+    }
     @RequestMapping("toggleOrganizationStatus")
     @ResponseBody
     public JsonResult toggleOrganizationStatus(@RequestBody TransferVO tf, HttpServletRequest request) {

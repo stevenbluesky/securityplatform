@@ -69,5 +69,7 @@ var lan = {
     userlist:"用户列表",
     enteringuserinfo:"录入用户信息",
     phonecardlist:"电话卡列表",
-    enteringphonecardinfo:"录入电话卡信息"
+    enteringphonecardinfo:"录入电话卡信息",
+    male:"男",
+    female:"女",
 };
