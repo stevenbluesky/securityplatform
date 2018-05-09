@@ -24,6 +24,8 @@ public interface ZwaveDeviceDAO extends CrudRepository<ZwaveDevicePO, Integer> {
 
     List<ZwaveDevicePO> findByNameContaining(String devicename);
 
+    List<ZwaveDevicePO> findByDeviceidLike(String deviceid);
+
     List<ZwaveDevicePO> findByDeviceid(String deviceid);
 
     Integer countByDeviceidIn(List<String> filterlist);

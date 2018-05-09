@@ -101,6 +101,9 @@ public class OrganizationService {
 
         OrganizationPO org = new OrganizationPO();
         org.setName(as.getName());
+        if (!validCode(as.getCode())) {
+            throw new RuntimeException("-118");
+        }
         org.setCode(as.getCode());
         org.setStatus(1);
         org.setCentralstationname(as.getCsname());
@@ -120,11 +123,11 @@ public class OrganizationService {
             if (Constants.ORGTYPE_INSTALLER.equals(orgtype)) {
                 // org.setParentorgid(emp0.getOrganizationid());
                 org.setOrgtype(Constants.ORGTYPE_INSTALLER);
-                // 不为空,ameta在进行添加//要进行当前用户是否是ameta员工的判断
+                // 不为空,ameta在进行添加
                 if (as.getParentorgid() != null) {
                     org.setParentorgid(as.getParentorgid());
-                } else {
-                    org.setParentorgid(emp0.getOrganizationid());
+                } else if (es.isAmetaAdmin(emp0.getEmployeeid())) {
+                    org.setParentorgid(null);
                 }
             }
         }
@@ -408,11 +411,6 @@ public class OrganizationService {
         org.setOrgtype(orgPO.getOrgtype());
         org.setOrganizationid(orgPO.getOrganizationid());
         org.setParentorgid(orgPO.getParentorgid());
-//        AddressPO addressInfo = as.findAddressInfo(orgPO.getOfficeaddressid());
-//        AddressPO baddressInfo = as.findAddressInfo(orgPO.getBillingaddressid());
-//        AddressPO csaddressInfo = as.findAddressInfo(orgPO.getCsaddressid());
-//        PersonPO peronInfo = ps.findPeronInfo(orgPO.getContactid());
-//        PersonPO bPersonInfo = ps.findPeronInfo(orgPO.getCscontactid());
         as.findAddressInfo(orgPO, org);
         ps.findPersonInfo(orgPO, org);
         System.out.println(org.toString());

@@ -312,7 +312,7 @@ public class EmployeeService {
         OrganizationPO org0 = od.findByOrganizationid(emp.getOrganizationid());
         if (org0 != null) {
             empp.setInstallerorgid(org0.getOrganizationid());
-            if (org0.getParentorgid() != null)// parentid的对象不为空,说明org0是一个安装商,emp是安装商员工
+            if (org0.getOrgtype() == Constants.ORGTYPE_INSTALLER)
             {
                 empp.setOrganizationid(org0.getParentorgid());
             } else {
@@ -320,6 +320,7 @@ public class EmployeeService {
                 empp.setOrganizationid(org0.getOrganizationid());
             }
         }
+
         return empp;
     }
 

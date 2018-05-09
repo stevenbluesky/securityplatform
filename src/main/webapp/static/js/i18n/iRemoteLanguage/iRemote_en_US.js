@@ -9,19 +9,20 @@ var lan = {
     statusnull:"Status is Mandatory.",//-101
     haduser:"User existed!",//-102
     installerneedscode:"If this is new installer, please input Installer Number!",//-103
-    duplicateempcode:"Dupliacate Installer Number!",//-104
+    duplicateempcode:"Duplicate Installer Number!",//-104
     loaderror: "Loading Data Error!",//-105
     duplicategateway:"This Gateway has binded Organization!",//-106
     gorpnotnull:"Gateway or SIM Mandatory.",//-107
     duplicategatewayuser:"This Gateway has binded User!",//-108
     addgatewayerror:"Gateway doesn't exsit!",//-109
-    duplicatephonecarduser:"Dupliacate SIM for User, please input others!.",//-110
+    duplicatephonecarduser:"Duplicate SIM for User, please input others!.",//-110
     simdontexsit:"SIM doesn't exsit",//-111
     devicenoexist:"Device does not exist",//-112
     apinopermission:"No permission",//-113
     codeorpassworderror:"Remote returned some errors ",//-114//-115
     deviceoffline:"Device offline",//-116
     nopermission:"No permission",//-117
+    validateCodeFail:"Duplicate Company Code",//-118
     connectdbfail:"Database connect failed",//-1113
 
     normal: "Normal",
@@ -67,7 +68,7 @@ var lan = {
     devicelist:"Device List",
     devicedetail:"Device Detail",
     userlist:"User List",
-    enteringuserinfo:"Input User Inforamation",
+    enteringuserinfo:"Input User Information",
     phonecardlist:"SIM Card List",
     enteringphonecardinfo:"Input SIM Card Information",
     male:"male",
