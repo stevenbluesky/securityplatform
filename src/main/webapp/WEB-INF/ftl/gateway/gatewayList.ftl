@@ -208,7 +208,7 @@
         <#--引入网关详情界面-->
             <div class="modal-body">
                 <div class="col-md-10" style="height:550px;width:100%">
-                    <iframe id="iframeDetail" class="embed-responsive-item" frameborder="0" src="gatewayDetail"
+                    <iframe id="iframeDetail" class="embed-responsive-item" frameborder="0" src=""
                             style="height:100%;width:100%;"></iframe>
                 </div>
             </div>

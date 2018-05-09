@@ -110,7 +110,7 @@
     var id = getCookie("id");
     if (id != null) {
         $('#table').bootstrapTable({
-            url: "gatewayDeviceDetail?deviceid=" + id + "",
+            url: "gatewayDeviceDetail?deviceid=" + id,
             method: 'GET',                      //请求方式（*）
             //toolbar: '#toolbar',              //工具按钮用哪个容器
             striped: true,                      //是否显示行间隔色
@@ -129,7 +129,7 @@
             minimumCountColumns: 2,             //最少允许的列数
             clickToSelect: true,                //是否启用点击选中行
             //height: 500,                      //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
-            uniqueId: "id",                     //每一行的唯一标识，一般为主键列
+            uniqueId: "zwavedeviceid",                     //每一行的唯一标识，一般为主键列
             showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
             cardView: false,                    //是否显示详细视图
             detailView: false,                  //是否显示父子表
@@ -139,8 +139,8 @@
                 var temp = {
                     rows: params.limit,                         //页面大小
                     page: (params.offset / params.limit) + 1,   //页码
-                    sort: params.sort,      //排序列名
-                    sortOrder: params.order //排位命令（desc，asc）
+                    sort: params.zwavedeviceid,      //排序列名
+                    sortOrder: params.asc //排位命令（desc，asc）
                 };
                 return temp;
             },
@@ -154,8 +154,7 @@
                 alert('<@spring.message code="label.dataloaderror"/>');
             },
             onDblClickRow: function (row, $element) {
-                var id = row.ID;
-                EditViewById(id, 'view');
+                var id = row.zwavedeviceid;
             }
         });
     }

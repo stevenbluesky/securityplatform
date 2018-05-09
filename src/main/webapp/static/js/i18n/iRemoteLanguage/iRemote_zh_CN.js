@@ -22,7 +22,9 @@ var lan = {
     codeorpassworderror:"远程操作出错",//-114//-115
     deviceoffline:"设备离线",//-116
     nopermission:"无权限",//-117
+    validateCodeFail:"公司代码重复",//-118
     connectdbfail:"连接数据库出错",//-1113
+
 
     normal: "正常",
     unvalid: '未生效',

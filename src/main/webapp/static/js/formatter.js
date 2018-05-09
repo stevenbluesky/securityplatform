@@ -283,6 +283,8 @@ function formatterReturnStatus(status){
         case '-116':return lan.deviceoffline;
         case '-117':return lan.nopermission;
         case '-1113':return lan.connectdbfail;
+        case '-118':return lan.validateCodeFail;
+
         default:return lan.error0;
     }
 }

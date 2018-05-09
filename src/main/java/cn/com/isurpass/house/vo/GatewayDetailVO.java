@@ -4,8 +4,10 @@ import java.util.Date;
 import java.util.List;
 
 import cn.com.isurpass.house.po.ZwaveDevicePO;
+import org.springframework.data.domain.Page;
 
 public class GatewayDetailVO {
+	private Long total;
 	private String deviceid;//网关id
 	private String name;//网关名称
 	private Integer status;//网关状态，0离线，1在线
@@ -29,6 +31,15 @@ public class GatewayDetailVO {
 	private Date orderingdate;
 	private Date expiredate ;
 	private List<ZwaveDevicePO> device;
+
+	public Long getTotal() {
+		return total;
+	}
+
+	public void setTotal(Long total) {
+		this.total = total;
+	}
+
 	public String getDeviceid() {
 		return deviceid;
 	}

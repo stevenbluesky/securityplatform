@@ -400,6 +400,20 @@
                     validators: {
                         notEmpty: {
                             message: 'The code is required and cannot be empty'
+                        },
+                        remote: {
+                            url: 'validCode',
+                            message: 'The code is not available',
+                            delay: 2000,
+                            type: 'POST',
+                            /**自定义提交数据，默认值提交当前input value
+                             *  data: function(validator) {
+						       return {
+						           password: $('[name="passwordNameAttributeInYourForm"]').val(),
+						           whatever: $('[name="whateverNameAttributeInYourForm"]').val()
+						       };
+						    }
+                             */
                         }
                     }
                 }
@@ -449,7 +463,7 @@
             url: "../org/listAllSupplier",
             async: true,
             success: function (data) {
-                var str = "";
+                var str ="<option value=''></option>";
                 for (var i = 0; i < data.length; i++) {
                     str += '<option value=' + data[i].organizationid + '>'
                             + data[i].name + '</option>'
