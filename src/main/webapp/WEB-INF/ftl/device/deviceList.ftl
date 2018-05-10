@@ -165,9 +165,6 @@
                 // alert(lan.loaderror);
             },
             onDblClickRow: function (row, $element) {
-                //console.log(value);
-                //console.log(row);
-                //console.log(index);
                 window.location.href = 'deviceDetail?zwavedeviceid=' + row.zwavedeviceid;
             }
         });

@@ -16,17 +16,24 @@
                         <table class="table table-hover">
                             <tr>
                                 <th width="50%"><@spring.message code="label.devicename"/></th>
+                                <th width="50%">${(zwave.devicename)!'NONE'}</th>
                                 <th width="50%">${(zwave.name)!'NONE'}</th>
                             </tr>
+                            <tr hidden>
+                                <th>id</th>
+                                <th id="zwavedevicetype">${(zwave.devicetype)!}</th>
                             <tr><#--设备类型-->
                                 <th>设备类型</th>
-                                <th id="devicetype">${(zwave.devicetype)!}</th>
+                                <th id="zwavedevicetype">${(zwave.devicetype)!}</th>
                             </tr>
+                            <tr>
 
                             <tr><#--服务商-->
                                 <th><@spring.message code="label.serviceprovider"/></th>
+                                <th>${(zwave.suppliename)!'NONE'}</th>
                                 <th>${(zwave.organizationname)!'NONE'}</th>
                             </tr>
+                            <tr>
                             <tr><#--安装商-->
                                 <th>安装商</th>
                                 <th>${(zwave.installerorgname)!'NONE'}</th>
@@ -41,11 +48,13 @@
                             </tr>
                             <tr><#--告警状态-->
                                 <th><@spring.message code="label.alarmstatus"/></th>
-                                <th>${(zwave.warningstatuses)!'NONE'}</th>
+                                <th id="zwavewarningstatus">${(zwave.warningstatuses)!'NONE'}</th>
                             </tr>
+                            <tr>
+
                             <tr><#--状态-->
                                 <th>状态</th>
-                                <th>${(zwave.status)!'NONE'}</th>
+                                <th id="status">${(zwave.status)!'NONE'}</th>
                             </tr>
                             <tr><#--电量-->
                                 <th>电量</th>
@@ -55,7 +64,7 @@
                                 <th>地区</th>
                                 <th>${(zwave.city)!'NONE'}</th>
                             </tr>
-                            <tr><#--操作-->
+                            <tr  id="operatetr" ><#--操作-->
                                 <th><@spring.message code="label.operate"/></th>
                                 <th>
                                     <button id="operate" type="submit" class="btn btn-default"
@@ -80,6 +89,9 @@
         <script type="text/javascript">
             $(function () {
                 formatterwarning();
+                hiddenOperate();
+                formatterstatus();
+                formatterdevicetype();
                 if (${(zwave.status)!"-1"} == 0){
                     $("#operate").text("<@spring.message code="label.open"/>");
                 }else{
@@ -99,6 +111,21 @@
                 $("#zwavewarningstatus").text(strs);
             }
 
+            function formatterdevicetype() {
+                var formatterDevicetype1 = formatter_devicetype1(${(zwave.devicetype)!'-1'});
+                $("#zwavedevicetype").text(formatterDevicetype1);
+            }
+
+            function formatterstatus(){
+                var formatterStatus = formatter_devicestatus1("${(zwave.devicetype)!'-1'}",${(zwave.status)!-1});
+                $("#status").text(formatterStatus);
+            }
+
+            function hiddenOperate(){
+                if(!toggleStatusAbleDevicetype(${(zwave.devicetype)}) || ${(zwave.status)!"-1"}=="-1") {
+                    $("#operatetr").css("visibility", "hidden");
+                }
+            }
             function toggleDeviceStatus(id) {
                 if (!toggleStatusAbleDevicetype(${(zwave.devicetype)}) || ${(zwave.status)!"-1"}=="-1") {
                     alert("<@spring.message code="label.canttoggledevice"/>");
@@ -130,4 +157,5 @@
                 });
             }
         </script>
+<#include "/_foot0.ftl"/>
 <#include "../_foot0.ftl"/>

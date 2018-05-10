@@ -155,6 +155,7 @@
             },
             onDblClickRow: function (row, $element) {
                 var id = row.zwavedeviceid;
+                window.location.href = "../device/deviceDetail?zwavedeviceid="+id;
             }
         });
     }

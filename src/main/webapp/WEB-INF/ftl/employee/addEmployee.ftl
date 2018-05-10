@@ -354,7 +354,7 @@
 
     $('.form_datetime').datetimepicker({
         //language:  'fr',
-        format: 'yyyy-mm-dd HH:mm',
+        format: 'yyyy-mm-dd hh:mm',
         weekStart: 1,
         minView: 'day',
         todayBtn: 1,

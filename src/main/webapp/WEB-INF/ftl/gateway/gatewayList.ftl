@@ -76,13 +76,13 @@
     <div class="form-group col-md-4" align="right">
         <div class="col-md-5"></div>
         <div class="col-md-7">
-        <button type="button" id="searchsubmit" class="btn btn-default"
-                style="width:100%;"><@spring.message code="label.search"/></button>
+            <button type="button" id="searchsubmit" class="btn btn-default"
+                    style="width:100%;"><@spring.message code="label.search"/></button>
         </div>
     </div>
 </form>
-<button  class='btn btn-default' style="float: right;visibility: hidden;">asdfaf</button>
-<button  class='btn btn-default' style="float: right;margin-top: -10px;visibility: hidden;">asdfaf</button>
+<button class='btn btn-default' style="float: right;visibility: hidden;">asdfaf</button>
+<button class='btn btn-default' style="float: right;margin-top: -10px;visibility: hidden;">asdfaf</button>
 <@shiro.hasPermission name="button:changeStatus">
 <#--新增，启用，停用按钮-->
 <button style="float: right;" type="button" class="btn btn-default"
@@ -203,25 +203,25 @@
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog" style="width:90%;height:90%;">
         <div class="modal-content">
-            <div class="modal-header" style="height: 40px;width:100%">
+            <#--<div class="modal-header" style="height: 40px;width:100%">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
                 <h4 class="modal-title" id="myModalLabel"><@spring.message code="label.gatewaydetail"/></h4>
-            </div>
-        <#--引入网关详情界面-->
-            <div class="modal-body">
-                <div class="col-md-10" style="height:550px;width:100%">
-                    <iframe id="iframeDetail" class="embed-responsive-item" frameborder="0" src=""
-                            style="height:100%;width:100%;"></iframe>
-                </div>
-            </div>
-
-            <div class="col-md-1"></div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default"
-                        data-dismiss="modal"><@spring.message code="label.close"/></button>
+            </div>-->
+    <#--引入网关详情界面-->
+        <div class="modal-body">
+            <div class="col-md-10" style="height:550px;width:100%">
+                <iframe id="iframeDetail" class="embed-responsive-item" frameborder="0" src="" ]
+                        style="height:100%;width:100%;"></iframe>
             </div>
         </div>
+
+        <div class="col-md-1"></div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default"
+                    data-dismiss="modal"><@spring.message code="label.close"/></button>
+        </div>
     </div>
+</div>
 </div>
 
 <#include "../_foot1.ftl"/>
