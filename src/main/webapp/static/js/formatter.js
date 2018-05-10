@@ -55,41 +55,44 @@ function formatter_op(value, row, index) {
     return str;
 }
 
-function formatter_devicetype(value, row, index) {
+function formatter_devicetype1(devicetype) {
 
-    if (row.devicetype == '1') {
+    if (devicetype == '1') {
         return lan.smokesensor;
     }
-    if (row.devicetype == '2') {
+    if (devicetype == '2') {
         return lan.leaksensor;
     }
-    if (row.devicetype == '3') {
+    if (devicetype == '3') {
         return lan.gassensor;
     }
-    if (row.devicetype == '4') {
+    if (devicetype == '4') {
         return lan.doorlock;
     }
-    if (row.devicetype == '5') {
+    if (devicetype == '5') {
         return lan.leaksensor;
     }
-    if (row.devicetype == '6') {
+    if (devicetype == '6') {
         return lan.PyroelectricSensors;
     }
-    if (row.devicetype == '11') {
+    if (devicetype == '11') {
         return lan.socket0;
     }
-    if (row.devicetype == '46') {
+    if (devicetype == '46') {
         return lan.Coloringlamp;
     }
     //console.log(row);
-    return row.devicetype;
+    return devicetype;
 }
 
-function formatter_devicestatus(value, row, index) {
+function formatter_devicetype(value, row, index) {
+    formatter_devicestatus1(row.devicetype);
+}
+function formatter_devicestatus1(devicetype,status) {
     //!devicetype是String类型,status是Integer类型
-    switch (row.devicetype) {
+    switch (devicetype) {
         case '4':
-            switch (row.status) {
+            switch (status) {
                 case -1:
                     return lan.error;
                 case 0:
@@ -100,7 +103,7 @@ function formatter_devicestatus(value, row, index) {
                     return lan.takepart;
             }
         case '5':
-            switch (row.status) {
+            switch (status) {
                 case -1:
                     return lan.error;
                 case 1:
@@ -115,7 +118,7 @@ function formatter_devicestatus(value, row, index) {
                     return lan.keyerror;
             }
         case '1':
-            switch (row.status) {
+            switch (status) {
                 case -1:
                     return lan.error;
                 case 0:
@@ -124,7 +127,7 @@ function formatter_devicestatus(value, row, index) {
                     return lan.alarm;
             }
         case '3':
-            switch (row.status) {
+            switch (status) {
                 case -1:
                     return lan.error;
                 case 0:
@@ -133,7 +136,7 @@ function formatter_devicestatus(value, row, index) {
                     return lan.alarm;
             }
         case '2':
-            switch (row.status) {
+            switch (status) {
                 case -1:
                     return lan.error;
                 case 0:
@@ -142,7 +145,7 @@ function formatter_devicestatus(value, row, index) {
                     return lan.alarm;
             }
         case '6':
-            switch (row.status) {
+            switch (status) {
                 case -1:
                     return lan.error;
                 case 0:
@@ -153,7 +156,7 @@ function formatter_devicestatus(value, row, index) {
                     return lan.takepart;
             }
         case '11':
-            switch (row.status) {
+            switch (status) {
                 case -1:
                     return lan.error;
                 case 0:
@@ -162,7 +165,7 @@ function formatter_devicestatus(value, row, index) {
                     return lan.open;
             }
         case '46':
-            switch (row.status) {
+            switch (status) {
                 case -1:
                     return lan.error;
                 case 0:
@@ -171,6 +174,10 @@ function formatter_devicestatus(value, row, index) {
                     return lan.open;
             }
     }
+}
+function formatter_devicestatus(value, row, index) {
+    //!devicetype是String类型,status是Integer类型
+    formatter_devicestatus1(row.devicetype,row.status)
 }
 
 function formatter_warnigstatuses(value, row, index) {
@@ -285,7 +292,8 @@ function formatterReturnStatus(status){
         case '-1113':return lan.connectdbfail;
         case '-118':return lan.validateCodeFail;
 
-        default:return lan.error0;
+        // default:return lan.error0;
+        default:return status;
     }
 }
 

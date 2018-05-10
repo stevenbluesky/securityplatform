@@ -9,6 +9,7 @@ import cn.com.isurpass.house.vo.EmployeeParentOrgIdVO;
 import cn.com.isurpass.house.vo.UserAddVO;
 import cn.com.isurpass.house.vo.UserInfoListVO;
 import cn.com.isurpass.house.vo.UserSearchVO;
+import com.sun.jndi.cosnaming.IiopUrl;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -59,9 +60,9 @@ public class UserService {
     public void add(UserAddVO u, HttpServletRequest request) {
         EmployeePO emp = (EmployeePO) SecurityUtils.getSubject().getPrincipal();
 
-        if (!FormUtils.checkNUll(u.getDeviceid()) || !FormUtils.checkNUll(u.getSerialnumber())) {
+        /*if (!FormUtils.checkNUll(u.getDeviceid()) || !FormUtils.checkNUll(u.getSerialnumber())) {
             throw new RuntimeException("-107");
-        }
+        }*/
         if (gd.findByDeviceid(u.getDeviceid()).size() != 0) {
             throw new RuntimeException("-108");
         }
@@ -350,6 +351,7 @@ public class UserService {
             return null;
         }
         UserAddVO userAddVO = new UserAddVO();
+        userAddVO.setUserid(userid);
         userAddVO.setCodepostfix(byUserid.getCodepostfix());
         getUserPersonInfo(byUserid, userAddVO);
         getUserGatewayIdSIM(userid, userAddVO);
@@ -399,6 +401,86 @@ public class UserService {
     }
 
     public void modify(UserAddVO user) {
+        if (user.getUserid() == null || ud.findByUserid(user.getUserid()) == null) {
+            throw new RuntimeException("User not Exist");
+        }
+        UserPO preUser = ud.findByUserid(user.getUserid());
+        PersonPO person = pd.findByPersonid(preUser.getPersonid());
+        AddressPO address = ad.findByAddressid(person.getAddressid());
 
+        person.setFirstname(user.getFirstname());
+        person.setLastname(user.getLastname());
+        person.setSsn(user.getSsn());
+        person.setGender(user.getGender());
+        person.setPhonenumber(user.getPhonenumber());
+        person.setEmail(user.getEmail());
+        person.setFax(user.getFax());
+        address.setDetailaddress(user.getDetailaddress());
+        if (user.getCountry() != null) {
+            address.setCountry(country.findByCountryid(user.getCountry()).getCountryname());
+        }
+        if (user.getProvince() != null) {
+            address.setProvince(province.findByProvinceid(user.getProvince()).getProvincename());
+        }
+        if (user.getCity() != null) {
+            CityPO c = city.findByCityid(user.getCity());
+            address.setCity(c.getCityname());
+            preUser.setCitycode(c.getCitycode());
+        }
+        ad.save(address);
+        pd.save(person);
+
+        preUser.setName(user.getFirstname() + user.getLastname());
+        preUser.setLoginname(user.getPhonenumber());
+        preUser.setCodepostfix(user.getCodepostfix());
+
+        /**************************************************************************************************/
+        if (gd.findByUserid(preUser.getUserid()) != null) {
+            if (user.getDeviceid() == null && gd.findByUserid(preUser.getUserid()) != null) {
+                //之前绑定了,现在没填
+                List<GatewayUserPO> byUserid = gd.findByUserid(preUser.getUserid());
+                gd.deleteAll(byUserid);
+            }
+            if (!(gd.findByDeviceid(user.getDeviceid()).stream().map(GatewayUserPO::getUserid).collect(toList()).contains(preUser.getUserid()))) {
+                //绑定的网关和当前输入的网关不相同, 说明在修改网关
+                gd.delete(gd.findByUserid(user.getUserid()).get(0));
+                if (gd.findByDeviceid(user.getDeviceid()).size() != 0) {
+                    throw new RuntimeException("-108");
+                }
+                if (gbd.findByDeviceid(user.getDeviceid()) == null) {//网关不存在
+                    throw new RuntimeException("-109");
+                }
+                GatewayUserPO gatewayUserPO = new GatewayUserPO();
+                gatewayUserPO.setUserid(user.getUserid());
+                gatewayUserPO.setDeviceid(user.getDeviceid());
+                gd.save(gatewayUserPO);
+            }
+        }
+        if (pcud.findByUserid(preUser.getUserid()) != null) {
+            if (user.getSerialnumber() == null && pcud.findByUserid(preUser.getUserid()) != null) {
+                PhonecardUserPO byUserid = pcud.findByUserid(preUser.getUserid());
+                pcud.delete(byUserid);
+            } else {
+                PhonecardPO bySerialnumber = pcard.findBySerialnumber(user.getSerialnumber());
+                Integer phonecardid = bySerialnumber.getPhonecardid();
+                if (!(pcud.findByUserid(user.getUserid()).getPhonecardid() != phonecardid)) {
+                    if (bySerialnumber == null) {
+                        throw new RuntimeException("-111");
+                    }
+                    if (pcud.findByPhonecardid(bySerialnumber.getPhonecardid()) != null) {
+                        throw new RuntimeException("-110");
+                    }
+                    PhonecardUserPO pu = new PhonecardUserPO();
+                    pu.setUserid(user.getUserid());
+                    pu.setPhonecardid(phonecardid);
+                    pu.setCreatetime(new Date());
+                    pcud.save(pu);
+                }
+            }
+        }
+        /**************************************************************************************************/
+
+//        preUser.setUsercode("");
+        ud.save(preUser);
     }
 }

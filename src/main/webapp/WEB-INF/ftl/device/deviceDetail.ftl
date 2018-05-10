@@ -20,7 +20,7 @@
                             </tr>
                             <tr><#--设备类型-->
                                 <th>设备类型</th>
-                                <th id="devicetype">${(zwave.devicetype)!}</th>
+                                <th id="zwavedevicetype">${(zwave.devicetype)!}</th>
                             </tr>
 
                             <tr><#--服务商-->
@@ -41,11 +41,11 @@
                             </tr>
                             <tr><#--告警状态-->
                                 <th><@spring.message code="label.alarmstatus"/></th>
-                                <th>${(zwave.warningstatuses)!'NONE'}</th>
+                                <th id="zwavewarningstatus">${(zwave.warningstatuses)!'NONE'}</th>
                             </tr>
                             <tr><#--状态-->
                                 <th>状态</th>
-                                <th>${(zwave.status)!'NONE'}</th>
+                                <th id="status">${(zwave.status)!'NONE'}</th>
                             </tr>
                             <tr><#--电量-->
                                 <th>电量</th>
@@ -81,6 +81,8 @@
             $(function () {
                 formatterwarning();
                 hiddenOperate();
+                formatterstatus();
+                formatterdevicetype();
                 if (${(zwave.status)!"-1"} == 0){
                     $("#operate").text("<@spring.message code="label.open"/>");
                 }else{
@@ -96,8 +98,17 @@
                         strs[i] = formatter_zwavewarning($("#zwavedevicetype").text(), json[i]);
                     }
                 }
-                // alert(strs);
                 $("#zwavewarningstatus").text(strs);
+            }
+
+            function formatterdevicetype() {
+                var formatterDevicetype1 = formatter_devicetype1(${(zwave.devicetype)!'-1'});
+                $("#zwavedevicetype").text(formatterDevicetype1);
+            }
+
+            function formatterstatus(){
+                var formatterStatus = formatter_devicestatus1("${(zwave.devicetype)!'-1'}",${(zwave.status)!-1});
+                $("#status").text(formatterStatus);
             }
 
             function hiddenOperate(){
@@ -136,4 +147,4 @@
                 });
             }
         </script>
-<#include "/_foot0.ftl"/>
+<#include "../_foot0.ftl"/>

@@ -173,7 +173,7 @@ $(document).ready(function() {
                         message: 'The ssn is required and cannot be empty'
                     }
                 }
-            },
+            }/*,
             deviceid: {
                 message: 'The deviceid is not valid',
                 validators: {
@@ -189,7 +189,7 @@ $(document).ready(function() {
                         message: 'The serialnumber is required and cannot be empty'
                     }
                 }
-            }
+            }*/
         }
     });
 });

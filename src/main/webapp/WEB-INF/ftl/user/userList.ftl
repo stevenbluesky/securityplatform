@@ -24,11 +24,6 @@
                                   placeholder="<@spring.message code='label.phonenumber'/>">
                        </div>
                    </div>
-                   <#--<div class="form-group col-md-4" align="right">-->
-                       <#--<div class="col-md-12" style="visibility: hidden;">-->
-                           <#--<input type="text" class="form-control" />-->
-                       <#--</div>-->
-                   <#--</div>-->
 
                    <div class="form-group col-md-4" align="right">
                        <label for="searchGatewayid" class="col-md-5 control-label"><@spring.message code='label.gatewayID'/></label>
@@ -144,7 +139,6 @@
             onLoadSuccess: function () {
             },
             onLoadError: function () {
-                // alert(lan.loaderror);
             },
             onDblClickRow: function (row, $element) {
                 window.location.href = 'queryUserInfo?userid=' + row.userid;

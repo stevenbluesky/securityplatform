@@ -28,7 +28,6 @@ public class UserController {
     @Autowired
     UserService us;
 
-
     @RequestMapping("modifyUserInfo")
     public String modifyUserInfo(HttpServletRequest request, Integer userid, Model model) {
         if (userid == null) {
@@ -52,6 +51,9 @@ public class UserController {
     @RequestMapping("modify")
     @ResponseBody
     public JsonResult modify(UserAddVO user) {
+        if (user.getUserid() == null) {
+            return new JsonResult(-1, "user not exist");
+        }
         try {
             us.modify(user);
         } catch (RuntimeException e) {
