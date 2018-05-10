@@ -30,7 +30,7 @@
                                 <th><@spring.message code="label.alarmstatus"/></th>
                                 <th id="zwavewarningstatus">${(zwave.warningstatuses)!'NONE'}</th>
                             </tr>
-                            <tr>
+                            <tr id="operatetr" >
                                 <th><@spring.message code="label.operate"/></th>
                                 <th>
                                     <button id="operate" type="submit" class="btn btn-default"
@@ -55,6 +55,7 @@
         <script type="text/javascript">
             $(function () {
                 formatterwarning();
+                hiddenOperate();
                 if (${(zwave.status)!"-1"} == 0){
                     $("#operate").text("<@spring.message code="label.open"/>");
                 }else{
@@ -74,6 +75,11 @@
                 $("#zwavewarningstatus").text(strs);
             }
 
+            function hiddenOperate(){
+                if(!toggleStatusAbleDevicetype(${(zwave.devicetype)}) || ${(zwave.status)!"-1"}=="-1") {
+                    $("#operatetr").css("visibility", "hidden");
+                }
+            }
             function toggleDeviceStatus(id) {
                 if (!toggleStatusAbleDevicetype(${(zwave.devicetype)}) || ${(zwave.status)!"-1"}=="-1") {
                     alert("<@spring.message code="label.canttoggledevice"/>");

@@ -3,6 +3,7 @@ package cn.com.isurpass.house.dao;
 import java.util.List;
 import java.util.Set;
 
+import cn.com.isurpass.house.po.UserPO;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -68,4 +69,6 @@ public interface GatewayuserDAO extends CrudRepository<GatewayUserPO, Integer> {
 	@Query(value = "SELECT g.deviceid FROM gatewayuser g\n" +
 			"\tJOIN user u ON g.userid = u.userid AND u.installerorgid=:id",nativeQuery = true)
 	List<String> findDeviceidByOwnInstallerorg(@Param("id") Integer id);
+
+	List<GatewayUserPO> findByUserid(Integer userid);
 }

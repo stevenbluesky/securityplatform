@@ -16,10 +16,37 @@ public class UserAddVO {
     private String detailaddress;
     private String deviceid;
     private String serialnumber;
+    private String countryname;
+    private String provincename;
+    private String cityname;
 //	private Integer organizationid;
 //	private Integer installerid;
 //	private Integer installerorgid;
 
+
+    public String getCountryname() {
+        return countryname;
+    }
+
+    public void setCountryname(String countryname) {
+        this.countryname = countryname;
+    }
+
+    public String getProvincename() {
+        return provincename;
+    }
+
+    public void setProvincename(String provincename) {
+        this.provincename = provincename;
+    }
+
+    public String getCityname() {
+        return cityname;
+    }
+
+    public void setCityname(String cityname) {
+        this.cityname = cityname;
+    }
 
     public String getSerialnumber() {
         return serialnumber;

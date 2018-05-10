@@ -46,12 +46,18 @@ public class OrganizationController {
 
     @RequestMapping("queryInstallerInfo")
     public String queryInstallerInfo(HttpServletRequest request, Integer installerid, Model model){
+        if (installerid == null) {
+            return null;
+        }
         model.addAttribute("orgVO",ss.queryInstallerInfo(request, installerid));
         return "installer/installerInfo";
     }
 
     @RequestMapping("querySupplierInfo")
     public String querySupplierInfo(HttpServletRequest request, Integer supplierid, Model model){
+        if (supplierid == null) {
+            return null;
+        }
         model.addAttribute("orgVO",ss.querySupplierInfo(request, supplierid));
         return "supplier/supplierInfo";
     }

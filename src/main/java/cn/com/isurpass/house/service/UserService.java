@@ -197,7 +197,7 @@ public class UserService {
         return userList;
     }
 
-    public void  toggleUserStatus0(String hope, Object[] ids, HttpServletRequest request) throws MyArgumentNullException {
+    public void toggleUserStatus0(String hope, Object[] ids, HttpServletRequest request) throws MyArgumentNullException {
         if ("unsuspence".equals(hope)) {
             for (Object id : ids) {
                 toggleUserStatus(Integer.valueOf(id.toString()), Constants.STATUS_NORMAL, request);
@@ -223,6 +223,7 @@ public class UserService {
 
     /**
      * 判断当前用户是否有权限操作此员工
+     *
      * @param userid
      * @param request
      * @return
@@ -312,9 +313,9 @@ public class UserService {
         } else if (orgtype.equals(Constants.ORGTYPE_SUPPLIER)) {
             listpage = ud.findByUseridInAndOrganizationid(ids, emp.getOrganizationid(), pageable);
             map.put("total", ud.countByUseridInAndOrganizationid(ids, emp.getOrganizationid()));
-        } else/* if (orgtype == Constants.ORGTYPE_INSTALLER) */{
+        } else/* if (orgtype == Constants.ORGTYPE_INSTALLER) */ {
             listpage = ud.findByUseridInAndInstallerorgid(ids, emp.getOrganizationid(), pageable);
-            map.put("total", ud.countByUseridInAndInstallerorgid(ids,emp.getOrganizationid()));
+            map.put("total", ud.countByUseridInAndInstallerorgid(ids, emp.getOrganizationid()));
         }
 //        System.out.println(ux);
         List<UserInfoListVO> listVO = new ArrayList<>();
@@ -333,10 +334,71 @@ public class UserService {
             user.setUserid(u.getUserid());
             user.setName(u.getName());
             user.setStatus(u.getStatus());
-            user.setPhonenumber(personPO==null?null:personPO.getPhonenumber());
-            user.setCity(citypo==null?null:citypo.getCityname());
-            user.setSuppliername(orgpo==null?null:orgpo.getName());
+            user.setPhonenumber(personPO == null ? null : personPO.getPhonenumber());
+            user.setCity(citypo == null ? null : citypo.getCityname());
+            user.setSuppliername(orgpo == null ? null : orgpo.getName());
             listvo.add(user);
         });
+    }
+
+    /**
+     * 查询添加用户时所有表单信息
+     */
+    public UserAddVO queryUserAddInfo(HttpServletRequest request, Integer userid) {
+        UserPO byUserid = ud.findByUserid(userid);
+        if (byUserid == null) {
+            return null;
+        }
+        UserAddVO userAddVO = new UserAddVO();
+        userAddVO.setCodepostfix(byUserid.getCodepostfix());
+        getUserPersonInfo(byUserid, userAddVO);
+        getUserGatewayIdSIM(userid, userAddVO);
+        return userAddVO;
+    }
+
+    private void getUserGatewayIdSIM(Integer userid, UserAddVO userAddVO) {
+        List<GatewayUserPO> gatewayuserlist = gd.findByUserid(userid);
+        if (gatewayuserlist == null || gatewayuserlist.size() == 0) {
+            return;
+        }
+        //目前只考虑用户只有一个网关,直接取第一个
+        userAddVO.setDeviceid(gatewayuserlist.get(0).getDeviceid());
+        PhonecardUserPO byUserid1 = pcud.findByUserid(userid);
+        if (byUserid1 == null) {
+            return;
+        }
+        PhonecardPO byPhonecardid = pcard.findByPhonecardid(byUserid1.getPhonecardid());
+        if (byPhonecardid == null) {
+            return;
+        }
+        userAddVO.setSerialnumber(byPhonecardid.getSerialnumber());
+    }
+
+    private void getUserPersonInfo(UserPO byUserid, UserAddVO userAddVO) {
+        if (byUserid.getPersonid() != null) {
+            PersonPO byPersonid = pd.findByPersonid(byUserid.getPersonid());
+            if (byPersonid != null) {
+                userAddVO.setSsn(byPersonid.getSsn());
+                userAddVO.setGender(byPersonid.getGender());
+                userAddVO.setEmail(byPersonid.getEmail());
+                userAddVO.setFax(byPersonid.getFax());
+                userAddVO.setFirstname(byPersonid.getFirstname());
+                userAddVO.setLastname(byPersonid.getLastname());
+                userAddVO.setPhonenumber(byPersonid.getPhonenumber());
+                if (byPersonid.getAddressid() != null) {
+                    AddressPO byAddressid = ad.findByAddressid(byPersonid.getAddressid());
+                    if (byAddressid != null) {
+                        userAddVO.setCountryname(byAddressid.getCountry());
+                        userAddVO.setProvincename(byAddressid.getProvince());
+                        userAddVO.setCityname(byAddressid.getCity());
+                        userAddVO.setDetailaddress(byAddressid.getDetailaddress());
+                    }
+                }
+            }
+        }
+    }
+
+    public void modify(UserAddVO user) {
+
     }
 }
