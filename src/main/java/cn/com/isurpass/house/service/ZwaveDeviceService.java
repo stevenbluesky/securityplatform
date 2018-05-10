@@ -390,19 +390,19 @@ public class ZwaveDeviceService {
         Map<String, Object> map = new HashMap<>();
 
         if (empreq.getEmployeerole().contains(Constants.ROLE_AMETA_ADMIN) || empreq.getEmployeerole().contains(Constants.ROLE_AMETA_EMPLOYEE)) {
-            List<ZwaveDeviceListVO> zwaveDeviceListVOS = ConvertQueryResultToVOUtils.convertZwaveDevice(zd.listZwaveDeviceListVO(pr.getStart(), pr.getRows()));
+            List<ZwaveDeviceListVO> zwaveDeviceListVOS = ConvertQueryResultToVOUtils.convertZwaveDevice(zd.listZwaveDeviceListVO(pr.getOrder(),pr.getSortOrder(),pr.getStart(), pr.getRows()));
             map.put("rows", zwaveDeviceListVOS);
             map.put("total", zd.getCountDeviceListVO());
         } else if (empreq.getEmployeerole().contains(Constants.ROLE_SUPPLIER_ADMIN) || empreq.getEmployeerole().contains(Constants.ROLE_SUPPLIER_EMPLOYEE)) {
-            List<ZwaveDeviceListVO> zwaveDeviceListVOS = ConvertQueryResultToVOUtils.convertZwaveDevice(zd.listZwaveDeviceListVOSupplier(empreq.getOrgid(), pr.getStart(), pr.getRows()));
+            List<ZwaveDeviceListVO> zwaveDeviceListVOS = ConvertQueryResultToVOUtils.convertZwaveDevice(zd.listZwaveDeviceListVOSupplier(pr.getOrder(),pr.getSortOrder(),empreq.getOrgid(), pr.getStart(), pr.getRows()));
             map.put("rows", zwaveDeviceListVOS);
             map.put("total", zd.getCountDeviceListVOSupplier(empreq.getOrgid()));
         } else if (empreq.getEmployeerole().contains(Constants.ROLE_INSTALLER_ADMILN)) {
-            List<ZwaveDeviceListVO> zwaveDeviceListVOS = ConvertQueryResultToVOUtils.convertZwaveDevice(zd.listZwaveDeviceListVOInstallerorg(empreq.getOrgid(), pr.getStart(), pr.getRows()));
+            List<ZwaveDeviceListVO> zwaveDeviceListVOS = ConvertQueryResultToVOUtils.convertZwaveDevice(zd.listZwaveDeviceListVOInstallerorg(pr.getOrder(),pr.getSortOrder(),empreq.getOrgid(), pr.getStart(), pr.getRows()));
             map.put("rows", zwaveDeviceListVOS);
             map.put("total", zd.getCountDeviceListVOInstallerorg(empreq.getOrgid()));
         } else if (empreq.getEmployeerole().contains(Constants.ROLE_INSTALLER)) {
-            List<ZwaveDeviceListVO> zwaveDeviceListVOS = ConvertQueryResultToVOUtils.convertZwaveDevice(zd.listZwaveDeviceListVOInstaller(empreq.getEmployeeid(), pr.getStart(), pr.getRows()));
+            List<ZwaveDeviceListVO> zwaveDeviceListVOS = ConvertQueryResultToVOUtils.convertZwaveDevice(zd.listZwaveDeviceListVOInstaller(pr.getOrder(),pr.getSortOrder(),empreq.getEmployeeid(), pr.getStart(), pr.getRows()));
             map.put("rows", zwaveDeviceListVOS);
             map.put("total", zd.getCountDeviceListVOInstaller(empreq.getOrgid()));
         }
@@ -480,7 +480,7 @@ public class ZwaveDeviceService {
             map.put("rows", Collections.EMPTY_LIST);
             return map;
         }
-        List<ZwaveDeviceListVO> zwavevo = ConvertQueryResultToVOUtils.convertZwaveDevice(zd.listZwaveDeviceListVOList(pr.getStart(), pr.getRows(), ux));
+        List<ZwaveDeviceListVO> zwavevo = ConvertQueryResultToVOUtils.convertZwaveDevice(zd.listZwaveDeviceListVOList(pr.getOrder(),pr.getSortOrder(),pr.getStart(), pr.getRows(), ux));
 
         map.put("rows",zwavevo);
         map.put("total", ux.size());

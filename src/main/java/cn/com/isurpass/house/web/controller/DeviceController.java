@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -29,7 +30,17 @@ public class DeviceController {
 	@RequestMapping("deviceJsonList")
 	@ResponseBody
 	public Map<String, Object> deviceJsonList(PageResult pr, DeviceSearchVO dsv, HttpServletRequest request){
-		Pageable pageable = PageRequest.of(pr.getPage()-1,pr.getRows(),Sort.Direction.ASC,"zwavedeviceid");
+		String mysort = request.getParameter("mysort");
+		String mysortOrder = request.getParameter("mysortOrder");
+		if(StringUtils.isEmpty(mysort)||StringUtils.isEmpty(mysortOrder)){
+			Pageable pageable = PageRequest.of(pr.getPage()-1,pr.getRows(),Sort.Direction.ASC,"zwavedeviceid");
+			pr.setSortOrder("asc");
+			pr.setOrder("zwavedeviceid");
+		}else{
+			Pageable pageable = PageRequest.of(pr.getPage()-1,pr.getRows(), Sort.Direction.fromString(mysortOrder.toUpperCase()),mysort);
+			pr.setSortOrder(mysortOrder.toUpperCase());
+			pr.setOrder(mysort);
+		}
 		if (!FormUtils.isEmpty(dsv)) {//搜索
 //			return ds.search(pageable, dsv,request);
 			return ds.newSearchZwaveDevice(pr, dsv,request);

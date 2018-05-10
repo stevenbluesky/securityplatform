@@ -9,18 +9,27 @@ public class PageResult {
 	private Integer rows;// 每页的数据条数
 	private Integer page;// 第几页
 	private Direction sortOrder;
-
+	private String order;
 	public Direction getSortOrder() {
 		return sortOrder;
 	}
 
+	public String getOrder() {
+		return order;
+	}
+
+	public void setOrder(String order) {
+		this.order = order;
+	}
+
 	public void setSortOrder(String sortOrder) {
-		if (sortOrder.equalsIgnoreCase("asc"))
+		if (sortOrder.equalsIgnoreCase("asc")) {
 			this.sortOrder = Direction.ASC;
-		if (sortOrder.equalsIgnoreCase("desc"))
+		}else if (sortOrder.equalsIgnoreCase("desc")) {
 			this.sortOrder = Direction.DESC;
-		else
+		}else {
 			this.sortOrder = null;
+		}
 	}
 
 	@SuppressWarnings("unused")

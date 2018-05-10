@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -49,8 +50,8 @@ public interface ZwaveDeviceDAO extends CrudRepository<ZwaveDevicePO, Integer> {
             " join city c on u.citycode=c.citycode" +
             " join organization o on o.organizationid = u.organizationid" +
             " join organization o1 on o1.organizationid = u.installerorgid" +
-            " join employee e on e.employeeid = u.installerid LIMIT :page,:row", nativeQuery = true)
-    List<Object[]> listZwaveDeviceListVO(@Param("page") Integer page, @Param("row") Integer row);
+            " join employee e on e.employeeid = u.installerid ORDER BY :myorder :sortorder LIMIT :page,:row", nativeQuery = true)
+    List<Object[]> listZwaveDeviceListVO(@Param("myorder") String myorder, @Param("sortorder") Sort.Direction sortorder,@Param("page") Integer page, @Param("row") Integer row);
 
     @Query(value = "select z.zwavedeviceid as zwavedeviceid, z.name as name,z.devicetype as devicetype,z.warningstatuses as warningstatuses,z.status as status,z.battery as battery,c.cityname as city,o.name as organizationname,o1.name as installerorgname,e.name as installername,u.name as username " +
             " from zwavedevice z" +
@@ -59,8 +60,8 @@ public interface ZwaveDeviceDAO extends CrudRepository<ZwaveDevicePO, Integer> {
             " join city c on u.citycode=c.citycode" +
             " join organization o on o.organizationid = u.organizationid" +
             " join organization o1 on o1.organizationid = u.installerorgid" +
-            " join employee e on e.employeeid = u.installerid where z.zwavedeviceid in :list LIMIT :page,:row", nativeQuery = true)
-    List<Object[]> listZwaveDeviceListVOList(@Param("page") Integer page, @Param("row") Integer row,@Param("list")List<Integer> list);
+            " join employee e on e.employeeid = u.installerid where z.zwavedeviceid in :list ORDER BY :myorder :sortorder LIMIT :page,:row", nativeQuery = true)
+    List<Object[]> listZwaveDeviceListVOList(@Param("myorder") String myorder, @Param("sortorder") Sort.Direction sortorder, @Param("page") Integer page, @Param("row") Integer row, @Param("list")List<Integer> list);
 
     @Query(value = "select COUNT(z.zwavedeviceid) from zwavedevice z " +
             " join gatewayuser gu on z.deviceid =gu.deviceid" +
@@ -81,9 +82,9 @@ public interface ZwaveDeviceDAO extends CrudRepository<ZwaveDevicePO, Integer> {
             " JOIN organization o ON o.organizationid = u.organizationid" +
             " JOIN organization o1 ON o1.organizationid = u.installerorgid" +
             " JOIN employee e ON e.employeeid = u.installerid" +
-            " where u.organizationid=:orgid" +
+            " where u.organizationid=:orgid ORDER BY :myorder :sortorder" +
             " LIMIT :page,:row", nativeQuery = true)
-    List<Object[]> listZwaveDeviceListVOSupplier(@Param("orgid") Integer orgid, @Param("page") Integer page, @Param("row") Integer row);
+    List<Object[]> listZwaveDeviceListVOSupplier(@Param("myorder") String myorder, @Param("sortorder") Sort.Direction sortorder,@Param("orgid") Integer orgid, @Param("page") Integer page, @Param("row") Integer row);
 
     @Query(value = "SELECT count(z.zwavedeviceid)" +
             "FROM zwavedevice z" +
@@ -106,9 +107,9 @@ public interface ZwaveDeviceDAO extends CrudRepository<ZwaveDevicePO, Integer> {
             " JOIN organization o ON o.organizationid = u.organizationid" +
             " JOIN organization o1 ON o1.organizationid = u.installerorgid" +
             " JOIN employee e ON e.employeeid = u.installerid" +
-            " where u.installerorgid=:orgid" +
+            " where u.installerorgid=:orgid ORDER BY :myorder :sortorder" +
             " LIMIT :page,:row", nativeQuery = true)
-    List<Object[]> listZwaveDeviceListVOInstallerorg(@Param("orgid") Integer orgid, @Param("page") Integer page, @Param("row") Integer row);
+    List<Object[]> listZwaveDeviceListVOInstallerorg(@Param("myorder") String myorder, @Param("sortorder") Sort.Direction sortorder,@Param("orgid") Integer orgid, @Param("page") Integer page, @Param("row") Integer row);
 
     @Query(value = "SELECT count(z.zwavedeviceid)" +
             " FROM zwavedevice z" +
@@ -143,9 +144,9 @@ public interface ZwaveDeviceDAO extends CrudRepository<ZwaveDevicePO, Integer> {
             " JOIN organization o ON o.organizationid = u.organizationid" +
             " JOIN organization o1 ON o1.organizationid = u.installerorgid" +
             " JOIN employee e ON e.employeeid = u.installerid" +
-            " where u.installerid=:empid" +
-            " LIMIT :page,:row", nativeQuery = true)
-    List<Object[]> listZwaveDeviceListVOInstaller(@Param("empid") Integer empid, @Param("page") Integer page, @Param("row") Integer row);
+            " where u.installerid=:empid ORDER BY :myorder :sortorder" +
+            "LIMIT :page,:row", nativeQuery = true)
+    List<Object[]> listZwaveDeviceListVOInstaller(@Param("myorder") String myorder, @Param("sortorder") Sort.Direction sortorder,@Param("empid") Integer empid, @Param("page") Integer page, @Param("row") Integer row);
 
     @Query(value = "select z.zwavedeviceid from zwavedevice z join gatewayuser gu on z.deviceid = gu.deviceid join user u on gu.userid = u.userid where u.organizationid = :orgid", nativeQuery = true)
     List<Integer> listZwavedeivceidBySupplier(@Param("orgid") Integer orgid);
