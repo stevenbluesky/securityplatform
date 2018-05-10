@@ -124,19 +124,25 @@ public class ZwaveDeviceService {
      * @param zwavedeviceid
      */
     @Transactional(readOnly = true)
-    public DeviceDetailVO findDeviceDetail(Integer zwavedeviceid) {
+    public ZwaveDeviceListVO findDeviceDetail(Integer zwavedeviceid) {
         //TODO 判断当前登录的员工是否有操作此id的权限
-
-        DeviceDetailVO dd = new DeviceDetailVO();
+        ZwaveDeviceListVO zdlv = new ZwaveDeviceListVO();
         ZwaveDevicePO zwave = zd.findByZwavedeviceid(zwavedeviceid);
-        String deviceid = zwave.getDeviceid();
-        dd.setWarningstatuses(zwave.getWarningstatuses());
-        dd.setStatus(zwave.getStatus());
-        dd.setDevicename(zwave.getName());
-        dd.setDevicetype(zwave.getDevicetype());
-        dd.setSuppliename(gs.findOrgnameBydeviceId(deviceid));
-        dd.setZwavedeviceid(zwave.getZwavedeviceid());
-        return dd;
+        zdlv.setName(zwave.getName());//设备名称
+        zdlv.setStatus(zwave.getStatus());//设备状态
+        zdlv.setDevicetype(zwave.getDevicetype());//设备类型
+        zdlv.setWarningstatuses(zwave.getWarningstatuses());//告警状态
+        zdlv.setBattery(zwave.getBattery());//电量
+        zdlv.setCreatetime(zwave.getCreatetime());//创建时间
+        String deviceid = zwave.getDeviceid();//网关id
+        zdlv.setDeviceid(deviceid);//网关id
+        zdlv.setOrganizationname(gs.findOrgnameBydeviceId(deviceid));//服务商名称
+        zdlv.setInstallerorgname(gs.findInstallerOrgnameBydeviceId(deviceid));//安装商名称
+        zdlv.setInstallername(gs.findInstallernameBydeviceid(deviceid));//安装员名称
+        zdlv.setCity(city.findByCitycode(ud.findByUserid(gud.findByDeviceid(deviceid).get(0).getUserid()).getCitycode()).getCityname());//地区
+        zdlv.setUsername(ud.findByUserid(gud.findByDeviceid(deviceid).get(0).getUserid()).getLoginname());//用户名称
+        zdlv.setZwavedeviceid(zwave.getZwavedeviceid());//设备id
+        return zdlv;
     }
 
     @Transactional(readOnly = true)

@@ -39,19 +39,17 @@
           <hr>
 <#--新增，启用，停用按钮-->
 <@shiro.hasPermission  name="label.TogglePhonecardStatus">
-            <button style="float: right;" type="button" id='deletePhonecard' class='btn btn-default'
-                    onclick='updatePhonecardStatus("delete");'><@spring.message code='label.delete'/></button>
-			<button style="float: right;" type="button" id='stopPhonecard' class='btn btn-default'
-                    onclick='updatePhonecardStatus("freeze");'><@spring.message code='label.freeze'/></button>
+            <button style="float: right;" type="button" id='deletePhonecard' class='btn btn-default' onclick='updatePhonecardStatus("delete");'><@spring.message code='label.delete'/></button>
+			<button style="float: right;" type="button" id='stopPhonecard' class='btn btn-default' onclick='updatePhonecardStatus("freeze");'><@spring.message code='label.freeze'/></button>
 </@shiro.hasPermission>
 <@shiro.hasPermission name="label.Activated">
-			<button style="float: right;" type="button" id='startPhonecard' class='btn btn-default'
-                    onclick='updatePhonecardStatus("start");'><@spring.message code='label.start'/></button>
+			<button style="float: right;" type="button" id='startPhonecard' class='btn btn-default' onclick='updatePhonecardStatus("start");'><@spring.message code='label.start'/></button>
 </@shiro.hasPermission>
+            <button style="float: right;" type="button" class="btn btn-default" onclick='updatePhonecardStatus("synchronous");'><@spring.message code="label.synchronous"/></button>
 <@shiro.hasPermission name="label.AddPhonecard">
-           	<button style="float: right;" type="button" class="btn btn-default"
-                    onclick="window.location.href='typePhonecardInfo'"><@spring.message code="label.entering"/></button>
+           	<button style="float: right;" type="button" class="btn btn-default" onclick="window.location.href='typePhonecardInfo'"><@spring.message code="label.entering"/></button>
 </@shiro.hasPermission>
+
 	<table id="table" data-toggle="table">
         <thead>
         <tr>
@@ -120,7 +118,10 @@
             onLoadError: function () {
             <#--alert('<@spring.message code="label.dataloaderror"/>');-->
             },
-            onDblClickRow: function (row, $element) {//双击操作，暂无
+            onDblClickRow: function (row, $element) {//双击操作，打开电话卡详情页
+                var phonecardid = row.phonecardid;
+                $('#myModal').modal('show');
+                $("#iframeDetail").attr("src", 'phonecardDetail?phonecardid='+phonecardid);
             }
         });
         //当点击搜索按钮后，表格刷新并跳到第一页
@@ -189,7 +190,13 @@
                 }
             }
             if (obj == "delete") {
-                if (!confirm("<@spring.message code='label.deleteconfirm'/>")) {
+                confirmdelete = prompt("<@spring.message code='label.phonecarddeleteconfirm'/>","");
+                if(JSON.stringify(confirmdelete) == "{}"){
+                    return;
+                }
+            }
+            if (obj == "synchronous") {
+                if (!confirm("<@spring.message code='label.synchronousconfirm'/>")) {
                     return;
                 }
             }
@@ -202,22 +209,51 @@
                 url: 'update',
                 contentType: 'application/json',
                 traditional: true,
-                data: "{\"hope\":\"" + obj + "\",\"ids\":" + JSON.stringify(trans) + "}",
+                data: "{\"hope\":\"" + obj + "\",\"ids\":" + JSON.stringify(trans)+",\"confirmdelete\":\""+ confirmdelete+"\"}",
                 success: function (data) {//返回json结果
                     if ("1" == data["msg"]) {
                         alert("<@spring.message code='label.updatesuccess'/>");
-                    } else {
+                    }else if(data["msg"] == "-900"){
+                        alert("<@spring.message code='label.needcorrectchar'/>");
+                    }else if(data["msg"] == "-899"){}
+                    else if (data["msg"] == "-898"){
+                        alert("<@spring.message code='label.albinding'/>");
+                    }
+                    else {
                         alert("<@spring.message code='label.updatefailed'/>");
                     }
                     $('#table').bootstrapTable('refresh');
                 },
-                error: function () {// 请求失败处理函数
+                error: function (data) {// 请求失败处理函数
                     alert("<@spring.message code='label.updatefailed'/>");
                     $('#table').bootstrapTable('refresh');
                 }
             });
         }
     </script>
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width:90%;height:70%;">
+        <div class="modal-content">
+            <div class="modal-header" style="height: 40px;width:100%">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
+                <h4 class="modal-title" id="myModalLabel"><@spring.message code="label.phonecarddetail"/></h4>
+            </div>
+        <#--引入网关详情界面-->
+            <div class="modal-body">
+                <div class="col-md-10" style="height:550px;width:100%">
+                    <iframe id="iframeDetail" class="embed-responsive-item" frameborder="0" src="phonecardDetail"
+                            style="height:100%;width:100%;"></iframe>
+                </div>
+            </div>
 
+            <div class="col-md-1"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default"
+                        data-dismiss="modal"><@spring.message code="label.close"/></button>
+            </div>
+        </div>
+    </div>
+</div>
 <#include "../_foot1.ftl"/>
 <#include "../_foot0.ftl"/>

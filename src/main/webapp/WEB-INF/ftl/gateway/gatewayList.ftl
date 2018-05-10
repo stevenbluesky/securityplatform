@@ -6,6 +6,14 @@
     <hr>
 
     <div class="form-group col-md-4" align="right">
+        <label for="searchinstallerorg" class="col-md-5 control-label"><@spring.message code="label.gatewayID"/></label>
+        <div class="col-md-7">
+            <input type="text" class="form-control" id="searchgatewayid" name="deviceid"
+                   placeholder=<@spring.message code="label.gatewayID"/>>
+        </div>
+    </div>
+
+    <div class="form-group col-md-4" align="right">
         <label for="searchname" class="col-md-5 control-label"><@spring.message code="label.devicename"/></label>
         <div class="col-md-7">
             <input class="form-control" type="text" id="searchname" name="name"
@@ -63,13 +71,7 @@
         </div>
     </div>
 
-    <div class="form-group col-md-4" align="right">
-        <label for="searchinstallerorg" class="col-md-5 control-label"><@spring.message code="label.gatewayID"/></label>
-        <div class="col-md-7">
-            <input type="text" class="form-control" id="searchgatewayid" name="deviceid"
-                   placeholder=<@spring.message code="label.gatewayID"/>>
-        </div>
-    </div>
+
 
     <div class="form-group col-md-4" align="right">
         <div class="col-md-5"></div>
@@ -91,11 +93,11 @@
     <thead>
     <tr>
         <th data-field="">复选框列</th>
+        <th data-field="deviceid" class="text-center"><@spring.message code="label.gatewayID"/></th>
         <th data-field="name" class="text-center"><@spring.message code="label.dname"/></th>
     <#--<th data-field=""><@spring.message code="label.alarmstatus"/></th>-->
         <th data-field="status" class="text-center"
             data-formatter="formatter_gatewaystatus"><@spring.message code="label.status"/></th>
-        <th data-field="deviceid" class="text-center"><@spring.message code="label.gatewayID"/></th>
         <th data-field="cityname" class="text-center"><@spring.message code="label.area"/></th>
         <th data-field="serviceprovider" class="text-center"><@spring.message code="label.serviceprovider"/></th>
         <th data-field="installerorg" class="text-center"><@spring.message code="label.installerorg"/></th>
@@ -162,7 +164,7 @@
         onLoadError: function () {
         <#--alert('<@spring.message code="label.dataloaderror"/>');-->
         },
-    <#--双击触发模态框展示-->
+        <#--双击触发模态框展示-->
         onDblClickRow: function (row, $element) {
             var deid = row.deviceid;
             $('#myModal').modal('show');
@@ -174,7 +176,7 @@
     //将网关id传递到网关详情页面
     function setCookie(name, value) {
         var exp = new Date();
-        exp.setTime(exp.getTime() + 10 * 1000);//Cookie有效期设置为10s
+        exp.setTime(exp.getTime() + 100 * 1000);//Cookie有效期设置为10s
         document.cookie = name + "=" + escape(value) + ";expires=" + exp.toGMTString();
         //location.href = "gatewayDetail"; //接收页面.
         $("#iframeDetail").attr("src", 'gatewayDetail?deviceid=' + value);

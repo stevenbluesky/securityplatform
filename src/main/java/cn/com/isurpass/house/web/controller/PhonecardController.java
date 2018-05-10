@@ -4,12 +4,15 @@ import java.util.Map;
 
 import cn.com.isurpass.house.po.EmployeePO;
 import cn.com.isurpass.house.result.JsonResult;
+import cn.com.isurpass.house.vo.GatewayDetailVO;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -68,6 +71,16 @@ public class PhonecardController {
 		Pageable pageable = PageRequest.of(pr.getPage()-1,pr.getRows(),Sort.Direction.ASC,"activationdate");
 		return ps.listPhonecard(pageable,pc);
 	}
+	@RequestMapping("phonecardDetail")
+	public String gatewayDetail(String phonecardid,Model model) {
+		if(StringUtils.isEmpty(phonecardid)){
+			return null;
+		}
+		PhonecardPO pp = ps.findByPhonecardid(phonecardid);
+		model.addAttribute("pnd", pp);
+		//model.addAttribute("gdd", gw.getDevice());
+		return "phonecard/phonecardDetail";
+	}
 	/**
 	 * 根据操作及id更新状态
 	 * @param tf
@@ -79,8 +92,9 @@ public class PhonecardController {
 		EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
 		String hope = tf.getHope();
 		Object[] ids = tf.getIds();
+		String confirmdelete = tf.getConfirmdelete();
 		try {
-			ps.updatePhonecardStatus(hope, ids,emp);
+			ps.updatePhonecardStatus(hope, ids,emp,confirmdelete);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new JsonResult(-1,e.getMessage().toString());
