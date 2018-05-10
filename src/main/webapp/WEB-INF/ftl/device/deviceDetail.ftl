@@ -16,17 +16,24 @@
                         <table class="table table-hover">
                             <tr>
                                 <th width="50%"><@spring.message code="label.devicename"/></th>
+                                <th width="50%">${(zwave.devicename)!'NONE'}</th>
                                 <th width="50%">${(zwave.name)!'NONE'}</th>
                             </tr>
+                            <tr hidden>
+                                <th>id</th>
+                                <th id="zwavedevicetype">${(zwave.devicetype)!}</th>
                             <tr><#--设备类型-->
                                 <th>设备类型</th>
                                 <th id="zwavedevicetype">${(zwave.devicetype)!}</th>
                             </tr>
+                            <tr>
 
                             <tr><#--服务商-->
                                 <th><@spring.message code="label.serviceprovider"/></th>
+                                <th>${(zwave.suppliename)!'NONE'}</th>
                                 <th>${(zwave.organizationname)!'NONE'}</th>
                             </tr>
+                            <tr>
                             <tr><#--安装商-->
                                 <th>安装商</th>
                                 <th>${(zwave.installerorgname)!'NONE'}</th>
@@ -43,6 +50,8 @@
                                 <th><@spring.message code="label.alarmstatus"/></th>
                                 <th id="zwavewarningstatus">${(zwave.warningstatuses)!'NONE'}</th>
                             </tr>
+                            <tr>
+
                             <tr><#--状态-->
                                 <th>状态</th>
                                 <th id="status">${(zwave.status)!'NONE'}</th>
@@ -98,6 +107,7 @@
                         strs[i] = formatter_zwavewarning($("#zwavedevicetype").text(), json[i]);
                     }
                 }
+                // alert(strs);
                 $("#zwavewarningstatus").text(strs);
             }
 
@@ -147,4 +157,5 @@
                 });
             }
         </script>
+<#include "/_foot0.ftl"/>
 <#include "../_foot0.ftl"/>
