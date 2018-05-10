@@ -56,7 +56,7 @@ public class InterfaceCall {
         String params = "1";
         byte[] requestBytes = params.getBytes("utf-8"); // 将参数转为二进制流
         HttpClient httpClient = new HttpClient();// 客户端实例化
-        GetMethod getMethod = new GetMethod(gg);
+        GetMethod getMethod = new GetMethod(urlStr);
         //设置请求头Authorization
         getMethod.setRequestHeader("Authorization", "Basic YW1ldGFjYTphNDRmNDJmMS0wMmRiLTRhY2EtYjZhMC04MWYxNTBmZGI1YmI=");
          // 设置请求头  Content-Type

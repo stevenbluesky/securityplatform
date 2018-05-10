@@ -53,13 +53,14 @@ public class PhoneCardInterfaceCallUtils {
      * 获取手机卡状态
      * @throws Exception
      */
-    public void interfaceCallGet() throws Exception{
+    public static String interfaceCallGet(Object iccid) throws Exception{
         //curl -X GET --header "Accept: application/json" --header "Authorization: Basic YW1ldGFjYTphNDRmNDJmMS0wMmRiLTRhY2EtYjZhMC04MWYxNTBmZGI1YmI=" "https://restapi7.jasper.com/rws/api/v1/devices?modifiedSince=2016-04-18T17%3A31%3A34%2B00%3A00&pageSize=50&pageNumber=1"
         String gg = "https://restapi7.jasper.com/rws/api/v1/devices?modifiedSince=2016-04-18T17%3A31%3A34%2B00%3A00&pageSize=50&pageNumber=1";
+        String urlStr = "https://restapi7.jasper.com/rws/api/v1/devices/"+String.valueOf(iccid);
         String params = "1";
         byte[] requestBytes = params.getBytes("utf-8"); // 将参数转为二进制流
         HttpClient httpClient = new HttpClient();// 客户端实例化
-        GetMethod getMethod = new GetMethod(gg);
+        GetMethod getMethod = new GetMethod(urlStr);
         //设置请求头Authorization
         getMethod.setRequestHeader("Authorization", "Basic YW1ldGFjYTphNDRmNDJmMS0wMmRiLTRhY2EtYjZhMC04MWYxNTBmZGI1YmI=");
          // 设置请求头  Content-Type
@@ -77,7 +78,9 @@ public class PhoneCardInterfaceCallUtils {
          }
         String result = new String(datas, "UTF-8");// 将二进制流转为String
         // 打印返回结果
-        System.out.println(result);
+        JSONObject jsStr = JSONObject.parseObject(result);
+        String status = (String)jsStr.get("status");
+        return status;
     }
 
     /**
