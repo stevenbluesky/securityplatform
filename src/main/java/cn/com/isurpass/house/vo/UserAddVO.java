@@ -2,6 +2,7 @@ package cn.com.isurpass.house.vo;
 
 public class UserAddVO {
 
+    private Integer userid;
     private String firstname;
     private String lastname;
     private String ssn;
@@ -23,6 +24,14 @@ public class UserAddVO {
 //	private Integer installerid;
 //	private Integer installerorgid;
 
+
+    public Integer getUserid() {
+        return userid;
+    }
+
+    public void setUserid(Integer userid) {
+        this.userid = userid;
+    }
 
     public String getCountryname() {
         return countryname;

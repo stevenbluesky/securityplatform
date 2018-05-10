@@ -4,12 +4,12 @@
         <div class="col-md-1"></div>
         <div class="col-md-10">
             <form id="defaultForm" method="POST">
-
                 <div class="text-center"><h1><@spring.message code='label.modifyUserInfo'/></h1></div>
                 <hr>
                 <div  class="form-group">
                     <label for="firstname"  class="col-sm-2 control-label"><@spring.message code='label.firstname'/>*</label>
                     <div class="col-sm-10">
+                        <input id="userid" name="userid" type="hidden" value="${(userVO.userid)!}"/>
                         <input type="text" class="form-control" id="firstname" name="firstname" value="${(userVO.firstname)!}" placeholder="<@spring.message code='label.firstname'/>">
                     </div>
                 </div>
@@ -107,7 +107,7 @@
 
                 <div id="msg" class="text-center"></div>
                 <div class="row text-center">
-                    <div class="col-sm-6"><button id="btn-submit" type="submit" class="btn btn-default" style="width:25%;"><@spring.message code='label.submit'/></button></div>
+                    <div class="col-sm-6"><button id="btn-submit" type="buttom" class="btn btn-default" style="width:25%;"><@spring.message code='label.submit'/></button></div>
                     <div class="col-sm-6"><button type="reset" class="btn btn-default" style="width:25%;"><@spring.message code='label.reset'/></button></div>
                 </div>
 
@@ -155,7 +155,7 @@
                                 message: 'The ssn is required and cannot be empty'
                             }
                         }
-                    },
+                    }/*,
                     deviceid: {
                         message: 'The deviceid is not valid',
                         validators: {
@@ -171,7 +171,7 @@
                                 message: 'The serialnumber is required and cannot be empty'
                             }
                         }
-                    }
+                    }*/
                 }
             });
         });
@@ -189,7 +189,6 @@
                         var jsonObj = eval('(' + data + ')');
                         if (jsonObj['status'] == 1) {
                             alert("success");
-
                             window.location.href = "userList";
                         }else{
                             alert(formatterReturnStatus(jsonObj['msg']));
