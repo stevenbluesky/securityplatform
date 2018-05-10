@@ -136,4 +136,4 @@
                 });
             }
         </script>
-<#include "/_foot0.ftl"/>
+<#include "../_foot0.ftl"/>
