@@ -175,7 +175,6 @@
         function updatePhonecardStatus(obj) {
             var checkedIds = getCheckedId();
             var trans = [];
-            var confirmdelete = "";
             if (checkedIds[0] == -1) {
                 alert("<@spring.message code='label.nochecked'/>");
                 return;

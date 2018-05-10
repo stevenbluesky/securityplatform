@@ -15,25 +15,18 @@ import cn.com.isurpass.house.po.EmployeePO;
 
 @Repository
 public interface EmployeeDAO extends CrudRepository<EmployeePO,Integer>{
+	@Override
 	EmployeePO save(EmployeePO emp);
 	
-//	List<EmployeePO> listAllEmployee(Pageable pageable);
+	@Override
 	List<EmployeePO> findAll();
 	Page<EmployeePO> findAll(Pageable pageable);
-/*	public List<EmployeePO> listAllEmployee(PageResult pr) {
-		return (List<EmployeePO>) getSession().createCriteria(EmployeePO.class).setFirstResult(pr.getStart())
-				.setMaxResults(pr.getRows()).list();
-	}*/
 
 	List<EmployeePO> findByOrganizationidAndCodeAndStatusNot(Integer orgid,String code,Integer status);
+
+	@Override
 	long count();
-	/*public Integer getTotal() {
-		Number count = (Number) getSession()
-				.createSQLQuery("select count(employeeid) from employee").uniqueResult();
-		if (count != null)
-			return count.intValue();
-		return 0;
-	}*/
+
 	List<EmployeePO> findByOrganizationidAndLoginname(Integer id,String loginname);
 	EmployeePO findByLoginname(String loginname);
 	EmployeePO findByEmployeeid(Integer id);
@@ -88,4 +81,9 @@ public interface EmployeeDAO extends CrudRepository<EmployeePO,Integer>{
     EmployeePO findByEmployeeidAndOrganizationid(Integer empid, Integer orgid);
 
 	List<EmployeePO> findByExpiredateBefore(Date date);
+
+	@Query(value = "SELECT e.employeeid FROM employee e" +
+			" LEFT JOIN employeerole er on e.employeeid = er.employeeid " +
+			" WHERE er.roleid=:roleid AND e.organizationid=:orgid", nativeQuery = true)
+	Integer findAdmin(@Param("orgid")Integer orgid,@Param("roleid") Integer roleid);
 }

@@ -24,7 +24,11 @@ public interface ZwaveDeviceDAO extends CrudRepository<ZwaveDevicePO, Integer> {
 
     List<ZwaveDevicePO> findByNameContaining(String devicename);
 
+    List<ZwaveDevicePO> findByDeviceidLike(String deviceid);
+
     List<ZwaveDevicePO> findByDeviceid(String deviceid);
+
+    Page<ZwaveDevicePO> findByDeviceid(String deviceid,Pageable pageable);
 
     Integer countByDeviceidIn(List<String> filterlist);
 
@@ -36,7 +40,7 @@ public interface ZwaveDeviceDAO extends CrudRepository<ZwaveDevicePO, Integer> {
 
     Page<ZwaveDevicePO> findAll(Specification<ZwaveDevicePO> specification, Pageable pageable);
 
-    long count();
+    long countByDeviceid(String deviceid);
 
     @Query(value = "select z.zwavedeviceid as zwavedeviceid, z.name as name,z.devicetype as devicetype,z.warningstatuses as warningstatuses,z.status as status,z.battery as battery,c.cityname as city,o.name as organizationname,o1.name as installerorgname,e.name as installername,u.name as username " +
             " from zwavedevice z" +

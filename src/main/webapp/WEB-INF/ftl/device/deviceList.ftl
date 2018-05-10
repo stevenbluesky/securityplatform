@@ -86,7 +86,7 @@
     <tr>
         <th data-field=""></th>
         <th data-field="zwavedeviceid" data-visible="false">ID</th>
-        <th data-field="name" class="text-center" ><@spring.message code="label.dname"/></th>
+        <th data-field="name" class="text-center" data-id="dname"><@spring.message code="label.dname"/></th>
         <th data-field="devicetype" class="text-center"
             data-formatter='formatter_devicetype'><@spring.message code="label.devicetype"/></th>
         <th data-field="warningstatuses" class="text-center"
@@ -164,7 +164,9 @@
                 window.location.href = 'deviceDetail?zwavedeviceid=' + row.zwavedeviceid;
             }
         });
-
+        $("#dname").click(function () {
+           alert("别点，要脸");
+        });
         //当点击搜索按钮后，表格刷新并跳到第一页
         $("#searchsubmit").click(function(){
             $("#table").bootstrapTable("refreshOptions",{pageNumber:1})

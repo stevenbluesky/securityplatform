@@ -8,6 +8,7 @@ public class EmployeeAddVO {
 
     private Integer modify;
     private Integer Organizationid;
+    private String parentOrgName;
     private String loginname;
     private String password;
     private String question;
@@ -38,6 +39,14 @@ public class EmployeeAddVO {
     private Integer personid;
     private Integer addressid;
     private Integer createtime;
+
+    public String getParentOrgName() {
+        return parentOrgName;
+    }
+
+    public void setParentOrgName(String parentOrgName) {
+        this.parentOrgName = parentOrgName;
+    }
 
     public Integer getModify() {
         return modify;

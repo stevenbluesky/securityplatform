@@ -97,27 +97,37 @@ public class EmployeeService {
 
     @Transactional(rollbackFor = Exception.class)
     public void add(EmployeeAddVO emp, HttpServletRequest request) throws MyArgumentNullException {
-        if (!FormUtils.checkNUll(emp.getLoginname()) || !FormUtils.checkNUll(emp.getPassword()))
+        if (!FormUtils.checkNUll(emp.getLoginname()) || !FormUtils.checkNUll(emp.getPassword())) {
             throw new MyArgumentNullException("-100");
-        EmployeePO emp1 = (EmployeePO) request.getSession().getAttribute("emp");//当前登录用户
-        EmployeeAddVO empInfo = (EmployeeAddVO) request.getSession().getAttribute("empInfo");//修改员工时才会存在的员工session
-        if (emp.getOrganizationid() == null) {//如果没有传入机构id
-            if (empInfo != null) {//修改
+        }
+        //当前登录用户
+        EmployeePO emp1 = (EmployeePO) request.getSession().getAttribute("emp");
+        //修改员工时才会存在的员工session
+        EmployeeAddVO empInfo = (EmployeeAddVO) request.getSession().getAttribute("empInfo");
+        if (emp.getOrganizationid() == null) {
+            //如果没有传入机构id
+            if (empInfo != null) {
+                //修改
                 emp.setOrganizationid(empInfo.getOrganizationid());
-            } else {//说明这是安装商在进行添加
+            } else {
+                //说明这是安装商在进行添加
                 emp.setOrganizationid(emp1.getOrganizationid());
             }
         }
-        if (empInfo == null && isRegister(emp.getOrganizationid(), emp.getLoginname())) {//被注册了
+        if (empInfo == null && isRegister(emp.getOrganizationid(), emp.getLoginname())) {
+            //被注册了
             throw new MyArgumentNullException("-102");
         }
-        if ((od.findByOrganizationid(emp.getOrganizationid()).getOrgtype() == Constants.ORGTYPE_INSTALLER)
-                && !FormUtils.checkNUll(emp.getCode()))// 是安装员且code为空时
+        // 是安装员且code为空时
+        if ((od.findByOrganizationid(emp.getOrganizationid()).getOrgtype().equals(Constants.ORGTYPE_INSTALLER))
+                && !FormUtils.checkNUll(emp.getCode()))
+        {
             throw new MyArgumentNullException("-103");
-//        System.out.println(FormUtils.checkNUll(emp.getCode()) + "==================");
+        }
         if (empInfo == null && FormUtils.checkNUll(emp.getCode()) && !ed.findByOrganizationidAndCodeAndStatusNot(emp.getOrganizationid(), emp.getCode(),
-                Constants.STATUS_DELETED).isEmpty())
+                Constants.STATUS_DELETED).isEmpty()) {
             throw new MyArgumentNullException("-104");
+        }
 
         EmployeePO empPO = new EmployeePO();
 
@@ -144,18 +154,17 @@ public class EmployeeService {
         }
         empPO.setLoginname(emp.getLoginname());
         empPO.setCode(emp.getCode());
-//        Encrypt svr = new Encrypt();
-//        empPO.setPassword(FormUtils.encrypt(emp.getPassword()));// 加密
         String code = od.findByOrganizationid(emp.getOrganizationid()).getCode();
         empPO.setPassword(Encrypt.encrypt(emp.getLoginname(), emp.getPassword(), code));
         empPO.setQuestion(emp.getQuestion());
-//        empPO.setAnswer(FormUtils.encrypt(emp.getAnswer()));
         empPO.setAnswer(Encrypt.encrypt(emp.getLoginname(), emp.getAnswer(), emp.getCode()));
+        if (emp.getStatus()==null) {
+            emp.setStatus(Constants.STATUS_NORMAL);
+        }
         empPO.setStatus(emp.getStatus());
-        empPO.setExpiredate(new Date());
+        empPO.setExpiredate(emp.getExpiredate());
         empPO.setOrganizationid(emp.getOrganizationid());
         empPO.setName(emp.getLastname() + emp.getFirstname());
-//        System.out.println(emp);
         Integer addressid = null;
         if (!FormUtils.isEmpty(addressPO)) {
             addressid = ad.save(addressPO).getAddressid();
@@ -175,13 +184,16 @@ public class EmployeeService {
         if (empInfo == null) {
             EmployeeRolePO erp = new EmployeeRolePO();
 
-            Integer orgtype = od.findByOrganizationid(emp.getOrganizationid()).getOrgtype();//添加员工所属的机构的类型
-            erp.setRoleid(5);//默认角色是员工
-            if (orgtype == Constants.ORGTYPE_AMETA) {
+            //添加员工所属的机构的类型
+            Integer orgtype = od.findByOrganizationid(emp.getOrganizationid()).getOrgtype();
+            //默认角色是员工
+            erp.setRoleid(5);
+            if (orgtype.equals(Constants.ORGTYPE_AMETA)) {
                 erp.setRoleid(Constants.ROLE_AMETA_EMPLOYEE);
-            } else if (orgtype == Constants.ORGTYPE_SUPPLIER) {
+            } else if (orgtype.equals(Constants.ORGTYPE_SUPPLIER)) {
                 erp.setRoleid(Constants.ROLE_SUPPLIER_EMPLOYEE);
-            } else if (orgtype == Constants.ORGTYPE_INSTALLER) {// 是安装员且code为空时
+            } else if (orgtype.equals(Constants.ORGTYPE_INSTALLER)) {
+                // 是安装员且code为空时
                 erp.setRoleid(Constants.ROLE_INSTALLER);
             } else {
                 erp.setRoleid(Constants.ROLE_EMPLOYEE);
@@ -249,8 +261,9 @@ public class EmployeeService {
         emp.setCode(e.getCode());
         updateEmployeeStatusByExpiredate(e);
         emp.setStatus(e.getStatus());
-        if (od.findByOrganizationid(e.getOrganizationid()) != null)
+        if (od.findByOrganizationid(e.getOrganizationid()) != null) {
             emp.setParentOrgName(od.findByOrganizationid(e.getOrganizationid()).getName());
+        }
         list.add(emp);
     }
 
@@ -299,11 +312,15 @@ public class EmployeeService {
         OrganizationPO org0 = od.findByOrganizationid(emp.getOrganizationid());
         if (org0 != null) {
             empp.setInstallerorgid(org0.getOrganizationid());
-            if (org0.getParentorgid() != null)// parentid的对象不为空,说明org0是一个安装商,emp是安装商员工
+            if (org0.getOrgtype() == Constants.ORGTYPE_INSTALLER)
+            {
                 empp.setOrganizationid(org0.getParentorgid());
-            else// 说明Org0是一个服务商
+            } else {
+                // 说明Org0是一个服务商
                 empp.setOrganizationid(org0.getOrganizationid());
+            }
         }
+
         return empp;
     }
 
@@ -425,24 +442,24 @@ public class EmployeeService {
             list.add(orgid);
             List<Integer> ids = os.findChildrenOrgid(emp.getOrganizationid(), list);
             if (FormUtils.isEmpty(search.getSearchcitycode()) && FormUtils.isEmpty(search.getSearchcity())) {
-                if (orgtype == Constants.ORGTYPE_AMETA) {
+                if (orgtype.equals(Constants.ORGTYPE_AMETA)) {
                     empList = ed.findByNameLike(pageable, name);
                     map.put("total", ed.countByNameLike(name));
-                } else if (orgtype == Constants.ORGTYPE_SUPPLIER) {
+                } else if (orgtype.equals(Constants.ORGTYPE_SUPPLIER)) {
                     empList = ed.findByOrganizationidInAndNameLike(pageable, ids, name);
                     map.put("total", ed.countByOrganizationidInAndNameLike(ids, name));
-                } else if (orgtype == Constants.ORGTYPE_INSTALLER) {//当前登录的是安装商
+                } else if (orgtype.equals(Constants.ORGTYPE_INSTALLER)) {//当前登录的是安装商
                     empList = ed.findByNameLikeAndOrganizationid(pageable, name, orgid);
                     map.put("total", ed.countByNameLikeAndOrganizationid(name, orgid));
                 }
             } else {
-                if (orgtype == Constants.ORGTYPE_AMETA) {
+                if (orgtype.equals(Constants.ORGTYPE_AMETA)) {
                     empList = ed.findByNameLikeAndAddressidIn(pageable, name, addressidlist);
                     map.put("total", ed.countByNameLikeAndAddressidIn(name, ids));
-                } else if (orgtype == Constants.ORGTYPE_SUPPLIER) {
+                } else if (orgtype.equals(Constants.ORGTYPE_SUPPLIER)) {
                     empList = ed.findByOrganizationidInAndNameLikeAndAddressidIn(pageable, ids, name, addressidlist);
                     map.put("total", ed.countByOrganizationidInAndNameLikeAndAddressidIn(ids, name, addressidlist));
-                } else if (orgtype == Constants.ORGTYPE_INSTALLER) {//当前登录的是安装商
+                } else if (orgtype.equals(Constants.ORGTYPE_INSTALLER)) {//当前登录的是安装商
                     empList = ed.findByNameLikeAndOrganizationidAndAddressidIn(pageable, name, orgid, addressidlist);
                     map.put("total", ed.countByNameLikeAndOrganizationidAndAddressidIn(name, orgid, addressidlist));
                 }
@@ -614,7 +631,7 @@ public class EmployeeService {
         List<EmployeeRolePO> list = erd.findByEmployeeid(id);
         if (list != null && list.size() != 0) {
             for (EmployeeRolePO emp : list) {
-                if (emp.getRoleid() == Constants.ROLE_AMETA_ADMIN) {
+                if (emp.getRoleid().equals(Constants.ROLE_AMETA_ADMIN)) {
                     return true;
                 }
             }
@@ -622,6 +639,23 @@ public class EmployeeService {
         return false;
     }
 
+    @Transactional(readOnly = true)
+    public EmployeePO findInstallerInfo(Integer orgid) {
+        Integer admin = ed.findAdmin(orgid,3);
+        if (admin == null) {
+            return null;
+        }
+        return ed.findByEmployeeid(admin);
+    }
+
+    @Transactional(readOnly = true)
+    public EmployeePO findSuppllierAdmin(Integer orgid){
+        Integer admin = ed.findAdmin(orgid,2);
+        if (admin == null) {
+            return null;
+        }
+        return ed.findByEmployeeid(admin);
+    }
 
     /**
      * 在获取员工信息时,通过此方法来同步status和exiredate之间的关系
@@ -630,9 +664,50 @@ public class EmployeeService {
         if (emp == null || emp.getExpiredate() == null) {
             return ;
         }
-        if (emp.getStatus() == Constants.STATUS_NORMAL && new Date().after(emp.getExpiredate())) {//当用户状态为正常且当前时间超过失效日期时,
+        //当用户状态为正常且当前时间超过失效日期时,
+        if (emp.getStatus().equals(Constants.STATUS_NORMAL) && new Date().after(emp.getExpiredate())) {
             emp.setStatus(Constants.STATUS_SUSPENCED);
             ed.save(emp);
         }
+    }
+
+    public EmployeeAddVO queryEmployeeInfo(HttpServletRequest request, Integer employeeid) {
+        if (!hasProvilege(employeeid, request)) {
+            throw new RuntimeException("-998");
+        }
+        EmployeeAddVO employeeAddVO = new EmployeeAddVO();
+        EmployeePO byEmployeeid = ed.findByEmployeeid(employeeid);
+        if (byEmployeeid == null) {
+            return null;
+        }
+        OrganizationPO byOrganizationid = od.findByOrganizationid(byEmployeeid.getOrganizationid());
+        if (byOrganizationid != null) {
+            employeeAddVO.setParentOrgName(byOrganizationid.getName());
+        }
+        employeeAddVO.setLoginname(byEmployeeid.getLoginname());
+        employeeAddVO.setCode(byEmployeeid.getCode());
+        employeeAddVO.setQuestion(byEmployeeid.getQuestion());
+        employeeAddVO.setCode(byEmployeeid.getCode());
+        employeeAddVO.setExpiredate(byEmployeeid.getExpiredate());
+        employeeAddVO.setStatus(byEmployeeid.getStatus());
+        employeeAddVO.setFirstname(byEmployeeid.getName());
+        PersonPO byPersonid = pd.findByPersonid(byEmployeeid.getPersonid());
+        AddressPO byAddressid = ad.findByAddressid(byEmployeeid.getAddressid());
+        if (byPersonid != null) {
+            employeeAddVO.setTitle(byPersonid.getTitle());
+            employeeAddVO.setGender(byPersonid.getGender());
+            employeeAddVO.setEmail(byPersonid.getEmail());
+            employeeAddVO.setFax(byPersonid.getFax());
+            employeeAddVO.setSsn(byPersonid.getSsn());
+            employeeAddVO.setPhonenumber(byPersonid.getPhonenumber());
+        }
+        if (byAddressid != null) {
+            employeeAddVO.setCountryname(byAddressid.getCountry());
+            employeeAddVO.setProvincename(byAddressid.getProvince());
+            employeeAddVO.setCityname(byAddressid.getCity());
+            employeeAddVO.setDetailaddress(byAddressid.getDetailaddress());
+        }
+
+        return employeeAddVO;
     }
 }

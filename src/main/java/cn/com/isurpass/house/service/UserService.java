@@ -99,17 +99,20 @@ public class UserService {
         AddressPO address = new AddressPO();
         Integer addressid = null;
         address.setDetailaddress(u.getDetailaddress());
-        if (u.getCountry() != null)
+        if (u.getCountry() != null) {
             address.setCountry(country.findByCountryid(u.getCountry()).getCountryname());
-        if (u.getProvince() != null)
+        }
+        if (u.getProvince() != null) {
             address.setProvince(province.findByProvinceid(u.getProvince()).getProvincename());
+        }
         if (u.getCity() != null) {
             CityPO c = city.findByCityid(u.getCity());
             address.setCity(c.getCityname());
             user.setCitycode(c.getCitycode());
         }
-        if (!FormUtils.isEmpty(address))
+        if (!FormUtils.isEmpty(address)) {
             addressid = ad.save(address).getAddressid();
+        }
         PersonPO person = new PersonPO();
         person.setFirstname(u.getFirstname());
         person.setLastname(u.getLastname());
@@ -153,17 +156,17 @@ public class UserService {
             count = ud.countByInstallerid(emp.getEmployeeid());
             return listUserInfo0(pageable, userList, count);
         }
-        if (orgtype == Constants.ORGTYPE_AMETA) {
+        if (orgtype.equals(Constants.ORGTYPE_AMETA)) {
             Page<UserPO> userList = ud.findAll(pageable);
             count = (int) ud.count();
             return listUserInfo0(pageable, userList, count);
         }
-        if (orgtype == Constants.ORGTYPE_INSTALLER) {
+        if (orgtype.equals(Constants.ORGTYPE_INSTALLER)) {
             Page<UserPO> userList = ud.findByInstallerorgid(emp.getOrganizationid(), pageable);
             count = ud.countByInstallerorgid(emp.getOrganizationid());
             return listUserInfo0(pageable, userList, count);
         }
-        if (orgtype == Constants.ORGTYPE_SUPPLIER) {
+        if (orgtype.equals(Constants.ORGTYPE_SUPPLIER)) {
             Page<UserPO> userList = ud.findByOrganizationid(emp.getOrganizationid(), pageable);
             count = ud.countByInstallerorgid(emp.getOrganizationid());
             return listUserInfo0(pageable, userList, count);
@@ -228,13 +231,13 @@ public class UserService {
         UserPO user = ud.findByUserid(userid);
         EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
         Integer orgtype = od.findByOrganizationid(emp.getOrganizationid()).getOrgtype();
-        if (orgtype == Constants.ORGTYPE_INSTALLER && emp.getOrganizationid() == user.getInstallerorgid()) {
+        if (orgtype.equals(Constants.ORGTYPE_INSTALLER) && emp.getOrganizationid().equals(user.getInstallerorgid())) {
             return true;
         }
-        if (orgtype == Constants.ORGTYPE_SUPPLIER && emp.getOrganizationid() == user.getOrganizationid()) {
+        if (orgtype.equals(Constants.ORGTYPE_SUPPLIER) && emp.getOrganizationid().equals(user.getOrganizationid())) {
             return true;
         }
-        if (orgtype == Constants.ORGTYPE_AMETA) {
+        if (orgtype.equals(Constants.ORGTYPE_AMETA)) {
             return true;
         }
         return false;
@@ -303,10 +306,10 @@ public class UserService {
             //登录的是安装员
             listpage = ud.findByUseridInAndInstallerid(ids, emp.getEmployeeid(), pageable);
             map.put("total", ud.countByUseridInAndInstallerid(ids, emp.getEmployeeid()));
-        } else if (orgtype == Constants.ORGTYPE_AMETA) {
+        } else if (orgtype.equals(Constants.ORGTYPE_AMETA)) {
             listpage = ud.findByUseridIn(ids, pageable);
             map.put("total", ud.countByUseridIn(ids));
-        } else if (orgtype == Constants.ORGTYPE_SUPPLIER) {
+        } else if (orgtype.equals(Constants.ORGTYPE_SUPPLIER)) {
             listpage = ud.findByUseridInAndOrganizationid(ids, emp.getOrganizationid(), pageable);
             map.put("total", ud.countByUseridInAndOrganizationid(ids, emp.getOrganizationid()));
         } else/* if (orgtype == Constants.ORGTYPE_INSTALLER) */{

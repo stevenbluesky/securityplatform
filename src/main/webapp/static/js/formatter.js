@@ -1,3 +1,12 @@
+function formatter_gender(value) {
+    if(value == 0 )
+        return lan.female;
+    if(value == 1 )
+        return lan.male;
+    if(value == 2 )
+        return "LGBT";
+
+}
 function formatter_status(value, row, index) {
     if (value == 1)
         return lan.normal;
@@ -274,6 +283,8 @@ function formatterReturnStatus(status){
         case '-116':return lan.deviceoffline;
         case '-117':return lan.nopermission;
         case '-1113':return lan.connectdbfail;
+        case '-118':return lan.validateCodeFail;
+
         default:return lan.error0;
     }
 }

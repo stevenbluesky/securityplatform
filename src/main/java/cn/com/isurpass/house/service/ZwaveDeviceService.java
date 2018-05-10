@@ -47,36 +47,6 @@ public class ZwaveDeviceService {
     @Autowired
     EmployeeService es;
 
-  /*   @Transactional(readOnly = true)
-    public Map<String, Object> listDevice0(Pageable pageable, HttpServletRequest request) {
-       ZwaveDevicePO z = new ZwaveDevicePO();
-        z.setDeviceid("");
-//        Pageable pageable = new PageRequest(0, 10, new Sort(Sort.Direction.DESC, "zwavedeviceid"));
-        Page<ZwaveDevicePO> all = zd.findAll(new Specification<ZwaveDevicePO>() {
-            @Override
-            public Predicate toPredicate(Root<ZwaveDevicePO> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-                Predicate stuNameLike = null;
-//                if (null != student && !StringUtils.isEmpty(student.getName())) {
-                stuNameLike = cb.like(root.<String>get("name"), "%" + "hw" + "%");
-//                }
-
-                Predicate clazzNameLike = null;
-//                if (null != student && null != student.getClazz() && !StringUtils.isEmpty(student.getClazz().getName())) {
-                clazzNameLike = cb.like(root.<String>get("gatewayPO").<String>get("name"), "%" + "8005" + "%");
-//                }
-
-                Predicate user = null;
-//                user = cb.like()
-                if (null != stuNameLike) query.where(stuNameLike);
-                if (null != clazzNameLike) query.where(clazzNameLike);
-                return null;
-            }
-        }, pageable);
-//        all.forEach(z-> System.out.println(z.getZwavedeviceid()));
-        System.out.println(all);
-        return null;
-    }*/
-
     @Deprecated
     @Transactional(readOnly = true)
     public Map<String, Object> listDevice(Pageable pageable, HttpServletRequest request) {
@@ -483,7 +453,7 @@ public class ZwaveDeviceService {
             set.add(z6);
         }
         if (!FormUtils.isEmpty(dsv.getSearchgatewayid())) {
-            z7 = zd.findByDeviceid("%"+dsv.getSearchgatewayid()+"%").stream().map(ZwaveDevicePO::getZwavedeviceid).collect(toList());
+            z7 = zd.findByDeviceidLike("%"+dsv.getSearchgatewayid()+"%").stream().map(ZwaveDevicePO::getZwavedeviceid).collect(toList());
             set.add(z7);
         }
 

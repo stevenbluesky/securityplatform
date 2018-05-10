@@ -22,7 +22,9 @@ var lan = {
     codeorpassworderror:"远程操作出错",//-114//-115
     deviceoffline:"设备离线",//-116
     nopermission:"无权限",//-117
+    validateCodeFail:"公司代码重复",//-118
     connectdbfail:"连接数据库出错",//-1113
+
 
     normal: "正常",
     unvalid: '未生效',
@@ -69,5 +71,7 @@ var lan = {
     userlist:"用户列表",
     enteringuserinfo:"录入用户信息",
     phonecardlist:"电话卡列表",
-    enteringphonecardinfo:"录入电话卡信息"
+    enteringphonecardinfo:"录入电话卡信息",
+    male:"男",
+    female:"女",
 };
