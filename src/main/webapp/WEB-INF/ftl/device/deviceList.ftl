@@ -86,13 +86,11 @@
     <tr>
         <th data-field=""></th>
         <th data-field="zwavedeviceid" data-visible="false">ID</th>
-        <th data-field="name" class="text-center" data-id="dname"><@spring.message code="label.dname"/></th>
-        <th data-field="devicetype" class="text-center"
-            data-formatter='formatter_devicetype'><@spring.message code="label.devicetype"/></th>
-        <th data-field="warningstatuses" class="text-center"
-            data-formatter='formatter_warnigstatuses'><@spring.message code="label.alarmstatus"/></th>
-        <th data-field="status" class="text-center" data-formatter='formatter_devicestatus'><@spring.message code="label.status"/></th>
-        <th data-field="battery" class="text-center"><@spring.message code="label.energy"/></th>
+        <th data-field="name" class="text-center"><div id="dname"><@spring.message code="label.dname"/></div></th>
+        <th data-field="devicetype" class="text-center" data-formatter='formatter_devicetype'><div id="ddevicetype"><@spring.message code="label.devicetype"/></div></th>
+        <th data-field="warningstatuses" class="text-center" data-formatter='formatter_warnigstatuses'><div id="dalarmstatus"><@spring.message code="label.alarmstatus"/></div></th>
+        <th data-field="status" class="text-center" data-formatter='formatter_devicestatus'><div id="dstatus"><@spring.message code="label.status"/></div></th>
+        <th data-field="battery" class="text-center"><div id="dbattery"><@spring.message code="label.energy"/></div></th>
         <th data-field="city" class="text-center"><@spring.message code="label.area"/></th>
         <th data-field="organizationname" class="text-center"><@spring.message code="label.serviceprovider"/></th>
         <th data-field="installerorgname" class="text-center"><@spring.message code="label.installerorg"/></th>
@@ -105,6 +103,13 @@
         <div class="col-md-1"></div>
     </div>
     <script type="text/javascript">
+        var mysort = "";
+        var mysortOrder = "";
+        var dnameflag = "asc";
+        var dbatteryflag = "asc";
+        var dstatusflag = "asc";
+        var ddevicetypeflag = "asc";
+        var dalarmstatusflag = "asc";
         $('#table').bootstrapTable({
             url: 'deviceJsonList',
             method: 'GET',                      //请求方式（*）
@@ -144,7 +149,9 @@
                     rows: params.limit,                         //页面大小
                     page: (params.offset / params.limit) + 1,   //页码
                     sort: /*params.sort*/"",      //排序列名
-                    sortOrder: params.order //排位命令（desc，asc）
+                    sortOrder: params.order, //排位命令（desc，asc）
+                    mysort:mysort,//自定义排序规则
+                    mysortOrder:mysortOrder
                 };
                 return temp;
             },
@@ -165,7 +172,59 @@
             }
         });
         $("#dname").click(function () {
-           alert("别点，要脸");
+            mysort = "name";
+            if(dnameflag == "asc"){
+                mysortOrder = "asc";
+                dnameflag = "desc";
+            }else{
+                mysortOrder = "desc";
+                dnameflag = "asc";
+            }
+            $("#table").bootstrapTable("refresh",{pageNumber:1});
+        });
+        $("#dbattery").click(function () {
+            mysort = "battery";
+            if(dbatteryflag == "asc"){
+                mysortOrder = "asc";
+                dbatteryflag = "desc";
+            }else{
+                mysortOrder = "desc";
+                dbatteryflag = "asc";
+            }
+            $("#table").bootstrapTable("refresh",{pageNumber:1});
+        });
+        $("#dstatus").click(function () {
+            mysort = "status";
+            if(dstatusflag == "asc"){
+                mysortOrder = "asc";
+                dstatusflag = "desc";
+            }else{
+                mysortOrder = "desc";
+                dstatusflag = "asc";
+            }
+            $("#table").bootstrapTable("refresh",{pageNumber:1});
+        });
+        $("#ddevicetype").click(function () {
+            mysort = "devicetype";
+            if(ddevicetypeflag == "asc"){
+                mysortOrder = "asc";
+                ddevicetypeflag = "desc";
+            }else{
+                mysortOrder = "desc";
+                ddevicetypeflag = "asc";
+            }
+            $("#table").bootstrapTable("refresh",{pageNumber:1});
+        });
+        $("#dalarmstatus").click(function () {
+            mysort = "warningstatuses";
+            if(dalarmstatusflag == "asc"){
+                mysortOrder = "asc";
+                dalarmstatusflag = "desc";
+            }else{
+                mysortOrder = "desc";
+                dalarmstatusflag = "asc";
+            }
+            $("#table").bootstrapTable("refresh",{pageNumber:1});
         });
         //当点击搜索按钮后，表格刷新并跳到第一页
         $("#searchsubmit").click(function(){
