@@ -1,7 +1,7 @@
 <#include "../_head0.ftl"/>
 <#include "../_head1.ftl"/>
 <form class="form-horizontal" id="searchForm" method="POST">
-    <div class="text-center"><h1><@spring.message code="label.gatewaylist"/></h1></div>
+    <div class="text-center"><h1><@spring.message code="label.devicelist"/></h1></div>
     <hr>
 
     <div class="form-group col-md-4" align="right">
@@ -86,7 +86,7 @@
     <tr>
         <th data-field=""></th>
         <th data-field="zwavedeviceid" data-visible="false">ID</th>
-        <th data-field="name" class="text-center"><@spring.message code="label.dname"/></th>
+        <th data-field="name" class="text-center" ><@spring.message code="label.dname"/></th>
         <th data-field="devicetype" class="text-center"
             data-formatter='formatter_devicetype'><@spring.message code="label.devicetype"/></th>
         <th data-field="warningstatuses" class="text-center"
@@ -143,7 +143,7 @@
                     searchgatewayid:$("#searchgatewayid").val(),
                     rows: params.limit,                         //页面大小
                     page: (params.offset / params.limit) + 1,   //页码
-                    sort: params.sort,      //排序列名
+                    sort: /*params.sort*/"",      //排序列名
                     sortOrder: params.order //排位命令（desc，asc）
                 };
                 return temp;

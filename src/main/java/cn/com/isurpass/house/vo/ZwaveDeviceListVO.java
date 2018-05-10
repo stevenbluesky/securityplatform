@@ -1,5 +1,7 @@
 package cn.com.isurpass.house.vo;
 
+import java.util.Date;
+
 public class ZwaveDeviceListVO {
 
 	private Integer zwavedeviceid;
@@ -13,6 +15,16 @@ public class ZwaveDeviceListVO {
 	private String installerorgname;
 	private String installername;
 	private String username;
+	private Date createtime;
+	private String deviceid;
+
+	public String getDeviceid() {
+		return deviceid;
+	}
+
+	public void setDeviceid(String deviceid) {
+		this.deviceid = deviceid;
+	}
 
 	public Integer getZwavedeviceid() {
 		return zwavedeviceid;
@@ -102,6 +114,14 @@ public class ZwaveDeviceListVO {
 		this.username = username;
 	}
 
+	public Date getCreatetime() {
+		return createtime;
+	}
+
+	public void setCreatetime(Date createtime) {
+		this.createtime = createtime;
+	}
+
 	@Override
 	public String toString() {
 		return "ZwaveDeviceListVO{" +
@@ -116,6 +136,8 @@ public class ZwaveDeviceListVO {
 				", installerorgname='" + installerorgname + '\'' +
 				", installername='" + installername + '\'' +
 				", username='" + username + '\'' +
+				", createtime=" + createtime +
+				", deviceid='" + deviceid + '\'' +
 				'}';
 	}
 }

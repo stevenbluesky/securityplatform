@@ -23,6 +23,9 @@ import cn.com.isurpass.house.dao.PhonecardDAO;
 import cn.com.isurpass.house.exception.MyArgumentNullException;
 import cn.com.isurpass.house.util.Constants;
 import cn.com.isurpass.house.vo.TypeGatewayInfoVO;
+
+import javax.persistence.criteria.CriteriaBuilder;
+
 @Service
 public class PhonecardService {
 	@Autowired
@@ -97,7 +100,7 @@ public class PhonecardService {
 	}
 
 	@Transactional(rollbackFor = Exception.class)
-	public void updatePhonecardStatus(String hope, Object [] ids, EmployeePO emp) throws Exception {
+	public void updatePhonecardStatus(String hope, Object [] ids, EmployeePO emp,String confirmdelete) throws Exception {
 		OrganizationPO org = organizationDAO.findByOrganizationid(emp.getOrganizationid());
 		if(!"0".equals(org.getOrgtype()+"")){//如果该员工不是ameta员工，则需要判断其希望修改的电话卡id是否是属于他的公司
 			List<UserPO> userlist = userDAO.findByOrganizationid(emp.getOrganizationid());
@@ -121,9 +124,18 @@ public class PhonecardService {
 			}else if("freeze".equals(hope)){
 				updatePhonecardStatusSuspenced(phonecardpo);
 			}else if("delete".equals(hope)){
-				updatePhonecardStatusDeleted(phonecardpo);
+				if(confirmdelete==null || "".equals(confirmdelete)||"null".equals(confirmdelete)){
+					throw new MyArgumentNullException("-899");
+				}
+				PhonecardUserPO phonecarduser = phonecarduserDAO.findByPhonecardid((Integer) string);
+				if(phonecarduser!=null){
+					throw new MyArgumentNullException("-898");
+				}
+				updatePhonecardStatusDeleted(phonecardpo,confirmdelete);
+			}else if("synchronous".equals(hope)) {
+				synchronousPhonecardStatus(phonecardpo);
 			}
-			pd.save(phonecardpo);
+
 		}
 	}
 
@@ -131,18 +143,39 @@ public class PhonecardService {
 	private void updatePhonecardStatusNormal(PhonecardPO phonecardpo) throws Exception {
 		PhoneCardInterfaceCallUtils.updateStatus(phonecardpo.getSerialnumber(), Constants.ACTIVATED);
 		phonecardpo.setStatus(Constants.STATUS_NORMAL);
+		pd.save(phonecardpo);
 	}
 
 	private void updatePhonecardStatusSuspenced(PhonecardPO phonecardpo) throws Exception {
 		PhoneCardInterfaceCallUtils.updateStatus(phonecardpo.getSerialnumber(),Constants.INVENTORY);
 		phonecardpo.setStatus(Constants.STATUS_SUSPENCED);
+		pd.save(phonecardpo);
 	}
 
-	private void updatePhonecardStatusDeleted(PhonecardPO phonecardpo) throws Exception {
-		PhoneCardInterfaceCallUtils.updateStatus(phonecardpo.getSerialnumber(),Constants.DEACTIVATED);
-		phonecardpo.setStatus(Constants.STATUS_DELETED);
+	private void updatePhonecardStatusDeleted(PhonecardPO phonecardpo,String confirmdelete) throws Exception
+	{
+		if("yes".equalsIgnoreCase(confirmdelete)){
+			PhoneCardInterfaceCallUtils.updateStatus(phonecardpo.getSerialnumber(),Constants.INVENTORY);
+			//phonecardpo.setStatus(Constants.STATUS_DELETED);
+			pd.deleteByPhonecardid(phonecardpo.getPhonecardid());
+		}else if("no".equalsIgnoreCase(confirmdelete)){
+			//phonecardpo.setStatus(Constants.STATUS_DELETED);
+			pd.deleteByPhonecardid(phonecardpo.getPhonecardid());
+		}else{
+			throw new MyArgumentNullException("-900");
+		}
 	}
-
+	private void synchronousPhonecardStatus(PhonecardPO phonecardpo) throws Exception {
+		String status = PhoneCardInterfaceCallUtils.interfaceCallGet(phonecardpo.getSerialnumber());
+		if("activated".equalsIgnoreCase(status)){
+			phonecardpo.setStatus(Constants.STATUS_NORMAL);
+		}else if("activation_ready".equalsIgnoreCase(status)||"inventory".equalsIgnoreCase(status)){
+			phonecardpo.setStatus(Constants.STATUS_SUSPENCED);
+		}else if("deactivated".equalsIgnoreCase(status)||"retired".equalsIgnoreCase(status)){
+			phonecardpo.setStatus(Constants.STATUS_DELETED);
+		}
+		pd.save(phonecardpo);
+	}
 	/**
 	 * 在获取电话卡信息时,通过此方法来同步status和exiredate之间的关系
 	 */
@@ -155,4 +188,8 @@ public class PhonecardService {
 			pd.save(phonecard);
 		}
 	}
+
+    public PhonecardPO findByPhonecardid(String phonecardid) {
+		return pd.findByPhonecardid(Integer.parseInt(phonecardid));
+    }
 }
