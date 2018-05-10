@@ -31,6 +31,9 @@ public class EmployeeController {
 
     @RequestMapping("queryEmployeeInfo")
     public String queryEmployeeInfo(HttpServletRequest request, Integer employeeid, Model model) {
+        if (employeeid == null) {
+            return null;
+        }
         model.addAttribute("empVO", es.queryEmployeeInfo(request, employeeid));
         return "employee/employeeInfo";
     }

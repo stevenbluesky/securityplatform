@@ -65,6 +65,10 @@
 
 <#--<button  class='btn btn-default' style="float: right;visibility: hidden;">asdfaf</button>-->
 <#--<button  class='btn btn-default' style="float: right;margin-top:-20px;visibility: hidden;">asdfaf</button>-->
+<@shiro.hasPermission name="label.ModifyUser">
+<button style="float: right;" class='btn btn-default'
+        onclick='modifyUser();'><@spring.message code='label.modify'/></button>
+</@shiro.hasPermission>
 <@shiro.hasPermission name="button:changeStatus">
             <button style="float: right;" class='btn btn-default'
                     onclick='toggleUserStatus0("unsuspence");'><@spring.message code='label.unsuspence'/></button>
@@ -143,9 +147,7 @@
                 // alert(lan.loaderror);
             },
             onDblClickRow: function (row, $element) {
-                var id = row.userid;
-                // alert(id);
-
+                window.location.href = 'queryUserInfo?userid=' + row.userid;
             }
         });
 
@@ -164,7 +166,17 @@
             return ids;
         }
 
-        // $("#table").bootstrapTable('getSelections')[1].organizationid
+        function modifyUser() {
+            if (getCheckedId() == null || getCheckedId().length == 0) {
+                alert("<@spring.message code='label.nochecked'/>");
+                return;
+            } else if (getCheckedId().length > 1) {
+                alert("<@spring.message code='label.chooseonepls'/>");
+                return;
+            }
+            window.location.href = "../user/modifyUserInfo?userid=" + getCheckedId()[0];
+        }
+
         function toggleUserStatus0(obj) {
             var ids = getCheckedId();
             // alert(checkedIds);
