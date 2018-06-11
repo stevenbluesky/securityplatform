@@ -7,17 +7,27 @@ public class EmployeeListVO {
 	private String parentOrgName;
 	private String code;
 	private Integer status;
+	private String orgname;
 
 	public EmployeeListVO() {
 		super();
 	}
 
-	public EmployeeListVO(String name, String parentOrgName, String code, Integer status) {
-		super();
+	public EmployeeListVO(Integer employeeid, String name, String parentOrgName, String code, Integer status, String orgname) {
+		this.employeeid = employeeid;
 		this.name = name;
 		this.parentOrgName = parentOrgName;
 		this.code = code;
 		this.status = status;
+		this.orgname = orgname;
+	}
+
+	public String getOrgname() {
+		return orgname;
+	}
+
+	public void setOrgname(String orgname) {
+		this.orgname = orgname;
 	}
 
 	public Integer getEmployeeid() {

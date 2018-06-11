@@ -9,7 +9,7 @@ public class DeviceSearchVO {
     private String searchinstallerorg;
     private String searchinstaller;
     private String searchgatewayid;
-
+    private String searchdevicetype;
     public String getSearchname() {
         return searchname;
     }
@@ -72,5 +72,13 @@ public class DeviceSearchVO {
 
     public void setSearchgatewayid(String searchgatewayid) {
         this.searchgatewayid = searchgatewayid;
+    }
+
+    public String getSearchdevicetype() {
+        return searchdevicetype;
+    }
+
+    public void setSearchdevicetype(String searchdevicetype) {
+        this.searchdevicetype = searchdevicetype;
     }
 }

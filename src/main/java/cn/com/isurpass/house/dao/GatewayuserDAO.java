@@ -18,11 +18,8 @@ public interface GatewayuserDAO extends CrudRepository<GatewayUserPO, Integer> {
 	List<GatewayUserPO> findByDeviceid(String deviceid);//一个deviceid只能绑定一个用户
 
 	List<GatewayUserPO> findByUseridIn(List<Integer> userid);
-	// GatewayUserPO findUseridByDeviceid(String deviceid);
 
 	List<GatewayUserPO> findByDeviceidIn(List<String> citynamedeviceidlist);
-
-    List<GatewayUserPO> findByUseridIn(Set<Integer> useridset);
 
 	@Query(value = "SELECT g.deviceid FROM gatewayuser g\n" +
 			"\tJOIN user u ON g.userid = u.userid\n" +
@@ -36,11 +33,10 @@ public interface GatewayuserDAO extends CrudRepository<GatewayUserPO, Integer> {
 	List<String> findDeviceidByInstallerorg(@Param("s") String s, @Param("orgtype") Integer orgtype, @Param("status") Integer status);
 
 	@Query(value = "SELECT g.deviceid FROM gatewayuser g\n" +
-			"\tJOIN user u ON g.userid = u.userid WHERE u.loginname LIKE :s",nativeQuery = true)
+			"\tJOIN user u ON g.userid = u.userid WHERE u.appaccount LIKE :s",nativeQuery = true)
 	List<String> findDeviceidByCustomer(@Param("s") String s);
 
-	@Query(value = "SELECT g.deviceid FROM gatewayuser g\n" +
-			"\tJOIN zwavedevice z ON g.deviceid=z.deviceid AND z.name LIKE :s",nativeQuery = true)
+	@Query(value = "SELECT z.deviceid FROM  zwavedevice z WHERE z.name LIKE :s",nativeQuery = true)
 	List<String> findDeviceidByDevicename(@Param("s") String s);
 
 	@Query(value = "SELECT g.deviceid FROM gatewayuser g\n" +
@@ -71,4 +67,8 @@ public interface GatewayuserDAO extends CrudRepository<GatewayUserPO, Integer> {
 	List<String> findDeviceidByOwnInstallerorg(@Param("id") Integer id);
 
 	List<GatewayUserPO> findByUserid(Integer userid);
+
+    void deleteByDeviceid(String mydata);
+
+    void deleteByUserid(Integer integer);
 }

@@ -1,9 +1,13 @@
 var lan = {
     success:"success",//1
     addsuccess:"success",//2
-    error:"error",//-1
+    error0:"error",//-1
     varificationcodeerror:"Verification Number Error",//-2
-    loginfaied:"Authentication failure",//-98
+    orgfreeze:"Your institution or parent is frozen. Please contact your superior.",//-3
+    dalose:"database connection disconnected, please wait ",//-4
+    loginfaied:"Login information error or the account is frozen.",//-98
+    orgnameexist:"The company name already exists",//-11
+    loginnameexist:"The loginname already exists",//-12
     notpermission:"No Permission",//-99
     notempty: "Mandatory",//-100
     statusnull:"Status is Mandatory.",//-101
@@ -24,6 +28,13 @@ var lan = {
     nopermission:"No permission",//-117
     validateCodeFail:"Duplicate Company Code",//-118
     connectdbfail:"Database connect failed",//-1113
+    alrgateway:"The user has already bound a gateway, please unbind it first.",//-119
+    alrphonecard:"The user has already bound a phone card. Please unbind it first.",//-120
+    alrappaccount:"This app account has been binding, please check whether fill in error",//-121
+    wholeaddress:"Please fill in the whole address information ",//-122
+    notsup:"Unsupported type of device",//不支持的设备类型
+    devicetimeout:"Timeout",//超时
+    unknownerror:"Unknown error",//未知错误
 
     normal: "Normal",
     unvalid: 'Ready',
@@ -33,7 +44,7 @@ var lan = {
     status0:"None",
     keyalarm:"Key Alarm",//当有人试图用钥匙开锁时
     closefail:"Close lock failure",
-
+    indoorunlock:"Indoor unlock alarm",
     dooropen0:"door open",
     doorclose0:"door close",
     pswfail:"5 Consecutive password errors",
@@ -47,6 +58,7 @@ var lan = {
     PyroelectricSensors: "Mobile sensors",
     socket0: "Socket",
     Coloringlamp: "Color lamp",
+    DSCSecurity:"DSC Security",
     close: "Close",
     open: "Open",
     error: "Failure",
@@ -73,4 +85,59 @@ var lan = {
     enteringphonecardinfo:"Input SIM Card Information",
     male:"male",
     female:"female",
+    withdraw:"Withdraw",
+    fortify:"Fortify",
+    firstchannel:"First channel alarm",
+    secondchannel:"Second channel alarm",
+    thirdchannel:"Third channel alarm",
+    fourthchannel:"Fourth channel alarm",
+    fifthchannel:"Fifth channel alarm",
+    sixthchannel:"Sixth channel alarm",
+    seventhchannel:"Seventh channel alarm",
+    eighthchannel:"Eighth channel alarm",
+    switch1:"switch",
+    switch2:"switch",
+    switch3:"switch",
+    sirenalarm:"siren alarm",
+    valvecontroller:"valve controller",
+    curtain:"curtain",
+    ac:"AC",
+    electricitymeter:"electricity meter",
+    sos:"sos",
+    watermeter:"water meter",
+    doorbell:"doorbell",
+    suoxin:"doorlock",
+    dimmer:"dimmer",
+    accesscontrol:"access control",
+    airsensor:"air sensor",
+    scenepanel1:"scenepane",
+    scenepanel2:"scenepane",
+    scenepanel3:"scenepane",
+    scenepanel4:"scenepane",
+    airconditioning:"air conditioning",
+    ventilation:"ventilation",
+    hometheater:"home theater",
+    passiveswitch1:"passive switch",
+    passiveswitch2:"passive switch",
+    passiveswitch3:"passive switch",
+    passiveswitch4:"passive switch",
+    passiveswitch6:"passive switch",
+    dry1:"Dry",
+    dry2:"Dry",
+    ventilationsystem1:"ventilation system",
+    backgroundmusic:"background music",
+    ventilationsystem2:"ventilation system",
+    multiswitch1:"multi switch",
+    multiswitch2:"multi switch",
+    multiswitch3:"multi switch",
+    projector:"projector",
+    armdevice:"arm device",
+    scenepanel21:"scene panel",
+    scenepanel22:"scene panel",
+    scenepanel24:"scene panel",
+    heating:"heating",
+    scenepanel23:"scene panel",
+    s811:"The channel of ",
+    s812:" : close",
+    s822:" : open",
 };

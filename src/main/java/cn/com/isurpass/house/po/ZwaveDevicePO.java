@@ -21,7 +21,7 @@ public class ZwaveDevicePO{
 	private String statuses; // 0:离线 1:在线
 	private String warningstatuses;
 	private Date createtime;
-
+	private Integer area;
     public Integer getZwavedeviceid() {
 		return zwavedeviceid;
 	}
@@ -92,5 +92,13 @@ public class ZwaveDevicePO{
 
 	public void setCreatetime(Date createtime) {
 		this.createtime = createtime;
+	}
+
+	public Integer getArea() {
+		return area;
+	}
+
+	public void setArea(Integer area) {
+		this.area = area;
 	}
 }

@@ -1,8 +1,17 @@
-<#include "/_head0.ftl"/>
-<#include "/_head1.ftl"/>
+<#include "../_head0.ftl"/>
+<#include "../_head1.ftl"/>
+<div class="row">
            <form class="form-horizontal" action="" method="POST">
                    <div class="text-center"><h1><@spring.message code='label.userlist'/></h1></div>
                    <hr>
+               <div class="form-group col-md-12">
+               <div class="form-group col-md-4" align="right">
+                   <label for="searchinstallerorg" class="col-md-5 control-label"><@spring.message code='label.usercodepostfix'/></label>
+                   <div class="col-md-7">
+                       <input type="text" class="form-control" id="searchCode" name="searchCode"
+                              placeholder="<@spring.message code='label.usercodepostfix'/>">
+                   </div>
+               </div>
                    <div class="form-group col-md-4" align="right">
                        <label for="searchinstallerorg" class="col-md-5 control-label"><@spring.message code='label.name'/></label>
                        <div class="col-md-7">
@@ -10,6 +19,31 @@
                                   placeholder="<@spring.message code='label.name'/>">
                        </div>
                    </div>
+
+               <div class="form-group col-md-4" align="right">
+                   <label for="searchGatewayid" class="col-md-5 control-label"><@spring.message code='label.gatewayID'/></label>
+                   <div class="col-md-7">
+                       <input type="text" class="form-control" id="searchGatewayid" name="searchGatewayid"
+                              placeholder="<@spring.message code='label.gatewayID'/>">
+                   </div>
+               </div>
+               </div>
+               <div class="form-group col-md-12">
+               <div class="form-group col-md-4" align="right">
+                   <label for="searchSerialnumber" class="col-md-5 control-label"><@spring.message code='label.serialnumber'/></label>
+                   <div class="col-md-7">
+                       <input type="text" class="form-control" id="searchSerialnumber" name="searchSerialnumber"
+                              placeholder="<@spring.message code='label.serialnumber'/>">
+                   </div>
+               </div>
+                   <div class="form-group col-md-4" align="right">
+                       <label for="searchAppAccount" class="col-md-5 control-label"><@spring.message code='label.appaccount'/></label>
+                       <div class="col-md-7">
+                           <input type="text" class="form-control" id="searchAppAccount" name="searchAppAccount"
+                                  placeholder="<@spring.message code='label.appaccount'/>">
+                       </div>
+                   </div>
+
                    <div class="form-group col-md-4" align="right">
                        <label for="searchCity" class="col-md-5 control-label"><@spring.message code='label.city'/></label>
                        <div class="col-md-7">
@@ -17,29 +51,8 @@
                                   placeholder="<@spring.message code='label.city'/>">
                        </div>
                    </div>
-                   <div class="form-group col-md-4" align="right">
-                       <label for="searchPhonenumber" class="col-md-5 control-label"><@spring.message code='label.phonenumber'/></label>
-                       <div class="col-md-7">
-                           <input type="text" class="form-control" id="searchPhonenumber" name="searchPhonenumber"
-                                  placeholder="<@spring.message code='label.phonenumber'/>">
-                       </div>
-                   </div>
-
-                   <div class="form-group col-md-4" align="right">
-                       <label for="searchGatewayid" class="col-md-5 control-label"><@spring.message code='label.gatewayID'/></label>
-                       <div class="col-md-7">
-                           <input type="text" class="form-control" id="searchGatewayid" name="searchGatewayid"
-                                  placeholder="<@spring.message code='label.gatewayID'/>">
-                       </div>
-                   </div>
-
-                   <div class="form-group col-md-4" align="right">
-                       <label for="searchSerialnumber" class="col-md-5 control-label"><@spring.message code='label.phonecardid0'/></label>
-                       <div class="col-md-7">
-                           <input type="text" class="form-control" id="searchSerialnumber" name="searchSerialnumber"
-                                  placeholder="<@spring.message code='label.phonecardid'/>">
-                       </div>
-                   </div>
+               </div>
+               <div class="form-group col-md-12">
 
                    <div class="form-group col-md-4" align="right">
                        <label for="searchDealername" class="col-md-5 control-label"><@spring.message code='label.serviceprovider'/></label>
@@ -48,38 +61,47 @@
                                   placeholder="<@spring.message code='label.serviceprovider'/>">
                        </div>
                    </div>
-                   <div class="form-group col-md-12" align="right">
-                       <div class="col-md-7"></div>
-                       <div class="col-md-4">
-                       <button id="searchbtn" type="button" class="btn btn-default"
-                               style=""><@spring.message code='label.search'/></button>
-                       </div>
-                       <div class="col-md-1"></div>
-                       </div>
+               <div class="form-group col-md-4" align="right">
+                   <label for="searchDealername" class="col-md-5 control-label"></label>
+                   <div class="col-md-7">
+                       <input type="hidden" class="form-control" id="" name=""
+                              placeholder="">
+                   </div>
+               </div>
+
+               <div class="form-group col-md-4" align="right">
+                   <div class="col-md-5"></div>
+                   <div class="col-md-7">
+                       <button type="button" id="searchbtn" class="btn btn-default"
+                               style="width:100%;"><@spring.message code="label.search"/></button>
+                   </div>
+               </div>
+               </div>
            </form>
+</div>
 
-<#--<button  class='btn btn-default' style="float: right;visibility: hidden;">asdfaf</button>-->
-<#--<button  class='btn btn-default' style="float: right;margin-top:-20px;visibility: hidden;">asdfaf</button>-->
-<@shiro.hasPermission name="label.ModifyUser">
-<button style="float: right;" class='btn btn-default'
-        onclick='modifyUser();'><@spring.message code='label.modify'/></button>
+<@shiro.hasPermission name="label.DeleteUser">
+<button style="float: right;" type="button" class='btn btn-default' onclick='toggleUserStatus0("delete");'><@spring.message code='label.delete'/></button>
 </@shiro.hasPermission>
-<@shiro.hasPermission name="button:changeStatus">
-            <button style="float: right;" class='btn btn-default'
+<@shiro.hasPermission name="label.FreezeUser">
+            <button style="float: right;" class='btn btn-default' type="button"
                     onclick='toggleUserStatus0("unsuspence");'><@spring.message code='label.unsuspence'/></button>
-			<button style="float: right;" class='btn btn-default'
+			<button style="float: right;" class='btn btn-default' type="button"
                     onclick='toggleUserStatus0("suspence");'><@spring.message code='label.suspenced'/></button>
-            <button onclick="window.location.href='typeUserInfo'" style="float: right;"
-                    class="btn btn-default"><@spring.message code='label.addnew'/></button>
 </@shiro.hasPermission>
-
+<@shiro.hasPermission name="label.ModifyUser">
+<button style="float: right;" type="button" class='btn btn-default' onclick='modifyUser();'><@spring.message code='label.modify'/></button>
+</@shiro.hasPermission>
 <table id="table" data-toggle="table">
     <thead>
     <tr>
         <th data-field=""></th>
         <th data-field="userid" data-visible="false">ID</th>
+        <th data-field="codepostfix" class="text-center"><@spring.message code='label.usercodepostfix'/></th>
         <th data-field="name" class="text-center"><@spring.message code='label.name'/></th>
-        <th data-field="phonenumber" class="text-center"><@spring.message code='label.phonenumber'/></th>
+        <th data-field="deviceid" class="text-center"><@spring.message code='label.gatewayID'/></th>
+        <th data-field="serialnumber" class="text-center"><@spring.message code='label.serialnumber'/></th>
+        <th data-field="appaccount" class="text-center"><@spring.message code='label.appaccount'/></th>
         <th data-field="city" class="text-center"><@spring.message code='label.city'/></th>
         <th data-field="suppliername" class="text-center"><@spring.message code='label.serviceprovider'/></th>
         <th data-field="status" class="text-center" data-formatter="formatter_status"><@spring.message code='label.status'/></th>
@@ -120,10 +142,12 @@
                 //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
                 var temp = {
                     searchName:$("#searchName").val(),
+                    searchCode:$("#searchCode").val(),
                     searchCity:$("#searchCity").val(),
                     searchSerialnumber:$("#searchSerialnumber").val(),
                     searchGatewayid:$("#searchGatewayid").val(),
-                    searchPhonenumber:$("#searchPhonenumber").val(),
+                    //searchPhonenumber:$("#searchPhonenumber").val(),
+                    searchAppAccount:$("#searchAppAccount").val(),
                     searchDealername:$("#searchDealername").val(),
                     rows: params.limit,                         //页面大小
                     page: (params.offset / params.limit) + 1,   //页码
@@ -141,7 +165,9 @@
             onLoadError: function () {
             },
             onDblClickRow: function (row, $element) {
-                window.location.href = 'queryUserInfo?userid=' + row.userid;
+                var id = row.userid;
+                $("#iframeDetail").attr("src", 'queryUserInfo?userid='+id);
+                $('#myModal').modal('show');
             }
         });
 
@@ -168,7 +194,8 @@
                 alert("<@spring.message code='label.chooseonepls'/>");
                 return;
             }
-            window.location.href = "../user/modifyUserInfo?userid=" + getCheckedId()[0];
+            $("#iframeDetail").attr("src", '../user/modifyUserInfo?userid='+getCheckedId()[0]);
+            $('#myModal').modal('show');
         }
 
         function toggleUserStatus0(obj) {
@@ -185,6 +212,16 @@
             }
             if (obj == "suspence") {
                 if (!confirm("<@spring.message code='label.freezeconfirm'/>")) {
+                    return;
+                }
+            }
+            if (obj == "synchronous") {
+                if (!confirm("<@spring.message code='label.synchronousconfirm'/>")) {
+                    return;
+                }
+            }
+            if (obj == "delete") {
+                if (!confirm("<@spring.message code='label.deleteconfirm'/>")) {
                     return;
                 }
             }
@@ -207,6 +244,6 @@
             });
         }
     </script>
-
-<#include "/_foot1.ftl"/>
-<#include "/_foot0.ftl"/>
+<#include "../modal.ftl"/>
+<#include "../_foot1.ftl"/>
+<#include "../_foot0.ftl"/>

@@ -36,18 +36,11 @@ public interface UserDAO extends CrudRepository<UserPO, Integer> {
 
     List<UserPO> findByCitycodeContaining(String findCode);
 
-    List<UserPO> findByCitycode(String cl);
-
-
     List<UserPO> findByInstalleridIn(List<Integer> employeeidlist);
-
-    List<UserPO> findByLoginnameContainingOrNameContaining(String customer, String customer2);
 
     List<UserPO> findByUseridIn(List<Integer> useridlist);
 
     Integer countByInstallerid(Integer employeeid);
-
-    //    Integer countAll();
 
     Integer countByInstallerorgid(Integer organizationid);
 
@@ -58,8 +51,6 @@ public interface UserDAO extends CrudRepository<UserPO, Integer> {
     Integer count(Specification<UserPO> specification);
 
     List<UserPO> findByCitycodeIn(List<String> citycodelist);
-
-    List<UserPO> findByPersonidIn(List<Integer> personidlist);
 
     List<UserPO> findByOrganizationidIn(List<Integer> orgidlist);
 
@@ -81,25 +72,21 @@ public interface UserDAO extends CrudRepository<UserPO, Integer> {
 
     List<UserPO> findByInstallerorgidIn(List<Integer> orgidlist);
 
-    List<UserPO> findByInstallerorgidInAndOrganizationid(List<Integer> orgidlist, Integer organizationid);
-
-    List<UserPO> findByInstalleridInAndOrganizationidIn(List<Integer> empidlist, Integer organizationid);
-
-    List<UserPO> findByInstallerorgidAndInstalleridIn(Integer organizationid, List<Integer> empidlist);
-
-    List<UserPO> findByLoginnameContaining(String customer);
-
     List<UserPO> findByNameContaining(String searchName);
-    @Query(value = "SELECT * FROM USER WHERE userid =:userid",nativeQuery = true)
+    @Query(value = "SELECT * FROM user WHERE userid =:userid",nativeQuery = true)
     UserPO findUserByUserid(@Param("userid") Integer userid);
 
     @Query(value = "select userid from user where loginname=:loginname",nativeQuery = true)
     Integer getUserid(@Param("loginname") String loginname);
 
-    @Query(value ="select u.name from user u left join gatewayuser gu on gu.userid=u.userid where gu.deviceid=:deviceid" ,nativeQuery = true)
-    String getUsernameByDeviceid(@Param("deviceid") String deviceid);
+    List<UserPO> findByCodepostfixContaining(String searchCode);
 
-//
-//    @Query(value = "select * from user u join gatewayuser gb on u.userid = gb.deviceid join gateway g on gb.deviceid=g.deviceid where g.deviceid LIKE :gatewayid", nativeQuery = true)
-//    List<Integer> listUserByGateway(@Param("gatewayid") String gatewayid);
+    void deleteByUserid(Integer integer);
+
+    UserPO findByAppaccount(String appaccount);
+
+    Integer countByOrganizationid(Integer organizationid);
+
+    List<UserPO> findByAppaccountContaining(String searchAppAccount);
+
 }

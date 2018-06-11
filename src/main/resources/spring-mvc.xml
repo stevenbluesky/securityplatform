@@ -92,4 +92,5 @@
 
 	<import resource="application.xml" />
 	<import resource="spring-shiro.xml" />
+	<import resource="spring-quartz.xml" />
 </beans>

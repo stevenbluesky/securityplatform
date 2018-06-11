@@ -1,16 +1,17 @@
 package cn.com.isurpass.house.service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import cn.com.isurpass.house.dao.OrganizationDAO;
-import cn.com.isurpass.house.dao.PhonecarduserDAO;
-import cn.com.isurpass.house.dao.UserDAO;
+import cn.com.isurpass.house.dao.*;
 import cn.com.isurpass.house.po.*;
 import cn.com.isurpass.house.util.PhoneCardInterfaceCallUtils;
+import cn.com.isurpass.house.vo.OrgListVO;
+import com.alibaba.fastjson.JSONObject;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,12 +20,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import cn.com.isurpass.house.dao.PhonecardDAO;
 import cn.com.isurpass.house.exception.MyArgumentNullException;
 import cn.com.isurpass.house.util.Constants;
 import cn.com.isurpass.house.vo.TypeGatewayInfoVO;
+import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.servlet.http.HttpServletRequest;
 
 @Service
 public class PhonecardService {
@@ -36,6 +38,10 @@ public class PhonecardService {
 	private UserDAO userDAO;
 	@Autowired
 	private PhonecarduserDAO phonecarduserDAO;
+	@Autowired
+	private OrganizationService os;
+	@Autowired
+	private EmployeeroleDAO erd;
 	/**
 	 * 新增网关信息
 	 * @param pc
@@ -43,7 +49,7 @@ public class PhonecardService {
 	 */
 	@Transactional(rollbackFor = Exception.class)
 	public void add(PhonecardPO pc) throws MyArgumentNullException {
-		if (StringUtils.isEmpty(pc.getSerialnumber())|| StringUtils.isEmpty(pc.getModel()) || StringUtils.isEmpty(pc.getRateplan())){
+		if (StringUtils.isEmpty(pc.getSerialnumber())){
 			throw new MyArgumentNullException("1");
 		}
 		PhonecardPO pp = pd.findBySerialnumber(pc.getSerialnumber());
@@ -52,6 +58,12 @@ public class PhonecardService {
 		}
 		PhonecardPO pcPO = new PhonecardPO();
 		// ID => name
+		if(StringUtils.isEmpty(pc.getModel())){
+			pc.setModel("");
+		}
+		if(StringUtils.isEmpty(pc.getRateplan())){
+			pc.setRateplan("");
+		}
 		pcPO.setRateplan(pc.getRateplan());
 		pcPO.setSerialnumber(pc.getSerialnumber());
 		pcPO.setFirmwareversion(pc.getFirmwareversion());
@@ -63,7 +75,6 @@ public class PhonecardService {
 		pcPO.setFirstprogrammedondate(pc.getFirstprogrammedondate());
 		pcPO.setLastprogrammedondate(pc.getLastprogrammedondate());
 
-		System.out.println(pcPO);
 		pd.save(pcPO);
 	}
 	/**
@@ -72,11 +83,13 @@ public class PhonecardService {
 	 * @param pc
 	 * @return
 	 */
-//	@Transactional(readOnly = true)
-	public Map<String, Object> listPhonecard(Pageable pageable, PhonecardPO pc) {
+	@Transactional(readOnly = true)
+	public Map<String, Object> listPhonecard(Pageable pageable, PhonecardPO pc, HttpServletRequest request) {
+		EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
+		List<EmployeeRolePO> emprolelist = erd.findByEmployeeid(emp.getEmployeeid());
+		OrganizationPO byOrganizationid = organizationDAO.findByOrganizationid(emp.getOrganizationid());
+		Integer orgtype = byOrganizationid.getOrgtype();
 		Map<String, Object> map = new HashMap<>();
-		//map.put("total", pd.count());
-		//SELECT * FROM  phonecard WHERE serialnumber LIKE '%f%' AND rateplan LIKE '%f%' AND STATUS=1  ORDER BY activationdate ASC LIMIT 0,9;
 		Integer status = pc.getStatus();
 		List<Integer> statuslist = new ArrayList<Integer>();
 		if(Integer.valueOf(2).equals(status)){//查询正常记录1
@@ -87,15 +100,46 @@ public class PhonecardService {
 			statuslist.add(1);
 			statuslist.add(2);
 		}
-		Page<PhonecardPO> gateList = pd.findByStatusInAndSerialnumberContainingAndRateplanContaining(statuslist,pc.getSerialnumber(),pc.getRateplan(),pageable);
-		long count = pd.countByStatusInAndSerialnumberContainingAndRateplanContaining(statuslist,pc.getSerialnumber(),pc.getRateplan());
+		String rateplan ="";
+		String serialnumber ="";
+		if(pc.getRateplan()!=null){
+			rateplan = "%"+pc.getRateplan()+"%";
+		}
+		if(pc.getSerialnumber()!=null){
+			serialnumber = "%"+pc.getSerialnumber()+"%";
+		}
+		List<Object[]> resultlist = new ArrayList<>();
+		long count = 0;
+		List<Integer> list = new ArrayList<>();
+		List<PhonecardPO> relist = new ArrayList<>();
+		List<Integer> childrenOrgid = os.findChildrenOrgid(emp.getOrganizationid(), list);
+		childrenOrgid.add(emp.getOrganizationid());
+		if (os.isAdmin(emp.getOrganizationid())) {
+			resultlist = pd.findByAmeta(statuslist,serialnumber,rateplan,pageable);
+			count = pd.countByStatusInAndSerialnumberLikeAndRateplanLike(statuslist,serialnumber,rateplan);
+		}else if(emprolelist.size()==1&&emprolelist.get(0).getRoleid()==4){//只有一个安装员的角色，就只拿他安装过的用户
+			resultlist = pd.findByInstaller(statuslist,serialnumber,rateplan,emp.getEmployeeid(),pageable);
+			count = pd.countByInstaller(statuslist,serialnumber,rateplan,emp.getEmployeeid());
+		}else if(orgtype==Constants.ORGTYPE_INSTALLER){
+			resultlist = pd.findByInstallerOrg(statuslist,serialnumber,rateplan,childrenOrgid,pageable);
+			count = pd.countByInstallerOrg(statuslist,serialnumber,rateplan,childrenOrgid);
+		}else if(orgtype==Constants.ORGTYPE_SUPPLIER){
+			resultlist = pd.findBySupplier(statuslist,serialnumber,rateplan,childrenOrgid,pageable);
+			count = pd.countBySupplier(statuslist,serialnumber,rateplan,childrenOrgid);
+		}
+		for(Object[] o:resultlist){
+			PhonecardPO p = new PhonecardPO();
+			p.setPhonecardid((Integer)o[0]);
+			p.setSerialnumber((String)o[1]);
+			p.setStatus((Integer)o[2]);
+			p.setModel((String)o[3]);
+			p.setFirmwareversion((String)o[4]);
+			p.setRateplan((String)o[5]);
+			p.setActivationdate((Date) o[6]);
+			relist.add(p);
+		}
 		map.put("total",count);
-		List<PhonecardPO> list = new ArrayList<>();
-		gateList.forEach(o -> {
-			updatePhonecardStatusByExpiredate(o);
-			list.add(o);
-		});
-		map.put("rows", list);
+		map.put("rows", relist);
 		return map;
 	}
 
@@ -104,20 +148,22 @@ public class PhonecardService {
 		OrganizationPO org = organizationDAO.findByOrganizationid(emp.getOrganizationid());
 		if(!"0".equals(org.getOrgtype()+"")){//如果该员工不是ameta员工，则需要判断其希望修改的电话卡id是否是属于他的公司
 			List<UserPO> userlist = userDAO.findByOrganizationid(emp.getOrganizationid());
+			List<UserPO> userlist1 = userDAO.findByInstallerorgid(emp.getOrganizationid());
 			List<Integer> useridlist = new ArrayList<>();//用户id集合
 			List<Integer> pclist = new ArrayList<>();//电话卡id集合
 			userlist.forEach(s->{useridlist.add(s.getUserid());});
+			userlist1.forEach(s->{useridlist.add(s.getUserid());});
 			List<PhonecardUserPO> pulist = phonecarduserDAO.findByUseridIn(useridlist);
 			pulist.forEach(s->{pclist.add(s.getPhonecardid());});
 			for(Object o : ids){
                 PhonecardPO phonecardpo = pd.findByPhonecardid(o);
 				if(!pclist.contains(phonecardpo.getSerialnumber())){
-					throw new MyArgumentNullException("You have not access to modify the SIM status!");
+					//throw new MyArgumentNullException("You have not access to modify the SIM status!");
 				}
 			}
 		}
 		for (Object string : ids) {
-			string = Integer.valueOf(String.valueOf(string));
+			string = Integer.valueOf(String.valueOf(string).replace( ",", ""));
 			PhonecardPO phonecardpo = pd.findByPhonecardid(string);
 			if("start".equals(hope)){
 				updatePhonecardStatusNormal(phonecardpo);
@@ -125,11 +171,11 @@ public class PhonecardService {
 				updatePhonecardStatusSuspenced(phonecardpo);
 			}else if("delete".equals(hope)){
 				if(confirmdelete==null || "".equals(confirmdelete)||"null".equals(confirmdelete)){
-					throw new MyArgumentNullException("-899");
+					throw new MyArgumentNullException("-899");//请传入字符
 				}
 				PhonecardUserPO phonecarduser = phonecarduserDAO.findByPhonecardid((Integer) string);
 				if(phonecarduser!=null){
-					throw new MyArgumentNullException("-898");
+					throw new MyArgumentNullException("-898");//请先解绑
 				}
 				updatePhonecardStatusDeleted(phonecardpo,confirmdelete);
 			}else if("synchronous".equals(hope)) {
@@ -166,7 +212,9 @@ public class PhonecardService {
 		}
 	}
 	private void synchronousPhonecardStatus(PhonecardPO phonecardpo) throws Exception {
-		String status = PhoneCardInterfaceCallUtils.interfaceCallGet(phonecardpo.getSerialnumber());
+		String cardInfo = PhoneCardInterfaceCallUtils.interfaceCallGet(phonecardpo.getSerialnumber());
+		JSONObject jsStr = JSONObject.parseObject(cardInfo);
+		String status = (String)jsStr.get("status");
 		if("activated".equalsIgnoreCase(status)){
 			phonecardpo.setStatus(Constants.STATUS_NORMAL);
 		}else if("activation_ready".equalsIgnoreCase(status)||"inventory".equalsIgnoreCase(status)){
@@ -174,6 +222,23 @@ public class PhonecardService {
 		}else if("deactivated".equalsIgnoreCase(status)||"retired".equalsIgnoreCase(status)){
 			phonecardpo.setStatus(Constants.STATUS_DELETED);
 		}
+		phonecardpo.setRateplan((String)jsStr.get("ratePlan"));
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		String dateActivated = (String) jsStr.get("dateActivated");
+		dateActivated.substring(0,dateActivated.indexOf("."));
+		Date activationdate = sdf.parse(dateActivated);
+		phonecardpo.setActivationdate(activationdate);
+
+		String dateAdded = (String)jsStr.get("dateAdded");
+		dateAdded.substring(0,dateAdded.indexOf("."));
+		Date firstprogrammedondate = sdf.parse(dateAdded);
+		phonecardpo.setFirstprogrammedondate(firstprogrammedondate);
+
+		String dateUpdated = (String)jsStr.get("dateUpdated");
+		dateUpdated.substring(0,dateUpdated.indexOf("."));
+		Date lastprogrammedondate = sdf.parse(dateUpdated);
+		phonecardpo.setLastprogrammedondate(lastprogrammedondate);
+
 		pd.save(phonecardpo);
 	}
 	/**
@@ -190,6 +255,6 @@ public class PhonecardService {
 	}
 
     public PhonecardPO findByPhonecardid(String phonecardid) {
-		return pd.findByPhonecardid(Integer.parseInt(phonecardid));
+		return pd.findByPhonecardid(Integer.parseInt(phonecardid.replace( ",", "")));
     }
 }

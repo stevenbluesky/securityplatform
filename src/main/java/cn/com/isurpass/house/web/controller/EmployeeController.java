@@ -1,9 +1,12 @@
 package cn.com.isurpass.house.web.controller;
 
 import cn.com.isurpass.house.exception.MyArgumentNullException;
+import cn.com.isurpass.house.po.EmployeePO;
+import cn.com.isurpass.house.po.OrganizationPO;
 import cn.com.isurpass.house.result.JsonResult;
 import cn.com.isurpass.house.result.PageResult;
 import cn.com.isurpass.house.service.EmployeeService;
+import cn.com.isurpass.house.service.OrganizationService;
 import cn.com.isurpass.house.util.FormUtils;
 import cn.com.isurpass.house.vo.EmployeeAddVO;
 import cn.com.isurpass.house.vo.OrgSearchVO;
@@ -14,12 +17,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.Map;
 
 @Controller
@@ -28,7 +33,8 @@ public class EmployeeController {
 
     @Autowired
     EmployeeService es;
-
+    @Autowired
+    private OrganizationService os;
     @RequestMapping("queryEmployeeInfo")
     public String queryEmployeeInfo(HttpServletRequest request, Integer employeeid, Model model) {
         if (employeeid == null) {
@@ -40,6 +46,7 @@ public class EmployeeController {
 
     @RequestMapping("addEmployeePage")
     public String addEmployeePage(@RequestParam(required = false)Integer id, HttpServletRequest request) {
+        OrganizationPO loginorg = os.findOrgByLoginEmp(request);
         if (id != null) {
 //            request.setAttribute("empInfo",es.getEmployeeVOInfo(id));
             request.getSession().setAttribute("empInfo",es.getEmployeeVOInfo(id));
@@ -47,9 +54,22 @@ public class EmployeeController {
             //清除empInfo session
             request.getSession().setAttribute("empInfo", null);
         }
+        request.getSession().setAttribute("loginorg",loginorg);
         return "employee/addEmployee";
     }
-
+    @RequestMapping("modifyEmployeePage")
+    public String modifyEmployeePage(@RequestParam(required = false)Integer id, HttpServletRequest request) {
+        OrganizationPO loginorg = os.findOrgByLoginEmp(request);
+        request.getSession().setAttribute("loginorg",loginorg);
+        if (id != null) {
+//            request.setAttribute("empInfo",es.getEmployeeVOInfo(id));
+            request.getSession().setAttribute("empInfo",es.getEmployeeVOInfo(id));
+        }else {
+            //清除empInfo session
+            request.getSession().setAttribute("empInfo", null);
+        }
+        return "employee/modifyEmployee";
+    }
     @RequestMapping("employeeList")
     public String employeeList() {
         return "employee/employeeList";
@@ -58,17 +78,47 @@ public class EmployeeController {
     @RequestMapping("employeeJsonList")
     @ResponseBody
     public Map<String, Object> employeeJsonList(PageResult pr, OrgSearchVO osv, HttpServletRequest request) {
-        Pageable pageable = PageRequest.of(pr.getPage() - 1, pr.getRows(), Sort.Direction.ASC, "employeeid");
+        Pageable pageable = PageRequest.of(pr.getPage() - 1, pr.getRows(), Sort.Direction.DESC, "employeeid");
         if (!FormUtils.isEmpty(osv)) {//搜索
             return es.search(pageable, osv,request);
         }
         return es.listEmployee(pageable, request);
     }
-
+    @RequestMapping("validCode")
+    @ResponseBody
+    public Map<String, Boolean> validCode(String code,String loginorgid, HttpServletRequest request) {
+        Map<String, Boolean> map = new HashMap<>();
+        if(StringUtils.isEmpty(loginorgid)){
+            return null;
+        }
+        map.put("valid", es.validCode(code,Integer.parseInt(loginorgid)));
+        return map;
+    }
+    @RequestMapping("validLoginName")
+    @ResponseBody
+    public Map<String, Boolean> validLoginName(String loginname,HttpServletRequest request) {
+        Map<String, Boolean> map = new HashMap<>();
+        if(StringUtils.isEmpty(loginname)){
+            return null;
+        }
+        map.put("valid", es.validLoginName(loginname));
+        return map;
+    }
     @RequestMapping("add")
     @ResponseBody
     public JsonResult addEmployee(EmployeeAddVO emp, HttpServletRequest request) {
-        //noinspection Duplicates
+        Integer organizationid = emp.getOrganizationid();
+        Integer employeeid = emp.getEmployeeid();
+        boolean loginname =es.findLoginname(employeeid,emp.getLoginname());
+        //TODO 如果将某个员工改为另一个机构下一个已经存在的员工，数据库会报唯一性异常
+        //为真表示从员工表找到机构id和登录名相同的纪录
+        if(!loginname){
+            //为假，表示更改了登录名，或者更改了机构
+            Boolean flag = es.validLoginName(emp.getLoginname());
+            if(!flag){
+                return new JsonResult(-1, "-12");
+            }
+        }
         try {
             es.add(emp, request);
         } catch (MyArgumentNullException e) {

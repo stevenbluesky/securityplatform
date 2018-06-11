@@ -9,6 +9,7 @@ public class ZwaveDeviceListVO {
 	private String devicetype;
 	private String warningstatuses;
 	private Integer status;
+	private String statuses;
 	private Integer battery;
 	private String city;
 	private String organizationname;
@@ -17,6 +18,15 @@ public class ZwaveDeviceListVO {
 	private String username;
 	private Date createtime;
 	private String deviceid;
+	private Integer area;
+
+	public String getStatuses() {
+		return statuses;
+	}
+
+	public void setStatuses(String statuses) {
+		this.statuses = statuses;
+	}
 
 	public String getDeviceid() {
 		return deviceid;
@@ -122,6 +132,14 @@ public class ZwaveDeviceListVO {
 		this.createtime = createtime;
 	}
 
+	public Integer getArea() {
+		return area;
+	}
+
+	public void setArea(Integer area) {
+		this.area = area;
+	}
+
 	@Override
 	public String toString() {
 		return "ZwaveDeviceListVO{" +
@@ -130,6 +148,7 @@ public class ZwaveDeviceListVO {
 				", devicetype='" + devicetype + '\'' +
 				", warningstatuses='" + warningstatuses + '\'' +
 				", status=" + status +
+				", statuses='" + statuses + '\'' +
 				", battery=" + battery +
 				", city='" + city + '\'' +
 				", organizationname='" + organizationname + '\'' +
@@ -138,6 +157,7 @@ public class ZwaveDeviceListVO {
 				", username='" + username + '\'' +
 				", createtime=" + createtime +
 				", deviceid='" + deviceid + '\'' +
+				", area=" + area +
 				'}';
 	}
 }

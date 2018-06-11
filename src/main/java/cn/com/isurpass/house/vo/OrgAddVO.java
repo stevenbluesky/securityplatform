@@ -14,6 +14,8 @@ public class OrgAddVO {
 
     private AddressPO address;
     private Integer parentorgid; // 所属安装商的名称
+    private String parentorgcode;
+    private String parentorgname;
     private String name;// *
     private String code;// *
     private Integer country;// *
@@ -62,6 +64,22 @@ public class OrgAddVO {
     private Integer csaddressid;
     private Integer cscontactid;
     private Integer Orgtype;
+
+    public String getParentorgcode() {
+        return parentorgcode;
+    }
+
+    public void setParentorgcode(String parentorgcode) {
+        this.parentorgcode = parentorgcode;
+    }
+
+    public String getParentorgname() {
+        return parentorgname;
+    }
+
+    public void setParentorgname(String parentorgname) {
+        this.parentorgname = parentorgname;
+    }
 
     public Integer getOrgtype() {
         return Orgtype;
@@ -387,9 +405,11 @@ public class OrgAddVO {
     @Override
     public String toString() {
         return "OrgAddVO{" +
-                "orgnizationid=" + organizationid +
+                "organizationid=" + organizationid +
                 ", address=" + address +
                 ", parentorgid=" + parentorgid +
+                ", parentorgcode='" + parentorgcode + '\'' +
+                ", parentorgname='" + parentorgname + '\'' +
                 ", name='" + name + '\'' +
                 ", code='" + code + '\'' +
                 ", country=" + country +

@@ -3,8 +3,8 @@
 
 <#include "../_head0.ftl"/>
     <div class="row-horizontal">
-        <div class="col-md-1"></div>
-        <div class="col-md-10">
+        <#--<div class="col-md-1"></div>-->
+        <div class="col-md-12">
             <form id="defaultForm" action="addPrivilege" method="POST">
                 <div class="text-center"><h1><@spring.message code="label.AddPrivilege"/></h1></div>
                 <hr>
@@ -29,7 +29,7 @@
 
         </div>
 
-        <div class="col-md-1"></div>
+        <#--<div class="col-md-1"></div>-->
     </div>
 <!-- JavaScript 部分 -->
     <script type="text/javascript">

@@ -23,8 +23,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import static cn.com.isurpass.house.util.CodeConstants.PRIVILEGE_EXISIT;
 
@@ -60,13 +63,24 @@ public class RoleController {
     }
 
     @RequestMapping("listRolePrivilege")
-    public String listRolePrivilege(Integer roleid, Integer addNew, Model model) {
+    public String listRolePrivilege(Integer roleid, Integer addNew, Model model, HttpServletRequest request) {
+        ResourceBundle resourceBundle;
+        String language = request.getLocale().getLanguage();
+        if ("zh".equals(language)) {
+            resourceBundle = ResourceBundle.getBundle("messages", Locale.SIMPLIFIED_CHINESE);
+        } else {
+            resourceBundle = ResourceBundle.getBundle("messages", Locale.US);
+        }
         RolePO rolePO = role.findByRoleid(roleid);
         if (rolePO == null && !Integer.valueOf(1).equals(addNew)) {
             return "role/roleList";
         }
+        List<PrivilegePO> all = privilegeDAO.findAll();
+        for(PrivilegePO p : all){
+            p.setCode(resourceBundle.getString(p.getCode()));
+        }
         model.addAttribute("role", rolePO);
-        model.addAttribute("privilegeList", privilegeDAO.findAll());
+        model.addAttribute("privilegeList", all);
         model.addAttribute("oldPrivilege", roleService.findByRoleid(roleid));
         return "role/rolePrivilege";
     }

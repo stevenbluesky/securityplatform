@@ -3,6 +3,7 @@ package cn.com.isurpass.house.vo;
 public class UserAddVO {
 
     private Integer userid;
+    private String appaccount;
     private String firstname;
     private String lastname;
     private String ssn;
@@ -20,10 +21,31 @@ public class UserAddVO {
     private String countryname;
     private String provincename;
     private String cityname;
+    private Integer status;
+    private Integer phonecardid;
 //	private Integer organizationid;
 //	private Integer installerid;
 //	private Integer installerorgid;
+    private Integer gatewaystatus;
+    private String serviceprovider;
+    private String installerorg;
+    private String installer;
 
+    public String getAppaccount() {
+        return appaccount;
+    }
+
+    public void setAppaccount(String appaccount) {
+        this.appaccount = appaccount;
+    }
+
+    public Integer getGatewaystatus() {
+        return gatewaystatus;
+    }
+
+    public void setGatewaystatus(Integer gatewaystatus) {
+        this.gatewaystatus = gatewaystatus;
+    }
 
     public Integer getUserid() {
         return userid;
@@ -167,5 +189,45 @@ public class UserAddVO {
 
     public void setDeviceid(String deviceid) {
         this.deviceid = deviceid;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public Integer getPhonecardid() {
+        return phonecardid;
+    }
+
+    public void setPhonecardid(Integer phonecardid) {
+        this.phonecardid = phonecardid;
+    }
+
+    public String getServiceprovider() {
+        return serviceprovider;
+    }
+
+    public void setServiceprovider(String serviceprovider) {
+        this.serviceprovider = serviceprovider;
+    }
+
+    public String getInstallerorg() {
+        return installerorg;
+    }
+
+    public void setInstallerorg(String installerorg) {
+        this.installerorg = installerorg;
+    }
+
+    public String getInstaller() {
+        return installer;
+    }
+
+    public void setInstaller(String installer) {
+        this.installer = installer;
     }
 }

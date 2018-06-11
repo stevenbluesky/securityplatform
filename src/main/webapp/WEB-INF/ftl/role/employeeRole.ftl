@@ -1,7 +1,7 @@
 <#include "../_head0.ftl"/>
 <#include "../_head1.ftl"/>
 
-Employee Name: ${(cemp.name)!}
+<@spring.message code="label.name"/>: ${(cemp.name)!}
 <hr>
 <@spring.message code="label.EmployeeRole"/>
 <hr><#--
@@ -23,8 +23,8 @@ Employee Name: ${(cemp.name)!}
 
 <br>
 <br>
-<input class="btn btn-default" value="Toggle" type="button" style="margin-right: 30px;" onclick="$('input').iCheck('toggle');" />
-<input class="btn btn-default" value="Clear" type="button" style="margin-right: 30px;" onclick="$('input').iCheck('uncheck');" />
+<input class="btn btn-default" value="<@spring.message code="label.toggle"/>" type="button" style="margin-right: 30px;" onclick="$('input').iCheck('toggle');" />
+<input class="btn btn-default" value="<@spring.message code="label.clear"/>" type="button" style="margin-right: 30px;" onclick="$('input').iCheck('uncheck');" />
 <input class="btn btn-default" value="<@spring.message code="label.save"/>" type="button" onclick="submit0()">
 <script src="https://cdn.bootcss.com/iCheck/1.0.2/icheck.min.js"></script>
 <link href="https://cdn.bootcss.com/iCheck/1.0.2/skins/square/blue.css" rel="stylesheet">
@@ -73,7 +73,8 @@ Employee Name: ${(cemp.name)!}
             data: "{\"id\":" + ${(cemp.employeeid)!} + ",\"list\":" + JSON.stringify(checks) + "}",
             success: function (data) {//返回json结果
                 alert("<@spring.message code='label.updatesuccess'/>");
-                window.location.href = "../employee/employeeList";
+                //window.location.href = "../employee/employeeList";
+                parent.location.href=parent.location.href;
             },
             error: function () {// 请求失败处理函数
                 alert("<@spring.message code='label.updatefailed'/>");

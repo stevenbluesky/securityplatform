@@ -3,12 +3,57 @@
 <form class="form-horizontal" id="searchForm" method="POST">
     <div class="text-center"><h1><@spring.message code="label.devicelist"/></h1></div>
     <hr>
-
+    <div class="form-group col-md-12">
     <div class="form-group col-md-4" align="right">
         <label for="searchname" class="col-md-5 control-label"><@spring.message code="label.devicename"/></label>
         <div class="col-md-7">
             <input class="form-control" type="text" id="searchname" name="name"
                    placeholder=<@spring.message code="label.devicename"/>>
+        </div>
+    </div>
+    <#--设备类型下拉框-->
+    <div class="form-group col-md-4" align="right">
+        <label for="searchdevicetype" class="col-md-5 control-label"><@spring.message code="label.devicetype"/></label>
+        <div class="col-md-7">
+            <select id="searchdevicetype" name="status" class="form-control" style="width: 100%"
+                    title="<@spring.message code='label.devicetype'/>" >
+                <option value=""><@spring.message code='label.all'/></option>
+                <option value="1"><@spring.message code='label.smokesensor'/></option>
+                <option value="2"><@spring.message code='label.leaksensor'/></option>
+                <option value="3"><@spring.message code='label.gassensor'/></option>
+                <option value="4"><@spring.message code='label.doorlock'/></option>
+                <option value="5"><@spring.message code='label.doorlock0'/></option>
+                <option value="6"><@spring.message code='label.PyroelectricSensors'/></option>
+                <option value="7,8,9"><@spring.message code='label.switch1'/></option>
+                <option value="10"><@spring.message code='label.sirenalarm'/></option>
+                <option value="11"><@spring.message code='label.socket0'/></option>
+                <option value="12"><@spring.message code='label.valvecontroller'/></option>
+                <option value="13"><@spring.message code='label.curtain'/></option>
+                <option value="14"><@spring.message code='label.ac'/></option>
+                <option value="15"><@spring.message code='label.electricitymeter'/></option>
+                <option value="16"><@spring.message code='label.sos'/></option>
+                <option value="17"><@spring.message code='label.watermeter'/></option>
+                <option value="18"><@spring.message code='label.doorbell'/></option>
+                <option value="19"><@spring.message code='label.suoxin'/></option>
+                <option value="20"><@spring.message code='label.dimmer'/></option>
+                <option value="22"><@spring.message code='label.accesscontrol'/></option>
+                <option value="23"><@spring.message code='label.airsensor'/></option>
+                <option value="24,25,26,27"><@spring.message code='label.scenepanel1'/></option>
+                <option value="28"><@spring.message code='label.airconditioning'/></option>
+                <option value="29"><@spring.message code='label.ventilation'/></option>
+                <option value="30"><@spring.message code='label.hometheater'/></option>
+                <option value="31,32,33,34,35"><@spring.message code='label.passiveswitch1'/></option>
+                <option value="36,37"><@spring.message code='label.dry1'/></option>
+                <option value="38,40"><@spring.message code='label.ventilationsystem2'/></option>
+                <option value="39"><@spring.message code='label.backgroundmusic'/></option>
+                <option value="41,42,43"><@spring.message code='label.multiswitch1'/></option>
+                <option value="44"><@spring.message code='label.projector'/></option>
+                <option value="45"><@spring.message code='label.armdevice'/></option>
+                <option value="46"><@spring.message code='label.Coloringlamp'/></option>
+                <option value="47"><@spring.message code='label.DSCSecurity'/></option>
+                <option value="48,49,50,52"><@spring.message code='label.scenepanel21'/></option>
+                <option value="51"><@spring.message code='label.heating'/></option>
+            </select>
         </div>
     </div>
 
@@ -19,14 +64,8 @@
                    placeholder=<@spring.message code="label.city"/>>
         </div>
     </div>
-
-    <div class="form-group col-md-4" align="right">
-        <label for="searchcitycode" class="col-md-5 control-label"><@spring.message code="label.citycode"/></label>
-        <div class="col-md-7">
-            <input type="text" class="form-control" id="searchcitycode" name="citycode"
-                   placeholder=<@spring.message code="label.citycode"/>>
-        </div>
     </div>
+    <div class="form-group col-md-12">
 
     <div class="form-group col-md-4" align="right">
         <label for="searchcustomer" class="col-md-5 control-label"><@spring.message code="label.customer"/></label>
@@ -53,7 +92,8 @@
                    placeholder=<@spring.message code="label.installerorg"/>>
         </div>
     </div>
-
+    </div>
+    <div class="form-group col-md-12">
     <div class="form-group col-md-4" align="right">
         <label for="searchinstaller" class="col-md-5 control-label"><@spring.message code="label.installer"/></label>
         <div class="col-md-7">
@@ -77,6 +117,7 @@
                     style="width:100%;"><@spring.message code="label.search"/></button>
         </div>
     </div>
+    </div>
 </form>
           <hr>
 
@@ -86,11 +127,12 @@
     <tr>
         <th data-field=""></th>
         <th data-field="zwavedeviceid" data-visible="false">ID</th>
-        <th data-field="name" class="text-center"><div id="dname"><@spring.message code="label.dname"/></div></th>
-        <th data-field="devicetype" class="text-center" data-formatter='formatter_devicetype'><div id="ddevicetype"><@spring.message code="label.devicetype"/></div></th>
-        <th data-field="warningstatuses" class="text-center" data-formatter='formatter_warnigstatuses'><div id="dalarmstatus"><@spring.message code="label.alarmstatus"/></div></th>
-        <th data-field="status" class="text-center" data-formatter='formatter_devicestatus'><div id="dstatus"><@spring.message code="label.status"/></div></th>
-        <th data-field="battery" class="text-center"><div id="dbattery"><@spring.message code="label.energy"/></div></th>
+        <th data-field="name" class="text-center"><div id="dname"><@spring.message code="label.dname"/>↑↓</div></th>
+        <th data-field="devicetype" class="text-center" data-formatter='formatter_devicetype'><div id="ddevicetype"><@spring.message code="label.devicetype"/>↑↓</div></th>
+        <th data-field="warningstatuses" class="text-center" data-formatter='formatter_warnigstatuses'><div id="dalarmstatus"><@spring.message code="label.alarmstatus"/>↑↓</div></th>
+        <th data-field="status" class="text-center" data-formatter='formatter_devicestatus'><div id="dstatus"><@spring.message code="label.status"/>↑↓</div></th>
+        <th data-field="statuses" class="text-center" data-formatter='formatter_statuses'><div id="dstatuses"><@spring.message code="label.statuses"/></div></th><#--多位状态数组-->
+        <th data-field="battery" class="text-center"><div id="dbattery"><@spring.message code="label.energy"/>↑↓</div></th>
         <th data-field="city" class="text-center"><@spring.message code="label.area"/></th>
         <th data-field="organizationname" class="text-center"><@spring.message code="label.serviceprovider"/></th>
         <th data-field="installerorgname" class="text-center"><@spring.message code="label.installerorg"/></th>
@@ -140,7 +182,7 @@
                 var temp = {
                     searchname:$("#searchname").val(),
                     searchcityname:$("#searchcityname").val(),
-                    searchcitycode:$("#searchcitycode").val(),
+                    searchdevicetype:$("#searchdevicetype").val(),
                     searchcustomer:$("#searchcustomer").val(),
                     searchserviceprovider:$("#searchserviceprovider").val(),
                     searchinstallerorg:$("#searchinstallerorg").val(),
@@ -165,7 +207,10 @@
                 // alert(lan.loaderror);
             },
             onDblClickRow: function (row, $element) {
-                window.location.href = 'deviceDetail?zwavedeviceid=' + row.zwavedeviceid;
+                //window.location.href = 'deviceDetail?zwavedeviceid=' + row.zwavedeviceid;
+                var zwavedeviceid = row.zwavedeviceid;
+                $('#myModal').modal('show');
+                $("#iframeDetail").attr("src", 'deviceDetail?zwavedeviceid='+zwavedeviceid);
             }
         });
         $("#dname").click(function () {
@@ -225,9 +270,9 @@
         });
         //当点击搜索按钮后，表格刷新并跳到第一页
         $("#searchsubmit").click(function(){
-            $("#table").bootstrapTable("refreshOptions",{pageNumber:1})
+            $("#table").bootstrapTable("refresh",{pageNumber:1})
         });
     </script>
-
+<#include "../modal.ftl"/>
 <#include "../_foot1.ftl"/>
 <#include "../_foot0.ftl"/>
