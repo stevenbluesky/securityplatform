@@ -51,7 +51,7 @@ public class MyShiroUtil extends AuthorizingRealm {
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
         EmployeePO emp = (EmployeePO) principalCollection.fromRealm(getName()).iterator().next();
-        System.out.println("权限"+emp);
+        //System.out.println("权限"+emp);
 //		EmployeePO emp = es.findByLoginname(loginName);
 //        System.out.println("abcdefg");
 //		System.out.println(loginName);
@@ -85,7 +85,8 @@ public class MyShiroUtil extends AuthorizingRealm {
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token0) {
         UsernamePasswordToken token = (UsernamePasswordToken) token0;//取得token
         LoginVO login = JSON.parseObject(token.getUsername(), LoginVO.class);
-        EmployeePO emp = es.login(login.getLoginname(), String.valueOf(token.getPassword()), login.getCode());
+        //EmployeePO emp = es.login(login.getLoginname(), String.valueOf(token.getPassword()), login.getCode());
+        EmployeePO emp = es.login(login.getLoginname(), String.valueOf(token.getPassword()), login.getOrganizationid(),login.getCode());
         if (emp != null) {
             return new SimpleAuthenticationInfo(emp, String.valueOf(token.getPassword()), getName());
         }

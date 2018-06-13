@@ -1,6 +1,6 @@
 package cn.com.isurpass.house.request;
 
-import cn.com.isurpass.house.util.CodeConstants;
+import cn.com.isurpass.house.util.Constants;
 import cn.com.isurpass.house.util.TokenKeeper;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.collections.MapUtils;
@@ -14,19 +14,18 @@ import org.apache.http.conn.socket.PlainConnectionSocketFactory;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.conn.ssl.TrustStrategy;
-import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.util.EntityUtils;
-import org.aspectj.apache.bcel.classfile.Code;
 
 import java.io.IOException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.*;
+import java.util.logging.Logger;
 
 public class HttpsUtils {
     private static final String HTTP = "http";
@@ -166,11 +165,11 @@ public class HttpsUtils {
         return post;
     }
     public static String openDevice(Integer zwavedeviceid){
-        String url = "https://app.aibasecloud.com/iremote/thirdpart/zufang/closedevice";
+        String url = "https://"+ Constants.OPERATE_DEVICE_URL+"/iremote/thirdpart/zufang/opendevice";
         return toggleDevice(zwavedeviceid, 1, url);
     }
     public static String closeDevice(Integer zwavedeviceid){
-        String url = "https://app.aibasecloud.com/iremote/thirdpart/zufang/opendevice";
+        String url = "https://"+ Constants.OPERATE_DEVICE_URL+"/iremote/thirdpart/zufang/closedevice";
         return toggleDevice(zwavedeviceid, 1, url);
     }
 

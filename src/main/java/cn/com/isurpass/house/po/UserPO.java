@@ -15,6 +15,7 @@ public class UserPO {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer userid;
+	private String appaccount;
 	private String loginname;
 	private String name;
 	private String citycode;
@@ -22,10 +23,19 @@ public class UserPO {
 	private Integer installerorgid;
 	private Integer installerid;
 	private String codepostfix;
+	private String supcode;
 	private String usercode;
 	private Integer personid;
 	private Integer status;
 	private Date createtime;
+
+	public String getAppaccount() {
+		return appaccount;
+	}
+
+	public void setAppaccount(String appaccount) {
+		this.appaccount = appaccount;
+	}
 
 	public Integer getStatus() {
 		return status;
@@ -122,10 +132,19 @@ public class UserPO {
 		this.createtime = createtime;
 	}
 
+	public String getSupcode() {
+		return supcode;
+	}
+
+	public void setSupcode(String supcode) {
+		this.supcode = supcode;
+	}
+
 	@Override
 	public String toString() {
 		return "UserPO{" +
 				"userid=" + userid +
+				", appaccount='" + appaccount + '\'' +
 				", loginname='" + loginname + '\'' +
 				", name='" + name + '\'' +
 				", citycode='" + citycode + '\'' +
@@ -133,6 +152,7 @@ public class UserPO {
 				", installerorgid=" + installerorgid +
 				", installerid=" + installerid +
 				", codepostfix='" + codepostfix + '\'' +
+				", supcode='" + supcode + '\'' +
 				", usercode='" + usercode + '\'' +
 				", personid=" + personid +
 				", status=" + status +

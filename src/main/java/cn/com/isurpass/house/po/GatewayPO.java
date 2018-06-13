@@ -10,7 +10,10 @@ import javax.persistence.*;
 public class GatewayPO {
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer gatewayid;
 	private String deviceid;
+	private String appaccount;
 	private String name;
 	private Integer status; // 0:离线 1:在线
 	private String model;
@@ -18,7 +21,23 @@ public class GatewayPO {
 	private Integer battery; // 0:离线 1:在线
 	private Date createtime;
 
-    public String getDeviceid() {
+	public String getAppaccount() {
+		return appaccount;
+	}
+
+	public void setAppaccount(String appaccount) {
+		this.appaccount = appaccount;
+	}
+
+	public Integer getGatewayid() {
+		return gatewayid;
+	}
+
+	public void setGatewayid(Integer gatewayid) {
+		this.gatewayid = gatewayid;
+	}
+
+	public String getDeviceid() {
 		return deviceid;
 	}
 
@@ -76,8 +95,16 @@ public class GatewayPO {
 
 	@Override
 	public String toString() {
-		return "GatewayPO [deviceid=" + deviceid + ", name=" + name + ", status=" + status + ", model=" + model
-				+ ", firmwareversion=" + firmwareversion + ", battery=" + battery + ", createtime=" + createtime + "]";
+		return "GatewayPO{" +
+				"gatewayid=" + gatewayid +
+				", deviceid='" + deviceid + '\'' +
+				", appaccount='" + appaccount + '\'' +
+				", name='" + name + '\'' +
+				", status=" + status +
+				", model='" + model + '\'' +
+				", firmwareversion='" + firmwareversion + '\'' +
+				", battery=" + battery +
+				", createtime=" + createtime +
+				'}';
 	}
-	
 }

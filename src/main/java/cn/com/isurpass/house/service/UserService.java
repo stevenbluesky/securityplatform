@@ -5,18 +5,20 @@ import cn.com.isurpass.house.exception.MyArgumentNullException;
 import cn.com.isurpass.house.po.*;
 import cn.com.isurpass.house.util.Constants;
 import cn.com.isurpass.house.util.FormUtils;
+import cn.com.isurpass.house.util.Ten2ThirtySix;
 import cn.com.isurpass.house.vo.EmployeeParentOrgIdVO;
 import cn.com.isurpass.house.vo.UserAddVO;
 import cn.com.isurpass.house.vo.UserInfoListVO;
 import cn.com.isurpass.house.vo.UserSearchVO;
-import com.sun.jndi.cosnaming.IiopUrl;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
@@ -55,7 +57,14 @@ public class UserService {
     GatewayDAO gateway;
     @Autowired
     OrganizationService os;
-
+    @Autowired
+    private PhonecardDAO phonecardDAO;
+    @Autowired
+    private EmployeeDAO empDAO;
+    @Autowired
+    private CodeLogDAO codelogDAO;
+    @Autowired
+    private SupplierCodeLogDAO supcodeDAO;
     @Transactional(rollbackFor = Exception.class)
     public void add(UserAddVO u, HttpServletRequest request) {
         EmployeePO emp = (EmployeePO) SecurityUtils.getSubject().getPrincipal();
@@ -63,6 +72,9 @@ public class UserService {
         /*if (!FormUtils.checkNUll(u.getDeviceid()) || !FormUtils.checkNUll(u.getSerialnumber())) {
             throw new RuntimeException("-107");
         }*/
+        if(ud.findByAppaccount(u.getAppaccount())!=null){//检查app账号是否已被别人绑定
+            throw new RuntimeException("-121");
+        }
         if (gd.findByDeviceid(u.getDeviceid()).size() != 0) {
             throw new RuntimeException("-108");
         }
@@ -79,23 +91,40 @@ public class UserService {
 
         UserPO user = new UserPO();
         user.setLoginname(u.getPhonenumber());
-        user.setName(u.getFirstname() + u.getLastname());
+        if(StringUtils.isEmpty(u.getAppaccount())){
+            user.setAppaccount(null);
+        }else{
+            user.setAppaccount(u.getAppaccount());
+        }
+        if(u.getFirstname()!=null){
+            boolean b = checkChar(u.getFirstname());
+            if(b){//是英文名
+                user.setName(u.getFirstname() +" "+ u.getLastname());
+            }else{
+                user.setName(u.getLastname()+u.getFirstname());
+            }
+        }
         if (FormUtils.isEmpty(u.getCity())) {
 //            user.setCitycode(city.findByCityid(u.getCity()).getCitycode());
             throw new RuntimeException("-100");
         }
         EmployeeParentOrgIdVO empp = emps.findEmpParentOrgid(emp);
-        user.setOrganizationid(1);
+        user.setOrganizationid(0);
         user.setInstallerorgid(1);
         user.setInstallerid(1);
         user.setStatus(1);
+        user.setUsercode("usercode");
         if (empp != null) {
             user.setOrganizationid(empp.getOrganizationid());
             user.setInstallerorgid(empp.getInstallerorgid());
             user.setInstallerid(empp.getInstallerid());
         }
+        if(u.getOrganizationid()!=null){
+            user.setOrganizationid(u.getOrganizationid());
+        }
         user.setCodepostfix(u.getCodepostfix());
-        user.setUsercode("ameta" + u.getPhonenumber());
+        user.setSupcode(u.getSupcode());
+        //user.setUsercode("ameta" + u.getPhonenumber());
 
         AddressPO address = new AddressPO();
         Integer addressid = null;
@@ -117,7 +146,14 @@ public class UserService {
         PersonPO person = new PersonPO();
         person.setFirstname(u.getFirstname());
         person.setLastname(u.getLastname());
-        person.setName(u.getFirstname() + u.getLastname());
+        if(u.getFirstname()!=null){
+            boolean b = checkChar(u.getFirstname());
+            if(b){//是英文名
+                person.setName(u.getFirstname() +" "+ u.getLastname());
+            }else{
+                person.setName(u.getLastname()+u.getFirstname());
+            }
+        }
         person.setSsn(u.getSsn());
         person.setGender(u.getGender());
         person.setPhonenumber(u.getPhonenumber());
@@ -146,13 +182,21 @@ public class UserService {
         pcud.save(pcup);
 //        }
     }
-
+    public static boolean checkChar(String   fstrData) {
+        char   c   =   fstrData.charAt(0);
+        if(((c>='a'&&c<='z')   ||   (c>='A'&&c<='Z'))) {
+            return   true;
+        }else{
+            return   false;
+        }
+    }
     @Transactional(readOnly = true)
     public Map<String, Object> listUserInfo(Pageable pageable, HttpServletRequest request) {
         EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
         Integer orgtype = od.findByOrganizationid(emp.getOrganizationid()).getOrgtype();
         Integer count = 0;
-        if (erd.findByEmployeeid(emp.getEmployeeid()) != null && erd.findByEmployeeid(emp.getEmployeeid()).stream().map(EmployeeRolePO::getRoleid).anyMatch(id -> id == 4)) {
+        List<EmployeeRolePO> rolelist = erd.findByEmployeeid(emp.getEmployeeid());
+        if(rolelist!= null &&rolelist.size()==1&&rolelist.get(0).getRoleid()==4){
             Page<UserPO> userList = ud.findByInstallerid(emp.getEmployeeid(), pageable);
             count = ud.countByInstallerid(emp.getEmployeeid());
             return listUserInfo0(pageable, userList, count);
@@ -169,7 +213,7 @@ public class UserService {
         }
         if (orgtype.equals(Constants.ORGTYPE_SUPPLIER)) {
             Page<UserPO> userList = ud.findByOrganizationid(emp.getOrganizationid(), pageable);
-            count = ud.countByInstallerorgid(emp.getOrganizationid());
+            count = ud.countByOrganizationid(emp.getOrganizationid());
             return listUserInfo0(pageable, userList, count);
         }
         return null;
@@ -197,19 +241,37 @@ public class UserService {
         List<UserPO> userList = ud.findByOrganizationid(orgid);
         return userList;
     }
-
+    @Transactional
     public void toggleUserStatus0(String hope, Object[] ids, HttpServletRequest request) throws MyArgumentNullException {
         if ("unsuspence".equals(hope)) {
             for (Object id : ids) {
-                toggleUserStatus(Integer.valueOf(id.toString()), Constants.STATUS_NORMAL, request);
+                toggleUserStatus(Integer.valueOf(id.toString().replace( ",", "")), Constants.STATUS_NORMAL, request);
             }
         } else if ("suspence".equals(hope)) {
             for (Object id : ids) {
-                toggleUserStatus(Integer.valueOf(id.toString()), Constants.STATUS_SUSPENCED, request);
+                toggleUserStatus(Integer.valueOf(id.toString().replace( ",", "")), Constants.STATUS_SUSPENCED, request);
+            }
+        }else if ("synchronous".equals(hope)) {//同步用户的服务商
+            for (Object id : ids) {
+                UserPO byUserid = ud.findByUserid(Integer.parseInt(id.toString().replace(",", "")));
+                Integer installerorgid = byUserid.getInstallerorgid();
+                OrganizationPO byOrganizationid = od.findByOrganizationid(installerorgid);
+                Integer parentorgid = byOrganizationid.getParentorgid();
+                if(parentorgid!=null) {
+                    byUserid.setInstallerorgid(parentorgid);
+                }
+                ud.save(byUserid);
+            }
+        }else if("delete".equals(hope)){
+            for (Object id : ids) {
+                //执行删除用户关联关系，及删除用户单表记录操作
+                gd.deleteByUserid(Integer.valueOf(id.toString().replace( ",", "")));
+                pcud.deleteByUserid(Integer.valueOf(id.toString().replace( ",", "")));
+                ud.deleteByUserid(Integer.valueOf(id.toString().replace( ",", "")));
             }
         }
     }
-
+    @Transactional(rollbackFor = Exception.class)
     public void toggleUserStatus(Integer userid, Integer status, HttpServletRequest request) throws MyArgumentNullException {
         if (status == null) {
             throw new RuntimeException("-101");
@@ -253,15 +315,21 @@ public class UserService {
         List<UserPO> u3 = Collections.EMPTY_LIST;
         List<UserPO> u4 = Collections.EMPTY_LIST;
         List<UserPO> u5 = Collections.EMPTY_LIST;
+        List<UserPO> u6 = Collections.EMPTY_LIST;
         Set<List<UserPO>> set = new HashSet<>();
         if (!FormUtils.isEmpty(usv.getSearchCity())) {
             List<String> citycodelist = city.findByCitynameContaining(usv.getSearchCity()).stream().map(CityPO::getCitycode).collect(toList());
             u0 = ud.findByCitycodeIn(citycodelist);
             set.add(u0);
         }
-        if (!FormUtils.isEmpty(usv.getSearchPhonenumber())) {
+        /*if (!FormUtils.isEmpty(usv.getSearchPhonenumber())) {
             List<Integer> personidlist = pd.findByPhonenumberContaining(usv.getSearchPhonenumber()).stream().map(PersonPO::getPersonid).collect(toList());
             u1 = ud.findByPersonidIn(personidlist);
+            set.add(u1);
+        }*/
+        if (usv.getSearchAppAccount() != null && usv.getSearchAppAccount() != "") {
+            u1 = ud.findByAppaccountContaining(usv.getSearchAppAccount());
+            //u6 = ud.findByCodepostfixContaining(usv.getSearchCode());
             set.add(u1);
         }
         if (!FormUtils.isEmpty(usv.getSearchGatewayid())) {
@@ -285,7 +353,10 @@ public class UserService {
             u5 = ud.findByNameContaining(usv.getSearchName());
             set.add(u5);
         }
-
+        if (usv.getSearchCode() != null && usv.getSearchCode() != "") {
+            u6 = ud.findByCodepostfixContaining(usv.getSearchCode());
+            set.add(u6);
+        }
         set.remove(null);
         Iterator<List<UserPO>> iterator = set.iterator();
         List<UserPO> ux = iterator.next();
@@ -331,13 +402,27 @@ public class UserService {
             PersonPO personPO = pd.findByPersonid(u.getPersonid());
             CityPO citypo = city.findByCitycode(u.getCitycode());
             OrganizationPO orgpo = od.findByOrganizationid(u.getOrganizationid());
+            List<GatewayUserPO> byUserid = gd.findByUserid(u.getUserid());
+            if(byUserid.size()>0){
+                GatewayUserPO gatewayUserPO = byUserid.get(0);
+                user.setDeviceid(gatewayUserPO.getDeviceid());
+            }
+            PhonecardUserPO phonecarduser = pcud.findByUserid(u.getUserid());
 
             user.setUserid(u.getUserid());
             user.setName(u.getName());
             user.setStatus(u.getStatus());
-            user.setPhonenumber(personPO == null ? null : personPO.getPhonenumber());
+            user.setAppaccount(u.getAppaccount());
+//            user.setPhonenumber(personPO == null ? null : personPO.getPhonenumber());
             user.setCity(citypo == null ? null : citypo.getCityname());
             user.setSuppliername(orgpo == null ? null : orgpo.getName());
+            user.setCodepostfix(u.getCodepostfix());
+            if(phonecarduser!=null) {
+                PhonecardPO byPhonecardid = pcard.findByPhonecardid(phonecarduser.getPhonecardid());
+                if(byPhonecardid!=null){
+                    user.setSerialnumber(byPhonecardid.getSerialnumber());
+                }
+            }
             listvo.add(user);
         });
     }
@@ -345,6 +430,7 @@ public class UserService {
     /**
      * 查询添加用户时所有表单信息
      */
+    @Transactional(readOnly = true)
     public UserAddVO queryUserAddInfo(HttpServletRequest request, Integer userid) {
         UserPO byUserid = ud.findByUserid(userid);
         if (byUserid == null) {
@@ -352,7 +438,15 @@ public class UserService {
         }
         UserAddVO userAddVO = new UserAddVO();
         userAddVO.setUserid(userid);
+        userAddVO.setAppaccount(byUserid.getAppaccount());
         userAddVO.setCodepostfix(byUserid.getCodepostfix());
+        userAddVO.setSupcode(byUserid.getSupcode());
+        OrganizationPO byOrganizationid = od.findByOrganizationid(byUserid.getOrganizationid());
+        if(byOrganizationid!=null){
+            userAddVO.setServiceprovider(byOrganizationid.getName());
+        }
+        userAddVO.setInstallerorg(od.findByOrganizationid(byUserid.getInstallerorgid()).getName());
+        userAddVO.setInstaller(empDAO.findByEmployeeid(byUserid.getInstallerid()).getLoginname());
         getUserPersonInfo(byUserid, userAddVO);
         getUserGatewayIdSIM(userid, userAddVO);
         return userAddVO;
@@ -360,11 +454,11 @@ public class UserService {
 
     private void getUserGatewayIdSIM(Integer userid, UserAddVO userAddVO) {
         List<GatewayUserPO> gatewayuserlist = gd.findByUserid(userid);
-        if (gatewayuserlist == null || gatewayuserlist.size() == 0) {
-            return;
+        if (gatewayuserlist.size()>0&&gatewayuserlist.get(0)!=null) {
+            //目前只考虑用户只有一个网关,直接取第一个
+            userAddVO.setDeviceid(gatewayuserlist.get(0).getDeviceid());
+            userAddVO.setGatewaystatus(gateway.findByDeviceid(gatewayuserlist.get(0).getDeviceid()).getStatus());
         }
-        //目前只考虑用户只有一个网关,直接取第一个
-        userAddVO.setDeviceid(gatewayuserlist.get(0).getDeviceid());
         PhonecardUserPO byUserid1 = pcud.findByUserid(userid);
         if (byUserid1 == null) {
             return;
@@ -374,6 +468,8 @@ public class UserService {
             return;
         }
         userAddVO.setSerialnumber(byPhonecardid.getSerialnumber());
+        userAddVO.setStatus(byPhonecardid.getStatus());
+        userAddVO.setPhonecardid(byUserid1.getPhonecardid());
     }
 
     private void getUserPersonInfo(UserPO byUserid, UserAddVO userAddVO) {
@@ -399,7 +495,7 @@ public class UserService {
             }
         }
     }
-
+    @Transactional(rollbackFor = Exception.class)
     public void modify(UserAddVO user) {
         if (user.getUserid() == null || ud.findByUserid(user.getUserid()) == null) {
             throw new RuntimeException("User not Exist");
@@ -435,10 +531,73 @@ public class UserService {
         preUser.setCodepostfix(user.getCodepostfix());
 
         /**************************************************************************************************/
-        if (gd.findByUserid(preUser.getUserid()) != null) {
-            if (user.getDeviceid() == null && gd.findByUserid(preUser.getUserid()) != null) {
-                //之前绑定了,现在没填
-                List<GatewayUserPO> byUserid = gd.findByUserid(preUser.getUserid());
+        /**判断网关
+         * gd   gatewayuserdao
+         * pcud phonecarddao
+         * gateway gatewaydao
+         * **/
+        List<GatewayUserPO> gatewayuseruser = gd.findByUserid(preUser.getUserid());
+        if(!StringUtils.isEmpty(user.getDeviceid())){//网关id有录入信息
+            if(gatewayuseruser!=null&&gatewayuseruser.size()>0){//该用户下面还有网关
+                String deviceid = gatewayuseruser.get(0).getDeviceid();
+                if(deviceid.equals(user.getDeviceid())){
+                    //同一个网关，网关未修改
+                }else{
+                    throw new RuntimeException("-119");//该用户已有网关，请先解绑再来更换网关
+                }
+            }else{//该用户没有网关了
+                List<GatewayUserPO> gatewayuserdevice = gd.findByDeviceid(user.getDeviceid());
+                if(gatewayuserdevice!=null&&gatewayuserdevice.size()>0){//该网关被别人绑定了
+                    throw new RuntimeException("-108");//网关已被其他用户绑定，请填入正确网关
+                }else{
+                    if(gateway.findByDeviceid(user.getDeviceid())==null){//网关表没有此网关，不可以绑定
+                        throw new RuntimeException("-109");//网关不存在
+                    }else{//执行绑定网关操作
+                        GatewayUserPO gatewayUserPO = new GatewayUserPO();
+                        gatewayUserPO.setUserid(user.getUserid());
+                        gatewayUserPO.setDeviceid(user.getDeviceid());
+                        gatewayUserPO.setCreatetime(new Date());
+                        gd.save(gatewayUserPO);
+                    }
+                }
+            }
+        }else{//网关id没有录入数据
+            gd.deleteByUserid(preUser.getUserid());
+        }
+
+        /**
+         * 判断电话卡
+         */
+        PhonecardUserPO phonecarduseruser = pcud.findByUserid(preUser.getUserid());
+        if(!StringUtils.isEmpty(user.getSerialnumber())) {
+            if (phonecarduseruser != null) {//该用户下有电话卡未解绑
+                if (phonecardDAO.findByPhonecardid(phonecarduseruser.getPhonecardid()).getSerialnumber().equals(user.getSerialnumber())) {
+                    //同一张电话卡
+                } else {
+                    throw new RuntimeException("-120");//该用户已有电话卡，请先解绑再来更换电话卡
+                }
+            } else {
+                if (phonecardDAO.findBySerialnumber(user.getSerialnumber()) == null) {//电话卡未录入
+                    throw new RuntimeException("-111");
+                }
+                PhonecardUserPO byPhonecardid = pcud.findByPhonecardid(phonecardDAO.findBySerialnumber(user.getSerialnumber()).getPhonecardid());
+                if (byPhonecardid != null) {//该电话卡已被别人绑定
+                    throw new RuntimeException("-110");
+                }
+                PhonecardUserPO pu = new PhonecardUserPO();
+                pu.setUserid(user.getUserid());
+                pu.setPhonecardid(phonecardDAO.findBySerialnumber(user.getSerialnumber()).getPhonecardid());
+                pu.setCreatetime(new Date());
+                pcud.save(pu);
+            }
+        }else{
+            pcud.deleteByUserid(preUser.getUserid());
+        }
+        /****/
+/*        if (gatewayuseruser != null) {
+            if (user.getDeviceid() == null && gatewayuseruser != null) {
+                //之前绑定了,现在没填,然后删除网关？
+                List<GatewayUserPO> byUserid = gatewayuseruser;
                 gd.deleteAll(byUserid);
             }
             if (!(gd.findByDeviceid(user.getDeviceid()).stream().map(GatewayUserPO::getUserid).collect(toList()).contains(preUser.getUserid()))) {
@@ -455,8 +614,8 @@ public class UserService {
                 gatewayUserPO.setDeviceid(user.getDeviceid());
                 gd.save(gatewayUserPO);
             }
-        }
-        if (pcud.findByUserid(preUser.getUserid()) != null) {
+        }*/
+/*        if (pcud.findByUserid(preUser.getUserid()) != null) {
             if (user.getSerialnumber() == null && pcud.findByUserid(preUser.getUserid()) != null) {
                 PhonecardUserPO byUserid = pcud.findByUserid(preUser.getUserid());
                 pcud.delete(byUserid);
@@ -477,10 +636,171 @@ public class UserService {
                     pcud.save(pu);
                 }
             }
-        }
+        }*/
         /**************************************************************************************************/
 
 //        preUser.setUsercode("");
         ud.save(preUser);
     }
+    @Transactional(rollbackFor = Exception.class)
+    public void unbundling(String userid, String serialnumber) {
+        //phonecardDAO.deleteBySerialnumber(serialnumber);删除操作留到电话卡页面，此处只是解绑操作
+        userid = userid.replace( ",", "");
+        pcud.deleteByUserid(Integer.parseInt(userid.replace( ",", "")));
+    }
+    @Transactional(rollbackFor = Exception.class)
+    public void unbundlinggateway(String mydata) {
+        gd.deleteByDeviceid(mydata);
+    }
+    @Transactional(readOnly = true)
+    public void findPro(Integer organizationid) {
+        OrganizationPO byOrganizationid = od.findByOrganizationid(organizationid);
+        if(Constants.ORGTYPE_AMETA!=byOrganizationid.getOrgtype()){
+            throw new RuntimeException("You have no access!");
+        }
+    }
+    @Transactional(readOnly = true)
+    public void findTypeUserPro( Integer organizationid,Integer employeeid) {
+        OrganizationPO byOrganizationid = od.findByOrganizationid(organizationid);
+        if(Constants.ORGTYPE_INSTALLER!=byOrganizationid.getOrgtype()){//不是安装商机构下的员工，不能打开该页面
+            throw new RuntimeException("Please login as operator to create user!");
+        }
+        List<EmployeeRolePO> byEmployeeid = erd.findByEmployeeid(employeeid);
+        byEmployeeid.get(0).getRoleid();
+        List<Integer> list = new ArrayList<Integer>();
+        for(EmployeeRolePO e:byEmployeeid){
+            list.add(e.getRoleid());
+        }
+        if(StringUtils.isEmpty(empDAO.findByEmployeeid(employeeid).getCode())){
+            throw new RuntimeException("Please login as operator to create user!");//需要有安装员代码
+        }
+    }
+    @Transactional(rollbackFor = Exception.class)
+    public String createUserCode(Integer employeeid, Integer organizationid,Integer suborgid) {
+        OrganizationPO org = od.findByOrganizationid(organizationid);
+        Integer parentorgid = org.getParentorgid();
+        /*if(suborgid==null&&StringUtils.isEmpty(parentorgid)){
+            return "-";
+        }*/
+        if(suborgid!=null){
+            parentorgid = suborgid;
+        }
+        OrganizationPO parentorg = od.findByOrganizationid(parentorgid);
+        /**
+         * (多伦多)(A报警中心)(安装商)(子安装商)(终端用户)
+           (501)   (101)      ((10100)(101)     (55555)
+         */
+        String citycode = org.getCitycode();
+        String Acode ="";
+        if(parentorg!=null){
+            Acode = parentorg.getCode();
+        }else{
+            Acode = "100";
+        }
+        String Bcode = org.getCode();
+        EmployeePO emp = empDAO.findByEmployeeid(employeeid);
+        String Ccode = emp.getCode();
+        //生成、获取终端用户部分Code
+        int Dcode;
+        String id ;
+        String precode = citycode+Acode+Bcode+Ccode;
+        CodeLog codefromdb = codelogDAO.findCodeLog(precode);
+        CodeLog codelog = new CodeLog();
+        if(codefromdb==null){
+            Dcode = 10001;
+            id = precode;
+        }else{
+            Dcode = codefromdb.getLastcode() + 1;
+            id = codefromdb.getId();
+        }
+        codelog.setId(id);
+        codelog.setLastcode(Dcode);
+        codelogDAO.save(codelog);
+        return precode+Dcode;
+    }
+    @Transactional(rollbackFor = Exception.class)
+    public String createSupCode(Integer organizationid,Integer suborgid) {
+        OrganizationPO org = od.findByOrganizationid(organizationid);
+        Integer parentorgid = org.getParentorgid();
+        if(suborgid==null&&StringUtils.isEmpty(parentorgid)){
+            return null;
+        }
+        if(suborgid!=null){
+            parentorgid = suborgid;
+        }
+        OrganizationPO parentorg = od.findByOrganizationid(parentorgid);
+        String usercode = "";
+        String suppliercode = parentorg.getCode();
+        SupplierCodeLogPO supplierCode = supcodeDAO.findSupplierCode(suppliercode);
+        if(supplierCode==null){
+            usercode = "00"+"0000";
+        }else{
+            Integer preint = 0 ;
+            Integer sufint = 0 ;
+            String usercode1 = supplierCode.getUsercode();
+            String precode = usercode1.substring(0,2);
+            String sufcode = usercode1.substring(2);
+            preint = Ten2ThirtySix.thirtysixToTen(precode);
+            sufint = Integer.parseInt(sufcode,16)+1;
+            if(sufint==65536){
+                preint = preint +1;
+                sufint = 0;
+            }
+            precode = Ten2ThirtySix.tenTo36(preint);
+            sufcode = sufint.toHexString(sufint);
+            if(precode.length()==1){
+                precode = "0"+precode;
+            }
+            if(sufcode.length()==1){
+                sufcode = "000"+sufcode;
+            }else if(sufcode.length()==2){
+                sufcode = "00"+sufcode;
+            }else if(sufcode.length()==3){
+                sufcode = "0"+sufcode;
+            }
+            usercode = precode.toLowerCase()+sufcode.toUpperCase();
+        }
+        SupplierCodeLogPO scpo = new SupplierCodeLogPO();
+        scpo.setSuppliercode(suppliercode);
+        scpo.setUsercode(usercode);
+        supcodeDAO.save(scpo);
+        return usercode;
+    }
+    @Transactional(readOnly = true)
+    public boolean validCode(String appaccount) {
+        UserPO user = ud.findByAppaccount(appaccount);
+        if (user == null)
+            return true;
+        return false;
+    }
+
+    /**
+     * 根据安装员的机构id拿到服务商的信息
+     * @param organizationid
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public String findSupName(Integer organizationid) {
+        OrganizationPO org = od.findByOrganizationid(organizationid);
+        OrganizationPO byParentorgid = od.findByOrganizationid(org.getParentorgid());
+        if(byParentorgid!=null){
+            return byParentorgid.getName();
+        }else{
+            return null;
+        }
+    }
+    @Transactional(readOnly = true)
+    public String findInsName(Integer organizationid) {
+        OrganizationPO org = od.findByOrganizationid(organizationid);
+        return org.getName();
+    }
+    @Transactional(readOnly = true)
+    public GatewayPO fillGateway(String appaccount) {
+        List<GatewayPO> gatewaylist = gateway.findByAppaccount(appaccount);
+        if(gatewaylist!=null&&gatewaylist.size()>0){
+            return gatewaylist.get(0);
+        }
+        else return null;
+    }
+
 }

@@ -85,7 +85,7 @@ public class GatewayuserService {
     @Transactional(readOnly = true)
     public OrganizationPO findInstallOrgBydeviceid(String deviceid) {
         UserPO up = findUserBydeviceid(deviceid);
-        return up == null ? null : od.findByOrganizationid(up.getOrganizationid());
+        return up == null ? null : od.findByOrganizationid(up.getInstallerorgid());
     }
 
     @Transactional(readOnly = true)
@@ -96,7 +96,7 @@ public class GatewayuserService {
     @Transactional(readOnly = true)
     public String findInstallernameBydeviceid(String deviceid) {
         EmployeePO ep = findInstallerByDeviceid(deviceid);
-        return ep == null ? null : ep.getName();
+        return ep == null ? null : ep.getLoginname();
     }
 
     /**

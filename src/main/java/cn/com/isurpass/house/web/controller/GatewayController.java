@@ -72,43 +72,48 @@ public class GatewayController {
 	@RequestMapping("gatewayJsonList")
 	@ResponseBody
 	public Map<String, Object> gatewayJsonList(PageResult pr,TypeGatewayInfoVO tgiv,HttpServletRequest request) {
-		Pageable pageable = PageRequest.of(pr.getPage()-1,pr.getRows(),Sort.Direction.ASC,"deviceid");
+		Pageable pageable = PageRequest.of(pr.getPage()-1,pr.getRows(),Sort.Direction.DESC,"gatewayid");
 		EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
+
 		if(FormUtils.isEmpty(tgiv)){
 			return gs.listNUllGateway(pageable,emp);
 		}
+		//return gs.findGatewayJsonList(pageable,tgiv,emp);
 		return gs.listGateway(pageable,tgiv,emp);
 	}
-	
-	/*@RequestMapping("gatewayDeviceJsonList")
-	@ResponseBody
-	public Map<String, Object> gatewayDeviceJsonList(PageResult pr,TypeGatewayInfoVO tgiv) {
-		Pageable pageable = PageRequest.of(pr.getPage()-1,pr.getRows(),Sort.Direction.ASC,"deviceid");
-		return gs.listGateway(pageable,tgiv);
-	}*/
 	/**
 	 * 根据deviceid获取网关详细信息
 	 * @param deviceid
 	 * @return
 	 */
 	@RequestMapping("gatewayDetail")
-	public String gatewayDetail(String deviceid,Model model) {
+	public String gatewayDetail(String deviceid,Model model){
 		if(StringUtils.isEmpty(deviceid)){
 			return null;
 		}
-		GatewayDetailVO gw = gs.findByDeviceid(deviceid,null);
+		GatewayDetailVO gw;
+		try {
+			gw = gs.findByDeviceid(deviceid,null);
+		} catch (Exception e) {
+			return null;
+		}
 		model.addAttribute("gwd", gw);
 //		model.addAttribute("gdd", gw.getDevice());
 		return "gateway/gatewayDetail";
 	}
 	@ResponseBody
 	@RequestMapping("gatewayDeviceDetail")
-	public Map<String,Object> gatewayDeviceDetail(PageResult pr,String deviceid,Model model) {
+	public Map<String,Object> gatewayDeviceDetail(PageResult pr,String deviceid,Model model){
 		Pageable pageable = PageRequest.of(pr.getPage() - 1, pr.getRows(), Sort.Direction.ASC, "zwavedeviceid");
 		if(StringUtils.isEmpty(deviceid)){
 			return null;
 		}
-		GatewayDetailVO gw = gs.findByDeviceid(deviceid, pageable);
+		GatewayDetailVO gw;
+		try {
+			gw = gs.findByDeviceid(deviceid, pageable);
+		} catch (Exception e) {
+			return null;
+		}
 		List<ZwaveDevicePO> list= gw.getDevice();
 		Map<String,Object> map = new HashMap<>();
 		map.put("total",gw.getTotal());
@@ -121,7 +126,7 @@ public class GatewayController {
 	 * @return
 	 */
 	@ResponseBody
-//	@RequestMapping(value="update",method = RequestMethod.POST)
+	@RequestMapping(value="update",method = RequestMethod.POST)
 	public String update(@RequestBody TransferVO tf){
 		String hope = tf.getHope();
 		Object[] ids = tf.getIds();
@@ -129,7 +134,7 @@ public class GatewayController {
 			gs.updateGatewayStatus(hope,ids);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return "failed";
+			return e.getMessage();
 		}
 		return "success";
 	}

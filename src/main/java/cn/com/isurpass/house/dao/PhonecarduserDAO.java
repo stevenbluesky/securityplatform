@@ -10,6 +10,7 @@ import java.util.List;
 @Repository
 public interface PhonecarduserDAO extends CrudRepository<PhonecardUserPO,Integer>{
 	PhonecardUserPO save(PhonecardUserPO pcud);
+
 	PhonecardUserPO findByUserid(Integer userid);
 
 	PhonecardUserPO findByPhonecardid(Integer phonecardid);
@@ -17,4 +18,6 @@ public interface PhonecarduserDAO extends CrudRepository<PhonecardUserPO,Integer
     List<PhonecardUserPO> findByPhonecardidIn(List<Integer> phonecardidlist);
 
     List<PhonecardUserPO> findByUseridIn(List<Integer> useridlist);
+
+    void deleteByUserid(int userid);
 }

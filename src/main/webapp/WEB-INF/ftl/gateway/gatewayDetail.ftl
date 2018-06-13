@@ -107,10 +107,14 @@
 
 <!-- JavaScript 部分 -->
 <script type="text/javascript">
-    var id = getCookie("id");
-    if (id != null) {
+
+        var url = document.location.toString();
+        var arrUrl = url.split("=");
+        var para = arrUrl[1];
+
+    if (para != null) {
         $('#table').bootstrapTable({
-            url: "gatewayDeviceDetail?deviceid=" + id,
+            url: "gatewayDeviceDetail?deviceid=" + para,
             method: 'GET',                      //请求方式（*）
             //toolbar: '#toolbar',              //工具按钮用哪个容器
             striped: true,                      //是否显示行间隔色
@@ -151,20 +155,24 @@
             onLoadSuccess: function () {
             },
             onLoadError: function () {
-                alert('<@spring.message code="label.dataloaderror"/>');
+                //alert('<@spring.message code="label.dataloaderror"/>');
             },
             onDblClickRow: function (row, $element) {
                 var id = row.zwavedeviceid;
-                window.location.href = "../device/deviceDetail?zwavedeviceid="+id;
+                //window.location.href = "../device/deviceDetail?zwavedeviceid="+id;
+                $("#2iframeDetail").attr("src", '../device/deviceDetail?zwavedeviceid='+id);
+                $('#2myModal').modal('show');
             }
         });
     }
 
-    function getCookie(name) {
-        var arr = document.cookie.match(new RegExp("(^| )" + name + "=([^;]*)(;|$)"));
-        if (arr != null) return unescape(arr[2]);
-        return null;
-    }
+/*    function getCookie(name) {
+        var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+        if(arr=document.cookie.match(reg))
+            return unescape(arr[2]);
+        else
+            return null;
+    }*/
 
     function formatter_gatewaystatus(value, row, index) {
         if (value == 0)
@@ -187,7 +195,7 @@
                     alert("<@spring.message code='label.updatesuccess'/>");
                     window.location.reload();
                 } else {
-                    alert("<@spring.message code='label.updatefailed'/>" + "(" + data['msg'] + ")");
+                    alert("<@spring.message code='label.updatefailed'/>" /*+ "(" + data['msg'] + ")"*/);
                 }
             },
             error: function () {// 请求失败处理函数
@@ -206,4 +214,24 @@
         formatterwarning();
     });
 </script>
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="2myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width:95%;height:100%;">
+        <div class="modal-content">
+        <#--引入详情界面-->
+            <div class="modal-body">
+                <div class="col-md-12" style="height:540px;width:100%">
+                    <iframe id="2iframeDetail" class="embed-responsive-item" frameborder="0" src=""
+                            style="height:100%;width:100%;"></iframe>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default"
+                        data-dismiss="modal"><@spring.message code="label.close"/></button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <#include "../_foot0.ftl"/>

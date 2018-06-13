@@ -1,6 +1,5 @@
 include "../_head0.ftl"/>
 <#include "../_head1.ftl"/>
-
           <div class="row">
               <div class="text-center"><h1><@spring.message code="label.EmployeeList"/></h1></div>
               <hr>

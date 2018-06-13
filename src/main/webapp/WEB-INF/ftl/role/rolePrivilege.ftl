@@ -11,14 +11,14 @@
 <@spring.message code="label.RolePrivilege"/>
 <hr>
 <#list privilegeList as privilege>
-    <#if privilege_index== 0 || (privilege_index)%3 == 0>
+    <#if privilege_index== 0 || (privilege_index)%2 == 0>
     <div class="row" style="text-align: left; margin-top: 20px;">
     </#if>
-        <div class="col-md-4">
+        <div class="col-md-6">
             <span style="margin-right: 10px;"><input id="privilege_${(privilege.privilegeid)!}" type="checkbox" value="${(privilege.privilegeid)!}"/></span>
                 <span style="margin-right: 80px;">${(privilege.code)!}</span>
         </div>
-    <#if (privilege_index+1)%3 == 0 || !privilege_has_next>
+    <#if (privilege_index+1)%2 == 0 || !privilege_has_next>
     </div>
     </#if>
 </#list>
@@ -91,7 +91,8 @@
             success: function (data) {//返回json结果
                 if(data["msg"] == "1"){
                     alert("<@spring.message code='label.updatesuccess'/>");
-                    window.location.href = "roleList";
+                    //window.location.href = "roleList";
+                    parent.location.href=parent.location.href;
                 }else{
                     alert("<@spring.message code='label.updatefailed'/>"+data["msg"]);
                 }

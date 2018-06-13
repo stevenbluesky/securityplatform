@@ -3,10 +3,12 @@ package cn.com.isurpass.house.vo;
 public class UserSearchVO {
     private String searchName;
     private String searchCity;
-    private String searchPhonenumber;
+    private String searchAppAccount;
     private String searchGatewayid;
     private String searchSerialnumber;
     private String searchDealername;
+    private String searchCode;
+
 
     public String getSearchName() {
         return searchName;
@@ -40,12 +42,12 @@ public class UserSearchVO {
         this.searchGatewayid = searchGatewayid;
     }
 
-    public String getSearchPhonenumber() {
-        return searchPhonenumber;
+    public String getSearchAppAccount() {
+        return searchAppAccount;
     }
 
-    public void setSearchPhonenumber(String searchPhonenumber) {
-        this.searchPhonenumber = searchPhonenumber;
+    public void setSearchAppAccount(String searchAppAccount) {
+        this.searchAppAccount = searchAppAccount;
     }
 
     public String getSearchDealername() {
@@ -54,5 +56,13 @@ public class UserSearchVO {
 
     public void setSearchDealername(String searchDealername) {
         this.searchDealername = searchDealername;
+    }
+
+    public String getSearchCode() {
+        return searchCode;
+    }
+
+    public void setSearchCode(String searchCode) {
+        this.searchCode = searchCode;
     }
 }

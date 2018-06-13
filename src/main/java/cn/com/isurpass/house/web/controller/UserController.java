@@ -1,11 +1,15 @@
 package cn.com.isurpass.house.web.controller;
 
+import cn.com.isurpass.house.dao.GatewayDAO;
 import cn.com.isurpass.house.exception.MyArgumentNullException;
+import cn.com.isurpass.house.po.EmployeePO;
+import cn.com.isurpass.house.po.GatewayPO;
 import cn.com.isurpass.house.result.JsonResult;
 import cn.com.isurpass.house.service.UserService;
 import cn.com.isurpass.house.util.FormUtils;
 import cn.com.isurpass.house.result.PageResult;
 import cn.com.isurpass.house.vo.TransferVO;
+import cn.com.isurpass.house.vo.UnbundlingUserWithPhoneVO;
 import cn.com.isurpass.house.vo.UserAddVO;
 import cn.com.isurpass.house.vo.UserSearchVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +18,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.Map;
 
 @Controller
@@ -62,7 +69,17 @@ public class UserController {
         }
         return new JsonResult(1, "1");
     }
-
+    @RequestMapping("fillGateway")
+    @ResponseBody
+    public String fillGateway(@RequestBody String appaccount,Model model) {
+        GatewayPO gatewayPO = us.fillGateway(appaccount);
+        if(gatewayPO!=null){
+            model.addAttribute("deviceid",gatewayPO.getDeviceid());
+            return gatewayPO.getDeviceid();
+        }else{
+            return "failed";
+        }
+    }
     @RequestMapping("add")
     @ResponseBody
     public JsonResult addUserInfo(UserAddVO user, HttpServletRequest request) {
@@ -81,7 +98,7 @@ public class UserController {
     @RequestMapping("userInfoJsonList")
     @ResponseBody
     public Map<String, Object> userInfoJsonList(PageResult pr, UserSearchVO usv, HttpServletRequest request) {
-        Pageable pageable = PageRequest.of(pr.getPage() - 1, pr.getRows(), Sort.Direction.ASC, "userid");
+        Pageable pageable = PageRequest.of(pr.getPage() - 1, pr.getRows(), Sort.Direction.DESC, "userid");
         if (!FormUtils.isEmpty(usv)) {//搜索
             return us.search(pageable, usv, request);
         }
@@ -104,14 +121,92 @@ public class UserController {
         }
         return "success";
     }
+    @RequestMapping("validCode")
+    @ResponseBody
+    public Map<String, Boolean> validCode(String appaccount) {
+        Map<String, Boolean> map = new HashMap<>();
+        if(StringUtils.isEmpty(appaccount)){
+            map.put("valid", true);
+            return map;
+        }
+        map.put("valid", us.validCode(appaccount));
+        return map;
+    }
+    /**
+     * 解绑电话卡
+     * @param mydata
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "unbundling",method = RequestMethod.POST)
+    @ResponseBody
+    public String unbundling(@RequestBody String mydata,HttpServletRequest request) {
+        String userid = mydata.split("#")[0];
+        String serialnumber = mydata.split("#")[1];
+        try {
+            us.unbundling(userid,serialnumber);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "1";
+    }
 
+    /**
+     * 解绑网关
+     * @param mydata
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "unbundlinggateway",method = RequestMethod.POST)
+    @ResponseBody
+    public String unbundlingGateway(@RequestBody String mydata,HttpServletRequest request) {
+        try {
+            EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
+            us.findPro(emp.getOrganizationid());
+            us.unbundlinggateway(mydata);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "1";
+    }
     @RequestMapping("userList")
     public String userList() {
         return "user/userList";
     }
 
     @RequestMapping("typeUserInfo")
-    public String typeUserInfo() {
+    public String typeUserInfo(HttpServletRequest request,Model model) {
+        //只有安装员能打开此页面
+        EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
+        Integer organizationid = emp.getOrganizationid();
+        Integer employeeid = emp.getEmployeeid();
+        //TODO 用户代码工作完成后打开这部分注释
+        try {
+            us.findTypeUserPro(organizationid,employeeid);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "../../noInstaller";
+        }
+        String userCode = us.createUserCode(employeeid,organizationid,null);
+        String supCode = us.createSupCode(organizationid,null);
+        String supname = us.findSupName(organizationid);
+        String insname = us.findInsName(organizationid);
+        model.addAttribute("supCode",supCode);
+        model.addAttribute("userCode",userCode);
+        model.addAttribute("supname",supname);
+        model.addAttribute("insname",insname);
         return "user/typeUserInfo";
+    }
+    @RequestMapping("findCodes")
+    @ResponseBody
+    public String findCodes(HttpServletRequest request){
+        String ss = request.getParameter("suporgid");
+        int suporgid = Integer.parseInt(ss);
+        EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
+        Integer organizationid = emp.getOrganizationid();
+        Integer employeeid = emp.getEmployeeid();
+        String userCode = us.createUserCode(employeeid,organizationid,suporgid);
+        String supCode = us.createSupCode(organizationid,suporgid);
+        return supCode+"#"+userCode;
     }
 }

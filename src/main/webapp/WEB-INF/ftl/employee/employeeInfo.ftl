@@ -1,8 +1,8 @@
 <!-- 新增员工页面 -->
 <#include "../_head0.ftl">
     <div class="row-horizontal">
-        <div class="col-md-1"></div>
-        <div class="col-md-10">
+       <#-- <div class="col-md-1"></div>-->
+        <div class="col-md-12">
             <form class="form-horizontal" id="defaultForm" method="POST">
               <div class="text-center"><h1><@spring.message code="label.employeeInfo"/></h1></div>
                 <hr>
@@ -11,38 +11,45 @@
               <#if emp?? && emp.organizationid == 1>
               <div class="form-group">
                   <label for="organizationid"
-                         class="col-sm-2 control-label"  style="text-align: left;"><@spring.message code="label.parentorg"/></label>
-                  <div class="col-sm-10">
+                         class="col-sm-3 "  style="text-align: left;"><@spring.message code="label.parentorg"/></label>
+                  <div class="col-sm-9">
                       ${(empVO.parentOrgName)!}
                   </div>
               </div>
               </#if>
                 <div class="form-group">
                     <label for="loginname"
-                           class="col-sm-2 control-label"  style="text-align: left;"><@spring.message code="label.loginname"/></label>
-                    <div class="col-sm-10">
+                           class="col-sm-3 "  style="text-align: left;"><@spring.message code="label.orgcode"/></label>
+                    <div class="col-sm-9">
+                    ${(empVO.orgCode)!}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="loginname"
+                           class="col-sm-3 "  style="text-align: left;"><@spring.message code="label.loginname"/></label>
+                    <div class="col-sm-9">
                         ${(empVO.loginname)!}
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="question"
-                           class="col-sm-2 control-label"  style="text-align: left;"><@spring.message code="label.pquestion"/></label>
-                    <div class="col-sm-10">
+                           class="col-sm-3 "  style="text-align: left;"><@spring.message code="label.pquestion"/></label>
+                    <div class="col-sm-9">
                       ${(empVO.question)!}
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="code" class="col-sm-2 control-label"  style="text-align: left;"><@spring.message code="label.empcode"/></label>
-                    <div class="col-sm-10">
+                    <label for="code" class="col-sm-3 "  style="text-align: left;"><@spring.message code="label.empcode"/></label>
+                    <div class="col-sm-9">
                         ${(empVO.code)!}
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="expiredate" class="col-sm-2 control-label"  style="text-align: left;"><@spring.message code="label.expiredate"/></label>
-                    <div class="col-sm-10" align="left">
+                    <label for="expiredate" class="col-sm-3 "  style="text-align: left;"><@spring.message code="label.expiredate"/></label>
+                    <div class="col-sm-9" align="left">
                         <div class="col-sm-4 input-group">
                            ${(empVO.expiredate)!}
                         </div>
@@ -51,8 +58,8 @@
                 <input type="hidden" id="dtp_input1" value=""/>
 
                 <div class="form-group">
-                    <label for="status" class="col-sm-2 control-label"  style="text-align: left;"><@spring.message code="label.status"/></label>
-                    <div class="col-sm-10">
+                    <label for="status" class="col-sm-3 "  style="text-align: left;"><@spring.message code="label.status"/></label>
+                    <div class="col-sm-9">
                         <span id="status"></span>
                     </div>
                 </div>
@@ -63,67 +70,73 @@
                 <div style="visibility: hidden;">br</div>
                 <div class="text-left"><h4><@spring.message code="label.personinfo"/></h4></div>
                 <hr>
-                <div class="form-group">
+               <#-- <div class="form-group">
                     <label for="lastname"
-                           class="col-sm-2 control-label"  style="text-align: left;"><@spring.message code="label.lastname"/></label>
-                    <div class="col-sm-10">
+                           class="col-sm-3 "  style="text-align: left;"><@spring.message code="label.lastname"/></label>
+                    <div class="col-sm-9">
                      ${(empVO.lastname)!}
                     </div>
-                </div>
+                </div>-->
                 <div class="form-group">
                     <label for="firstname"
-                           class="col-sm-2 control-label"  style="text-align: left;"><@spring.message code="label.firstname"/></label>
-                    <div class="col-sm-10">
+                           class="col-sm-3 "  style="text-align: left;"><@spring.message code="label.name"/></label>
+                    <div class="col-sm-9">
                        ${(empVO.firstname)!}
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="title" class="col-sm-2 control-label"  style="text-align: left;"><@spring.message code="label.ptitle"/></label>
-                    <div class="col-sm-10">
+                    <label for="title" class="col-sm-3 "  style="text-align: left;"><@spring.message code="label.ptitle"/></label>
+                    <div class="col-sm-9">
                         ${(empVO.title)!}
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="ssn" class="col-sm-2 control-label"  style="text-align: left;"><@spring.message code="label.ssn"/></label>
-                    <div class="col-sm-10">
+                    <label for="ssn" class="col-sm-3 "  style="text-align: left;"><@spring.message code="label.ssn"/></label>
+                    <div class="col-sm-9">
                         ${(empVO.ssn)!}
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="gender" class="col-sm-2 control-label"  style="text-align: left;"><@spring.message code="label.gender"/></label>
-                    <div class="col-sm-10">
+               <#-- <div class="form-group">
+                    <label for="gender" class="col-sm-3 "  style="text-align: left;"><@spring.message code="label.gender"/></label>
+                    <div class="col-sm-9">
                         <span id="gender"></span>
                     </div>
-                </div>
+                </div>-->
 
                 <div class="form-group">
                     <label for="phonenumber"
-                           class="col-sm-2 control-label"  style="text-align: left;"><@spring.message code="label.phonenumber"/></label>
-                    <div class="col-sm-10">
+                           class="col-sm-3 "  style="text-align: left;"><@spring.message code="label.phonenumber"/></label>
+                    <div class="col-sm-9">
                         ${(empVO.phonenumber)!}
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="email" class="col-sm-2 control-label" style="text-align: left;"><@spring.message code="label.email"/></label>
-                    <div class="col-sm-10">
+                    <label for="email" class="col-sm-3 " style="text-align: left;"><@spring.message code="label.email"/></label>
+                    <div class="col-sm-9">
                         ${(empVO.email)!}
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="fax" class="col-sm-2 control-label" style="text-align: left;"><@spring.message code="label.fax"/></label>
-                    <div class="col-sm-10">
+                    <label for="fax" class="col-sm-3 " style="text-align: left;"><@spring.message code="label.fax"/></label>
+                    <div class="col-sm-9">
                         ${(empVO.fax)!}
                     </div>
                 </div>
-
+                <div class="form-group">
+                    <label for="detailaddress"
+                           class="col-sm-3 " style="text-align: left;"><@spring.message code="label.detailaddress"/></label>
+                    <div class="col-sm-9">
+                    ${(empVO.detailaddress)!}
+                    </div>
+                </div>
                 <div class="form-group">
                     <label for="address"
-                           class="col-sm-2 control-label" style="text-align: left;"><@spring.message code="label.address"/></label>
-                    <div class="col-sm-10">
+                           class="col-sm-3 " style="text-align: left;"></label>
+                    <div class="col-sm-9">
                         <div class="row text-left">
                             <div class="col-sm-4">
                             ${(empVO.countryname)!}
@@ -138,19 +151,13 @@
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="detailaddress"
-                           class="col-sm-2 control-label" style="text-align: left;"><@spring.message code="label.detailaddress"/></label>
-                    <div class="col-sm-10">
-                        ${(empVO.detailaddress)!}
-                    </div>
-                </div>
+
 
             </form>
 
         </div>
 
-        <div class="col-md-1"></div>
+       <#-- <div class="col-md-1"></div>-->
     </div>
 
 <!-- JavaScript 部分 -->
@@ -250,7 +257,7 @@
         }
     });
 
-    getParentOrg("#organizationid");
+    //getParentOrg("#organizationid");
 
     function getParentOrg(s, id) {
         $.ajax({
@@ -289,15 +296,15 @@
         let formatterStatus = formatter_status(status, null, null);
         $("#status").text(formatterStatus);
     }
-    function formatterGender(){
-        let gender = ${(empVO.gender)!"-1"};
+/*    function formatterGender(){
+        let gender = {(empVO.gender)!"-1"};
         let formatterStatus = formatter_gender(gender);
         $("#gender").text(formatterStatus);
-    }
+    }*/
 
     $(function () {
         formatterStatus();
-        formatterGender();
+        //formatterGender();
     });
 </script>
 <#include "../_foot0.ftl"/>

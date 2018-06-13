@@ -4,51 +4,78 @@
           <div class="row">
               <div class="text-center"><h1><@spring.message code='label.phonecardlist'/></h1></div>
               <hr>
-              <form id="searchForm" class="form-inline" method="POST" style="text-align: right;">
-                  <div class="form-group col-md-3">
-                      <b class="col-md-5"><@spring.message code='label.serialnumber'/></b>
+              <form id="searchForm" class="form-horizontal" method="POST" >
+                  <div class="form-group col-md-12">
+                  <div class="form-group col-md-4">
+                      <label class="col-md-5  control-label"><@spring.message code='label.serialnumber'/></label>
                       <div class="col-md-7">
                           <input type="text" class="form-control" id="searchserialnumber" name="serialnumber"
-                                 placeholder="<@spring.message code='label.serialnumber'/>" style="width:160px;">
+                                 placeholder="<@spring.message code='label.serialnumber'/>" >
                       </div>
                   </div>
-                  <div class="form-group col-md-3">
-                      <b class="col-md-5">Rate Plan</b>
+                      <div class="form-group col-md-4">
+                          <label class="col-md-5 control-label"><@spring.message code='label.status'/></label>
+                          <div class="col-md-7">
+                              <select id="searchstatus" name="status" <#--class="selectpicker"--> class="form-control" style="width: 100%"
+                                      title="<@spring.message code='label.choosestatus'/>">
+                                  <option value="1"><@spring.message code='label.all'/></option>
+                                  <option value="2"><@spring.message code='label.normal'/></option>
+                                  <option value="3"><@spring.message code='label.freeze'/></option>
+                              </select>
+                          </div>
+                      </div>
+                  <div class="form-group col-md-4">
+                      <label class="col-md-5 control-label">Rate Plan</label>
                       <div class="col-md-7">
                           <input type="text" class="form-control" id="searchrateplan" name="rateplan"
-                                 placeholder="Rate Plan" style="width:160px;">
+                                 placeholder="Rate Plan" >
                       </div>
                   </div>
-                  <div class="form-group col-md-4">
-                      <b class="col-md-5"><@spring.message code='label.status'/></b>
-                      <div class="col-md-7">
-                          <select id="searchstatus" name="status" class="selectpicker"
-                                  title="<@spring.message code='label.choosestatus'/>">
-                              <option value="1"><@spring.message code='label.all'/></option>
-                              <option value="2"><@spring.message code='label.normal'/></option>
-                              <option value="3"><@spring.message code='label.freeze'/></option>
-                          </select>
-                      </div>
+
                   </div>
-                  <div class="form-group col-md-2">
-                      <button type="button" id="searchsubmit" class="btn btn-default"
-                              style="width:80px;"><@spring.message code='label.search'/></button>
+                  <div class="form-group col-md-12">
+                      <div class="form-group col-md-4" align="right">
+                          <label for="searchDealername" class="col-md-5 control-label"></label>
+                          <div class="col-md-7">
+                              <input type="hidden" class="form-control" id="" name=""
+                                     placeholder="">
+                          </div>
+                      </div>
+                      <div class="form-group col-md-4" align="right">
+                          <label for="searchDealername" class="col-md-5 control-label"></label>
+                          <div class="col-md-7">
+                              <input type="hidden" class="form-control" id="" name=""
+                                     placeholder="">
+                          </div>
+                      </div>
+
+                      <div class="form-group col-md-4" align="right">
+                          <div class="col-md-5"></div>
+                          <div class="col-md-7">
+                              <button type="button" id="searchsubmit" class="btn btn-default"
+                                      style="width:100%;"><@spring.message code='label.search'/></button>
+                          </div>
+                      </div>
                   </div>
               </form>
           </div>
           <hr>
 <#--新增，启用，停用按钮-->
-<@shiro.hasPermission  name="label.TogglePhonecardStatus">
-            <button style="float: right;" type="button" id='deletePhonecard' class='btn btn-default' onclick='updatePhonecardStatus("delete");'><@spring.message code='label.delete'/></button>
+<@shiro.hasPermission  name="label.DeleteSIM">
+            <button style="float: right;" type="button" id='deletePhonecard' class='btn btn-default' onclick='send();'><@spring.message code='label.delete'/></button>
+</@shiro.hasPermission>
+<@shiro.hasPermission name="label.FreezeSIM">
 			<button style="float: right;" type="button" id='stopPhonecard' class='btn btn-default' onclick='updatePhonecardStatus("freeze");'><@spring.message code='label.freeze'/></button>
 </@shiro.hasPermission>
-<@shiro.hasPermission name="label.Activated">
+<@shiro.hasPermission name="label.ActiveSIM">
 			<button style="float: right;" type="button" id='startPhonecard' class='btn btn-default' onclick='updatePhonecardStatus("start");'><@spring.message code='label.start'/></button>
 </@shiro.hasPermission>
+<@shiro.hasPermission name="label.SynchronousSIMInfo">
             <button style="float: right;" type="button" class="btn btn-default" onclick='updatePhonecardStatus("synchronous");'><@spring.message code="label.synchronous"/></button>
-<@shiro.hasPermission name="label.AddPhonecard">
-           	<button style="float: right;" type="button" class="btn btn-default" onclick="window.location.href='typePhonecardInfo'"><@spring.message code="label.entering"/></button>
 </@shiro.hasPermission>
+<#--<@shiro.hasPermission name="label.AddPhonecard">
+           	<button style="float: right;" type="button" class="btn btn-default" onclick="window.location.href='typePhonecardInfo'"><@spring.message code="label.entering"/></button>
+</@shiro.hasPermission>-->
 
 	<table id="table" data-toggle="table">
         <thead>
@@ -69,8 +96,10 @@
       </div>
         <div class="col-md-1"></div>
     </div>
+
     <script type="text/javascript">
         var temp;
+        var confirmdelete = "";
         $('#table').bootstrapTable({
             url: 'phonecardJsonList',
             method: 'GET',                      //请求方式（*）
@@ -189,12 +218,6 @@
                     return;
                 }
             }
-            if (obj == "delete") {
-                confirmdelete = prompt("<@spring.message code='label.phonecarddeleteconfirm'/>","");
-                if(JSON.stringify(confirmdelete) == "{}"){
-                    return;
-                }
-            }
             if (obj == "synchronous") {
                 if (!confirm("<@spring.message code='label.synchronousconfirm'/>")) {
                     return;
@@ -230,30 +253,37 @@
                 }
             });
         }
+        function send() {
+            $('#mymyModal').modal('show');
+        }
+        function deleteAll() {
+            confirmdelete = "YES";
+            updatePhonecardStatus("delete");
+            $('#mymyModal').modal('hide');
+        }
+        function deleteDB() {
+            confirmdelete = "NO";
+            updatePhonecardStatus("delete");
+            $('#mymyModal').modal('hide');
+        }
     </script>
 <!-- 模态框（Modal） -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog" style="width:90%;height:70%;">
+<div class="modal fade" id="mymyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width:40%;height:15%;">
         <div class="modal-content">
-            <div class="modal-header" style="height: 40px;width:100%">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
-                <h4 class="modal-title" id="myModalLabel"><@spring.message code="label.phonecarddetail"/></h4>
-            </div>
-        <#--引入网关详情界面-->
+        <#--引入详情界面-->
             <div class="modal-body">
-                <div class="col-md-10" style="height:550px;width:100%">
-                    <iframe id="iframeDetail" class="embed-responsive-item" frameborder="0" src="phonecardDetail"
-                            style="height:100%;width:100%;"></iframe>
-                </div>
+            <@spring.message code="label.phonecarddeleteconfirm"/>
             </div>
-
-            <div class="col-md-1"></div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default"
-                        data-dismiss="modal"><@spring.message code="label.close"/></button>
+                <button type="button" class="btn btn-default" onclick="deleteAll()"><@spring.message code="label.freezeanddelete"/></button>
+                <button type="button" class="btn btn-default" onclick="deleteDB()"><@spring.message code="label.justdelete"/></button>
+                <button type="button" class="btn btn-default" data-dismiss="modal"><@spring.message code="label.cancel"/></button>
             </div>
         </div>
     </div>
 </div>
+<#include "../modal.ftl"/>
 <#include "../_foot1.ftl"/>
 <#include "../_foot0.ftl"/>
+</head>

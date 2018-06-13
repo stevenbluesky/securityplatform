@@ -74,7 +74,7 @@ public class ShiroPermissionFactory extends ShiroFilterFactoryBean {
 //        section.put("/###/@@@/**", "authc");
         section.put("/**", "anon");
 //        log.warn("----------");
-        System.out.println(section.toString());
+        //System.out.println(section.toString());
         setFilterChainDefinitionMap(section);
     }
 

@@ -52,13 +52,13 @@ public class OrganizationServiceTest {
 
     }
 
-    @Test
+/*    @Test
     public void testEmployeeRole() {
         Set set = getEmployeeRolesNameSet(28);
         System.out.println(set.toString());
         Set<String> ep = getEmployeePermissionsName(28);
         System.out.println(ep.toString());
-    }
+    }*/
 
     public Set getEmployeeRolesNameSet(Integer employeedid) {
         Set<String> set = new HashSet();
