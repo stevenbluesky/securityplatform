@@ -257,7 +257,7 @@
         }
     });
 
-    getParentOrg("#organizationid");
+    //getParentOrg("#organizationid");
 
     function getParentOrg(s, id) {
         $.ajax({

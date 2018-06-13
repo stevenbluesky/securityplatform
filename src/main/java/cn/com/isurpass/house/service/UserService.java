@@ -5,6 +5,7 @@ import cn.com.isurpass.house.exception.MyArgumentNullException;
 import cn.com.isurpass.house.po.*;
 import cn.com.isurpass.house.util.Constants;
 import cn.com.isurpass.house.util.FormUtils;
+import cn.com.isurpass.house.util.Ten2ThirtySix;
 import cn.com.isurpass.house.vo.EmployeeParentOrgIdVO;
 import cn.com.isurpass.house.vo.UserAddVO;
 import cn.com.isurpass.house.vo.UserInfoListVO;
@@ -62,6 +63,8 @@ public class UserService {
     private EmployeeDAO empDAO;
     @Autowired
     private CodeLogDAO codelogDAO;
+    @Autowired
+    private SupplierCodeLogDAO supcodeDAO;
     @Transactional(rollbackFor = Exception.class)
     public void add(UserAddVO u, HttpServletRequest request) {
         EmployeePO emp = (EmployeePO) SecurityUtils.getSubject().getPrincipal();
@@ -106,7 +109,7 @@ public class UserService {
             throw new RuntimeException("-100");
         }
         EmployeeParentOrgIdVO empp = emps.findEmpParentOrgid(emp);
-        user.setOrganizationid(-1);
+        user.setOrganizationid(0);
         user.setInstallerorgid(1);
         user.setInstallerid(1);
         user.setStatus(1);
@@ -116,7 +119,11 @@ public class UserService {
             user.setInstallerorgid(empp.getInstallerorgid());
             user.setInstallerid(empp.getInstallerid());
         }
+        if(u.getOrganizationid()!=null){
+            user.setOrganizationid(u.getOrganizationid());
+        }
         user.setCodepostfix(u.getCodepostfix());
+        user.setSupcode(u.getSupcode());
         //user.setUsercode("ameta" + u.getPhonenumber());
 
         AddressPO address = new AddressPO();
@@ -433,6 +440,7 @@ public class UserService {
         userAddVO.setUserid(userid);
         userAddVO.setAppaccount(byUserid.getAppaccount());
         userAddVO.setCodepostfix(byUserid.getCodepostfix());
+        userAddVO.setSupcode(byUserid.getSupcode());
         OrganizationPO byOrganizationid = od.findByOrganizationid(byUserid.getOrganizationid());
         if(byOrganizationid!=null){
             userAddVO.setServiceprovider(byOrganizationid.getName());
@@ -668,10 +676,15 @@ public class UserService {
         }
     }
     @Transactional(rollbackFor = Exception.class)
-    public String createUserCode(Integer employeeid, Integer organizationid) {
+    public String createUserCode(Integer employeeid, Integer organizationid,Integer suborgid) {
         OrganizationPO org = od.findByOrganizationid(organizationid);
         Integer parentorgid = org.getParentorgid();
-        //List<OrganizationPO> parentorg = od.findByParentorgid(parentorgid);
+        /*if(suborgid==null&&StringUtils.isEmpty(parentorgid)){
+            return "-";
+        }*/
+        if(suborgid!=null){
+            parentorgid = suborgid;
+        }
         OrganizationPO parentorg = od.findByOrganizationid(parentorgid);
         /**
          * (多伦多)(A报警中心)(安装商)(子安装商)(终端用户)
@@ -705,7 +718,54 @@ public class UserService {
         codelogDAO.save(codelog);
         return precode+Dcode;
     }
-
+    @Transactional(rollbackFor = Exception.class)
+    public String createSupCode(Integer organizationid,Integer suborgid) {
+        OrganizationPO org = od.findByOrganizationid(organizationid);
+        Integer parentorgid = org.getParentorgid();
+        if(suborgid==null&&StringUtils.isEmpty(parentorgid)){
+            return null;
+        }
+        if(suborgid!=null){
+            parentorgid = suborgid;
+        }
+        OrganizationPO parentorg = od.findByOrganizationid(parentorgid);
+        String usercode = "";
+        String suppliercode = parentorg.getCode();
+        SupplierCodeLogPO supplierCode = supcodeDAO.findSupplierCode(suppliercode);
+        if(supplierCode==null){
+            usercode = "00"+"0000";
+        }else{
+            Integer preint = 0 ;
+            Integer sufint = 0 ;
+            String usercode1 = supplierCode.getUsercode();
+            String precode = usercode1.substring(0,2);
+            String sufcode = usercode1.substring(2);
+            preint = Ten2ThirtySix.thirtysixToTen(precode);
+            sufint = Integer.parseInt(sufcode,16)+1;
+            if(sufint==65536){
+                preint = preint +1;
+                sufint = 0;
+            }
+            precode = Ten2ThirtySix.tenTo36(preint);
+            sufcode = sufint.toHexString(sufint);
+            if(precode.length()==1){
+                precode = "0"+precode;
+            }
+            if(sufcode.length()==1){
+                sufcode = "000"+sufcode;
+            }else if(sufcode.length()==2){
+                sufcode = "00"+sufcode;
+            }else if(sufcode.length()==3){
+                sufcode = "0"+sufcode;
+            }
+            usercode = precode.toLowerCase()+sufcode.toUpperCase();
+        }
+        SupplierCodeLogPO scpo = new SupplierCodeLogPO();
+        scpo.setSuppliercode(suppliercode);
+        scpo.setUsercode(usercode);
+        supcodeDAO.save(scpo);
+        return usercode;
+    }
     @Transactional(readOnly = true)
     public boolean validCode(String appaccount) {
         UserPO user = ud.findByAppaccount(appaccount);
@@ -726,7 +786,7 @@ public class UserService {
         if(byParentorgid!=null){
             return byParentorgid.getName();
         }else{
-            return "NONE";
+            return null;
         }
     }
     @Transactional(readOnly = true)
@@ -736,11 +796,11 @@ public class UserService {
     }
     @Transactional(readOnly = true)
     public GatewayPO fillGateway(String appaccount) {
-        //GatewayPO gatewayPO = gateway.findByAppaccount(appaccount);
         List<GatewayPO> gatewaylist = gateway.findByAppaccount(appaccount);
         if(gatewaylist!=null&&gatewaylist.size()>0){
             return gatewaylist.get(0);
         }
         else return null;
     }
+
 }

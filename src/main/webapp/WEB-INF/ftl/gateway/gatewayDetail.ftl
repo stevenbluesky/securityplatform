@@ -155,7 +155,7 @@
             onLoadSuccess: function () {
             },
             onLoadError: function () {
-                alert('<@spring.message code="label.dataloaderror"/>');
+                //alert('<@spring.message code="label.dataloaderror"/>');
             },
             onDblClickRow: function (row, $element) {
                 var id = row.zwavedeviceid;

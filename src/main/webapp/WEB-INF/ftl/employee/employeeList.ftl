@@ -6,14 +6,14 @@
               <hr>
               <form id="searchform" class="form-horizontal">
                   <div class="form-group col-md-12">
-                  <div class="form-group col-md-4">
+                  <div class="form-group col-md-4" >
                       <label for="searchcode" class="col-md-5 control-label"><@spring.message code="label.empcode"/></label>
                       <div class="col-md-7">
                           <input type="text" class="form-control" id="searchcode" name="searchcode"
                                  placeholder="<@spring.message code="label.empcode"/>">
                       </div>
                   </div>
-                  <div class="form-group col-md-4">
+                  <div class="form-group col-md-4" >
                       <label for="searchname"
                              class="col-md-5 control-label"><@spring.message code="label.username"/></label>
                       <div class="col-md-7">
@@ -21,7 +21,7 @@
                                  placeholder="<@spring.message code="label.pname"/>">
                       </div>
                   </div>
-                  <div class="form-group col-md-4">
+                  <div class="form-group col-md-4" >
                       <label for="searchorgname"
                              class="col-md-5 control-label"><@spring.message code="label.parentorg"/></label>
                       <div class="col-md-7">

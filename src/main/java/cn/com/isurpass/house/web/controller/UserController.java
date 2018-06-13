@@ -187,12 +187,26 @@ public class UserController {
             e.printStackTrace();
             return "../../noInstaller";
         }
-        String userCode = us.createUserCode(employeeid,organizationid);
+        String userCode = us.createUserCode(employeeid,organizationid,null);
+        String supCode = us.createSupCode(organizationid,null);
         String supname = us.findSupName(organizationid);
         String insname = us.findInsName(organizationid);
+        model.addAttribute("supCode",supCode);
         model.addAttribute("userCode",userCode);
         model.addAttribute("supname",supname);
         model.addAttribute("insname",insname);
         return "user/typeUserInfo";
+    }
+    @RequestMapping("findCodes")
+    @ResponseBody
+    public String findCodes(HttpServletRequest request){
+        String ss = request.getParameter("suporgid");
+        int suporgid = Integer.parseInt(ss);
+        EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
+        Integer organizationid = emp.getOrganizationid();
+        Integer employeeid = emp.getEmployeeid();
+        String userCode = us.createUserCode(employeeid,organizationid,suporgid);
+        String supCode = us.createSupCode(organizationid,suporgid);
+        return supCode+"#"+userCode;
     }
 }

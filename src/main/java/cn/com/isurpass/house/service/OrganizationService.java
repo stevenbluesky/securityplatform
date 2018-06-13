@@ -369,7 +369,7 @@ public class OrganizationService {
         if("1".equals(organizationid)){
             return od.findAllOrgSelect();
         }
-        List<OrganizationPO> byParentorgid = od.findByParentorgid(Integer.parseInt(organizationid));
+        List<OrganizationPO> byParentorgid = od.findByParentorgid(Integer.parseInt(organizationid));//TODO 机构id为null
         OrganizationPO byOrganizationid = od.findByOrganizationid(Integer.parseInt(organizationid));
         byParentorgid.add(byOrganizationid);
         return byParentorgid;

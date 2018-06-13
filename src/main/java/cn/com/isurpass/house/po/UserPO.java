@@ -23,6 +23,7 @@ public class UserPO {
 	private Integer installerorgid;
 	private Integer installerid;
 	private String codepostfix;
+	private String supcode;
 	private String usercode;
 	private Integer personid;
 	private Integer status;
@@ -131,6 +132,14 @@ public class UserPO {
 		this.createtime = createtime;
 	}
 
+	public String getSupcode() {
+		return supcode;
+	}
+
+	public void setSupcode(String supcode) {
+		this.supcode = supcode;
+	}
+
 	@Override
 	public String toString() {
 		return "UserPO{" +
@@ -143,6 +152,7 @@ public class UserPO {
 				", installerorgid=" + installerorgid +
 				", installerid=" + installerid +
 				", codepostfix='" + codepostfix + '\'' +
+				", supcode='" + supcode + '\'' +
 				", usercode='" + usercode + '\'' +
 				", personid=" + personid +
 				", status=" + status +

@@ -365,7 +365,6 @@
     });
 
     getParentOrg("#organizationid");
-
     function getParentOrg(s, id) {
         $.ajax({
             type: "get",

@@ -136,12 +136,12 @@ public class JPATest {
 	@Test
 	public void addGateway(){
 
-		for(int i =0;i<2000;i++) {
+		/*for(int i =0;i<2000;i++) {
 			GatewayPO gp = new GatewayPO();
 			gp.setDeviceid("test"+i);
 			gp.setStatus(1);
 			gp.setCreatetime(new Date());
 			gd.save(gp);
-		}
+		}*/
 	}
 }

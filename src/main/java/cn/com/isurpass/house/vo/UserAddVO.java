@@ -1,7 +1,7 @@
 package cn.com.isurpass.house.vo;
 
 public class UserAddVO {
-
+    private Integer organizationid;
     private Integer userid;
     private String appaccount;
     private String firstname;
@@ -10,6 +10,7 @@ public class UserAddVO {
     private Integer gender;
     private String phonenumber;
     private String codepostfix;
+    private String supcode;
     private String email;
     private String fax;
     private Integer country;
@@ -30,6 +31,14 @@ public class UserAddVO {
     private String serviceprovider;
     private String installerorg;
     private String installer;
+
+    public Integer getOrganizationid() {
+        return organizationid;
+    }
+
+    public void setOrganizationid(Integer organizationid) {
+        this.organizationid = organizationid;
+    }
 
     public String getAppaccount() {
         return appaccount;
@@ -229,5 +238,13 @@ public class UserAddVO {
 
     public void setInstaller(String installer) {
         this.installer = installer;
+    }
+
+    public String getSupcode() {
+        return supcode;
+    }
+
+    public void setSupcode(String supcode) {
+        this.supcode = supcode;
     }
 }
