@@ -19,12 +19,13 @@ public class ConvertQueryResultToVOUtils {
             z.setDevicetype((String) obj[2]);
             z.setWarningstatuses((String) obj[3]);
             z.setStatus((Integer) obj[4]);
-            z.setBattery((Integer) obj[5]);
-            z.setCity((String) obj[6]);
-            z.setOrganizationname((String) obj[7]);
-            z.setInstallerorgname((String) obj[8]);
-            z.setInstallername((String) obj[9]);
-            z.setUsername((String) obj[10]);
+            z.setStatuses((String) obj[5]);
+            z.setBattery((Integer) obj[6]);
+            z.setCity((String) obj[7]);
+            z.setOrganizationname((String) obj[8]);
+            z.setInstallerorgname((String) obj[9]);
+            z.setInstallername((String) obj[10]);
+            z.setUsername((String) obj[11]);
             list.add(z);
         }
         return list;

@@ -13,6 +13,24 @@ public class OrgListVO {
 	private String code;
 	private String city;
 	private Integer status;
+	private String parentname;
+	private String parentcode;
+
+	public String getParentcode() {
+		return parentcode;
+	}
+
+	public void setParentcode(String parentcode) {
+		this.parentcode = parentcode;
+	}
+
+	public String getParentname() {
+		return parentname;
+	}
+
+	public void setParentname(String parentname) {
+		this.parentname = parentname;
+	}
 
 	public Integer getOrganizationid() {
 		return organizationid;

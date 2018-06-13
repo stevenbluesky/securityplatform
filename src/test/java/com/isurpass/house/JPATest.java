@@ -3,6 +3,7 @@ package com.isurpass.house;
 import cn.com.isurpass.house.dao.*;
 import cn.com.isurpass.house.po.EmployeePO;
 import cn.com.isurpass.house.po.EmployeeRolePO;
+import cn.com.isurpass.house.po.GatewayPO;
 import cn.com.isurpass.house.po.OrganizationPO;
 import cn.com.isurpass.house.util.Constants;
 import org.junit.Test;
@@ -34,7 +35,8 @@ public class JPATest {
 	EmployeeroleDAO erd;
 	@Autowired
 	EmployeeDAO ed;
-	
+	@Autowired
+	private GatewayDAO gd;
 	@Test
 	public void testOrg() {
 		List<OrganizationPO> list = org.findAllOrgSelect();
@@ -105,10 +107,10 @@ public class JPATest {
 
     @Test
     public void testNativeSQL(){
-        Integer id = ud.getUserid("fdsafasd");
-        String id1 = ud.getUsernameByDeviceid("iRemote8005000000002");
-        System.out.println(id);
-        System.out.println(id1);
+        /*Integer id = ud.getUserid("fdsafasd");
+        String id1 = ud.getUsernameByDeviceid("iRemote8005000000002");*/
+       /* System.out.println(id);
+        System.out.println(id1);*/
     }
 
     @Test
@@ -130,5 +132,16 @@ public class JPATest {
 //		System.out.println(ed.before(new Date()));
 //		System.out.println(new Date().after(ed));
 //		System.out.println(new Date().after(null));
+	}
+	@Test
+	public void addGateway(){
+
+		for(int i =0;i<2000;i++) {
+			GatewayPO gp = new GatewayPO();
+			gp.setDeviceid("test"+i);
+			gp.setStatus(1);
+			gp.setCreatetime(new Date());
+			gd.save(gp);
+		}
 	}
 }

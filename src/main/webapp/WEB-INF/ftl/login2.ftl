@@ -1,6 +1,6 @@
 <#import "/spring.ftl" as spring />
 <!DOCTYPE html>
-<html lang="zh-CN" xmlns="http://www.w3.org/1999/html">
+<html  xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -39,49 +39,39 @@
             <div class="login">
 
         <form id="defaultForm" method="POST">
-            <div class="form-group">
-                <label for="code"
-                       class="col-sm-2 control-label"><@spring.message code='label.organizationcode'/></label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" id="code" name="code"
-                           placeholder="<@spring.message code='label.organizationcode'/>" value="">
-                </div>
+            <div class="text-center" style="margin-bottom:70px;"><h1><@spring.message code='label.logintitle'/></h1>
             </div>
-
+            <input type="hidden" id="code" name="code" value="">
             <div class="form-group">
-                <label for="loginname" class="col-sm-2 control-label"><@spring.message code='label.username'/></label>
-                <div class="col-sm-10">
+                <div class="col-sm-12">
                     <input type="text" class="form-control" id="loginname" name="loginname"
                            placeholder="<@spring.message code='label.username'/>">
                 </div>
             </div>
 
             <div class="form-group">
-                <label for="password" class="col-sm-2 control-label"><@spring.message code='label.password'/></label>
-                <div class="col-sm-10">
+                <div class="col-sm-12">
                     <input type="password" class="form-control" id="password" name="password"
                            placeholder="<@spring.message code='label.password'/>">
                 </div>
             </div>
 
             <div class="form-group">
-                <label for="captchacode"
-                       class="col-sm-2 control-label"><@spring.message code='label.captchcode'/></label>
-                <div class="col-sm-4">
+                <div class="col-sm-8">
                     <input type="text" class="form-control" id="captchacode" name="captchacode"
                            placeholder="<@spring.message code='label.captchcode'/> ">
                 </div>
-                <div class="col-sm-6">
+                <div class="col-sm-4">
                     <img id="validateCode" class="img-responsive" src=""
                          onclick="this.src='login/getCode?time='+new Date().getTime();"
                          style="height:35px;float: right"/>
                 </div>
             </div>
-            <button id="btn-submit" class="btn btn-default  btn-lg"
-                    style="float:right;;width: 400px"><@spring.message code='label.login'/></button>
+            <div class="col-sm-12">
+                <button id="btn-submit" class="btn btn-default  btn-lg col-sm-12" style="background:#2BA8C4"><@spring.message code='label.login'/></button>
+            </div>
         </form>
             </div>
-            <#--<div class="copyright">公司 版权所有©2016-2018 技术支持电话：000-00000000</div>-->
         </div>
 
 <script type="text/javascript">

@@ -5,51 +5,72 @@
               <div class="text-center"><h1><@spring.message code="label.employeelist"/></h1></div>
               <hr>
               <form id="searchform" class="form-horizontal">
-                  <div class="form-group col-md-3">
+                  <div class="form-group col-md-12">
+                  <div class="form-group col-md-4">
+                      <label for="searchcode" class="col-md-5 control-label"><@spring.message code="label.empcode"/></label>
+                      <div class="col-md-7">
+                          <input type="text" class="form-control" id="searchcode" name="searchcode"
+                                 placeholder="<@spring.message code="label.empcode"/>">
+                      </div>
+                  </div>
+                  <div class="form-group col-md-4">
                       <label for="searchname"
-                             class="col-md-4 control-label"><@spring.message code="label.pname"/></label>
-                      <div class="col-md-8">
+                             class="col-md-5 control-label"><@spring.message code="label.username"/></label>
+                      <div class="col-md-7">
                           <input type="text" class="form-control" id="searchname" name="searchname"
                                  placeholder="<@spring.message code="label.pname"/>">
                       </div>
                   </div>
-                  <div class="form-group col-md-3">
-                      <label for="searchcity"
-                             class="col-md-4 control-label"><@spring.message code="label.city"/></label>
-                      <div class="col-md-8">
-                          <input type="text" class="form-control" id="searchcity" name="searchcity"
-                                 placeholder="<@spring.message code="label.city"/>">
-                      </div>
-                  </div>
-                  <div class="form-group col-md-3">
-                      <label for="searchcitycode"
-                             class="col-md-5 control-label"><@spring.message code="label.citycode"/></label>
+                  <div class="form-group col-md-4">
+                      <label for="searchorgname"
+                             class="col-md-5 control-label"><@spring.message code="label.parentorg"/></label>
                       <div class="col-md-7">
-                          <input type="text" class="form-control" id="searchcitycode" name="searchcitycode"
-                                 placeholder="<@spring.message code="label.citycode"/>">
+                          <input type="text" class="form-control" id="searchorgname" name="searchorgname"
+                                 placeholder="<@spring.message code="label.parentorg"/>">
                       </div>
                   </div>
-                  <div class="form-group col-md-3">
-                      <div class="col-md-2"></div>
-                      <div class="col-md-10">
-                          <button id="searchbtn" type="button"
+                  </div>
+                  <div class="form-group col-md-12">
+                  <div class="form-group col-md-4" align="right">
+                      <label for="searchcitycode" class="col-md-5 control-label"><@spring.message code=""/></label>
+                      <div class="col-md-7">
+                          <input type="hidden" class="form-control" id="" name=""
+                                 placeholder=<@spring.message code=""/>>
+                      </div>
+                  </div>
+                  <div class="form-group col-md-4" align="right">
+                      <label for="searchcitycode" class="col-md-5 control-label"><@spring.message code=""/></label>
+                      <div class="col-md-7">
+                          <input type="hidden" class="form-control" id="" name=""
+                                 placeholder=<@spring.message code=""/>>
+                      </div>
+                  </div>
+                  <div class="form-group col-md-4">
+                      <div class="col-md-5"></div>
+                      <div class="col-md-7">
+                          <button id="searchbtn" type="button" style="width: 100%"
                                   class="btn btn-default"><@spring.message code="label.search"/></button>
                       </div>
+                  </div>
                   </div>
               </form>
           </div>
           <hr>
-<@shiro.hasPermission name="label.ModifyEmployeeRole">
+<@shiro.hasPermission name="label.ModifyRole">
 <button style="float: right;" class='btn btn-default'
         onclick='modifyEmployeeRole();'><@spring.message code='label.Modifyemprole'/></button>
 </@shiro.hasPermission>
-<@shiro.hasPermission name="label.ToggleEmployeeStatus">
+<@shiro.hasPermission name="label.FreezeEmployee">
                <button style="float: right;" class='btn btn-default'
                        onclick='toggleEmployeeStatus0("unsuspence");'><@spring.message code='label.unsuspence'/></button>
 			<button style="float: right;" class='btn btn-default'
                     onclick='toggleEmployeeStatus0("suspence");'><@spring.message code='label.suspenced'/></button>
+</@shiro.hasPermission>
+<@shiro.hasPermission name="label.AddEmployee">
             <button onclick="window.location.href='addEmployeePage'" style="float: right;"
                     class="btn btn-default"><@spring.message code="label.addnew"/></button>
+</@shiro.hasPermission>
+<@shiro.hasPermission name="label.ModifyEmployee">
            <button style="float: right;" class='btn btn-default' id='btn1'
                    onclick='toggleEmployeeStatus0("modify");'><@spring.message code='label.modify'/></button>
 </@shiro.hasPermission>
@@ -59,7 +80,7 @@
         <th data-field=""></th>
         <th data-field="employeeid" data-visible="false">ID</th>
         <th data-field="code" class="text-center"><@spring.message code="label.empcode"/></th>
-        <th data-field="name" class="text-center"><@spring.message code="label.name"/></th>
+        <th data-field="name" class="text-center"><@spring.message code="label.username"/></th>
         <th data-field="parentOrgName" class="text-center"><@spring.message code="label.parentorg"/></th>
         <th data-field="status" data-formatter='formatter_status'
             class="text-center"><@spring.message code="label.status"/></th>
@@ -102,9 +123,9 @@
             queryParams: function (params) {
                 //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
                 var temp = {
+                    searchcode: $("#searchcode").val(),
                     searchname: $("#searchname").val(),
-                    searchcity: $("#searchcity").val(),
-                    searchcitycode: $("#searchcitycode").val(),
+                    searchorgname: $("#searchorgname").val(),
                     rows: params.limit,                         //页面大小
                     page: (params.offset / params.limit) + 1,   //页码
                     sort: params.sort,      //排序列名
@@ -151,7 +172,8 @@
                 alert("<@spring.message code='label.chooseonepls'/>");
                 return;
             }
-            window.location.href = "../role/listEmployeeRole?employeeid=" + getCheckedId()[0];
+            $("#iframeDetail").attr("src", '../role/listEmployeeRole?employeeid='+getCheckedId()[0]);
+            $('#myModal').modal('show');
         }
 
         // $("#table").bootstrapTable('getSelections')[1].organizationid
@@ -167,7 +189,8 @@
                     alert("<@spring.message code='label.chooseonepls'/>");
                     return;
                 } else {
-                    window.location.href = "addEmployeePage?id=" + ids[0];
+                    $("#iframeDetail").attr("src", 'modifyEmployeePage?id='+ids[0]);
+                    $('#myModal').modal('show');
                     return;
                 }
             }
@@ -205,30 +228,6 @@
         }
     </script>
 
-<!-- 模态框（Modal） -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog" style="width:90%;height:90%;">
-        <div class="modal-content">
-            <div class="modal-header" style="height: 40px;width:100%">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
-                <h4 class="modal-title" id="myModalLabel"><@spring.message code="label.employeeInfo"/></h4>
-            </div>
-        <#--引入网关详情界面-->
-            <div class="modal-body">
-                <div class="col-md-10" style="height:550px;width:100%">
-                    <iframe id="iframeDetail" class="embed-responsive-item" frameborder="0" src=""
-                            style="height:100%;width:100%;"></iframe>
-                </div>
-            </div>
-
-            <div class="col-md-1"></div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default"
-                        data-dismiss="modal"><@spring.message code="label.close"/></button>
-            </div>
-        </div>
-    </div>
-</div>
-
+<#include "../modal.ftl"/>
 <#include "../_foot1.ftl"/>
 <#include "../_foot0.ftl"/>

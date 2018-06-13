@@ -13,8 +13,10 @@
 		<property name="hibernate.cache.use_second_level_cache">true</property>
 		<property name="hibernate.cache.region.factory_class"> org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory</property>
 		<property name="hibernate.cache.provider_class">net.sf.ehcache.hibernate.EhCacheProvider</property>
-
-		 <!-- <mapping class="cn.com.isurpass.house.po.CountryPO"/> -->
+		<property name="connection.autoReconnect">true</property>
+		<property name="connection.autoReconnectForPools">true</property>
+		<property name="connection.is-connection-validation-required">true</property>
+		<!-- <mapping class="cn.com.isurpass.house.po.CountryPO"/> -->
 		<!--<mapping class="cn.com.isurpass.house.po.ProvincePO"/>
 		<mapping class="cn.com.isurpass.house.po.CityPO"/> -->
 	</session-factory>

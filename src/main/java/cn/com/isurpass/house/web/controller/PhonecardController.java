@@ -67,9 +67,9 @@ public class PhonecardController {
 	 */
 	@RequestMapping("phonecardJsonList")
 	@ResponseBody
-	public Map<String, Object> phonecardJsonList(PageResult pr,PhonecardPO pc) {
-		Pageable pageable = PageRequest.of(pr.getPage()-1,pr.getRows(),Sort.Direction.ASC,"activationdate");
-		return ps.listPhonecard(pageable,pc);
+	public Map<String, Object> phonecardJsonList(PageResult pr,PhonecardPO pc,HttpServletRequest request) {
+		Pageable pageable = PageRequest.of(pr.getPage()-1,pr.getRows(),Sort.Direction.DESC,"phonecardid");
+		return ps.listPhonecard(pageable,pc,request);
 	}
 	@RequestMapping("phonecardDetail")
 	public String gatewayDetail(String phonecardid,Model model) {

@@ -15,19 +15,19 @@
                 </div>
               </div>
               <div  class="form-group">
-                <label for="code"  class="col-sm-2 control-label"  style="text-align: left;"><@spring.message code='label.model'/>*</label>
+                <label for="code"  class="col-sm-2 control-label"  style="text-align: left;"><@spring.message code='label.model'/></label>
                 <div class="col-sm-10">
                  <input type="text" class="form-control" id="model" name="model" placeholder="<@spring.message code='label.model'/>" <#if model??>value=${model}</#if> >
                 </div>
               </div>
               <div  class="form-group">
-                <label for="answer"  class="col-sm-2 control-label"  style="text-align: left;"><@spring.message code='label.firmwareversion'/>*</label>
+                <label for="answer"  class="col-sm-2 control-label"  style="text-align: left;"><@spring.message code='label.firmwareversion'/></label>
                 <div class="col-sm-10">
                  <input type="text" class="form-control" id="firmwareversion" name="firmwareversion"  placeholder="<@spring.message code='label.firmwareversion'/>" <#if firmwareversion??>value=${firmwareversion}</#if>>
                </div>
               </div>
               <div  class="form-group">
-                <label for="name"  class="col-sm-2 control-label"  style="text-align: left;">Rate Plan*</label>
+                <label for="name"  class="col-sm-2 control-label"  style="text-align: left;">Rate Plan</label>
                 <div class="col-sm-10">
                  <input type="text" class="form-control" id="rateplan" name="rateplan"  placeholder="Rate Plan" <#if rateplan??>value=${rateplan}</#if>>
                 </div>

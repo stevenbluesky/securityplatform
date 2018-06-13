@@ -1,6 +1,6 @@
 <#import "/spring.ftl" as spring />
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html >
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,13 +10,8 @@
 
     <script src="../static/js/i18n/iRemoteLanguage/<@spring.message code="label.language.js"/>"></script>
     <script src="../static/js/jquery.min.js"></script>
-    <#--<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"
-          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">-->
     <link rel="stylesheet" href="../static/css/bootstrap.min.css">
-    <#--<link href="https://cdn.bootcss.com/bootstrap-select/2.0.0-beta1/css/bootstrap-select.min.css" rel="stylesheet">-->
-    <#--<link href="https://cdn.bootcss.com/bootstrap-table/1.12.1/bootstrap-table.min.css" rel="stylesheet">-->
     <link href="../static/css/bootstrap-select.min.css" rel="stylesheet">
-    <#--<link href="https://cdn.bootcss.com/bootstrap-table/1.12.1/bootstrap-table.min.css" rel="stylesheet">-->
     <link href="../static/css/bootstrap-table.min.css" rel="stylesheet">
     <link href="../static/css/bootstrapValidator.min.css" rel="stylesheet">
     <link href="../static/css/bootstrap-datetimepicker.min.css" rel="stylesheet">

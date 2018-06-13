@@ -2,7 +2,7 @@
 <#include "../_head1.ftl"/>
 <div class="text-center"><h1><@spring.message code="label.RoleList"/></h1></div>
 <hr>
-<@shiro.hasPermission name="label.ListRolePrivilege">
+<@shiro.hasPermission name="label.AddRole">
             <button style="float: right;" class='btn btn-default'
                     onclick='deleteRole();'><@spring.message code='label.delete'/></button>
             <button onclick="window.location.href='listRolePrivilege?addNew=1'" style="float: right;"
@@ -72,7 +72,8 @@
             },
             onDblClickRow: function (row, $element) {
                 var id = row.roleid;
-                window.location.href = "listRolePrivilege?roleid=" + id;
+                $('#myModal').modal('show');
+                $("#iframeDetail").attr("src", 'listRolePrivilege?roleid='+id);
             }
         });
 
@@ -123,5 +124,6 @@
             });
         }
     </script>
+<#include "../modal.ftl"/>
 <#include "../_foot1.ftl"/>
 <#include "../_foot0.ftl"/>

@@ -6,9 +6,20 @@ import java.io.UnsupportedEncodingException;
  * 服务商,安装商与员工搜索的实体类
  */
 public class OrgSearchVO {
+    private String searchcode;
     private String searchname;
     private String searchcity;
-    private String searchcitycode;
+    private String searchparentname;
+    private String searchparentcode;
+    private String searchorgname;
+
+    public String getSearchorgname() {
+        return searchorgname;
+    }
+
+    public void setSearchorgname(String searchorgname) {
+        this.searchorgname = searchorgname;
+    }
 
     public String getSearchname() {
         return searchname;
@@ -26,20 +37,39 @@ public class OrgSearchVO {
         this.searchcity = searchcity;
     }
 
-    public String getSearchcitycode() {
-        return searchcitycode;
+    public String getSearchparentname() {
+        return searchparentname;
     }
 
-    public void setSearchcitycode(String searchcitycode) {
-        this.searchcitycode = searchcitycode;
+    public void setSearchparentname(String searchparentname) {
+        this.searchparentname = searchparentname;
+    }
+
+    public String getSearchparentcode() {
+        return searchparentcode;
+    }
+
+    public void setSearchparentcode(String searchparentcode) {
+        this.searchparentcode = searchparentcode;
+    }
+
+    public String getSearchcode() {
+        return searchcode;
+    }
+
+    public void setSearchcode(String searchcode) {
+        this.searchcode = searchcode;
     }
 
     @Override
     public String toString() {
         return "OrgSearchVO{" +
-                "searchname='" + searchname + '\'' +
+                "searchcode='" + searchcode + '\'' +
+                ", searchname='" + searchname + '\'' +
                 ", searchcity='" + searchcity + '\'' +
-                ", searchcitycode='" + searchcitycode + '\'' +
+                ", searchparentname='" + searchparentname + '\'' +
+                ", searchparentcode='" + searchparentcode + '\'' +
+                ", searchorgname='" + searchorgname + '\'' +
                 '}';
     }
 }

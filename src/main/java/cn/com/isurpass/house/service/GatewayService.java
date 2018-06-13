@@ -5,8 +5,10 @@ import cn.com.isurpass.house.exception.MyArgumentNullException;
 import cn.com.isurpass.house.po.*;
 import cn.com.isurpass.house.util.BeanCopyUtils;
 import cn.com.isurpass.house.util.Constants;
+import cn.com.isurpass.house.vo.EmployeeListVO;
 import cn.com.isurpass.house.vo.GatewayDetailVO;
 import cn.com.isurpass.house.vo.TypeGatewayInfoVO;
+import com.jhlabs.vecmath.Tuple3f;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -242,7 +244,7 @@ public class GatewayService {
 	 * @return
 	 */
 	@Transactional(readOnly = true)
-	public List<String> findIdListByInstaller(String installer){//貌似不能再优化了
+	public List<String> findIdListByInstaller(String installer){
 		List<String> installerdeviceidlist = gud.findDeviceidByInstaller("%"+installer+"%",Constants.ROLE_INSTALLER,Constants.STATUS_NORMAL);
 		return installerdeviceidlist.size()==0?null:installerdeviceidlist;
 	}
@@ -265,6 +267,9 @@ public class GatewayService {
 	public GatewayDetailVO findByDeviceid(String deviceid, Pageable pageable) {
 		GatewayDetailVO gate = new GatewayDetailVO();
 		GatewayPO gateway = gd.findByDeviceid(deviceid);
+		if(gateway==null){
+			throw new RuntimeException("wronggateway");
+		}
 		//网关信息
 		gate.setName(gateway.getName());
 		gate.setModel(gateway.getModel());
@@ -276,7 +281,7 @@ public class GatewayService {
 		List<GatewayUserPO> gu = gud.findByDeviceid(deviceid);
 		if(gu!=null&&gu.size()!=0) {//网关用户表匹配到了数据，该网关已跟用户绑定
 			UserPO user = ud.findByUserid(gu.get(0).getUserid());
-			gate.setCustomer(user.getLoginname());
+			gate.setCustomer(user.getAppaccount());
 			if(user.getInstallerid()!=null) {
 				EmployeePO emp = ed.findByEmployeeid(user.getInstallerid());
 				gate.setInstaller(emp.getLoginname());
@@ -335,7 +340,7 @@ public class GatewayService {
 	 * @param ids
 	 */
 	@Transactional
-	public void updateGatewayStatus(String hope, Object[] ids) {
+	public void updateGatewayStatus(String hope, Object[] ids) throws MyArgumentNullException {
 		if("start".equals(hope)){
 			for (Object string : ids) {
 				GatewayPO gatewaypo = gd.findByDeviceid(string);
@@ -348,15 +353,19 @@ public class GatewayService {
 				gatewaypo.setStatus(Constants.STATUS_OFFLINE);
 				gd.save(gatewaypo);
 			}
+		}else if("delete".equals(hope)){
+			for (Object string : ids) {
+				List<GatewayUserPO> byDeviceid = gud.findByDeviceid(string.toString());
+				if(byDeviceid.size()>0&&byDeviceid.get(0)!=null){//网关用户表查到了记录，需要解绑
+					throw new MyArgumentNullException("-897");
+				}else{
+					gbd.deleteByDeviceid(string.toString());
+					gd.deleteByDeviceid(string.toString());
+				}
+			}
 		}
 	}
 
-	private boolean isAccessChangeGatewayStatus(Object[] ids){
-		for (Object obj : ids) {
-
-		}
-		return false;
-	}
 	/**
 	 * 填充数据
 	 * @param obj
@@ -376,7 +385,6 @@ public class GatewayService {
 			gateVO.setInstaller((String) o[7]);
 			list.add(gateVO);
 		}
-
 		return list;
 	}
 	/**
@@ -399,7 +407,7 @@ public class GatewayService {
 					gateVO.setInstaller(ed.findByEmployeeid(upo.getInstallerid()).getLoginname());
 				}
 				gateVO.setServiceprovider(od.findByOrganizationid(upo.getOrganizationid()).getName());
-				gateVO.setCustomer(upo.getLoginname());
+				gateVO.setCustomer(upo.getAppaccount());
 			}
 			gateVO.setName(o.getName());
 			gateVO.setStatus(o.getStatus());
@@ -460,5 +468,40 @@ public class GatewayService {
 			return listlist;
 		}
 	}
+	@Transactional(readOnly = true)
+	public Map<String, Object> findGatewayJsonList(Pageable pageable, TypeGatewayInfoVO tgiv, EmployeePO emp) {
+		String deviceid = "%"+tgiv.getDeviceid()+"%";
+		String cityname = "%"+tgiv.getCityname()+"%";
+		String name = "%"+tgiv.getName()+"%";
+		String serviceprovider = "%"+tgiv.getServiceprovider()+"%";
+		String installerorg = "%"+tgiv.getInstallerorg()+"%";
+		String installer = "%"+tgiv.getInstaller()+"%";
+		String customer = "%"+tgiv.getCustomer()+"%";
+		long total = 0;
+		Map<String,Object> map = new HashMap<>();
+		List<Object[]> olist = new ArrayList<>();
+		List<TypeGatewayInfoVO>list = new ArrayList<>();
+		Integer organizationid = emp.getOrganizationid();
+		OrganizationPO loginorg = od.findByOrganizationid(organizationid);
+		if(Constants.ORGTYPE_AMETA.equals(loginorg.getOrgtype())){
+			olist = gd.findAllGateway(deviceid,cityname,name,serviceprovider,installerorg,installer,customer,pageable);//动态sql传递不进去//gateway表加字段维护繁琐
+			total = gd.countAllGateway(deviceid,cityname,name,serviceprovider,installerorg,installer,customer);
+		}
 
+		for(Object[] o:olist){
+			TypeGatewayInfoVO gatewayVO = new TypeGatewayInfoVO();
+			gatewayVO.setDeviceid((String) o[0]);
+			gatewayVO.setStatus((Integer) o[1]);
+			gatewayVO.setName((String) o[2]);
+			gatewayVO.setCityname((String) o[3]);
+			gatewayVO.setServiceprovider((String) o[4]);
+			gatewayVO.setInstallerorg((String) o[5]);
+			gatewayVO.setInstaller((String) o[6]);
+			gatewayVO.setCustomer((String) o[7]);
+			list.add(gatewayVO);
+		}
+		map.put("rows", list);
+		map.put("total",total);
+		return map;
+	}
 }

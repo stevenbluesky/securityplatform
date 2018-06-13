@@ -22,8 +22,7 @@ public class FilterChainDefinitionsService {
             try {
                 shiroFilter = (AbstractShiroFilter) permissionFactory.getObject();
 
-                PathMatchingFilterChainResolver resolver = (PathMatchingFilterChainResolver) shiroFilter
-                        .getFilterChainResolver();
+                PathMatchingFilterChainResolver resolver = (PathMatchingFilterChainResolver) shiroFilter.getFilterChainResolver();
                 // 过滤管理器
                 DefaultFilterChainManager manager = (DefaultFilterChainManager) resolver.getFilterChainManager();
                 // 清除权限配置

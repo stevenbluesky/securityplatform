@@ -7,10 +7,9 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface PersonDAO extends CrudRepository<PersonPO,Integer>/* extends BaseDAO*/{
+public interface PersonDAO extends CrudRepository<PersonPO,Integer>{
 
 	PersonPO save(PersonPO person);
 	PersonPO findByPersonid(Integer personid);
 
-    List<PersonPO> findByPhonenumberContaining(String searchPhonenumber);
 }

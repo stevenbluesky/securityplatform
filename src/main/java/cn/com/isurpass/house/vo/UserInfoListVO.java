@@ -7,7 +7,19 @@ public class UserInfoListVO {
 	private String city;
 	private String suppliername;
 	private Integer status;
-	
+	private String deviceid;
+	private String serialnumber;
+	private String codepostfix;
+	private String appaccount;
+
+	public String getAppaccount() {
+		return appaccount;
+	}
+
+	public void setAppaccount(String appaccount) {
+		this.appaccount = appaccount;
+	}
+
 	public Integer getUserid() {
 		return userid;
 	}
@@ -44,5 +56,28 @@ public class UserInfoListVO {
 	public void setStatus(Integer status) {
 		this.status = status;
 	}
-	
+
+	public String getDeviceid() {
+		return deviceid;
+	}
+
+	public void setDeviceid(String deviceid) {
+		this.deviceid = deviceid;
+	}
+
+	public String getSerialnumber() {
+		return serialnumber;
+	}
+
+	public void setSerialnumber(String serialnumber) {
+		this.serialnumber = serialnumber;
+	}
+
+	public String getCodepostfix() {
+		return codepostfix;
+	}
+
+	public void setCodepostfix(String codepostfix) {
+		this.codepostfix = codepostfix;
+	}
 }

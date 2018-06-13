@@ -7,7 +7,9 @@
 
 <div class="text-center"><h1><@spring.message code='label.phonecarddetail'/></h1></div>
 <hr>
-        <div align="center">
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
             <div  class="form-group">
                 <label for="name"  class="col-sm-6 control-label"><@spring.message code='label.serialnumber'/></label>
                <#if (pnd.serialnumber)??>${pnd.serialnumber}<#else><@spring.message code="label.none"/></#if>
@@ -17,7 +19,9 @@
                 <label for="name"  class="col-sm-6 control-label"><@spring.message code='label.status'/></label>
                 <label style="align-content: center">
                 <#if (pnd.status)?exists && pnd.status==1><@spring.message code="label.normal"/><#elseif (pnd.status)?exists && pnd.status==2><@spring.message code="label.suspenced"/><#elseif (pnd.status)?exists && pnd.status==9><@spring.message code="label.delete"/><#else><@spring.message code="label.unknown"/></#if>
+<@shiro.hasPermission name="label.SynchronousSIMInfo">
                 <#if (pnd.serialnumber)??><input style="margin-left:10px;" class="btn btn-sm" value='<@spring.message code="label.synchronous"/>' type="button" onclick='updatePhonecardStatus("synchronous");'></button></#if>
+</@shiro.hasPermission>
                </label>
             </div>
             <div  class="form-group">
@@ -36,8 +40,6 @@
                 <label for="code"  class="col-sm-6 control-label">Activation Date</label>
                 <#if (pnd.activationdate)??>${pnd.activationdate}<#else><@spring.message code="label.none"/></#if>
             </div>
-
-
             <div  class="form-group">
                 <label for="answer"  class="col-sm-6 control-label">First programmed On</label>
                 <#if (pnd.firstprogrammedondate)??>${pnd.firstprogrammedondate}<#else><@spring.message code="label.none"/></#if>
@@ -60,22 +62,18 @@
                 <label for="answer"  class="col-sm-6 control-label">Expiredate Date</label>
                 <#if (pnd.expiredate)??>${pnd.expiredate}<#else><@spring.message code="label.none"/></#if>
             </div>
-        </div>
+                <div class="col-md-2"></div>
+            </div>
         <script>
             //更新状态
             function updatePhonecardStatus(obj) {
-
-                var trans = [];
                 var confirmdelete = "";
-
-
                 if (obj == "synchronous") {
                     if (!confirm("<@spring.message code='label.synchronousconfirm'/>")) {
                         return;
                     }
                 }
-                    var id = $("#sesese").val();
-                    trans.push(${pnd.serialnumber});
+                var id = $("#sesese").val();
 
                 //异步更新
                 $.ajax({
@@ -93,7 +91,7 @@
                         else {
                             alert("<@spring.message code='label.updatefailed'/>");
                         }
-                        $('#table').bootstrapTable('refresh');
+                       window.location.reload();
                     },
                     error: function (data) {// 请求失败处理函数
                         alert("<@spring.message code='label.updatefailed'/>");

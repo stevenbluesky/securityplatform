@@ -15,6 +15,7 @@ public class UserPO {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer userid;
+	private String appaccount;
 	private String loginname;
 	private String name;
 	private String citycode;
@@ -26,6 +27,14 @@ public class UserPO {
 	private Integer personid;
 	private Integer status;
 	private Date createtime;
+
+	public String getAppaccount() {
+		return appaccount;
+	}
+
+	public void setAppaccount(String appaccount) {
+		this.appaccount = appaccount;
+	}
 
 	public Integer getStatus() {
 		return status;
@@ -126,6 +135,7 @@ public class UserPO {
 	public String toString() {
 		return "UserPO{" +
 				"userid=" + userid +
+				", appaccount='" + appaccount + '\'' +
 				", loginname='" + loginname + '\'' +
 				", name='" + name + '\'' +
 				", citycode='" + citycode + '\'' +

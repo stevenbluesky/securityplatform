@@ -1,7 +1,3 @@
-/**
- *
- */
-
 function ajaxcountry(str,position) {
     $.ajax({
         type: "get",
@@ -12,8 +8,7 @@ function ajaxcountry(str,position) {
             // var str = "<option value=''></option>";
             // var str = "";
             for (var i = 0; i < data.length; i++) {
-                str += '<option value=' + data[i].countryid + '>'
-                    + data[i].countryname + '</option>'
+                str += '<option value=' + data[i].countryid + '>' + data[i].countryname + '</option>'
             }
             $(position).html(str);
             $(position).selectpicker('refresh');

@@ -10,6 +10,6 @@ import java.util.List;
 @Repository
 public interface EmployeeroleDAO extends CrudRepository<EmployeeRolePO,Integer>{
 	List<EmployeeRolePO>  findByEmployeeid(Integer employeeid);
-	//EmployeeRolePO findByEmployeeid(Integer id);
+
 	List<EmployeeRolePO> findAll();
 }

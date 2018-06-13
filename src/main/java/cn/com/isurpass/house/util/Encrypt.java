@@ -14,14 +14,14 @@ public class Encrypt {
         digester.setIterations(1059);
     }
 
-    public static String encrypt(String username, String password, String code) {
-        String pw = username + password + code;
+    public static String encrypt(String username, String password, String organizationid) {
+        String pw = username + password + organizationid;
         return digester.digest(pw);
     }
 
-    public static boolean check(String loginname, String password, String code, String enpassword) {
+    public static boolean check(String loginname, String password, String organizationid, String enpassword) {
         try {
-            return digester.matches(loginname + password + code, enpassword);
+            return digester.matches(loginname + password + organizationid, enpassword);
         } catch (Throwable t) {
             log.warn(t.getMessage());
             return false;
@@ -29,10 +29,10 @@ public class Encrypt {
     }
 
     public static void main(String arg[]) {
-//        String name = "admin";
-//        String pw = "123";
-//        String code = "002";
-//
+        String name = "admin";
+        String pw = "123";
+        String organizationid = "002";
+        System.out.println(Encrypt.check(name,pw,organizationid,"Rbn75L+MLenexJhu806/ALkLRcIYz8ri"));
 //        long s = System.currentTimeMillis();
 //        Encrypt svr = new Encrypt();
 //        String str = encrypt(name, pw, code);
@@ -44,10 +44,10 @@ public class Encrypt {
 //        boolean b = check(name, pw, code, str);
 //        System.out.println(System.currentTimeMillis() - s);
 //        System.out.println(b);
-        String name = "test001";
+       /* String name = "test001";
         String pw = "test001";
-        String code = "002";
+        String code = "002";*/
 //        System.out.println(encrypt(name,pw,code));
-        System.out.println(Encrypt.check(name,pw,code,"b6WLvEXigldas6v2H6TinxZBFwMD65iq"));
+       // System.out.println(Encrypt.check(name,pw,code,"b6WLvEXigldas6v2H6TinxZBFwMD65iq"));
     }
 }

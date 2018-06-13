@@ -4,8 +4,17 @@ public class LoginVO {
 
 	private String loginname;
 	private String password;
-	private String code;
+	private String organizationid;
 	private String captchacode;
+	private String code;
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
 
 	public String getLoginname() {
 		return loginname;
@@ -23,12 +32,12 @@ public class LoginVO {
 		this.password = password;
 	}
 
-	public String getCode() {
-		return code;
+	public String getOrganizationid() {
+		return organizationid;
 	}
 
-	public void setCode(String code) {
-		this.code = code;
+	public void setOrganizationid(String organizationid) {
+		this.organizationid = organizationid;
 	}
 
 	public String getCaptchacode() {

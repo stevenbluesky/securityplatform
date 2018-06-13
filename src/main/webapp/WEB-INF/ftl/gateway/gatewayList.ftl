@@ -1,10 +1,11 @@
 <#include "../_head0.ftl"/>
 <#include "../_head1.ftl"/>
 <#import "/spring.ftl" as spring />
+<div class="row">
 <form class="form-horizontal" id="searchForm" method="POST">
     <div class="text-center"><h1><@spring.message code="label.gatewaylist"/></h1></div>
     <hr>
-
+    <div class="form-group col-md-12">
     <div class="form-group col-md-4" align="right">
         <label for="searchinstallerorg" class="col-md-5 control-label"><@spring.message code="label.gatewayID"/></label>
         <div class="col-md-7">
@@ -28,22 +29,10 @@
                    placeholder=<@spring.message code="label.city"/>>
         </div>
     </div>
-
-    <div class="form-group col-md-4" align="right">
-        <label for="searchcitycode" class="col-md-5 control-label"><@spring.message code="label.citycode"/></label>
-        <div class="col-md-7">
-            <input type="text" class="form-control" id="searchcitycode" name="citycode"
-                   placeholder=<@spring.message code="label.citycode"/>>
-        </div>
     </div>
 
-    <div class="form-group col-md-4" align="right">
-        <label for="searchcustomer" class="col-md-5 control-label"><@spring.message code="label.customer"/></label>
-        <div class="col-md-7">
-            <input type="text" class="form-control" id="searchcustomer" name="customer"
-                   placeholder=<@spring.message code="label.customer"/>>
-        </div>
-    </div>
+    <div class="form-group col-md-12">
+
 
     <div class="form-group col-md-4" align="right">
         <label for="searchserviceprovider"
@@ -62,16 +51,31 @@
                    placeholder=<@spring.message code="label.installerorg"/>>
         </div>
     </div>
-
-    <div class="form-group col-md-4" align="right">
-        <label for="searchinstaller" class="col-md-5 control-label"><@spring.message code="label.installer"/></label>
-        <div class="col-md-7">
-            <input type="text" class="form-control" id="searchinstaller" name="installer"
-                   placeholder=<@spring.message code="label.installer"/>>
+        <div class="form-group col-md-4" align="right">
+            <label for="searchinstaller" class="col-md-5 control-label"><@spring.message code="label.installer"/></label>
+            <div class="col-md-7">
+                <input type="text" class="form-control" id="searchinstaller" name="installer"
+                       placeholder=<@spring.message code="label.installer"/>>
+            </div>
         </div>
     </div>
+    <div class="form-group col-md-12">
 
+        <div class="form-group col-md-4" align="right">
+            <label for="searchcustomer" class="col-md-5 control-label"><@spring.message code="label.user"/></label>
+            <div class="col-md-7">
+                <input type="text" class="form-control" id="searchcustomer" name="customer"
+                       placeholder=<@spring.message code="label.user"/>>
+            </div>
+        </div>
 
+    <div class="form-group col-md-4" align="right">
+        <label for="searchcitycode" class="col-md-5 control-label"><@spring.message code=""/></label>
+        <div class="col-md-7">
+            <input type="hidden" class="form-control" id="searchcitycode" name="citycode"
+                   placeholder=<@spring.message code=""/>>
+        </div>
+    </div>
 
     <div class="form-group col-md-4" align="right">
         <div class="col-md-5"></div>
@@ -80,14 +84,18 @@
                     style="width:100%;"><@spring.message code="label.search"/></button>
         </div>
     </div>
+    </div>
 </form>
-<button class='btn btn-default' style="float: right;visibility: hidden;">asdfaf</button>
-<button class='btn btn-default' style="float: right;margin-top: -10px;visibility: hidden;">asdfaf</button>
-<@shiro.hasPermission name="button:changeStatus">
+</div>
+<#--<button class='btn btn-default' style="float: right;visibility: hidden;">asdfaf</button>
+<button class='btn btn-default' style="float: right;margin-top: -10px;visibility: hidden;">asdfaf</button>-->
+<@shiro.hasPermission name="label.DeleteGateway">
 <#--新增，启用，停用按钮-->
-<button style="float: right;" type="button" class="btn btn-default"
-        onclick="window.location.href='typeGatewayInfo'"><@spring.message code="label.entering"/></button>
+<button style="float: right;" type="button" id='deletePhonecard' class='btn btn-default' onclick='updatePhonecardStatus("delete")'><@spring.message code='label.delete'/></button>
 </@shiro.hasPermission>
+<#--<@shiro.hasPermission name="label.InputGatewayInformation">
+<button style="float: right;" type="button" class="btn btn-default" onclick="window.location.href='typeGatewayInfo'"><@spring.message code="label.entering"/></button>
+</@shiro.hasPermission>-->
 
 <table id="table" data-toggle="table">
     <thead>
@@ -98,7 +106,7 @@
     <#--<th data-field=""><@spring.message code="label.alarmstatus"/></th>-->
         <th data-field="status" class="text-center"
             data-formatter="formatter_gatewaystatus"><@spring.message code="label.status"/></th>
-        <th data-field="cityname" class="text-center"><@spring.message code="label.area"/></th>
+        <th data-field="cityname" class="text-center"><@spring.message code="label.city"/></th>
         <th data-field="serviceprovider" class="text-center"><@spring.message code="label.serviceprovider"/></th>
         <th data-field="installerorg" class="text-center"><@spring.message code="label.installerorg"/></th>
         <th data-field="installer" class="text-center"><@spring.message code="label.installer"/></th>
@@ -111,6 +119,7 @@
 </div>
 <div class="col-md-1"></div>
 </div>
+
 <script type="text/javascript">
     $('#table').bootstrapTable({
         url: 'gatewayJsonList',
@@ -176,7 +185,7 @@
     //将网关id传递到网关详情页面
     function setCookie(name, value) {
         var exp = new Date();
-        exp.setTime(exp.getTime() + 100 * 1000);//Cookie有效期设置为10s
+        exp.setTime(exp.getTime() + 100 * 1000);//Cookie有效期设置为100s
         document.cookie = name + "=" + escape(value) + ";expires=" + exp.toGMTString();
         //location.href = "gatewayDetail"; //接收页面.
         $("#iframeDetail").attr("src", 'gatewayDetail?deviceid=' + value);
@@ -197,32 +206,60 @@
         if (value == 1)
             return '<@spring.message code="label.online"/>';
     }
-
+    <#--获取复选框选中的列的id数组-->
+    function getCheckedId() {
+        var pid = $("#table").bootstrapTable('getSelections');
+        var ids = [];
+        for (var index in pid) {
+            ids.push(pid[index].deviceid);
+        }
+        if (ids.length == 0) {
+            return new Array("-1");
+        }
+        return ids;
+    }
+    //更新状态
+    function updatePhonecardStatus(obj) {
+        var checkedIds = getCheckedId();
+        var trans = [];
+        if (checkedIds[0] == -1) {
+            alert("<@spring.message code='label.nochecked'/>");
+            return;
+        }
+        if (obj == "delete") {
+            if (!confirm("<@spring.message code='label.deleteconfirm'/>")) {
+                return;
+            }
+        }
+        for (var index in checkedIds) {
+            trans.push(checkedIds[index]);
+        }
+        //异步更新
+        $.ajax({
+            type: 'post',
+            url: 'update',//TODO更新后台代码未写
+            contentType: 'application/json',
+            traditional: true,
+            data: "{\"hope\":\"" + obj + "\",\"ids\":" + JSON.stringify(trans)+"}",
+            success: function (data) {//返回json结果
+                if ("success" == data) {
+                    alert("<@spring.message code='label.updatesuccess'/>");
+                }
+                else if (data == "-897"){
+                    alert("<@spring.message code='label.gabinding'/>");
+                }
+                else {
+                    alert("<@spring.message code='label.updatefailed'/>");
+                }
+                $('#table').bootstrapTable('refresh');
+            },
+            error: function (data) {// 请求失败处理函数
+                alert("<@spring.message code='label.updatefailed'/>");
+                $('#table').bootstrapTable('refresh');
+            }
+        });
+    }
 </script>
-<!-- 模态框（Modal） -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog" style="width:90%;height:90%;">
-        <div class="modal-content">
-            <#--<div class="modal-header" style="height: 40px;width:100%">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
-                <h4 class="modal-title" id="myModalLabel"><@spring.message code="label.gatewaydetail"/></h4>
-            </div>-->
-    <#--引入网关详情界面-->
-        <div class="modal-body">
-            <div class="col-md-10" style="height:550px;width:100%">
-                <iframe id="iframeDetail" class="embed-responsive-item" frameborder="0" src="" ]
-                        style="height:100%;width:100%;"></iframe>
-            </div>
-        </div>
-
-        <div class="col-md-1"></div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-default"
-                    data-dismiss="modal"><@spring.message code="label.close"/></button>
-        </div>
-    </div>
-</div>
-</div>
-
+<#include "../modal.ftl"/>
 <#include "../_foot1.ftl"/>
 <#include "../_foot0.ftl"/>

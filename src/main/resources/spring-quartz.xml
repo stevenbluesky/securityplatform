@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		">
+<bean id="dbjob" class="cn.com.isurpass.house.util.QuartzDB"/>
+    <bean id="jobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="dbjob"/>
+        <property name="targetMethod" value="connectDB"/>
+        <property name="concurrent" value="false"/>
+    </bean>
+    <bean id="jobTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="jobDetail"></property>
+        <!-- 七子表达式 -->
+        <property name="cronExpression" value="0 0 */1 * * ?"/>
+    </bean>
+    <!-- 任务调度管理容器 -->
+    <bean id="scheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean" >
+        <property name="triggers">
+            <list>
+                <ref bean="jobTrigger"/>
+            </list>
+        </property>
+        <!-- 跳过 新版本的检查 -->
+        <property name="quartzProperties">
+            <props>
+                <prop key="org.quartz.scheduler.skipUpdateCheck">true</prop>
+            </props>
+        </property>
+    </bean>
+</beans>

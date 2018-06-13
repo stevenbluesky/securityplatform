@@ -5,7 +5,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.util.Date;
 
 public class EmployeeAddVO {
-
+    private String orgCode;
     private Integer modify;
     private Integer Organizationid;
     private String parentOrgName;
@@ -39,6 +39,14 @@ public class EmployeeAddVO {
     private Integer personid;
     private Integer addressid;
     private Integer createtime;
+
+    public String getOrgCode() {
+        return orgCode;
+    }
+
+    public void setOrgCode(String orgCode) {
+        this.orgCode = orgCode;
+    }
 
     public String getParentOrgName() {
         return parentOrgName;
@@ -276,7 +284,10 @@ public class EmployeeAddVO {
     @Override
     public String toString() {
         return "EmployeeAddVO{" +
-                "Organizationid=" + Organizationid +
+                "orgCode='" + orgCode + '\'' +
+                ", modify=" + modify +
+                ", Organizationid=" + Organizationid +
+                ", parentOrgName='" + parentOrgName + '\'' +
                 ", loginname='" + loginname + '\'' +
                 ", password='" + password + '\'' +
                 ", question='" + question + '\'' +
@@ -296,6 +307,13 @@ public class EmployeeAddVO {
                 ", province=" + province +
                 ", city=" + city +
                 ", detailaddress='" + detailaddress + '\'' +
+                ", countryname='" + countryname + '\'' +
+                ", provincename='" + provincename + '\'' +
+                ", cityname='" + cityname + '\'' +
+                ", employeeid=" + employeeid +
+                ", personid=" + personid +
+                ", addressid=" + addressid +
+                ", createtime=" + createtime +
                 '}';
     }
 }

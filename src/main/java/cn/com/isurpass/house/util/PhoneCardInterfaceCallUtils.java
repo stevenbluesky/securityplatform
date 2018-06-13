@@ -80,7 +80,7 @@ public class PhoneCardInterfaceCallUtils {
         // 打印返回结果
         JSONObject jsStr = JSONObject.parseObject(result);
         String status = (String)jsStr.get("status");
-        return status;
+        return result;
     }
 
     /**

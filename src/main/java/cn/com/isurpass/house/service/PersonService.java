@@ -30,7 +30,7 @@ public class PersonService {
             if (person != null) {
                 emp.setLastname(person.getLastname());
                 emp.setFirstname(person.getFirstname());
-                emp.setTitle(person.getFirstname());
+                emp.setTitle(person.getTitle());
                 emp.setSsn(person.getSsn());
                 emp.setGender(person.getGender());
                 emp.setPhonenumber(person.getPhonenumber());

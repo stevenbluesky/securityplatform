@@ -31,11 +31,11 @@ public class CityTest {
 	AddressDAO ad;
 	@Autowired
     OrganizationDAO od;
-	@Test
+/*	@Test
 	public void testCitySave() {
-	/*	CityPO city = new CityPO("fda","12312","312fdsf");
+	*//*	CityPO city = new CityPO("fda","12312","312fdsf");
 		city.setProvinceid(1);
-		cityDAO.save(city);*/
+		cityDAO.save(city);*//*
 		AddressPO a0 = new AddressPO();
 		AddressPO a = ad.findByAddressid(103);
         System.out.println(a);
@@ -45,7 +45,7 @@ public class CityTest {
         a0.setCountry("Country");
         a0.setProvince("Province");
         ad.save(a0);
-	}
+	}*/
 
 	@Test
 	public void testCount() {
