@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @SuppressWarnings("Duplicates")
@@ -27,7 +29,9 @@ public class AddressService {
     CityDAO city;
 
     public List<CountryPO> getCountry() {
-        return country.findAll();
+        List<CountryPO> all = country.findAll();
+        Collections.sort(all, Comparator.comparing(CountryPO::getCountryname));
+        return all;
     }
 
     public List<CityPO> getCity(Integer provinceid) {
