@@ -10,7 +10,13 @@
               <div  class="form-group">
                   <label for="codepostfix"  class="col-sm-2 control-label"><@spring.message code='label.serviceprovider'/></label>
                   <div class="col-sm-10">
-                      <#if supname??>${(supname)}<#else><@spring.message code='label.none'/></#if>
+                      <#if supname??>
+                        ${(supname)}
+                      <#else>
+                          <select name="organizationid" id="organizationid" class="selectpicker" data-live-search="true"
+                                  title="<@spring.message code="label.chooseorg"/>">
+                          </select>
+                      </#if>
                   </div>
               </div>
               <div  class="form-group">
@@ -19,11 +25,17 @@
                   <#if insname??>${(insname)}<#else><@spring.message code='label.none'/></#if>
                   </div>
               </div>
-
-              <div  class="form-group">
+              <div  class="form-group"><#--报警中心所需用户代码-->
+                  <label for="codepostfix"  class="col-sm-2 control-label"><@spring.message code='label.alarmcode'/></label>
+                  <div class="col-sm-10">
+                  <span id="sback"><#if supCode??>${(supCode)!}<#else><@spring.message code='label.none'/></#if></span>
+                      <input type="hidden" class="form-control" id="supcode" name="supcode" value="${(supCode)!}">
+                  </div>
+              </div>
+              <div  class="form-group"><#--项目所需用户代码-->
                   <label for="codepostfix"  class="col-sm-2 control-label"><@spring.message code='label.usercodepostfix'/></label>
                   <div class="col-sm-10">
-                  ${(userCode)!}
+                  <span id="uback"><#if userCode??>${(userCode)!}<#else><@spring.message code='label.none'/></#if></span>
                       <input type="hidden" class="form-control" id="codepostfix" name="codepostfix" value="${(userCode)!}">
                   </div>
               </div>
@@ -51,17 +63,6 @@
                  <input type="text" class="form-control" id="ssn" name="ssn" placeholder="<@spring.message code='label.ssn'/>">
                </div>
               </div>
-             <#--<div  class="form-group">
-                <label for="gender"  class="col-sm-2 control-label"><@spring.message code='label.gender'/></label>
-                <div class="col-sm-10">
-               <select id="gender" name="gender" class="selectpicker" title="<@spring.message code='label.choosegender'/>">
-                      <option value=""><@spring.message code='label.choosegender'/></option>
-                      <option value="0"><@spring.message code='label.female'/></option>
-                      <option value="1"><@spring.message code='label.male'/></option>
-                      <option value="3">LGBT</option>
-                    </select>
-                </div>
-              </div>-->
               <div  class="form-group">
                 <label for="phonenumber"  class="col-sm-2 control-label"><@spring.message code='label.phonenumber'/></label>
                 <div class="col-sm-10">
@@ -109,10 +110,7 @@
               	 </div>
                </div>
               </div>
-              
 
-
-              
               <div  class="form-group">
                 <label for="deviceid"  class="col-sm-2 control-label"><@spring.message code='label.gatewayID'/>*</label>
                   <div class="col-sm-10">
@@ -311,6 +309,50 @@ $("#btn-submit").click(function () {
         }else{
         	alert(lan.notempty);
         }
+});
+getParentOrg();
+function getParentOrg() {
+    $.ajax({
+        type: "get",
+        url: "../org/listAllSupOrg",
+        async: true,
+        success: function (data) {
+            var str = "";
+            for (var i = 0; i < data.length; i++) {
+                str += '<option value=' + data[i].organizationid + '>'
+                        + data[i].name + '</option>'
+            }
+            $("#organizationid").html(str);
+
+            $("#organizationid").selectpicker('refresh');
+
+        }
+    });
+}
+$("#organizationid").change(function () {
+    var suporgid = $("#organizationid").val();
+    if(suporgid==""||suporgid==null||suporgid==undefined){
+        return ;
+    }
+    $.ajax({
+        type: 'get',
+        url: '../user/findCodes',
+        contentType: 'application/json',
+        traditional: true,
+        data: {
+            suporgid:suporgid,
+        },
+        success: function (data) {//返回json结果
+            var split = data.split("#");
+            $("#sback").html(split[0]);
+            $("#uback").html(split[1]);
+            document.getElementById("supcode").value= split[0];
+            document.getElementById("codepostfix").value= split[1];
+        },
+        error: function () {// 请求失败处理函数
+        }
+
+    });
 });
     </script>
 	<script src="../static/js/addressController.js"></script>

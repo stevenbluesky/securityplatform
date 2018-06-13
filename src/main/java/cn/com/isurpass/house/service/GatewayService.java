@@ -406,7 +406,9 @@ public class GatewayService {
 				if (upo.getInstallerid() != null) {
 					gateVO.setInstaller(ed.findByEmployeeid(upo.getInstallerid()).getLoginname());
 				}
-				gateVO.setServiceprovider(od.findByOrganizationid(upo.getOrganizationid()).getName());
+				if(od.findByOrganizationid(upo.getOrganizationid())!=null){
+					gateVO.setServiceprovider(od.findByOrganizationid(upo.getOrganizationid()).getName());
+				}
 				gateVO.setCustomer(upo.getAppaccount());
 			}
 			gateVO.setName(o.getName());

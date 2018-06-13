@@ -334,7 +334,7 @@ public class EmployeeService {
             if (org0.getOrgtype() == Constants.ORGTYPE_INSTALLER)//如果机构为安装商，则其父机构为服务商，
             {
                 if(org0.getParentorgid()==null){
-                    empp.setOrganizationid(1);
+                    empp.setOrganizationid(0);
                 }else{
                     empp.setOrganizationid(org0.getParentorgid());
                 }

@@ -1,8 +1,8 @@
 <!-- 录入电话卡信息页面 -->
 <#include "../_head0.ftl"/>
     <div class="row-horizontal">
-        <div class="col-md-1"></div>
-        <div class="col-md-10">
+
+        <div class="col-md-12">
             <form class="form-horizontal" id="defaultForm" method="POST">
                 <div class="text-center"><h1><@spring.message code='label.userInfo'/></h1></div>
                 <hr>
@@ -13,9 +13,9 @@
                     ${(userVO.codepostfix)!}
                     </div>
                     <label for="codepostfix"
-                           class="col-sm-2 "><@spring.message code='label.appaccount'/></label>
+                           class="col-sm-2 "><@spring.message code='label.alarmcode'/></label>
                     <div class="col-sm-4">
-                    ${(userVO.appaccount)!}
+                    ${(userVO.supcode)!}
                     </div>
                 </div>
                 <div class="form-group">
@@ -23,22 +23,24 @@
                     <div class="col-sm-4">
                     ${(userVO.firstname)!}
                     </div>
+
                     <label for="lastname" class="col-sm-2 " ><@spring.message code='label.lastname'/>
-                        </label>
+                    </label>
                     <div class="col-sm-4">
                     ${(userVO.lastname)!}
                     </div>
                 </div>
 
                 <div class="form-group">
+
+                    <label for="codepostfix"
+                           class="col-sm-2 "><@spring.message code='label.appaccount'/></label>
+                    <div class="col-sm-4">
+                    ${(userVO.appaccount)!}
+                    </div>
                     <label for="ssn" class="col-sm-2 "><@spring.message code='label.ssn'/></label>
                     <div class="col-sm-4">
                     ${(userVO.ssn)!}
-                    </div>
-
-                    <label for="gender" class="col-sm-2 "></label>
-                    <div class="col-sm-4">
-                        <span id="gender"></span>
                     </div>
                 </div>
 
@@ -60,19 +62,22 @@
                     <div class="col-sm-4">
                     ${(userVO.fax)!}
                     </div>
-
-                    <label for="address" class="col-sm-2 "><@spring.message code='label.address'/></label>
+                    <label for="detailaddress"
+                           class="col-sm-2 "><@spring.message code=''/></label>
                     <div class="col-sm-4">
-                            ${(userVO.countryname)!}&nbsp;${(userVO.provincename)!}&nbsp;${(userVO.cityname)!}
+
                     </div>
+
                 </div>
 
                 <div class="form-group">
-                    <label for="detailaddress"
-                           class="col-sm-2 "><@spring.message code='label.detailaddress'/></label>
+                    <label for="address" class="col-sm-2 "><@spring.message code='label.detailaddress'/></label>
                     <div class="col-sm-10">
-                    ${(userVO.detailaddress)!}
+                    ${(userVO.detailaddress)!}&nbsp;&nbsp;
+                    ${(userVO.countryname)!}&nbsp;${(userVO.provincename)!}&nbsp;${(userVO.cityname)!}
                     </div>
+
+
                 </div>
                 <hr>
                 <div class="form-group">
@@ -84,7 +89,7 @@
                 </div>
                 <div class="form-group">
                     <label for="detailaddress"
-                           class="col-sm-2 "><@spring.message code='label.installerorg'/></label>
+                           class="col-sm-2 "><@spring.message code='label.parentInstaller'/></label>
                     <div class="col-sm-4">
                     ${(userVO.installerorg)!}
                     </div>
@@ -156,7 +161,7 @@
 
         </div>
 
-        <div class="col-md-1"></div>
+
     </div>
 
 <!-- JavaScript 部分 -->
