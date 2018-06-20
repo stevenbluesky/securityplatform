@@ -5,10 +5,37 @@
             <form id="defaultForm" method="POST">
                 <div class="text-center"><h1><@spring.message code='label.modifyUserInfo'/></h1></div>
                 <hr>
+            <#if admin?? && admin == true>
+                <div class="form-group">
+                    <label for="organizationid"
+                           class="col-sm-3 control-label" style="text-align: left;"><@spring.message code="label.parentsupplier"/></label>
+                    <div class="col-sm-9">
+                        <select id="organizationid" name="organizationid" class="selectpicker" data-live-search="true"  data-size="10"
+                                title="<@spring.message code="label.choosesupplier"/>">
+                        </select>
+                    </div>
+                </div>
+            <#else>
+                <div class="form-group">
+                    <label for="organizationid"
+                           class="col-sm-3 control-label" style="text-align: left;"><@spring.message code="label.parentsupplier"/></label>
+                    <div class="col-sm-9">
+                            <#if userVO.serviceprovider??>${(userVO.serviceprovider!)}<#else><@spring.message code='label.none'/></#if>
+                            <input type="hidden" class="form-control" id="organizationid" name="organizationid" value="${(userVO.organizationid)!}">
+                    </div>
+                </div>
+            </#if>
+                <div  class="form-group"><#--报警中心所需用户代码-->
+                    <label for="codepostfix"  class="col-sm-3 control-label"><@spring.message code='label.alarmcode'/></label>
+                    <div class="col-sm-9">
+                        <span id="sback"><#if userVO.supcode??&&userVO.supcode!=''>${(userVO.supcode)!}<#else><@spring.message code='label.none'/></#if></span>
+                        <input type="hidden" class="form-control" id="supcode" name="supcode" value="${(userVO.supcode)!}">
+                    </div>
+                </div>
                 <div  class="form-group">
                     <label for="codepostfix"  class="col-sm-3 control-label"><@spring.message code='label.usercodepostfix'/></label>
                     <div class="col-sm-9">
-                    <#if (userVO.codepostfix)??>${userVO.codepostfix}<#else><@spring.message code="label.none"/></#if>
+                    <span id="uback"><#if (userVO.codepostfix)??>${userVO.codepostfix}<#else><@spring.message code="label.none"/></#if></span>
                         <input type="hidden" class="form-control" id="codepostfix" name="codepostfix" value="${(userVO.codepostfix)!}" placeholder="<@spring.message code='label.usercodepostfix'/>">
                     </div>
                 </div>
@@ -31,17 +58,6 @@
                         <input type="text" class="form-control" id="ssn" name="ssn" value="${(userVO.ssn)!}" placeholder="<@spring.message code='label.ssn'/>">
                     </div>
                 </div>
-                <#--<div  class="form-group">
-                    <label for="gender"  class="col-sm-3 control-label"><@spring.message code='label.gender'/></label>
-                    <div class="col-sm-9">
-                        <select id="gender" name="gender" class="selectpicker" title="<@spring.message code='label.choosegender'/>">
-                            <option value=""><@spring.message code='label.choosegender'/></option>
-                            <option value="0" <#if (userVO.gender)??&&userVO.gender==0>selected</#if>><@spring.message code='label.female'/></option>
-                            <option value="1" <#if (userVO.gender)??&&userVO.gender==1>selected</#if>><@spring.message code='label.male'/></option>
-                            <option value="2" <#if (userVO.gender)??&&userVO.gender==2>selected</#if>>LGBT</option>
-                        </select>
-                    </div>
-                </div>-->
                 <div  class="form-group">
                     <label for="phonenumber"  class="col-sm-3 control-label"><@spring.message code='label.phonenumber'/></label>
                     <div class="col-sm-9">
@@ -138,6 +154,14 @@
                     validating: 'glyphicon glyphicon-refresh'
                 },
                 fields: {
+                    organizationid: {
+                        message: 'The Distributor is not valid',
+                        validators: {
+                            notEmpty: {
+                                message: 'The Distributor is required and cannot be empty'
+                            }
+                        }
+                    },
                     firstname: {
                         message: 'The firstname is not valid',
                         validators: {
@@ -193,7 +217,32 @@
                 }
             });
         });
+        getParentOrg();
 
+        function getParentOrg() {
+            $.ajax({
+                type: "get",
+                url: "../org/listAllSupplier",
+                async: true,
+                success: function (data) {
+                    var parentorgid ="";
+                    <#if userVO.organizationid??>parentorgid='${(userVO.organizationid)}' </#if>
+                    var str ="";
+                    for (var i = 0; i < data.length; i++) {
+                        //str += '<option value=' + data[i].organizationid + '>' + data[i].name + '</option>'
+                        if(data[i].organizationid == parentorgid) {
+                            str += "<option value='" + data[i].organizationid + "' selected='selected' >" + data[i].name + "</option>"
+                        }else {
+                            str += '<option value=' + data[i].organizationid + '>' + data[i].name + '</option>'
+                        }
+                    }
+                    $("#organizationid").html(str);
+
+                    $("#organizationid").selectpicker('refresh');
+
+                }
+            });
+        }
         $("#btn-submit").click(function () {
             $("#defaultForm").bootstrapValidator('validate');//提交验证
                 if ($("#defaultForm").data('bootstrapValidator').isValid()) {//获取验证结果，如果成功，执行下面代码
@@ -309,5 +358,32 @@
                     changeCity(provinceid);
                 }
         );
+        $("#organizationid").change(function () {
+            var suporgid = $("#organizationid").val();
+            var userid = ${(userVO.userid)?c};
+            if(suporgid==""||suporgid==null||suporgid==undefined){
+                return ;
+            }
+            $.ajax({
+                type: 'get',
+                url: '../user/findCodes',
+                contentType: 'application/json',
+                traditional: true,
+                data: {
+                    suporgid:suporgid,
+                    userid:userid
+                },
+                success: function (data) {//返回json结果
+                    var split = data.split("#");
+                    $("#sback").html(split[0]);
+                    $("#uback").html(split[1]);
+                    document.getElementById("supcode").value= split[0];
+                    document.getElementById("codepostfix").value= split[1];
+                },
+                error: function () {// 请求失败处理函数
+                }
+
+            });
+        });
     </script>
 <#include "../_foot0.ftl"/>

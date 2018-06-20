@@ -4,8 +4,10 @@ import cn.com.isurpass.house.dao.GatewayDAO;
 import cn.com.isurpass.house.exception.MyArgumentNullException;
 import cn.com.isurpass.house.po.EmployeePO;
 import cn.com.isurpass.house.po.GatewayPO;
+import cn.com.isurpass.house.po.UserPO;
 import cn.com.isurpass.house.result.JsonResult;
 import cn.com.isurpass.house.service.UserService;
+import cn.com.isurpass.house.util.Constants;
 import cn.com.isurpass.house.util.FormUtils;
 import cn.com.isurpass.house.result.PageResult;
 import cn.com.isurpass.house.vo.TransferVO;
@@ -57,7 +59,7 @@ public class UserController {
 
     @RequestMapping("modify")
     @ResponseBody
-    public JsonResult modify(UserAddVO user) {
+    public JsonResult modify(UserAddVO user) {//TODO
         if (user.getUserid() == null) {
             return new JsonResult(-1, "user not exist");
         }
@@ -187,13 +189,13 @@ public class UserController {
             e.printStackTrace();
             return "../../noInstaller";
         }
-        String userCode = us.createUserCode(employeeid,organizationid,null);
-        String supCode = us.createSupCode(organizationid,null);
-        String supname = us.findSupName(organizationid);
+        //String userCode = us.createUserCode(employeeid,organizationid,null);
+        //String supCode = us.createSupCode(organizationid,null);
+        //String supname = us.findSupName(organizationid);
         String insname = us.findInsName(organizationid);
-        model.addAttribute("supCode",supCode);
-        model.addAttribute("userCode",userCode);
-        model.addAttribute("supname",supname);
+        //model.addAttribute("supCode",supCode);
+        //model.addAttribute("userCode",userCode);
+        //model.addAttribute("supname",supname);
         model.addAttribute("insname",insname);
         return "user/typeUserInfo";
     }
@@ -201,10 +203,20 @@ public class UserController {
     @ResponseBody
     public String findCodes(HttpServletRequest request){
         String ss = request.getParameter("suporgid");
+        String uu = request.getParameter("userid");
         int suporgid = Integer.parseInt(ss);
+        Integer organizationid;
+        Integer employeeid;
         EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
-        Integer organizationid = emp.getOrganizationid();
-        Integer employeeid = emp.getEmployeeid();
+        boolean flag = us.checkAmeta(emp);
+        if(flag&&!StringUtils.isEmpty(uu)){//ameta在修改用户的服务商
+            UserPO user = us.findUserInfo(Integer.parseInt(uu));
+            organizationid=user.getInstallerorgid();
+            employeeid=user.getInstallerid();
+        }else{
+            organizationid = emp.getOrganizationid();
+            employeeid = emp.getEmployeeid();
+        }
         String userCode = us.createUserCode(employeeid,organizationid,suporgid);
         String supCode = us.createSupCode(organizationid,suporgid);
         return supCode+"#"+userCode;

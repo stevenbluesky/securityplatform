@@ -10,13 +10,9 @@
               <div  class="form-group">
                   <label for="codepostfix"  class="col-sm-2 control-label"><@spring.message code='label.serviceprovider'/></label>
                   <div class="col-sm-10">
-                      <#if supname??>
-                        ${(supname)}
-                      <#else>
-                          <select name="organizationid" id="organizationid" class="selectpicker" data-live-search="true"
-                                  title="<@spring.message code="label.chooseorg"/>">
-                          </select>
-                      </#if>
+                      <select name="organizationid" id="organizationid" class="selectpicker" data-live-search="true"
+                              title="<@spring.message code="label.chooseorg"/>">
+                      </select>
                   </div>
               </div>
               <div  class="form-group">
@@ -158,6 +154,14 @@ $(document).ready(function() {
             validating: 'glyphicon glyphicon-refresh'
         },
         fields: {
+            organizationid: {
+                message: 'The Distributor is not valid',
+                validators: {
+                    notEmpty: {
+                        message: 'The Distributor is required and cannot be empty'
+                    }
+                }
+            },
             appaccount: {
                 validators: {
                     remote: {

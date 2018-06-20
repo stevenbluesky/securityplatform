@@ -10,12 +10,12 @@
                     <label for="codepostfix"
                            class="col-sm-2 "><@spring.message code='label.usercodepostfix'/></label>
                     <div class="col-sm-4">
-                    ${(userVO.codepostfix)!}
+                        <#if userVO.codepostfix??>${(userVO.codepostfix)!}<#else><@spring.message code='label.none'/></#if>
                     </div>
                     <label for="codepostfix"
                            class="col-sm-2 "><@spring.message code='label.alarmcode'/></label>
                     <div class="col-sm-4">
-                    ${(userVO.supcode)!}
+                    <#if userVO.supcode??>${(userVO.supcode)!}<#else><@spring.message code='label.none'/></#if>
                     </div>
                 </div>
                 <div class="form-group">

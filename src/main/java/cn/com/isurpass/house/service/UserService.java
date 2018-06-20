@@ -443,6 +443,7 @@ public class UserService {
         userAddVO.setSupcode(byUserid.getSupcode());
         OrganizationPO byOrganizationid = od.findByOrganizationid(byUserid.getOrganizationid());
         if(byOrganizationid!=null){
+            userAddVO.setOrganizationid(byUserid.getOrganizationid());
             userAddVO.setServiceprovider(byOrganizationid.getName());
         }
         userAddVO.setInstallerorg(od.findByOrganizationid(byUserid.getInstallerorgid()).getName());
@@ -527,9 +528,10 @@ public class UserService {
         pd.save(person);
 
         preUser.setName(user.getFirstname() + user.getLastname());
+        preUser.setOrganizationid(user.getOrganizationid());
         preUser.setLoginname(user.getPhonenumber());
         preUser.setCodepostfix(user.getCodepostfix());
-
+        preUser.setSupcode(user.getSupcode());
         /**************************************************************************************************/
         /**判断网关
          * gd   gatewayuserdao
@@ -593,53 +595,6 @@ public class UserService {
         }else{
             pcud.deleteByUserid(preUser.getUserid());
         }
-        /****/
-/*        if (gatewayuseruser != null) {
-            if (user.getDeviceid() == null && gatewayuseruser != null) {
-                //之前绑定了,现在没填,然后删除网关？
-                List<GatewayUserPO> byUserid = gatewayuseruser;
-                gd.deleteAll(byUserid);
-            }
-            if (!(gd.findByDeviceid(user.getDeviceid()).stream().map(GatewayUserPO::getUserid).collect(toList()).contains(preUser.getUserid()))) {
-                //绑定的网关和当前输入的网关不相同, 说明在修改网关
-                gd.delete(gd.findByUserid(user.getUserid()).get(0));
-                if (gd.findByDeviceid(user.getDeviceid()).size() != 0) {
-                    throw new RuntimeException("-108");
-                }
-                if (gbd.findByDeviceid(user.getDeviceid()) == null) {//网关不存在
-                    throw new RuntimeException("-109");
-                }
-                GatewayUserPO gatewayUserPO = new GatewayUserPO();
-                gatewayUserPO.setUserid(user.getUserid());
-                gatewayUserPO.setDeviceid(user.getDeviceid());
-                gd.save(gatewayUserPO);
-            }
-        }*/
-/*        if (pcud.findByUserid(preUser.getUserid()) != null) {
-            if (user.getSerialnumber() == null && pcud.findByUserid(preUser.getUserid()) != null) {
-                PhonecardUserPO byUserid = pcud.findByUserid(preUser.getUserid());
-                pcud.delete(byUserid);
-            } else {
-                PhonecardPO bySerialnumber = pcard.findBySerialnumber(user.getSerialnumber());
-                Integer phonecardid = bySerialnumber.getPhonecardid();
-                if (!(pcud.findByUserid(user.getUserid()).getPhonecardid() != phonecardid)) {
-                    if (bySerialnumber == null) {
-                        throw new RuntimeException("-111");
-                    }
-                    if (pcud.findByPhonecardid(bySerialnumber.getPhonecardid()) != null) {
-                        throw new RuntimeException("-110");
-                    }
-                    PhonecardUserPO pu = new PhonecardUserPO();
-                    pu.setUserid(user.getUserid());
-                    pu.setPhonecardid(phonecardid);
-                    pu.setCreatetime(new Date());
-                    pcud.save(pu);
-                }
-            }
-        }*/
-        /**************************************************************************************************/
-
-//        preUser.setUsercode("");
         ud.save(preUser);
     }
     @Transactional(rollbackFor = Exception.class)
@@ -678,6 +633,7 @@ public class UserService {
     @Transactional(rollbackFor = Exception.class)
     public String createUserCode(Integer employeeid, Integer organizationid,Integer suborgid) {
         OrganizationPO org = od.findByOrganizationid(organizationid);
+
         Integer parentorgid = org.getParentorgid();
         /*if(suborgid==null&&StringUtils.isEmpty(parentorgid)){
             return "-";
@@ -802,5 +758,17 @@ public class UserService {
         }
         else return null;
     }
-
+    @Transactional(readOnly = true)
+    public boolean checkAmeta(EmployeePO emp) {
+        OrganizationPO org = od.findByOrganizationid(emp.getOrganizationid());
+        if(Constants.ORGTYPE_AMETA.equals(org.getOrgtype())){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    @Transactional(readOnly = true)
+    public UserPO findUserInfo(int userid) {
+        return ud.findByUserid(userid);
+    }
 }
