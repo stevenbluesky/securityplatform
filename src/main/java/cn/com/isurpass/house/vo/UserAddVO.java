@@ -10,6 +10,7 @@ public class UserAddVO {
     private Integer gender;
     private String phonenumber;
     private String codepostfix;
+    private String usercode;
     private String supcode;
     private String email;
     private String fax;
@@ -246,5 +247,13 @@ public class UserAddVO {
 
     public void setSupcode(String supcode) {
         this.supcode = supcode;
+    }
+
+    public String getUsercode() {
+        return usercode;
+    }
+
+    public void setUsercode(String usercode) {
+        this.usercode = usercode;
     }
 }

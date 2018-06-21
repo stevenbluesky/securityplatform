@@ -89,4 +89,5 @@ public interface UserDAO extends CrudRepository<UserPO, Integer> {
 
     List<UserPO> findByAppaccountContaining(String searchAppAccount);
 
+    List<UserPO> findByUsercodeContaining(String searchCode);
 }

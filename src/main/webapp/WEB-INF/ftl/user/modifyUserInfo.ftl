@@ -35,8 +35,8 @@
                 <div  class="form-group">
                     <label for="codepostfix"  class="col-sm-3 control-label"><@spring.message code='label.usercodepostfix'/></label>
                     <div class="col-sm-9">
-                    <span id="uback"><#if (userVO.codepostfix)??>${userVO.codepostfix}<#else><@spring.message code="label.none"/></#if></span>
-                        <input type="hidden" class="form-control" id="codepostfix" name="codepostfix" value="${(userVO.codepostfix)!}" placeholder="<@spring.message code='label.usercodepostfix'/>">
+                    <span id="uback"><#if (userVO.usercode)??>${userVO.usercode}<#else><@spring.message code="label.none"/></#if></span>
+                        <input type="hidden" class="form-control" id="codepostfix" name="usercode" value="${(userVO.usercode)!}" placeholder="<@spring.message code='label.usercodepostfix'/>">
                     </div>
                 </div>
                 <div  class="form-group">
@@ -376,9 +376,7 @@
                 success: function (data) {//返回json结果
                     var split = data.split("#");
                     $("#sback").html(split[0]);
-                    $("#uback").html(split[1]);
                     document.getElementById("supcode").value= split[0];
-                    document.getElementById("codepostfix").value= split[1];
                 },
                 error: function () {// 请求失败处理函数
                 }

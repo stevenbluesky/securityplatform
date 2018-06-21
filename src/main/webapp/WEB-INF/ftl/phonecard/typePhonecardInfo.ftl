@@ -44,18 +44,6 @@
 		                </div>	
                 </div>
               </div>
-            
-              <#--日期控件
-              <div  class="form-group">
-                <label for="expiredate"  class="col-sm-2 control-label" data-date="1979-09-16T05:25:07Z" data-date-format="dd MM yyyy  p" data-link-field="dtp_input1"></label>
-		                <div class="col-sm-3 input-group date form_datetime">
-		                  <input class="form-control" size="16" name="expiredate" type="text" value="" readonly>
-		                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-							<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
-		                </div>
-					<input type="hidden" id="dtp_input1"  value="" /><br/>
-               </div>
-               -->
               
               <div  class="form-group">
                 <label for="answer"  class="col-sm-2 control-label"  style="text-align: left;">First programmed On</label>
@@ -113,7 +101,7 @@
               </div>
               
               <div id="msg" class="text-center" style="color:red;font-size:14px;">
-              <#if msg?exists&&msg=="6"><font color="green"><@spring.message code="label.6"/>${msgserialnumber}<@spring.message code="label.5"/></font><#elseif msg?exists><@spring.message code="label."+msg/></#if>
+              <#if msg?exists&&msg=="6"><font color="green"><@spring.message code="label.6"/> ${msgserialnumber} <@spring.message code="label.5"/></font><#elseif msg?exists><@spring.message code="label."+msg/></#if>
               </div>
               <div class="row text-center">
 	              <div class="col-sm-6"><button id="submitid" type="button" class="btn btn-default" style="width:25%;"><@spring.message code='label.submit'/></button></div>

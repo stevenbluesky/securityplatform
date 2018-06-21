@@ -10,6 +10,7 @@ public class UserInfoListVO {
 	private String deviceid;
 	private String serialnumber;
 	private String codepostfix;
+	private String usercode;
 	private String appaccount;
 
 	public String getAppaccount() {
@@ -79,5 +80,13 @@ public class UserInfoListVO {
 
 	public void setCodepostfix(String codepostfix) {
 		this.codepostfix = codepostfix;
+	}
+
+	public String getUsercode() {
+		return usercode;
+	}
+
+	public void setUsercode(String usercode) {
+		this.usercode = usercode;
 	}
 }

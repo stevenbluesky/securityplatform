@@ -69,10 +69,7 @@ public class UserService {
     public void add(UserAddVO u, HttpServletRequest request) {
         EmployeePO emp = (EmployeePO) SecurityUtils.getSubject().getPrincipal();
 
-        /*if (!FormUtils.checkNUll(u.getDeviceid()) || !FormUtils.checkNUll(u.getSerialnumber())) {
-            throw new RuntimeException("-107");
-        }*/
-        if(ud.findByAppaccount(u.getAppaccount())!=null){//检查app账号是否已被别人绑定
+        if(!StringUtils.isEmpty(u.getAppaccount())&&ud.findByAppaccount(u.getAppaccount())!=null){//检查app账号是否已被别人绑定
             throw new RuntimeException("-121");
         }
         if (gd.findByDeviceid(u.getDeviceid()).size() != 0) {
@@ -105,7 +102,6 @@ public class UserService {
             }
         }
         if (FormUtils.isEmpty(u.getCity())) {
-//            user.setCitycode(city.findByCityid(u.getCity()).getCitycode());
             throw new RuntimeException("-100");
         }
         EmployeeParentOrgIdVO empp = emps.findEmpParentOrgid(emp);
@@ -113,7 +109,7 @@ public class UserService {
         user.setInstallerorgid(1);
         user.setInstallerid(1);
         user.setStatus(1);
-        user.setUsercode("usercode");
+
         if (empp != null) {
             user.setOrganizationid(empp.getOrganizationid());
             user.setInstallerorgid(empp.getInstallerorgid());
@@ -122,9 +118,9 @@ public class UserService {
         if(u.getOrganizationid()!=null){
             user.setOrganizationid(u.getOrganizationid());
         }
-        user.setCodepostfix(u.getCodepostfix());
+        user.setCodepostfix(u.getUsercode());
+        user.setUsercode(u.getUsercode());
         user.setSupcode(u.getSupcode());
-        //user.setUsercode("ameta" + u.getPhonenumber());
 
         AddressPO address = new AddressPO();
         Integer addressid = null;
@@ -354,7 +350,8 @@ public class UserService {
             set.add(u5);
         }
         if (usv.getSearchCode() != null && usv.getSearchCode() != "") {
-            u6 = ud.findByCodepostfixContaining(usv.getSearchCode());
+            //u6 = ud.findByCodepostfixContaining(usv.getSearchCode());
+            u6 = ud.findByUsercodeContaining(usv.getSearchCode());
             set.add(u6);
         }
         set.remove(null);
@@ -417,6 +414,7 @@ public class UserService {
             user.setCity(citypo == null ? null : citypo.getCityname());
             user.setSuppliername(orgpo == null ? null : orgpo.getName());
             user.setCodepostfix(u.getCodepostfix());
+            user.setUsercode(u.getUsercode());
             if(phonecarduser!=null) {
                 PhonecardPO byPhonecardid = pcard.findByPhonecardid(phonecarduser.getPhonecardid());
                 if(byPhonecardid!=null){
@@ -439,6 +437,7 @@ public class UserService {
         UserAddVO userAddVO = new UserAddVO();
         userAddVO.setUserid(userid);
         userAddVO.setAppaccount(byUserid.getAppaccount());
+        userAddVO.setUsercode(byUserid.getUsercode());
         userAddVO.setCodepostfix(byUserid.getCodepostfix());
         userAddVO.setSupcode(byUserid.getSupcode());
         OrganizationPO byOrganizationid = od.findByOrganizationid(byUserid.getOrganizationid());
@@ -530,7 +529,8 @@ public class UserService {
         preUser.setName(user.getFirstname() + user.getLastname());
         preUser.setOrganizationid(user.getOrganizationid());
         preUser.setLoginname(user.getPhonenumber());
-        preUser.setCodepostfix(user.getCodepostfix());
+        preUser.setCodepostfix(user.getUsercode());
+        preUser.setUsercode(user.getUsercode());
         preUser.setSupcode(user.getSupcode());
         /**************************************************************************************************/
         /**判断网关

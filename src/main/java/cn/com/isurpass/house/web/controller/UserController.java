@@ -212,13 +212,15 @@ public class UserController {
         if(flag&&!StringUtils.isEmpty(uu)){//ameta在修改用户的服务商
             UserPO user = us.findUserInfo(Integer.parseInt(uu));
             organizationid=user.getInstallerorgid();
-            employeeid=user.getInstallerid();
+            String supCode = us.createSupCode(organizationid,suporgid);
+            return supCode+"#";
         }else{
             organizationid = emp.getOrganizationid();
             employeeid = emp.getEmployeeid();
+            String userCode = us.createUserCode(employeeid,organizationid,suporgid);
+            String supCode = us.createSupCode(organizationid,suporgid);
+            return supCode+"#"+userCode;
         }
-        String userCode = us.createUserCode(employeeid,organizationid,suporgid);
-        String supCode = us.createSupCode(organizationid,suporgid);
-        return supCode+"#"+userCode;
+
     }
 }

@@ -32,7 +32,7 @@
                   <label for="codepostfix"  class="col-sm-2 control-label"><@spring.message code='label.usercodepostfix'/></label>
                   <div class="col-sm-10">
                   <span id="uback"><#if userCode??>${(userCode)!}<#else><@spring.message code='label.none'/></#if></span>
-                      <input type="hidden" class="form-control" id="codepostfix" name="codepostfix" value="${(userCode)!}">
+                      <input type="hidden" class="form-control" id="codepostfix" name="usercode" value="${(userCode)!}">
                   </div>
               </div>
               <div  class="form-group">
@@ -128,7 +128,7 @@
               
               <div id="msg" class="text-center"></div>
               <div class="row text-center">
-	              <div class="col-sm-6"><button id="btn-submit" type="submit" class="btn btn-default" style="width:25%;"><@spring.message code='label.submit'/></button></div>
+	              <div class="col-sm-6"><button id="btn-submit" type="button" class="btn btn-default" style="width:25%;"><@spring.message code='label.submit'/></button></div>
 	              <div class="col-sm-6"><button type="reset" class="btn btn-default" style="width:25%;"><@spring.message code='label.reset'/></button></div>
               </div>
               

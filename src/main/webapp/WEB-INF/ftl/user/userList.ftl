@@ -97,7 +97,7 @@
     <tr>
         <th data-field=""></th>
         <th data-field="userid" data-visible="false">ID</th>
-        <th data-field="codepostfix" class="text-center"><@spring.message code='label.usercodepostfix'/></th>
+        <th data-field="usercode" class="text-center"><@spring.message code='label.usercodepostfix'/></th>
         <th data-field="name" class="text-center"><@spring.message code='label.name'/></th>
         <th data-field="deviceid" class="text-center"><@spring.message code='label.gatewayID'/></th>
         <th data-field="serialnumber" class="text-center"><@spring.message code='label.serialnumber'/></th>
