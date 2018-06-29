@@ -53,12 +53,6 @@
                     </div>
                 </div>
                 <div  class="form-group">
-                    <label for="ssn"  class="col-sm-3 control-label"><@spring.message code='label.ssn'/>*</label>
-                    <div class="col-sm-9">
-                        <input type="text" class="form-control" id="ssn" name="ssn" value="${(userVO.ssn)!}" placeholder="<@spring.message code='label.ssn'/>">
-                    </div>
-                </div>
-                <div  class="form-group">
                     <label for="phonenumber"  class="col-sm-3 control-label"><@spring.message code='label.phonenumber'/></label>
                     <div class="col-sm-9">
                         <input type="text" class="form-control" id="phonenumber" name="phonenumber" value="${(userVO.phonenumber)!}" placeholder="<@spring.message code='label.phonenumber'/>">
@@ -204,14 +198,6 @@
                             notEmpty: {
                                 message: 'The address is required and cannot be empty'
                             },
-                        }
-                    },
-                    ssn: {
-                        message: 'The ssn is not valid',
-                        validators: {
-                            notEmpty: {
-                                message: 'The ssn is required and cannot be empty'
-                            }
                         }
                     }
                 }

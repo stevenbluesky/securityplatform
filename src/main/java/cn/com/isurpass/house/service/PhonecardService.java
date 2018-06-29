@@ -68,7 +68,7 @@ public class PhonecardService {
 		pcPO.setSerialnumber(pc.getSerialnumber());
 		pcPO.setFirmwareversion(pc.getFirmwareversion());
 		pcPO.setModel(pc.getModel());
-		pcPO.setStatus(1);//TODO 暂时默认新增即视为在线状态
+		pcPO.setStatus(Constants.STATUS_INVENTORY);
 		pcPO.setActivationdate(pc.getActivationdate());
 		pcPO.setOrderingdate(pc.getOrderingdate());
 		pcPO.setExpiredate(pc.getExpiredate());
@@ -92,13 +92,16 @@ public class PhonecardService {
 		Map<String, Object> map = new HashMap<>();
 		Integer status = pc.getStatus();
 		List<Integer> statuslist = new ArrayList<Integer>();
-		if(Integer.valueOf(2).equals(status)){//查询正常记录1
+		if(Integer.valueOf(2).equals(status)){//查询正常激活记录1
 			statuslist.add(1);
 		}else if(Integer.valueOf(3).equals(status)){//查询冻结记录 2
 			statuslist.add(2);
+		}else if(Integer.valueOf(4).equals(status)){//查询未激活记录 3
+			statuslist.add(3);
 		}else{//查询全部记录（暂不包括已删除记录）
 			statuslist.add(1);
 			statuslist.add(2);
+			statuslist.add(3);
 		}
 		String rateplan ="";
 		String serialnumber ="";
@@ -225,10 +228,11 @@ public class PhonecardService {
 		phonecardpo.setRateplan((String)jsStr.get("ratePlan"));
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 		String dateActivated = (String) jsStr.get("dateActivated");
-		dateActivated.substring(0,dateActivated.indexOf("."));
-		Date activationdate = sdf.parse(dateActivated);
-		phonecardpo.setActivationdate(activationdate);
-
+		if(!StringUtils.isEmpty(dateActivated)){
+			dateActivated.substring(0,dateActivated.indexOf("."));
+			Date activationdate = sdf.parse(dateActivated);
+			phonecardpo.setActivationdate(activationdate);
+		}
 		String dateAdded = (String)jsStr.get("dateAdded");
 		dateAdded.substring(0,dateAdded.indexOf("."));
 		Date firstprogrammedondate = sdf.parse(dateAdded);

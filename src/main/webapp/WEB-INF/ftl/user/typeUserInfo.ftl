@@ -8,7 +8,7 @@
               <div class="text-center"><h1><@spring.message code='label.enteringuserinfo'/></h1></div>
               <hr>
               <div  class="form-group">
-                  <label for="codepostfix"  class="col-sm-2 control-label"><@spring.message code='label.serviceprovider'/></label>
+                  <label for="codepostfix"  class="col-sm-2 control-label"><@spring.message code='label.serviceprovider'/>*</label>
                   <div class="col-sm-10">
                       <select name="organizationid" id="organizationid" class="selectpicker" data-live-search="true"
                               title="<@spring.message code="label.chooseorg"/>">
@@ -52,12 +52,6 @@
                 <div class="col-sm-10">
                  <input type="text" class="form-control" id="lastname" name="lastname" placeholder="<@spring.message code='label.lastname'/>">
                 </div>
-              </div>
-              <div  class="form-group">
-                <label for="ssn"  class="col-sm-2 control-label"><@spring.message code='label.ssn'/>*</label>
-                <div class="col-sm-10">
-                 <input type="text" class="form-control" id="ssn" name="ssn" placeholder="<@spring.message code='label.ssn'/>">
-               </div>
               </div>
               <div  class="form-group">
                 <label for="phonenumber"  class="col-sm-2 control-label"><@spring.message code='label.phonenumber'/></label>
@@ -193,14 +187,6 @@ $(document).ready(function() {
                 validators: {
                     notEmpty: {
                         message: 'The lastname is required and cannot be empty'
-                    }
-                }
-            },
-            ssn: {
-                message: 'The ssn is not valid',
-                validators: {
-                    notEmpty: {
-                        message: 'The ssn is required and cannot be empty'
                     }
                 }
             },

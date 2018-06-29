@@ -38,9 +38,9 @@
                     <div class="col-sm-4">
                     ${(userVO.appaccount)!}
                     </div>
-                    <label for="ssn" class="col-sm-2 "><@spring.message code='label.ssn'/></label>
+                    <label for="fax" class="col-sm-2 "><@spring.message code='label.fax'/></label>
                     <div class="col-sm-4">
-                    ${(userVO.ssn)!}
+                    ${(userVO.fax)!}
                     </div>
                 </div>
 
@@ -55,19 +55,6 @@
                     <div class="col-sm-4">
                     ${(userVO.email)!}
                     </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="fax" class="col-sm-2 "><@spring.message code='label.fax'/></label>
-                    <div class="col-sm-4">
-                    ${(userVO.fax)!}
-                    </div>
-                    <label for="detailaddress"
-                           class="col-sm-2 "><@spring.message code=''/></label>
-                    <div class="col-sm-4">
-
-                    </div>
-
                 </div>
 
                 <div class="form-group">

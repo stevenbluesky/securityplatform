@@ -3,7 +3,6 @@ package cn.com.isurpass.house.service;
 import cn.com.isurpass.house.dao.*;
 import cn.com.isurpass.house.exception.MyArgumentNullException;
 import cn.com.isurpass.house.po.*;
-import cn.com.isurpass.house.result.JsonResult;
 import cn.com.isurpass.house.util.Constants;
 import cn.com.isurpass.house.util.Encrypt;
 import cn.com.isurpass.house.util.FormUtils;
@@ -14,7 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.lang.model.type.IntersectionType;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 

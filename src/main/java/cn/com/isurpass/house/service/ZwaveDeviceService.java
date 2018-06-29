@@ -5,7 +5,6 @@ import cn.com.isurpass.house.dao.*;
 import cn.com.isurpass.house.po.*;
 import cn.com.isurpass.house.request.HttpsUtils;
 import cn.com.isurpass.house.util.*;
-import cn.com.isurpass.house.vo.DeviceDetailVO;
 import cn.com.isurpass.house.vo.DeviceSearchVO;
 import cn.com.isurpass.house.vo.RequestExpendVO;
 import cn.com.isurpass.house.vo.ZwaveDeviceListVO;

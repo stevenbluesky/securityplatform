@@ -19,8 +19,9 @@
                               <select id="searchstatus" name="status" <#--class="selectpicker"--> class="form-control" style="width: 100%"
                                       title="<@spring.message code='label.choosestatus'/>">
                                   <option value="1"><@spring.message code='label.all'/></option>
-                                  <option value="2"><@spring.message code='label.normal'/></option>
-                                  <option value="3"><@spring.message code='label.freeze'/></option>
+                                  <option value="2"><@spring.message code='label.activated'/></option>
+                                  <option value="3"><@spring.message code='label.deactivated'/></option>
+                                  <option value="4"><@spring.message code='label.inventory'/></option>
                               </select>
                           </div>
                       </div>
@@ -161,9 +162,11 @@
         //状态格式化器
         function formatter_status(value, row, index) {
             if (value == 1)
-                return '<@spring.message code='label.normal'/>';
+                return '<@spring.message code='label.activated'/>';
             if (value == 2)
-                return '<@spring.message code='label.freeze'/>';
+                return '<@spring.message code='label.deactivated'/>';
+            if (value == 3)
+                return '<@spring.message code='label.inventory'/>';
             if (value == 0)
                 return '<@spring.message code='label.noeffect'/>';
         }

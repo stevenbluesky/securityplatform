@@ -57,10 +57,12 @@ public class DeviceController {
 	@ResponseBody
 	@RequestMapping(value="savearea",method = RequestMethod.POST)
 	public String savearea(@RequestBody String areanumber, HttpServletRequest request) {
+		String number = "";
+		String zwavedeviceid = "";
 		areanumber =  areanumber.replace( ",", "");
-		String number =areanumber.split("#")[1];
-		String zwavedeviceid = areanumber.split("#")[0];
-		try {
+		try{
+		number =areanumber.split("#")[1];
+		zwavedeviceid = areanumber.split("#")[0];
 			int i = Integer.parseInt(number);
 			if(i<=0||i>100||!number.equals(i+"")){
 				throw new RuntimeException();

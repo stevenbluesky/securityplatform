@@ -10,58 +10,78 @@
         <div class="row">
             <div class="col-md-2"></div>
             <div class="col-md-8">
+            <div class="col-md-12">
             <div  class="form-group">
                 <label for="name"  class="col-sm-6 control-label"><@spring.message code='label.serialnumber'/></label>
                <#if (pnd.serialnumber)??>${pnd.serialnumber}<#else><@spring.message code="label.none"/></#if>
                 <input type="hidden" name="" id="sesese" value="${pnd.phonecardid}"/>
             </div>
+            </div>
+                <div class="col-md-12">
             <div  class="form-group">
                 <label for="name"  class="col-sm-6 control-label"><@spring.message code='label.status'/></label>
                 <label style="align-content: center">
-                <#if (pnd.status)?exists && pnd.status==1><@spring.message code="label.normal"/><#elseif (pnd.status)?exists && pnd.status==2><@spring.message code="label.suspenced"/><#elseif (pnd.status)?exists && pnd.status==9><@spring.message code="label.delete"/><#else><@spring.message code="label.unknown"/></#if>
+                <#if (pnd.status)?exists && pnd.status==1><@spring.message code="label.activated"/><#elseif (pnd.status)?exists && pnd.status==2><@spring.message code="label.deactivated"/><#elseif (pnd.status)?exists && pnd.status==3><@spring.message code="label.inventory"/><#else><@spring.message code="label.unknown"/></#if>
 <@shiro.hasPermission name="label.SynchronousSIMInfo">
                 <#if (pnd.serialnumber)??><input style="margin-left:10px;" class="btn btn-sm" value='<@spring.message code="label.synchronous"/>' type="button" onclick='updatePhonecardStatus("synchronous");'></button></#if>
 </@shiro.hasPermission>
                </label>
             </div>
+                </div>
+                <div class="col-md-12">
             <div  class="form-group">
                 <label for="code"  class="col-sm-6 control-label"><@spring.message code='label.model'/></label>
-                <#if (pnd.model)??>${pnd.model}<#else><@spring.message code="label.none"/></#if>
+                <#if (pnd.model)?? && (pnd.model)!="">${pnd.model}<#else><@spring.message code="label.none"/></#if>
             </div>
+                </div>
+                <div class="col-md-12">
             <div  class="form-group">
                 <label for="answer"  class="col-sm-6 control-label"><@spring.message code='label.firmwareversion'/></label>
-                <#if (pnd.firmwareversion)??>${pnd.firmwareversion}<#else><@spring.message code="label.none"/></#if>
+                <#if (pnd.firmwareversion)??&& (pnd.firmwareversion)!="">${pnd.firmwareversion}<#else><@spring.message code="label.none"/></#if>
             </div>
+                </div>
+                <div class="col-md-12">
             <div  class="form-group">
                 <label for="name"  class="col-sm-6 control-label">Rate Plan</label>
-                <#if (pnd.rateplan)??>${pnd.rateplan}<#else><@spring.message code="label.none"/></#if>
+                <#if (pnd.rateplan)?? && (pnd.rateplan)!="">${pnd.rateplan}<#else><@spring.message code="label.none"/></#if>
             </div>
+                </div>
+                <div class="col-md-12">
             <div  class="form-group">
                 <label for="code"  class="col-sm-6 control-label">Activation Date</label>
                 <#if (pnd.activationdate)??>${pnd.activationdate}<#else><@spring.message code="label.none"/></#if>
             </div>
+                </div>
+                <div class="col-md-12">
             <div  class="form-group">
                 <label for="answer"  class="col-sm-6 control-label">First programmed On</label>
                 <#if (pnd.firstprogrammedondate)??>${pnd.firstprogrammedondate}<#else><@spring.message code="label.none"/></#if>
             </div>
+                </div>
+                <div class="col-md-12">
             <div  class="form-group">
                 <label for="name"  class="col-sm-6 control-label">Last Programmed On</label>
                 <#if (pnd.lastprogrammedondate)??>${pnd.lastprogrammedondate}<#else><@spring.message code="label.none"/></#if>
             </div>
-
+                </div>
+                <div class="col-md-12">
             <div  class="form-group">
                 <label for="code"  class="col-sm-6 control-label">Last Saved On</label>
                 <#if (pnd.lastsavedondate)??>${pnd.lastsavedondate}<#else><@spring.message code="label.none"/></#if>
             </div>
+                </div>
+                <div class="col-md-12">
             <div  class="form-group">
                 <label for="answer"  class="col-sm-6 control-label">Ordering Date</label>
                 <#if (pnd.orderingdate)??>${pnd.orderingdate}<#else><@spring.message code="label.none"/></#if>
             </div>
-
+                </div>
+                <div class="col-md-12">
             <div  class="form-group">
                 <label for="answer"  class="col-sm-6 control-label">Expiredate Date</label>
                 <#if (pnd.expiredate)??>${pnd.expiredate}<#else><@spring.message code="label.none"/></#if>
             </div>
+                </div>
                 <div class="col-md-2"></div>
             </div>
         <script>

@@ -42,7 +42,7 @@ public interface ZwaveDeviceDAO extends CrudRepository<ZwaveDevicePO, Integer> {
     long countByDeviceid(String deviceid);
 
     @Query(value = "SELECT z.zwavedeviceid AS zwavedeviceid, IFNULL(z.name,'')AS NAME,z.devicetype AS devicetype,z.warningstatuses AS warningstatuses,z.status AS STATUS,z.statuses AS statuses ,\n" +
-            "z.battery AS battery,IFNULL(c.cityname,'') AS city,IFNULL(o.name,'') AS organizationname,IFNULL(o1.name,'') AS installerorgname,IFNULL(e.loginname,'') AS installername,IFNULL(u.appaccount,'') AS username \n" +
+            "z.battery AS battery,IFNULL(c.cityname,'') AS city,IFNULL(o.name,'') AS organizationname,IFNULL(o1.name,'') AS installerorgname,IFNULL(e.loginname,'') AS installername,IFNULL(u.appaccount,'') AS username,z.area \n" +
             " FROM zwavedevice z\n" +
             " LEFT JOIN gatewayuser gu ON z.deviceid =gu.deviceid\n" +
             " LEFT JOIN user u ON gu.userid=u.userid\n" +
@@ -52,7 +52,7 @@ public interface ZwaveDeviceDAO extends CrudRepository<ZwaveDevicePO, Integer> {
             " LEFT JOIN employee e ON e.employeeid = u.installerid", nativeQuery = true)
     List<Object[]> listZwaveDeviceListVO(Pageable pageable);
 
-    @Query(value = "select z.zwavedeviceid as zwavedeviceid, z.name as name,z.devicetype as devicetype,z.warningstatuses as warningstatuses,z.status as status, z.statuses AS statuses ,z.battery as battery,c.cityname as city,o.name as organizationname,o1.name as installerorgname,e.loginname as installername,u.appaccount as username " +
+    @Query(value = "select z.zwavedeviceid as zwavedeviceid, z.name as name,z.devicetype as devicetype,z.warningstatuses as warningstatuses,z.status as status, z.statuses AS statuses ,z.battery as battery,c.cityname as city,o.name as organizationname,o1.name as installerorgname,e.loginname as installername,u.appaccount as username,z.area " +
             "from zwavedevice z" +
             " LEFT  join gatewayuser gu on z.deviceid =gu.deviceid" +
             " LEFT  join user u on gu.userid=u.userid" +
@@ -73,7 +73,7 @@ public interface ZwaveDeviceDAO extends CrudRepository<ZwaveDevicePO, Integer> {
 
     @Query(value = "SELECT z.zwavedeviceid AS zwavedeviceid,z. NAME AS NAME,z.devicetype AS devicetype,z.warningstatuses AS warningstatuses," +
             " z. STATUS AS STATUS ,z.statuses AS statuses ,z.battery AS battery,c.cityname AS city,o. NAME AS organizationname,o1. NAME AS installerorgname," +
-            " e.loginname AS installername,u.appaccount AS username" +
+            " e.loginname AS installername,u.appaccount AS username ,z.area" +
             " FROM zwavedevice z" +
             " LEFT  JOIN gatewayuser gu ON z.deviceid = gu.deviceid" +
             " LEFT  JOIN user u ON gu.userid = u.userid" +
@@ -97,7 +97,7 @@ public interface ZwaveDeviceDAO extends CrudRepository<ZwaveDevicePO, Integer> {
 
     @Query(value = "SELECT z.zwavedeviceid AS zwavedeviceid,z. NAME AS NAME,z.devicetype AS devicetype,z.warningstatuses AS warningstatuses," +
             " z. STATUS AS STATUS,z.statuses AS statuses ,z.battery AS battery,c.cityname AS city,o. NAME AS organizationname,o1. NAME AS installerorgname," +
-            " e.loginname AS installername,u.appaccount AS username" +
+            " e.loginname AS installername,u.appaccount AS username ,z.area" +
             " FROM zwavedevice z" +
             " LEFT JOIN gatewayuser gu ON z.deviceid = gu.deviceid" +
             " LEFT  JOIN user u ON gu.userid = u.userid" +
@@ -134,7 +134,7 @@ public interface ZwaveDeviceDAO extends CrudRepository<ZwaveDevicePO, Integer> {
 
     @Query(value = "SELECT z.zwavedeviceid AS zwavedeviceid,z. NAME AS NAME,z.devicetype AS devicetype,z.warningstatuses AS warningstatuses," +
             " z. STATUS AS STATUS,z.statuses AS statuses ,z.battery AS battery,c.cityname AS city,o. NAME AS organizationname,o1. NAME AS installerorgname," +
-            " e.loginname AS installername,u.appaccount AS username" +
+            " e.loginname AS installername,u.appaccount AS username ,z.area" +
             " FROM zwavedevice z" +
             " LEFT  JOIN gatewayuser gu ON z.deviceid = gu.deviceid" +
             " LEFT  JOIN user u ON gu.userid = u.userid" +

@@ -58,7 +58,7 @@
     </div>
 
     <div class="form-group col-md-4" align="right">
-        <label for="searchcityname" class="col-md-5 control-label"><@spring.message code="label.city"/></label>
+        <label for="searchcityname" class="col-md-5 control-label"><@spring.message code="label.area"/></label>
         <div class="col-md-7">
             <input type="text" class="form-control" id="searchcityname" name="cityname"
                    placeholder=<@spring.message code="label.city"/>>
@@ -133,6 +133,7 @@
         <th data-field="status" class="text-center" data-formatter='formatter_devicestatus'><div id="dstatus"><@spring.message code="label.status"/>↑↓</div></th>
         <th data-field="statuses" class="text-center" data-formatter='formatter_statuses'><div id="dstatuses"><@spring.message code="label.statuses"/></div></th><#--多位状态数组-->
         <th data-field="battery" class="text-center"><div id="dbattery"><@spring.message code="label.energy"/>↑↓</div></th>
+        <th data-field="area" class="text-center"><@spring.message code="label.areanumber"/></th>
         <th data-field="city" class="text-center"><@spring.message code="label.area"/></th>
         <th data-field="organizationname" class="text-center"><@spring.message code="label.serviceprovider"/></th>
         <th data-field="installerorgname" class="text-center"><@spring.message code="label.installerorg"/></th>

@@ -26,6 +26,7 @@ public class ConvertQueryResultToVOUtils {
             z.setInstallerorgname((String) obj[9]);
             z.setInstallername((String) obj[10]);
             z.setUsername((String) obj[11]);
+            z.setArea((Integer)obj[12]);
             list.add(z);
         }
         return list;

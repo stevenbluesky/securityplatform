@@ -433,6 +433,11 @@ function formatter_zwavestatuses(i,devicetype,statuses) {
     }
 }
 function formatter_zwavewarning(devicetype, warningstatuses){
+    if(devicetype==47){
+        if(warningstatuses>0&&warningstatuses<65){
+            return eval("lan.channel"+warningstatuses);
+        }
+    }
     switch (devicetype) {
         case '4':
             switch (warningstatuses) {
@@ -507,25 +512,6 @@ function formatter_zwavewarning(devicetype, warningstatuses){
             }
         case '46':
             return '-';
-        case '47':
-            switch (warningstatuses) {
-                case 1:
-                    return lan.firstchannel;
-                case 2:
-                    return lan.secondchannel;
-                case 3:
-                    return lan.thirdchannel;
-                case 4:
-                    return lan.fourthchannel;
-                case 5:
-                    return lan.fifthchannel;
-                case 6:
-                    return lan.sixthchannel;
-                case 7:
-                    return lan.seventhchannel;
-                case 8:
-                    return lan.eighthchannel;
-            }
     }
 }
 

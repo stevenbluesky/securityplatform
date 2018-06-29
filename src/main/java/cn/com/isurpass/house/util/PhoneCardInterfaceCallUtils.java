@@ -68,7 +68,7 @@ public class PhoneCardInterfaceCallUtils {
         InputStream inputStream = new ByteArrayInputStream(requestBytes, 0, requestBytes.length);
         RequestEntity requestEntity = new InputStreamRequestEntity(inputStream, requestBytes.length, "application/json; charset=utf-8"); // 请求体
         //getMethod.setRequestEntity(requestEntity);
-        httpClient.executeMethod(getMethod);// 执行请求
+        httpClient.executeMethod(getMethod);// 执行请求  有时会出错java.net.UnknownHostException: restapi7.jasper.com
         InputStream soapResponseStream = getMethod.getResponseBodyAsStream();// 获取返回的流
         byte[] datas = null;
          try {

@@ -12,6 +12,7 @@ public class Constants {
 	public static final Integer STATUS_UNVALID= 0; //未生效
 	public static final Integer STATUS_NORMAL = 1;		//正常
 	public static final Integer STATUS_SUSPENCED = 2;	//冻结
+	public static final Integer STATUS_INVENTORY = 3;  	//待激活
 	public static final Integer STATUS_DELETED = 9;		//删除
 	
 	public static final Integer STATUS_ONLINE = 1; 		//在线
@@ -19,10 +20,10 @@ public class Constants {
 	//电话卡状态切换
 
 	public static final String ACTIVATED = "ACTIVATED";//激活
-	public static final String ACTIVATION_READY = "ACTIVATION_READY";//就绪
+	public static final String ACTIVATION_READY = "ACTIVATION_READY";//就绪 未使用该字段
 	public static final String	 DEACTIVATED = "DEACTIVATED";//停用
-	public static final String INVENTORY = "INVENTORY";//待处理
-	public static final String RETIRED = "RETIRED";//退休
+	public static final String INVENTORY = "INVENTORY";//待激活
+	public static final String RETIRED = "RETIRED";//退休 未使用该字段
 	public static final String Authorization = "Basic YW1ldGFjYTphNDRmNDJmMS0wMmRiLTRhY2EtYjZhMC04MWYxNTBmZGI1YmI=";//调用接口认证信息
 
 	public static final Integer ROLE_AMETA_ADMIN=1;

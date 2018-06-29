@@ -136,13 +136,6 @@
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="ssn" class="col-sm-3 control-label"  style="text-align: left;"><@spring.message code="label.ssn"/></label>
-                    <div class="col-sm-9">
-                        <input type="text" class="form-control" id="ssn" name="ssn" value="${(empInfo.ssn)!}"
-                               placeholder="<@spring.message code="label.ssn"/>">
-                    </div>
-                </div>
                 <#--<div class="form-group">
                     <label for="gender" class="col-sm-3 control-label"  style="text-align: left;"><@spring.message code="label.gender"/></label>
                     <div class="col-sm-9">
