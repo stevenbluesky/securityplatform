@@ -84,7 +84,7 @@
         <th data-field="parentOrgName" class="text-center"><@spring.message code="label.parentorg"/></th>
         <th data-field="status" data-formatter='formatter_status'
             class="text-center"><@spring.message code="label.status"/></th>
-        <th data-field="employeeroleid" class="text-center"><@spring.message code="label.privilege"/></th>
+        <#--<th data-field="employeeroleid" class="text-center"><@spring.message code="label.privilege"/></th>-->
         <th data-field="operate" data-formatter="formatter_op"
             data-events="operateEvents" data-visible="false"
             class="text-center"><@spring.message code="label.operate"/></th>

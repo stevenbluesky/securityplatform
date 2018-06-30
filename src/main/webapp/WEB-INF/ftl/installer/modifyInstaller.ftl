@@ -24,6 +24,8 @@
                     </select>
                 </div>
             </div>
+        <#else>
+            <#if orgInfo.parentorgid??><input id="parentorgid" name="parentorgid" type="hidden" value="${(orgInfo.parentorgid)!?c}"/></#if>
         </#if>
 
             <div class="form-group">
@@ -38,8 +40,8 @@
             <div class="form-group">
                 <label for="code" class="col-sm-3 control-label"  style="text-align: left;"><@spring.message code="label.orgcode"/>*</label>
                 <div class="col-sm-9">
-                <#if (orgInfo.code)??>${orgInfo.code}<#else><@spring.message code="label.none"/></#if>
-                    <input type="hidden" class="form-control" id="code" name="code" value="${(orgInfo.code)!}" placeholder="<@spring.message code="label.orgcode"/>">
+                <#--<#if (orgInfo.code)??>${orgInfo.code}<#else><@spring.message code="label.none"/></#if>-->
+                    <input class="form-control" id="code" name="code" value="${(orgInfo.code)!}" placeholder="<@spring.message code="label.orgcode"/>">
                 </div>
             </div>
             <div class="form-group">
@@ -360,6 +362,34 @@
                             message: 'The name is required and cannot be empty'
                         }
                     }
+                },
+                code: {
+                    validators: {
+                        notEmpty: {
+                            message: 'The code is required and cannot be empty'
+                        }, stringLength: {
+                            min: 5,
+                            max: 5,
+                            message: 'The code must be 5 characters long'
+                        },
+                        regexp: {
+                            regexp: /[1-9][0-9][0-9][0-9][0-9]/g,
+                            message: 'The code format is 10001-99999.'
+                        },
+                        remote: {
+                            url: 'validCode',
+                            message: 'The code is not available',
+                            delay: 2000,
+                            type: 'POST',
+                            /**自定义提交数据，默认值提交当前input value*/
+                            data: function(validator) {
+                                return {
+                                    parentorgid: $('[name="parentorgid"]').val(),
+                                    code: $('[name="code"]').val()
+                                };
+                            }
+                        }
+                    }
                 }
             }
         });
@@ -370,6 +400,7 @@
             $("#defaultForm").bootstrapValidator('removeField','loginname');
             $("#defaultForm").bootstrapValidator('removeField','password');
             $("#defaultForm").bootstrapValidator('removeField','repassword');
+            $("#defaultForm").bootstrapValidator('removeField','code');
         }
         $("#defaultForm").bootstrapValidator('validate');//提交验证
         if(!validAddressB() || !validAddressC()){

@@ -10,10 +10,7 @@ import cn.com.isurpass.house.service.UserService;
 import cn.com.isurpass.house.util.Constants;
 import cn.com.isurpass.house.util.FormUtils;
 import cn.com.isurpass.house.result.PageResult;
-import cn.com.isurpass.house.vo.TransferVO;
-import cn.com.isurpass.house.vo.UnbundlingUserWithPhoneVO;
-import cn.com.isurpass.house.vo.UserAddVO;
-import cn.com.isurpass.house.vo.UserSearchVO;
+import cn.com.isurpass.house.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -196,6 +193,7 @@ public class UserController {
         //model.addAttribute("supCode",supCode);
         //model.addAttribute("userCode",userCode);
         //model.addAttribute("supname",supname);
+        model.addAttribute("orgInfo",us.findOrgInfo(organizationid));
         model.addAttribute("insname",insname);
         return "user/typeUserInfo";
     }
@@ -218,8 +216,8 @@ public class UserController {
             organizationid = emp.getOrganizationid();
             employeeid = emp.getEmployeeid();
             String userCode = us.createUserCode(employeeid,organizationid,suporgid);
-            String supCode = us.createSupCode(organizationid,suporgid);
-            return supCode+"#"+userCode;
+            //String supCode = us.createSupCode(organizationid,suporgid);
+            return userCode;
         }
 
     }

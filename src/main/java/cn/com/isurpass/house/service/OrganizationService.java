@@ -104,6 +104,7 @@ public class OrganizationService {
         OrganizationPO org = new OrganizationPO();
         org.setName(as.getName());
         org.setCode(as.getCode());
+        org.setGroupid(as.getCode());
         org.setStatus(1);
         org.setCentralstationname(as.getCsname());
         org.setCreatetime(new Date());

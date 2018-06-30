@@ -6,10 +6,7 @@ import cn.com.isurpass.house.po.*;
 import cn.com.isurpass.house.util.Constants;
 import cn.com.isurpass.house.util.FormUtils;
 import cn.com.isurpass.house.util.Ten2ThirtySix;
-import cn.com.isurpass.house.vo.EmployeeParentOrgIdVO;
-import cn.com.isurpass.house.vo.UserAddVO;
-import cn.com.isurpass.house.vo.UserInfoListVO;
-import cn.com.isurpass.house.vo.UserSearchVO;
+import cn.com.isurpass.house.vo.*;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -121,7 +118,7 @@ public class UserService {
         user.setCodepostfix(u.getUsercode());
         user.setUsercode(u.getUsercode());
         user.setSupcode(u.getSupcode());
-
+        user.setGroupid(u.getGroupid());
         AddressPO address = new AddressPO();
         Integer addressid = null;
         address.setDetailaddress(u.getDetailaddress());
@@ -440,6 +437,7 @@ public class UserService {
         userAddVO.setUsercode(byUserid.getUsercode());
         userAddVO.setCodepostfix(byUserid.getCodepostfix());
         userAddVO.setSupcode(byUserid.getSupcode());
+        userAddVO.setGroupid(byUserid.getGroupid());
         OrganizationPO byOrganizationid = od.findByOrganizationid(byUserid.getOrganizationid());
         if(byOrganizationid!=null){
             userAddVO.setOrganizationid(byUserid.getOrganizationid());
@@ -770,5 +768,12 @@ public class UserService {
     @Transactional(readOnly = true)
     public UserPO findUserInfo(int userid) {
         return ud.findByUserid(userid);
+    }
+
+    @Transactional(readOnly = true)
+    public OrganizationPO findOrgInfo(Integer organizationid) {
+        return od.findByOrganizationid(organizationid);
+
+
     }
 }

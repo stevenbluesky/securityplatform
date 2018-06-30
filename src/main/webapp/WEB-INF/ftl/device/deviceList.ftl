@@ -61,7 +61,7 @@
         <label for="searchcityname" class="col-md-5 control-label"><@spring.message code="label.area"/></label>
         <div class="col-md-7">
             <input type="text" class="form-control" id="searchcityname" name="cityname"
-                   placeholder=<@spring.message code="label.city"/>>
+                   placeholder=<@spring.message code="label.area"/>>
         </div>
     </div>
     </div>

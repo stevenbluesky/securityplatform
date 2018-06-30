@@ -12,6 +12,13 @@
                     <div class="col-sm-4">
                         <#if userVO.usercode??>${(userVO.usercode)!}<#else><@spring.message code='label.none'/></#if>
                     </div>
+                </div>
+                <div class="form-group">
+                    <label for="codepostfix"
+                           class="col-sm-2 "><@spring.message code='label.groupid'/></label>
+                    <div class="col-sm-4">
+                    <#if userVO.groupid??>${(userVO.groupid)!}<#else><@spring.message code='label.none'/></#if>
+                    </div>
                     <label for="codepostfix"
                            class="col-sm-2 "><@spring.message code='label.alarmcode'/></label>
                     <div class="col-sm-4">

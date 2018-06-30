@@ -25,7 +25,7 @@ public class OrganizationPO {
 	private Integer csaddressid;
 	private Integer cscontactid;
 	private Date createtime;
-
+	private String groupid;
 	public OrganizationPO() {
 		super();
 	}
@@ -36,6 +36,13 @@ public class OrganizationPO {
 		this.name = name;
 	}
 
+	public String getGroupid() {
+		return groupid;
+	}
+
+	public void setGroupid(String groupid) {
+		this.groupid = groupid;
+	}
 
 	public Integer getOrganizationid() {
 		return organizationid;

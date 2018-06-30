@@ -32,6 +32,15 @@ public class UserAddVO {
     private String serviceprovider;
     private String installerorg;
     private String installer;
+    private String groupid;
+
+    public String getGroupid() {
+        return groupid;
+    }
+
+    public void setGroupid(String groupid) {
+        this.groupid = groupid;
+    }
 
     public Integer getOrganizationid() {
         return organizationid;

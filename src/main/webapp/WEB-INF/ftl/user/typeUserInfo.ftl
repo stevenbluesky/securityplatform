@@ -10,7 +10,7 @@
               <div  class="form-group">
                   <label for="codepostfix"  class="col-sm-2 control-label"><@spring.message code='label.serviceprovider'/>*</label>
                   <div class="col-sm-10">
-                      <select name="organizationid" id="organizationid" class="selectpicker" data-live-search="true"
+                      <select name="organizationid" id="organizationid" class="selectpicker" data-live-search="true" onchange="getGroupidAndCode()"
                               title="<@spring.message code="label.chooseorg"/>">
                       </select>
                   </div>
@@ -22,10 +22,15 @@
                   </div>
               </div>
               <div  class="form-group"><#--报警中心所需用户代码-->
+                  <label for="codepostfix"  class="col-sm-2 control-label"><@spring.message code='label.groupid'/></label>
+                  <div class="col-sm-10">
+                      <input  class="form-control" id="inscode" name="groupid" value="${(orgInfo.code)!}" placeholder="<@spring.message code='label.groupid'/>">
+                  </div>
+              </div>
+              <div  class="form-group"><#--报警中心所需用户代码-->
                   <label for="codepostfix"  class="col-sm-2 control-label"><@spring.message code='label.alarmcode'/></label>
                   <div class="col-sm-10">
-                  <span id="sback"><#if supCode??>${(supCode)!}<#else><@spring.message code='label.none'/></#if></span>
-                      <input type="hidden" class="form-control" id="supcode" name="supcode" value="${(supCode)!}">
+                      <input class="form-control" id="supcode" name="supcode" placeholder="<@spring.message code='label.alarmcode'/>" />
                   </div>
               </div>
               <div  class="form-group"><#--项目所需用户代码-->
@@ -226,6 +231,36 @@ $(document).ready(function() {
                     }
                 }
             },
+            inscode: {
+                validators: {
+                    notEmpty: {
+                        message: 'The code is required and cannot be empty'
+                    }, stringLength: {
+                        min: 5,
+                        max: 5,
+                        message: 'The code must be 5 characters long'
+                    },
+                    regexp: {
+                        regexp: /[1-9][0-9][0-9][0-9][0-9]/g,
+                        message: 'The code format is 10001-99999.'
+                    }
+                }
+            },
+            supcode: {
+                validators: {
+                    notEmpty: {
+                        message: 'The code is required and cannot be empty'
+                    }, stringLength: {
+                        min: 4,
+                        max: 4,
+                        message: 'The code must be 4 characters long'
+                    },
+                    regexp: {
+                        regexp: /[1-9][0-9][0-9][0-9]/g,
+                        message: 'The code format is 1001-9999.'
+                    }
+                }
+            },
             serialnumber: {
                 message: 'The serialnumber is not valid',
                 validators: {
@@ -301,25 +336,33 @@ $("#btn-submit").click(function () {
         }
 });
 getParentOrg();
+
 function getParentOrg() {
     $.ajax({
         type: "get",
         url: "../org/listAllSupOrg",
         async: true,
         success: function (data) {
-            var str = "";
+            var parentorgid ="";
+            <#if orgInfo.parentorgid??>parentorgid='${(orgInfo.parentorgid)}' </#if>
+            var str ="<option value=''></option>";
             for (var i = 0; i < data.length; i++) {
-                str += '<option value=' + data[i].organizationid + '>'
-                        + data[i].name + '</option>'
+                //str += '<option value=' + data[i].organizationid + '>' + data[i].name + '</option>'
+                if(data[i].organizationid == parentorgid) {
+                    str += "<option value='" + data[i].organizationid + "' selected='selected' >" + data[i].name + "</option>"
+                }else {
+                    str += '<option value=' + data[i].organizationid + '>' + data[i].name + '</option>'
+                }
             }
             $("#organizationid").html(str);
 
             $("#organizationid").selectpicker('refresh');
-
+            getGroupidAndCode();
         }
     });
 }
-$("#organizationid").change(function () {
+
+function getGroupidAndCode() {
     var suporgid = $("#organizationid").val();
     if(suporgid==""||suporgid==null||suporgid==undefined){
         return ;
@@ -334,16 +377,16 @@ $("#organizationid").change(function () {
         },
         success: function (data) {//返回json结果
             var split = data.split("#");
-            $("#sback").html(split[0]);
-            $("#uback").html(split[1]);
-            document.getElementById("supcode").value= split[0];
-            document.getElementById("codepostfix").value= split[1];
+            //$("#sback").html(split[0]);
+            $("#uback").html(data);
+            //document.getElementById("supcode").value= split[0];
+            document.getElementById("codepostfix").value= data;
         },
         error: function () {// 请求失败处理函数
         }
 
     });
-});
+}
     </script>
 	<script src="../static/js/addressController.js"></script>
 <#include "../modal.ftl"/>

@@ -26,6 +26,14 @@
                 </div>
             </#if>
                 <div  class="form-group"><#--报警中心所需用户代码-->
+                    <label for="codepostfix"  class="col-sm-3 control-label"><@spring.message code='label.groupid'/></label>
+                    <div class="col-sm-9">
+                        <span id="iback"><#if userVO.groupid??&&userVO.groupid!=''>${(userVO.groupid)!}<#else><@spring.message code='label.none'/></#if></span>
+                        <input type="hidden" class="form-control" id="inscode" name="groupid" value="${(userVO.groupid)!}" />
+                    </div>
+                </div>
+
+                <div  class="form-group"><#--报警中心所需用户代码-->
                     <label for="codepostfix"  class="col-sm-3 control-label"><@spring.message code='label.alarmcode'/></label>
                     <div class="col-sm-9">
                         <span id="sback"><#if userVO.supcode??&&userVO.supcode!=''>${(userVO.supcode)!}<#else><@spring.message code='label.none'/></#if></span>
@@ -344,9 +352,9 @@
                     changeCity(provinceid);
                 }
         );
-        $("#organizationid").change(function () {
+        /*$("#organizationid").change(function () {
             var suporgid = $("#organizationid").val();
-            var userid = ${(userVO.userid)?c};
+            var userid = $-{(userVO.userid)?c};
             if(suporgid==""||suporgid==null||suporgid==undefined){
                 return ;
             }
@@ -368,6 +376,6 @@
                 }
 
             });
-        });
+        });*/
     </script>
 <#include "../_foot0.ftl"/>

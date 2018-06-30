@@ -28,6 +28,15 @@ public class UserPO {
 	private Integer personid;
 	private Integer status;
 	private Date createtime;
+	private String groupid;
+
+	public String getGroupid() {
+		return groupid;
+	}
+
+	public void setGroupid(String groupid) {
+		this.groupid = groupid;
+	}
 
 	public String getAppaccount() {
 		return appaccount;
