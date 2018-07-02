@@ -74,6 +74,10 @@
            <button style="float: right;" class='btn btn-default' id='btn1'
                    onclick='toggleEmployeeStatus0("modify");'><@spring.message code='label.modify'/></button>
 </@shiro.hasPermission>
+<@shiro.hasPermission name="label.DeleteEmployee">
+<button style="float: right;" class='btn btn-default'
+        onclick='toggleEmployeeStatus0("delete");'><@spring.message code='label.delete'/></button>
+</@shiro.hasPermission>
 <table id="table" data-toggle="table">
     <thead>
     <tr>
@@ -201,6 +205,11 @@
             }
             if (obj == "suspence") {
                 if (!confirm("<@spring.message code='label.freezeconfirm'/>")) {
+                    return;
+                }
+            }
+            if (obj == "delete") {
+                if (!confirm("<@spring.message code='label.deleteconfirm'/>")) {
                     return;
                 }
             }

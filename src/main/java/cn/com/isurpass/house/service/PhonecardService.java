@@ -10,11 +10,9 @@ import java.util.Map;
 import cn.com.isurpass.house.dao.*;
 import cn.com.isurpass.house.po.*;
 import cn.com.isurpass.house.util.PhoneCardInterfaceCallUtils;
-import cn.com.isurpass.house.vo.OrgListVO;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,10 +20,7 @@ import org.springframework.util.StringUtils;
 
 import cn.com.isurpass.house.exception.MyArgumentNullException;
 import cn.com.isurpass.house.util.Constants;
-import cn.com.isurpass.house.vo.TypeGatewayInfoVO;
-import org.springframework.web.servlet.HandlerInterceptor;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import javax.servlet.http.HttpServletRequest;
 
 @Service

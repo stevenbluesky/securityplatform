@@ -389,7 +389,7 @@ public class EmployeeService {
         emp.setStatus(status);
         ed.save(emp);
     }
-
+    @Transactional(rollbackFor = Exception.class)
     public void toggleEmployeeStatus0(String hope, Object[] ids, HttpServletRequest request) {
         if ("unsuspence".equals(hope)) {
             for (Object id : ids) {
@@ -398,6 +398,25 @@ public class EmployeeService {
         } else if ("suspence".equals(hope)) {
             for (Object id : ids) {
                 toggleEmployeeStatus(Integer.valueOf(id.toString().replace( ",", "")), Constants.STATUS_SUSPENCED, request);
+            }
+        }else if ("delete".equals(hope)) {
+            OrganizationPO loginorg = (OrganizationPO) request.getSession().getAttribute("loginorg");
+            if(Constants.ORGTYPE_AMETA!=loginorg.getOrgtype()){
+                return ;
+            }
+            for (Object id : ids) {
+                EmployeePO empentity = ed.findByEmployeeid(Integer.valueOf(id.toString().replace(",", "")));
+                ed.delete(empentity);
+                List<EmployeeRolePO> emproleentity = employeeroleDAO.findByEmployeeid(empentity.getEmployeeid());
+                for(EmployeeRolePO e:emproleentity){
+                    employeeroleDAO.delete(e);
+                }
+                if(empentity.getAddressid()!=null){
+                    ad.deleteByAddressid(empentity.getAddressid());
+                }
+                if(empentity.getPersonid()!=null){
+                    pd.deleteByPersonid(empentity.getPersonid());
+                }
             }
         }
     }

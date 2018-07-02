@@ -12,4 +12,6 @@ public interface EmployeeroleDAO extends CrudRepository<EmployeeRolePO,Integer>{
 	List<EmployeeRolePO>  findByEmployeeid(Integer employeeid);
 
 	List<EmployeeRolePO> findAll();
+
+    void deleteByEmployeeid(Integer employeeid);
 }

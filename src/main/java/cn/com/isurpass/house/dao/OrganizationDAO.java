@@ -117,4 +117,7 @@ public interface OrganizationDAO extends CrudRepository<OrganizationPO, Integer>
             "LEFT JOIN organization o2 ON o1.parentorgid=o2.organizationid   \n" +
             "WHERE o1.code LIKE :code AND o1.name LIKE :name AND c.cityname LIKE :city AND o1.organizationid IN :childrenOrgid AND o2.name LIKE :parname AND o2.code LIKE :parcode AND o1.orgtype=2",nativeQuery = true)
     long countOwnInstallerOrg(@Param("name")String name,@Param("code") String code,@Param("city") String city,@Param("childrenOrgid") List<Integer> childrenOrgid,@Param("parname")String parname,@Param("parcode")String parcode);
+
+
+    void deleteByOrganizationid(Integer id);
 }

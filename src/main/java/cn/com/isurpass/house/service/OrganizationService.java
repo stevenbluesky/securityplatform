@@ -559,7 +559,13 @@ public class OrganizationService {
         org.setStatus(toStatus);
         od.save(org);
     }
-
+    public void deleteOrganization(Integer id, HttpServletRequest request){
+        OrganizationPO loginorg = (OrganizationPO) request.getSession().getAttribute("loginorg");
+        if(Constants.ORGTYPE_AMETA!=loginorg.getOrgtype()){
+            return ;
+        }
+        od.deleteByOrganizationid(id);
+    }
     /**
      * 通过要操作的员工id和request判断当前登录的员工是否有权限操作此机构
      *
@@ -585,7 +591,7 @@ public class OrganizationService {
         }
         return false;
     }
-
+    @Transactional(rollbackFor = Exception.class)
     public void toggleOrganizationStatus0(String hope, Object[] ids, HttpServletRequest request) {
         if ("unsuspence".equals(hope)) {
             for (Object id : ids) {
@@ -595,6 +601,18 @@ public class OrganizationService {
         } else if ("suspence".equals(hope)) {
             for (Object id : ids) {
                 toggleOrganizationStatus(Integer.valueOf(id.toString().replace( ",", "")), Constants.STATUS_SUSPENCED, request);
+            }
+        }
+        else if ("delete".equals(hope)) {
+            OrganizationPO loginorg = (OrganizationPO) request.getSession().getAttribute("loginorg");
+            if(Constants.ORGTYPE_AMETA!=loginorg.getOrgtype()){
+                return ;
+            }
+            for (Object id : ids) {
+                //deleteOrganization(Integer.valueOf(id.toString().replace( ",", "")), request);
+//                od.deleteByOrganizationid(Integer.valueOf(id.toString().replace( ",", "")));
+                OrganizationPO orgentity = od.findByOrganizationid(Integer.valueOf(id.toString().replace(",", "")));
+                od.delete(orgentity);
             }
         }
     }
