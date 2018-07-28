@@ -41,7 +41,7 @@ public interface GatewayDAO extends CrudRepository<GatewayPO,Integer>{
 	@Query(value = "SELECT g.deviceid as deviceid,IFNULL(g.name,'') AS name,g.status as status,IFNULL(u.appaccount,'') AS customer,IFNULL(c.cityname,'')AS cityname,IFNULL(o1.name,'') AS serviceprovider,IFNULL(o2.name,'') AS installerorg,IFNULL(e.loginname,'') AS installer FROM gateway g\n" +
 			"\tJOIN gatewayuser gu ON g.deviceid=gu.deviceid\n" +
 			"\tJOIN user u ON u.userid=gu.userid AND u.organizationid=:id\n" +
-			"\tJOIN city c ON u.citycode=c.citycode\n" +
+			"\tLEFT JOIN city c ON u.citycode=c.citycode\n" +
 			"\tJOIN organization o1 ON u.organizationid=o1.organizationid\n" +
 			"\tJOIN organization o2 ON u.installerorgid=o2.organizationid\n" +
 			"\tLEFT JOIN employee e ON u.installerid=e.employeeid\n",nativeQuery = true)
@@ -49,7 +49,7 @@ public interface GatewayDAO extends CrudRepository<GatewayPO,Integer>{
 	@Query(value = "SELECT COUNT(*) FROM gateway g\n" +
 			"\tJOIN gatewayuser gu ON g.deviceid=gu.deviceid\n" +
 			"\tJOIN user u ON u.userid=gu.userid AND u.organizationid=:id\n" +
-			"\tJOIN city c ON u.citycode=c.citycode\n" +
+			"\tLEFT JOIN city c ON u.citycode=c.citycode\n" +
 			"\tJOIN organization o1 ON u.organizationid=o1.organizationid\n" +
 			"\tJOIN organization o2 ON u.installerorgid=o2.organizationid\n" +
 			"\tLEFT JOIN employee e ON u.installerid=e.employeeid\n",nativeQuery = true)
@@ -58,7 +58,7 @@ public interface GatewayDAO extends CrudRepository<GatewayPO,Integer>{
 	@Query(value = "SELECT g.deviceid as deviceid,IFNULL(g.name,'') AS name,g.status as status,IFNULL(u.appaccount,'') AS customer,IFNULL(c.cityname,'')AS cityname,IFNULL(o1.name,'') AS serviceprovider,IFNULL(o2.name,'') AS installerorg,IFNULL(e.loginname,'') AS installer FROM gateway g\n" +
 			"\tJOIN gatewayuser gu ON g.deviceid=gu.deviceid\n" +
 			"\tJOIN user u ON u.userid=gu.userid AND u.installerid=:id\n" +
-			"\tJOIN city c ON u.citycode=c.citycode\n" +
+			"\t left JOIN city c ON u.citycode=c.citycode\n" +
 			"\tJOIN organization o1 ON u.organizationid=o1.organizationid\n" +
 			"\tJOIN organization o2 ON u.installerorgid=o2.organizationid\n" +
 			"\tLEFT JOIN employee e ON u.installerid=e.employeeid\n",nativeQuery = true)
@@ -66,7 +66,7 @@ public interface GatewayDAO extends CrudRepository<GatewayPO,Integer>{
 	@Query(value = "SELECT COUNT(*) FROM gateway g\n" +
 			"\tJOIN gatewayuser gu ON g.deviceid=gu.deviceid\n" +
 			"\tJOIN user u ON u.userid=gu.userid AND u.installerid=:id\n" +
-			"\tJOIN city c ON u.citycode=c.citycode\n" +
+			"\t LEFT JOIN city c ON u.citycode=c.citycode\n" +
 			"\tJOIN organization o1 ON u.organizationid=o1.organizationid\n" +
 			"\tJOIN organization o2 ON u.installerorgid=o2.organizationid\n" +
 			"\tLEFT JOIN employee e ON u.installerid=e.employeeid\n",nativeQuery = true)
@@ -75,7 +75,7 @@ public interface GatewayDAO extends CrudRepository<GatewayPO,Integer>{
 	@Query(value = "SELECT g.deviceid as deviceid,IFNULL(g.name,'') AS name,g.status as status,IFNULL(u.appaccount,'') AS customer,IFNULL(c.cityname,'')AS cityname,IFNULL(o1.name,'') AS serviceprovider,IFNULL(o2.name,'') AS installerorg,IFNULL(e.loginname,'') AS installer FROM gateway g\n" +
 			"\tJOIN gatewayuser gu ON g.deviceid=gu.deviceid\n" +
 			"\tJOIN user u ON u.userid=gu.userid AND u.installerorgid=:id\n" +
-			"\tJOIN city c ON u.citycode=c.citycode\n" +
+			"\tLEFT JOIN city c ON u.citycode=c.citycode\n" +
 			"\tJOIN organization o1 ON u.organizationid=o1.organizationid\n" +
 			"\tJOIN organization o2 ON u.installerorgid=o2.organizationid\n" +
 			"\tLEFT JOIN employee e ON u.installerid=e.employeeid\n",nativeQuery = true)
@@ -83,7 +83,7 @@ public interface GatewayDAO extends CrudRepository<GatewayPO,Integer>{
 	@Query(value = "SELECT COUNT(*) FROM gateway g\n" +
 			"\tJOIN gatewayuser gu ON g.deviceid=gu.deviceid\n" +
 			"\tJOIN user u ON u.userid=gu.userid AND u.installerorgid=:id\n" +
-			"\tJOIN city c ON u.citycode=c.citycode\n" +
+			"\tLEFT JOIN city c ON u.citycode=c.citycode\n" +
 			"\tJOIN organization o1 ON u.organizationid=o1.organizationid\n" +
 			"\tJOIN organization o2 ON u.installerorgid=o2.organizationid\n" +
 			"\tLEFT JOIN employee e ON u.installerid=e.employeeid\n",nativeQuery = true)
@@ -118,4 +118,30 @@ public interface GatewayDAO extends CrudRepository<GatewayPO,Integer>{
 			"GROUP BY g.deviceid",nativeQuery = true)
 	List<Object[]> findAllGateway(@Param("deviceid")String deviceid,@Param("cityname") String cityname,@Param("name") String name,@Param("serviceprovider") String serviceprovider,@Param("installerorg") String installerorg, @Param("installer")String installer,@Param("customer") String customer, Pageable pageable);
 
+
+	@Query(value="SELECT g.deviceid as deviceid,IFNULL(g.name,'') AS name,g.status as status,IFNULL(u.appaccount,'') AS customer,IFNULL(c.cityname,'')AS cityname,IFNULL(o1.name,'') AS serviceprovider,IFNULL(o2.name,'') AS installerorg,IFNULL(e.loginname,'') AS installer FROM \n" +
+			"gateway g   \n" +
+			"JOIN gatewayuser gu ON g.deviceid=gu.deviceid \n" +
+			"JOIN USER u ON gu.userid=u.userid\n" +
+			"JOIN organization o ON u.monitoringstationid=o.organizationid OR u.organizationid = :organizationid \n" +
+			"LEFT JOIN city c ON u.citycode=c.citycode\n" +
+			"LEFT JOIN organization o1 ON u.organizationid=o1.organizationid\n" +
+			"LEFT JOIN organization o2 ON u.installerorgid=o2.organizationid\n" +
+			"LEFT JOIN employee e ON u.installerid=e.employeeid \n" +
+			"WHERE o.organizationid =:organizationid  \n" +
+			"GROUP BY g.deviceid",nativeQuery = true)
+	List<Object[]> findAllGatewayByMonitoringStation(@Param("organizationid") Integer organizationid, Pageable pageable);
+
+	@Query(value="select count(*) from (SELECT count(*) FROM \n" +
+			"gateway g   \n" +
+			"JOIN gatewayuser gu ON g.deviceid=gu.deviceid \n" +
+			"JOIN USER u ON gu.userid=u.userid\n" +
+			"JOIN organization o ON u.monitoringstationid=o.organizationid OR u.organizationid = :organizationid \n" +
+			"LEFT JOIN city c ON u.citycode=c.citycode\n" +
+			"LEFT JOIN organization o1 ON u.organizationid=o1.organizationid\n" +
+			"LEFT JOIN organization o2 ON u.installerorgid=o2.organizationid\n" +
+			"LEFT JOIN employee e ON u.installerid=e.employeeid \n" +
+			"WHERE o.organizationid =:organizationid  \n" +
+			"GROUP BY g.deviceid) as b",nativeQuery = true)
+	Long countByMonitoringStation(@Param("organizationid")Integer organizationid);
 }

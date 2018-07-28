@@ -17,8 +17,7 @@
     <div class="form-group col-md-4" align="right">
         <label for="searchname" class="col-md-5 control-label"><@spring.message code="label.devicename"/></label>
         <div class="col-md-7">
-            <input class="form-control" type="text" id="searchname" name="name"
-                   placeholder=<@spring.message code="label.devicename"/>>
+            <input class="form-control" type="text" id="searchname" name="name" placeholder='<@spring.message code="label.devicename"/>'>
         </div>
     </div>
 
@@ -26,7 +25,7 @@
         <label for="searchcityname" class="col-md-5 control-label"><@spring.message code="label.city"/></label>
         <div class="col-md-7">
             <input type="text" class="form-control" id="searchcityname" name="cityname"
-                   placeholder=<@spring.message code="label.city"/>>
+                   placeholder='<@spring.message code="label.city"/>'>
         </div>
     </div>
     </div>
@@ -48,14 +47,14 @@
                class="col-md-5 control-label"><@spring.message code="label.installerorg"/></label>
         <div class="col-md-7">
             <input type="text" class="form-control" id="searchinstallerorg" name="installerorg"
-                   placeholder=<@spring.message code="label.installerorg"/>>
+                   placeholder='<@spring.message code="label.installerorg"/>'>
         </div>
     </div>
         <div class="form-group col-md-4" align="right">
-            <label for="searchinstaller" class="col-md-5 control-label"><@spring.message code="label.installer"/></label>
+            <label for="searchinstaller" class="col-md-5 control-label"><@spring.message code="label.InstallerPersonList"/></label>
             <div class="col-md-7">
                 <input type="text" class="form-control" id="searchinstaller" name="installer"
-                       placeholder=<@spring.message code="label.installer"/>>
+                       placeholder='<@spring.message code="label.InstallerPersonList"/>'>
             </div>
         </div>
     </div>
@@ -65,7 +64,7 @@
             <label for="searchcustomer" class="col-md-5 control-label"><@spring.message code="label.user"/></label>
             <div class="col-md-7">
                 <input type="text" class="form-control" id="searchcustomer" name="customer"
-                       placeholder=<@spring.message code="label.user"/>>
+                       placeholder='<@spring.message code="label.user"/>'>
             </div>
         </div>
 
@@ -109,7 +108,7 @@
         <th data-field="cityname" class="text-center"><@spring.message code="label.city"/></th>
         <th data-field="serviceprovider" class="text-center"><@spring.message code="label.serviceprovider"/></th>
         <th data-field="installerorg" class="text-center"><@spring.message code="label.installerorg"/></th>
-        <th data-field="installer" class="text-center"><@spring.message code="label.installer"/></th>
+        <th data-field="installer" class="text-center"><@spring.message code="label.InstallerPersonList"/></th>
         <th data-field="customer" class="text-center"><@spring.message code="label.user"/></th>
     <#--<th data-field=""><@spring.message code="label.businessstatus"/></th>-->
     <#--<th data-field="operate" data-formatter="formatter_operate"><@spring.message code="label.operate"/></th>-->

@@ -1,9 +1,6 @@
 package cn.com.isurpass.house.po;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import java.util.Date;
-
 import javax.persistence.*;
 
 @Entity
@@ -11,7 +8,6 @@ import javax.persistence.*;
 public class ZwaveDevicePO{
 
 	@Id
-//	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer zwavedeviceid;
 	private String deviceid;
 	private String name;

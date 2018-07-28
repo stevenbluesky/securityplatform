@@ -5,6 +5,9 @@ public class Constants {
 	public static final Integer ORGTYPE_SUPPLIER = 1; // 服务商
 	public static final Integer ORGTYPE_INSTALLER = 2; // 安装商
 
+	public static final Integer OPERATOR_TYPE = 0;//普通员工
+	public static final Integer INSTALLOR_TYPE = 1;//安装员
+
 	public static final Integer GENDER_FEMALE = 0; // 女性
 	public static final Integer GENDER_MALE = 1; // 男性
 	public static final Integer GENDER_LGBT = 2; // LGBT

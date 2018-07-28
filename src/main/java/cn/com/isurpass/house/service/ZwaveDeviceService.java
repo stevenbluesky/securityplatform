@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
@@ -45,7 +46,8 @@ public class ZwaveDeviceService {
     EmployeeDAO ed;
     @Autowired
     EmployeeService es;
-
+    @Autowired
+    private ZwaveSubDeviceDAO zsddao;
     @Deprecated
     @Transactional(readOnly = true)
     public Map<String, Object> listDevice(Pageable pageable, HttpServletRequest request) {
@@ -141,11 +143,21 @@ public class ZwaveDeviceService {
         zdlv.setInstallername(gs.findInstallernameBydeviceid(deviceid));//安装员名称
         List<GatewayUserPO> gatewayuserlist = gud.findByDeviceid(deviceid);
         if(gatewayuserlist !=null&& gatewayuserlist.size()>0&&gatewayuserlist.get(0)!=null){
-            zdlv.setCity(city.findByCitycode(ud.findByUserid(gatewayuserlist.get(0).getUserid()).getCitycode()).getCityname());//地区
+            String citycode = ud.findByUserid(gatewayuserlist.get(0).getUserid()).getCitycode();
+            if(StringUtils.isEmpty(citycode)){
+                zdlv.setCity("NONE");
+            }else {
+                zdlv.setCity(city.findByCitycode(citycode).getCityname());//地区
+            }
             zdlv.setUsername(ud.findByUserid(gatewayuserlist.get(0).getUserid()).getAppaccount());//用户名称
         }
         zdlv.setZwavedeviceid(zwave.getZwavedeviceid());//设备id
-        zdlv.setArea(zwave.getArea());
+        int l1 = zsddao.countByZwavedeviceid(zwave.getZwavedeviceid());
+        if(l1>7){
+            zdlv.setArea(1000+l1);
+        }else {
+            zdlv.setArea(zwave.getArea());
+        }
         return zdlv;
     }
 
@@ -411,7 +423,7 @@ public class ZwaveDeviceService {
         } else if (empreq.getEmployeerole().contains(Constants.ROLE_INSTALLER)) {
             List<ZwaveDeviceListVO> zwaveDeviceListVOS = ConvertQueryResultToVOUtils.convertZwaveDevice(zd.listZwaveDeviceListVOInstaller(empreq.getEmployeeid(), pageable));
             map.put("rows", zwaveDeviceListVOS);
-            map.put("total", zd.getCountDeviceListVOInstaller(empreq.getOrgid()));
+            map.put("total", zd.getCountDeviceListVOInstaller(empreq.getEmployeeid()));
         }
         return map;
     }

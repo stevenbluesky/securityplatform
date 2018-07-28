@@ -2,14 +2,14 @@
 <#include "../_head1.ftl"/>
 <div class="row">
            <form class="form-horizontal" action="" method="POST">
-                   <div class="text-center"><h1><@spring.message code='label.userlist'/></h1></div>
+                   <div class="text-center"><h1><@spring.message code='label.UserList'/></h1></div>
                    <hr>
                <div class="form-group col-md-12">
                <div class="form-group col-md-4" align="right">
-                   <label for="searchinstallerorg" class="col-md-5 control-label"><@spring.message code='label.usercodepostfix'/></label>
+                   <label for="searchinstallerorg" class="col-md-5 control-label"><@spring.message code='label.aibaseid'/></label>
                    <div class="col-md-7">
                        <input type="text" class="form-control" id="searchCode" name="searchCode"
-                              placeholder="<@spring.message code='label.usercodepostfix'/>">
+                              placeholder="<@spring.message code='label.aibaseid'/>">
                    </div>
                </div>
                    <div class="form-group col-md-4" align="right">
@@ -37,10 +37,10 @@
                    </div>
                </div>
                    <div class="form-group col-md-4" align="right">
-                       <label for="searchAppAccount" class="col-md-5 control-label"><@spring.message code='label.appaccount'/></label>
+                       <label for="searchAppAccount" class="col-md-5 control-label"><@spring.message code='label.apploginemail'/></label>
                        <div class="col-md-7">
                            <input type="text" class="form-control" id="searchAppAccount" name="searchAppAccount"
-                                  placeholder="<@spring.message code='label.appaccount'/>">
+                                  placeholder="<@spring.message code='label.apploginemail'/>">
                        </div>
                    </div>
 
@@ -97,11 +97,11 @@
     <tr>
         <th data-field=""></th>
         <th data-field="userid" data-visible="false">ID</th>
-        <th data-field="usercode" class="text-center"><@spring.message code='label.usercodepostfix'/></th>
+        <th data-field="usercode" class="text-center"><@spring.message code='label.aibaseid'/></th>
         <th data-field="name" class="text-center"><@spring.message code='label.name'/></th>
         <th data-field="deviceid" class="text-center"><@spring.message code='label.gatewayID'/></th>
         <th data-field="serialnumber" class="text-center"><@spring.message code='label.serialnumber'/></th>
-        <th data-field="appaccount" class="text-center"><@spring.message code='label.appaccount'/></th>
+        <th data-field="appaccount" class="text-center"><@spring.message code='label.apploginemail'/></th>
         <th data-field="city" class="text-center"><@spring.message code='label.city'/></th>
         <th data-field="suppliername" class="text-center"><@spring.message code='label.serviceprovider'/></th>
         <th data-field="status" class="text-center" data-formatter="formatter_status"><@spring.message code='label.status'/></th>

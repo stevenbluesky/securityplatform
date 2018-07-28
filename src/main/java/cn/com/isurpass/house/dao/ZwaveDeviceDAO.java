@@ -155,10 +155,10 @@ public interface ZwaveDeviceDAO extends CrudRepository<ZwaveDevicePO, Integer> {
     @Query(value = "select z.zwavedeviceid from zwavedevice z join gatewayuser gu on z.deviceid = gu.deviceid join user u on gu.userid = u.userid where u.installerid = :empid", nativeQuery = true)
     List<Integer> listZwavedeivceidByInstaller(@Param("empid") Integer empid);
 
-    @Query(value = "select z.zwavedeviceid from zwavedevice z join gatewayuser gu on z.deviceid = gu.deviceid join user u on gu.userid = u.userid join city c on u.citycode = c.citycode where c.cityname LIKE :cityname",nativeQuery = true)
+    @Query(value = "select z.zwavedeviceid from zwavedevice z join gatewayuser gu on z.deviceid = gu.deviceid join user u on gu.userid = u.userid left join city c on u.citycode = c.citycode where c.cityname LIKE :cityname",nativeQuery = true)
     List<Integer> listByCityname(@Param("cityname")String cityname);
 
-    @Query(value = "select z.zwavedeviceid from zwavedevice z join gatewayuser gu on z.deviceid = gu.deviceid join user u on gu.userid = u.userid join city c on u.citycode = c.citycode where c.citycode LIKE :citycode ",nativeQuery = true)
+    @Query(value = "select z.zwavedeviceid from zwavedevice z join gatewayuser gu on z.deviceid = gu.deviceid join user u on gu.userid = u.userid left join city c on u.citycode = c.citycode where c.citycode LIKE :citycode ",nativeQuery = true)
     List<Integer> listByCitycode(@Param("citycode")String citycode);
 
     @Query(value = "select z.zwavedeviceid from zwavedevice z join gatewayuser gu on z.deviceid = gu.deviceid join user u on gu.userid = u.userid where u.appaccount LIKE :name ",nativeQuery = true)

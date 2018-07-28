@@ -30,7 +30,8 @@ public class GatewayDetailVO {
 	private Date lastprogrammedon;
 	private Date orderingdate;
 	private Date expiredate ;
-	private List<ZwaveDevicePO> device;
+	private List<DeviceDetailVO> device;
+
 
 	public Long getTotal() {
 		return total;
@@ -169,11 +170,12 @@ public class GatewayDetailVO {
 	public void setExpiredate(Date expiredate) {
 		this.expiredate = expiredate;
 	}
-	public List<ZwaveDevicePO> getDevice() {
+	public List<DeviceDetailVO> getDevice() {
 		return device;
 	}
-	public void setDevice(List<ZwaveDevicePO> device) {
+	public void setDevice(List<DeviceDetailVO> device) {
 		this.device = device;
 	}
-	
+
+
 }

@@ -523,6 +523,8 @@ function formatterReturnStatus(status){
         case '-2':return lan.varificationcodeerror;
         case '-3':return lan.orgfreeze;//机构或父机构被冻结
         case '-4':return lan.dblose;//数据库连接断开
+        case '-6':return lan.nameerror;//用户名错误
+        case '-7':return lan.accountfroze;//账号冻结
         case '-11':return lan.orgnameexist;
         case '-12':return lan.loginnameexist;
         case '-98':return lan.loginfaied;//账户被冻结或者填写错误

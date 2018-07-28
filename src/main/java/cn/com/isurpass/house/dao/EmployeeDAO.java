@@ -42,4 +42,12 @@ public interface EmployeeDAO extends CrudRepository<EmployeePO,Integer>{
     EmployeePO findByCodeAndOrganizationid(String code, Integer organizationid);
 
     EmployeePO findByOrganizationid(Integer organizationid);
+
+	long countByTypeIn(List<Integer> typelist);
+
+	Page<EmployeePO> findByTypeIn(Pageable pageable, List<Integer> typelist);
+
+	Page<EmployeePO> findByOrganizationidInAndTypeIn(Pageable pageable, List<Integer> list, List<Integer> typelist);
+
+	Object countByOrganizationidInAndTypeIn(List<Integer> list, List<Integer> typelist);
 }

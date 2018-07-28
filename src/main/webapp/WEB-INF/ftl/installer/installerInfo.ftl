@@ -37,7 +37,7 @@
 
                 <div class="form-group">
                     <label for="code" class="col-sm-3"
-                           style="text-align: left;"><@spring.message code="label.orgcode"/></label>
+                           style="text-align: left;"><@spring.message code="label.groupid"/></label>
                     <div class="col-sm-9">
                     ${(orgVO.code)!}
                     </div>

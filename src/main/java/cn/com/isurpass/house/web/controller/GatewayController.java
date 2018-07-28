@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import cn.com.isurpass.house.po.EmployeePO;
 import cn.com.isurpass.house.util.FormUtils;
+import cn.com.isurpass.house.vo.DeviceDetailVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -114,7 +115,7 @@ public class GatewayController {
 		} catch (Exception e) {
 			return null;
 		}
-		List<ZwaveDevicePO> list= gw.getDevice();
+		List<DeviceDetailVO> list= gw.getDevice();
 		Map<String,Object> map = new HashMap<>();
 		map.put("total",gw.getTotal());
 		map.put("rows",list);

@@ -1,15 +1,12 @@
 package cn.com.isurpass.house.service;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import cn.com.isurpass.house.dao.*;
 import cn.com.isurpass.house.po.*;
 import cn.com.isurpass.house.util.PhoneCardInterfaceCallUtils;
+import cn.com.isurpass.house.util.RemoveDuplicate;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,7 +78,10 @@ public class PhonecardService {
 	@Transactional(readOnly = true)
 	public Map<String, Object> listPhonecard(Pageable pageable, PhonecardPO pc, HttpServletRequest request) {
 		EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
-		List<EmployeeRolePO> emprolelist = erd.findByEmployeeid(emp.getEmployeeid());
+		List<EmployeeRolePO> elist = erd.findByEmployeeid(emp.getEmployeeid());
+		List<Integer> emprolelist2 = new ArrayList<>();
+		elist.forEach(single ->{emprolelist2.add(single.getRoleid());});
+		List<Integer> rolelist = RemoveDuplicate.removeDuplicate(emprolelist2);
 		OrganizationPO byOrganizationid = organizationDAO.findByOrganizationid(emp.getOrganizationid());
 		Integer orgtype = byOrganizationid.getOrgtype();
 		Map<String, Object> map = new HashMap<>();
@@ -115,7 +115,7 @@ public class PhonecardService {
 		if (os.isAdmin(emp.getOrganizationid())) {
 			resultlist = pd.findByAmeta(statuslist,serialnumber,rateplan,pageable);
 			count = pd.countByStatusInAndSerialnumberLikeAndRateplanLike(statuslist,serialnumber,rateplan);
-		}else if(emprolelist.size()==1&&emprolelist.get(0).getRoleid()==4){//只有一个安装员的角色，就只拿他安装过的用户
+		}else if(rolelist.size()==1&&rolelist.get(0)==4){//只有一个安装员的角色，就只拿他安装过的用户
 			resultlist = pd.findByInstaller(statuslist,serialnumber,rateplan,emp.getEmployeeid(),pageable);
 			count = pd.countByInstaller(statuslist,serialnumber,rateplan,emp.getEmployeeid());
 		}else if(orgtype==Constants.ORGTYPE_INSTALLER){
@@ -226,17 +226,17 @@ public class PhonecardService {
 		if(!StringUtils.isEmpty(dateActivated)){
 			dateActivated.substring(0,dateActivated.indexOf("."));
 			Date activationdate = sdf.parse(dateActivated);
-			phonecardpo.setActivationdate(activationdate);
+			phonecardpo.setActivationdate(new Date(activationdate.getTime() - (long) 4 * 60 * 60 * 1000));
 		}
 		String dateAdded = (String)jsStr.get("dateAdded");
 		dateAdded.substring(0,dateAdded.indexOf("."));
 		Date firstprogrammedondate = sdf.parse(dateAdded);
-		phonecardpo.setFirstprogrammedondate(firstprogrammedondate);
+		phonecardpo.setFirstprogrammedondate(new Date(firstprogrammedondate.getTime() - (long) 4 * 60 * 60 * 1000));
 
 		String dateUpdated = (String)jsStr.get("dateUpdated");
 		dateUpdated.substring(0,dateUpdated.indexOf("."));
 		Date lastprogrammedondate = sdf.parse(dateUpdated);
-		phonecardpo.setLastprogrammedondate(lastprogrammedondate);
+		phonecardpo.setLastprogrammedondate(new Date(lastprogrammedondate.getTime() - (long) 4 * 60 * 60 * 1000));
 
 		pd.save(phonecardpo);
 	}

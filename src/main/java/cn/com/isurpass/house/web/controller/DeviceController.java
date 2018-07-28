@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
@@ -25,7 +24,7 @@ import java.util.Map;
 public class DeviceController {
 
 	@Autowired
-	ZwaveDeviceService ds;
+	private ZwaveDeviceService ds;
 	
 	@RequestMapping("deviceJsonList")
 	@ResponseBody
@@ -42,11 +41,9 @@ public class DeviceController {
 			pr.setSortOrder(mysortOrder.toUpperCase());
 			pr.setOrder(mysort);
 		}
-		if (!FormUtils.isEmpty(dsv)) {//搜索
-//			return ds.search(pageable, dsv,request);
+		if (!FormUtils.isEmpty(dsv)) {
 			return ds.newSearchZwaveDevice(pr, dsv,request,pageable);
 		}
-//		return ds.listDevice(pageable,request);
         return ds.newListZwaveDevice(pr, request,pageable);
 	}
 	
@@ -54,20 +51,22 @@ public class DeviceController {
 	public String deviceList() {
 		return "device/deviceList";
 	}
+
 	@ResponseBody
 	@RequestMapping(value="savearea",method = RequestMethod.POST)
-	public String savearea(@RequestBody String areanumber, HttpServletRequest request) {
+	public String savearea(@RequestBody String areanumber) {
 		String number = "";
 		String zwavedeviceid = "";
 		areanumber =  areanumber.replace( ",", "");
 		try{
-		number =areanumber.split("#")[1];
-		zwavedeviceid = areanumber.split("#")[0];
+			zwavedeviceid = areanumber.split("#")[0];
+			number =areanumber.split("#")[1];
 			int i = Integer.parseInt(number);
-			if(i<=0||i>100||!number.equals(i+"")){
+			if(i<=0||i>100||!number.equals(String.valueOf(i))){
 				throw new RuntimeException();
 			}
 		}catch (Exception e1){
+			//提示用户格式不对
 			return "format";
 		}
 
@@ -81,8 +80,9 @@ public class DeviceController {
 	}
 	@RequestMapping("deviceDetail")
 	public String deviceDetail(Integer zwavedeviceid,Model model) {
-		if(zwavedeviceid == null || zwavedeviceid == 0)
+		if(zwavedeviceid == null || zwavedeviceid == 0) {
 			return "device/deviceDetail";
+		}
 		model.addAttribute("zwave",ds.findDeviceDetail(zwavedeviceid));
 		return "device/deviceDetail";
 	}
@@ -92,7 +92,7 @@ public class DeviceController {
 	public JsonResult toggleDeviceStatus(HttpServletRequest request,Integer zwavedeviceid,Integer toStatus){
         JsonResult jr = new JsonResult();
         try {
-            String s = ds.toggleDeviceStatus(toStatus, zwavedeviceid, request);
+            ds.toggleDeviceStatus(toStatus, zwavedeviceid, request);
             jr.setStatus(1);
             return jr;
         } catch (RuntimeException e) {
@@ -102,4 +102,13 @@ public class DeviceController {
             return jr;
         }
     }
+	@RequestMapping("dscdeviceList")
+	public String dscdeviceList() {
+		return "device/dscdeviceList";
+	}
+
+	@RequestMapping("adddsc")
+	public String adddsc() {
+		return "device/adddsc";
+	}
 }

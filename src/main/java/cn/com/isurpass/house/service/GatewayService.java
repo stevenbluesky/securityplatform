@@ -5,6 +5,8 @@ import cn.com.isurpass.house.exception.MyArgumentNullException;
 import cn.com.isurpass.house.po.*;
 import cn.com.isurpass.house.util.BeanCopyUtils;
 import cn.com.isurpass.house.util.Constants;
+import cn.com.isurpass.house.util.RemoveDuplicate;
+import cn.com.isurpass.house.vo.DeviceDetailVO;
 import cn.com.isurpass.house.vo.EmployeeListVO;
 import cn.com.isurpass.house.vo.GatewayDetailVO;
 import cn.com.isurpass.house.vo.TypeGatewayInfoVO;
@@ -48,6 +50,8 @@ public class GatewayService {
 	private OrganizationService os;
 	@Autowired
 	private EmployeeroleDAO employeeroleDAO;
+	@Autowired
+	private ZwaveSubDeviceDAO zsddao;
 	/**
 	 * 新增网关信息
 	 * @param tgi
@@ -94,13 +98,22 @@ public class GatewayService {
 		Integer organizationid = emp.getOrganizationid();
 		OrganizationPO org = od.findByOrganizationid(organizationid);//当前用户所属机构
 		if(org.getOrgtype()==Constants.ORGTYPE_SUPPLIER){//为服务商,拿本身及旗下安装商的网关
-			List<Object[]> obj = gd.findInfoBySupplier(organizationid,pageable);
-			count = gd.countBySupplier(organizationid);
-			list = newtransfer(obj);
+			//如果是报警中心，拿所有选了其报警服务的用户的网关和自己旗下的网关
+			int monitorcount = ud.countByMonitoringstationid(organizationid);
+			if(monitorcount>0){
+				List<Object[]> msobj = gd.findAllGatewayByMonitoringStation(organizationid,pageable);
+				count = gd.countByMonitoringStation(organizationid);
+				list = newtransfer(msobj);
+			}else {
+				List<Object[]> obj = gd.findInfoBySupplier(organizationid, pageable);
+				count = gd.countBySupplier(organizationid);
+				list = newtransfer(obj);
+			}
 		}else if(org.getOrgtype()==Constants.ORGTYPE_INSTALLER){//为安装商，拿自己的网关
 			List<EmployeeRolePO> elist = employeeroleDAO.findByEmployeeid(emp.getEmployeeid());
-			List<Integer> emprolelist = new ArrayList<>();
-			elist.forEach(single ->{emprolelist.add(single.getRoleid());});
+			List<Integer> emprolelist2 = new ArrayList<>();
+			elist.forEach(single ->{emprolelist2.add(single.getRoleid());});
+			List emprolelist = RemoveDuplicate.removeDuplicate(emprolelist2);
 			if(emprolelist.contains(Constants.ROLE_INSTALLER)&&emprolelist.size()==1){//只是安装员id
 				List<Object[]> obj = gd.findInfoByInstaller(emp.getEmployeeid(),pageable);
 				count = gd.countByInstaller(emp.getEmployeeid());
@@ -134,11 +147,17 @@ public class GatewayService {
 		Integer organizationid = emp.getOrganizationid();
 		OrganizationPO org = od.findByOrganizationid(organizationid);
 		if(org.getOrgtype()==Constants.ORGTYPE_SUPPLIER){//为服务商,拿本身及旗下安装商的网关
-			orgglist = gud.findDeviceidByOwnSupplier(organizationid,Constants.STATUS_NORMAL,Constants.ORGTYPE_SUPPLIER);
+			int count =ud.countByMonitoringstationid(organizationid);
+			if(count>0){//为告警中心
+				orgglist = gud.findDeviceidByMonitoringStation(organizationid);
+			}else {
+				orgglist = gud.findDeviceidByOwnSupplier(organizationid, Constants.STATUS_NORMAL, Constants.ORGTYPE_SUPPLIER);
+			}
 		}else if(org.getOrgtype()==Constants.ORGTYPE_INSTALLER){//为安装商，拿自己的网关
 			List<EmployeeRolePO> elist = employeeroleDAO.findByEmployeeid(emp.getEmployeeid());
-			List<Integer> emprolelist = new ArrayList<>();
-			elist.forEach(single ->{emprolelist.add(single.getRoleid());});
+			List<Integer> emprolelist2 = new ArrayList<>();
+			elist.forEach(single ->{emprolelist2.add(single.getRoleid());});
+			List<Integer> emprolelist = RemoveDuplicate.removeDuplicate(emprolelist2);
 			if(emprolelist.contains(Constants.ROLE_INSTALLER)&&emprolelist.size()==1){//只是安装员id
 				orgglist = gud.findDeviceidByOwnInstaller(emp.getEmployeeid());
 			}else {
@@ -276,7 +295,7 @@ public class GatewayService {
 		gate.setDeviceid(deviceid);
 		gate.setFirmwareversion(gateway.getFirmwareversion());
 		gate.setStatus(gateway.getStatus());
-		//TODO 业务状态未知
+
 		gate.setCreatetime(gateway.getCreatetime());
 		List<GatewayUserPO> gu = gud.findByDeviceid(deviceid);
 		if(gu!=null&&gu.size()!=0) {//网关用户表匹配到了数据，该网关已跟用户绑定
@@ -311,7 +330,23 @@ public class GatewayService {
 			Page<ZwaveDevicePO> zdlist = zdd.findByDeviceid(deviceid, pageable);
 			gate.setTotal(l);
 			List<ZwaveDevicePO> list = setProperties(zdlist);
-			gate.setDevice(list);
+			List<DeviceDetailVO> list2 = new ArrayList<>();
+			for(ZwaveDevicePO z:zdlist){
+				DeviceDetailVO zz = new DeviceDetailVO();
+				try {
+					BeanCopyUtils.copyProperties(z,zz);
+					int l1 = zsddao.countByZwavedeviceid(z.getZwavedeviceid());
+					if(l1>7){
+						zz.setArea(1000+l1);
+					}
+					zz.setChannelcount(String.valueOf(l1));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				list2.add(zz);
+			}
+			gate.setDevice(list2);
+
 		}
 		return gate;
 	}
@@ -322,11 +357,7 @@ public class GatewayService {
 			ZwaveDevicePO z = new ZwaveDevicePO();
 			try {
 				BeanCopyUtils.copyProperties(f,z);
-			} catch (NoSuchMethodException e) {
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			list.add(z);
@@ -401,7 +432,11 @@ public class GatewayService {
 			if (userlist != null && userlist.size() != 0) {//网关用户表匹配到了数据，该网关已跟用户绑定
 				Integer userid = userlist.get(0).getUserid();
 				UserPO upo = ud.findUserByUserid(userid);
-				gateVO.setCityname(cd.findByCitycode(upo.getCitycode()).getCityname());
+				if(upo.getCitycode()==null){
+					//gateVO.setCityname("NONE");
+				}else {
+					gateVO.setCityname(cd.findByCitycode(upo.getCitycode()).getCityname());
+				}
 				gateVO.setInstallerorg(od.findByOrganizationid(upo.getInstallerorgid()).getName());
 				if (upo.getInstallerid() != null) {
 					gateVO.setInstaller(ed.findByEmployeeid(upo.getInstallerid()).getLoginname());
@@ -506,4 +541,5 @@ public class GatewayService {
 		map.put("total",total);
 		return map;
 	}
+
 }

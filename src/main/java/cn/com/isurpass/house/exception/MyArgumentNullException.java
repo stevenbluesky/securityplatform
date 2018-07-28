@@ -7,13 +7,13 @@ package cn.com.isurpass.house.exception;
  */
 public class MyArgumentNullException extends Exception{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
-	public MyArgumentNullException() {};
+	public MyArgumentNullException() {
+
+	}
+
 	public MyArgumentNullException(String msg) {
 		super(msg);
-	};
+	}
 }

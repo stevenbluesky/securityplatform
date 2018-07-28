@@ -3,9 +3,7 @@ package cn.com.isurpass.house.service;
 import cn.com.isurpass.house.dao.*;
 import cn.com.isurpass.house.exception.MyArgumentNullException;
 import cn.com.isurpass.house.po.*;
-import cn.com.isurpass.house.util.Constants;
-import cn.com.isurpass.house.util.FormUtils;
-import cn.com.isurpass.house.util.Ten2ThirtySix;
+import cn.com.isurpass.house.util.*;
 import cn.com.isurpass.house.vo.*;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,13 +74,14 @@ public class UserService {
             throw new RuntimeException("-109");
         }
         PhonecardPO pcardpo = pcard.findBySerialnumber(u.getSerialnumber());
-        if (pcardpo == null) {
-            throw new RuntimeException("-111");
+        if(!StringUtils.isEmpty(u.getSerialnumber())) {
+            if (pcardpo == null) {
+                throw new RuntimeException("-111");
+            }
+            if (pcud.findByPhonecardid(pcardpo.getPhonecardid()) != null) {
+                throw new RuntimeException("-110");
+            }
         }
-        if (pcud.findByPhonecardid(pcardpo.getPhonecardid()) != null) {
-            throw new RuntimeException("-110");
-        }
-
         UserPO user = new UserPO();
         user.setLoginname(u.getPhonenumber());
         if(StringUtils.isEmpty(u.getAppaccount())){
@@ -92,15 +91,15 @@ public class UserService {
         }
         if(u.getFirstname()!=null){
             boolean b = checkChar(u.getFirstname());
-            if(b){//是英文名
-                user.setName(u.getFirstname() +" "+ u.getLastname());
+            if(b){//名称是字母
+                user.setName(u.getFirstname()+" "+ u.getLastname());
             }else{
-                user.setName(u.getLastname()+u.getFirstname());
+                user.setName(u.getFirstname()+u.getLastname());
             }
         }
-        if (FormUtils.isEmpty(u.getCity())) {
+        /*if (FormUtils.isEmpty(u.getCity())) {
             throw new RuntimeException("-100");
-        }
+        }*/
         EmployeeParentOrgIdVO empp = emps.findEmpParentOrgid(emp);
         user.setOrganizationid(0);
         user.setInstallerorgid(1);
@@ -119,6 +118,7 @@ public class UserService {
         user.setUsercode(u.getUsercode());
         user.setSupcode(u.getSupcode());
         user.setGroupid(u.getGroupid());
+        user.setMonitoringstationid(u.getMonitoringstationid());
         AddressPO address = new AddressPO();
         Integer addressid = null;
         address.setDetailaddress(u.getDetailaddress());
@@ -144,7 +144,7 @@ public class UserService {
             if(b){//是英文名
                 person.setName(u.getFirstname() +" "+ u.getLastname());
             }else{
-                person.setName(u.getLastname()+u.getFirstname());
+                person.setName(u.getFirstname()+u.getLastname());
             }
         }
         person.setSsn(u.getSsn());
@@ -167,12 +167,14 @@ public class UserService {
 //        }
 
 //        if (pcardpo.getPhonecardid() != null) {//此方法最开始已经强制phonecardid不能为空,这里不用进行判断了.
-        PhonecardUserPO pcup = new PhonecardUserPO();
-        pcup.setUserid(userSave.getUserid());
-        pcup.setPhonecardid(pcardpo.getPhonecardid());
-        pcup.setUserid(userSave.getUserid());
-        pcup.setCreatetime(new Date());
-        pcud.save(pcup);
+        if(!StringUtils.isEmpty(u.getSerialnumber())){
+            PhonecardUserPO pcup = new PhonecardUserPO();
+            pcup.setUserid(userSave.getUserid());
+            pcup.setPhonecardid(pcardpo.getPhonecardid());
+            pcup.setUserid(userSave.getUserid());
+            pcup.setCreatetime(new Date());
+            pcud.save(pcup);
+        }
 //        }
     }
     public static boolean checkChar(String   fstrData) {
@@ -188,8 +190,11 @@ public class UserService {
         EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
         Integer orgtype = od.findByOrganizationid(emp.getOrganizationid()).getOrgtype();
         Integer count = 0;
-        List<EmployeeRolePO> rolelist = erd.findByEmployeeid(emp.getEmployeeid());
-        if(rolelist!= null &&rolelist.size()==1&&rolelist.get(0).getRoleid()==4){
+        List<EmployeeRolePO> elist = erd.findByEmployeeid(emp.getEmployeeid());
+        List<Integer> emprolelist2 = new ArrayList<>();
+        elist.forEach(single ->{emprolelist2.add(single.getRoleid());});
+        List<Integer> rolelist = RemoveDuplicate.removeDuplicate(emprolelist2);
+        if(rolelist!= null &&rolelist.size()==1&&rolelist.get(0)==4){
             Page<UserPO> userList = ud.findByInstallerid(emp.getEmployeeid(), pageable);
             count = ud.countByInstallerid(emp.getEmployeeid());
             return listUserInfo0(pageable, userList, count);
@@ -369,7 +374,8 @@ public class UserService {
         Page<UserPO> listpage = null;
 //        List<EmployeeRolePO> emprolelist = erd.findByEmployeeid(emp.getEmployeeid());
         List<Integer> emprolelist = erd.findByEmployeeid(emp.getEmployeeid()).stream().map(EmployeeRolePO::getRoleid).collect(toList());
-        if (emprolelist.contains(Constants.ROLE_INSTALLER)) {
+        List<Integer> rolelist = RemoveDuplicate.removeDuplicate(emprolelist);
+        if (rolelist!= null &&rolelist.size()==1&&rolelist.get(0)==4) {
             //登录的是安装员
             listpage = ud.findByUseridInAndInstallerid(ids, emp.getEmployeeid(), pageable);
             map.put("total", ud.countByUseridInAndInstallerid(ids, emp.getEmployeeid()));
@@ -447,6 +453,7 @@ public class UserService {
         userAddVO.setInstaller(empDAO.findByEmployeeid(byUserid.getInstallerid()).getLoginname());
         getUserPersonInfo(byUserid, userAddVO);
         getUserGatewayIdSIM(userid, userAddVO);
+        userAddVO.setMonitoringstationid(byUserid.getMonitoringstationid());
         return userAddVO;
     }
 
@@ -455,7 +462,7 @@ public class UserService {
         if (gatewayuserlist.size()>0&&gatewayuserlist.get(0)!=null) {
             //目前只考虑用户只有一个网关,直接取第一个
             userAddVO.setDeviceid(gatewayuserlist.get(0).getDeviceid());
-            userAddVO.setGatewaystatus(gateway.findByDeviceid(gatewayuserlist.get(0).getDeviceid()).getStatus());
+            userAddVO.setGatewaystatus(gateway.findByDeviceid(gatewayuserlist.get(0).getDeviceid()).getStatus());//TODO
         }
         PhonecardUserPO byUserid1 = pcud.findByUserid(userid);
         if (byUserid1 == null) {
@@ -500,7 +507,6 @@ public class UserService {
         }
         UserPO preUser = ud.findByUserid(user.getUserid());
         PersonPO person = pd.findByPersonid(preUser.getPersonid());
-        AddressPO address = ad.findByAddressid(person.getAddressid());
 
         person.setFirstname(user.getFirstname());
         person.setLastname(user.getLastname());
@@ -509,7 +515,13 @@ public class UserService {
         person.setPhonenumber(user.getPhonenumber());
         person.setEmail(user.getEmail());
         person.setFax(user.getFax());
-        address.setDetailaddress(user.getDetailaddress());
+        AddressPO address = ad.findByAddressid(person.getAddressid());
+        if(address==null){
+            address = new AddressPO();
+        }
+        if (user.getDetailaddress() != null) {
+            address.setDetailaddress(user.getDetailaddress());
+        }
         if (user.getCountry() != null) {
             address.setCountry(country.findByCountryid(user.getCountry()).getCountryname());
         }
@@ -521,7 +533,10 @@ public class UserService {
             address.setCity(c.getCityname());
             preUser.setCitycode(c.getCitycode());
         }
-        ad.save(address);
+        if(address!=null){
+            Integer addressid = ad.save(address).getAddressid();
+            person.setAddressid(addressid);
+        }
         pd.save(person);
 
         preUser.setName(user.getFirstname() + user.getLastname());
@@ -530,11 +545,9 @@ public class UserService {
         preUser.setCodepostfix(user.getUsercode());
         preUser.setUsercode(user.getUsercode());
         preUser.setSupcode(user.getSupcode());
-        /**************************************************************************************************/
-        /**判断网关
-         * gd   gatewayuserdao
-         * pcud phonecarddao
-         * gateway gatewaydao
+        preUser.setMonitoringstationid(user.getMonitoringstationid());
+        /**
+         * 判断网关
          * **/
         List<GatewayUserPO> gatewayuseruser = gd.findByUserid(preUser.getUserid());
         if(!StringUtils.isEmpty(user.getDeviceid())){//网关id有录入信息
@@ -775,5 +788,36 @@ public class UserService {
         return od.findByOrganizationid(organizationid);
 
 
+    }
+    @Transactional
+    public String findGroupid(Integer organizationid) {
+        return od.findByOrganizationid(organizationid).getGroupid();
+    }
+    @Transactional
+    public String findSupplierCode(int suporgid) {
+        return od.findByOrganizationid(suporgid).getCode();
+    }
+
+    @Transactional(readOnly = true)
+    public String findSupOrgId(Integer organizationid) {
+            OrganizationPO org = od.findByOrganizationid(organizationid);
+            OrganizationPO byParentorgid = od.findByOrganizationid(org.getParentorgid());
+            if(byParentorgid!=null){
+                return byParentorgid.getOrganizationid()+"";
+            }else{
+                return null;
+            }
+    }
+    @Transactional
+    public void updatePassword(String oldpassword, String newpassword, HttpServletRequest request) {
+        EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
+        OrganizationPO loginorg = (OrganizationPO) request.getSession().getAttribute("loginorg");
+        //String encryptpassword = Encrypt.encrypt(emp.getLoginname(), oldpassword, loginorg.getCode());
+        boolean check = Encrypt.check(emp.getLoginname(),oldpassword, loginorg.getCode(), emp.getPassword());
+        if(!check){
+            throw new RuntimeException("oldpassword is wrong !");
+        }
+        emp.setPassword(Encrypt.encrypt(emp.getLoginname(), newpassword, loginorg.getCode()));
+        EmployeePO save = empDAO.save(emp);
     }
 }

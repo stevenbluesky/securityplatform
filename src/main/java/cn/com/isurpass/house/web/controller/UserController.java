@@ -1,13 +1,11 @@
 package cn.com.isurpass.house.web.controller;
 
-import cn.com.isurpass.house.dao.GatewayDAO;
 import cn.com.isurpass.house.exception.MyArgumentNullException;
 import cn.com.isurpass.house.po.EmployeePO;
 import cn.com.isurpass.house.po.GatewayPO;
 import cn.com.isurpass.house.po.UserPO;
 import cn.com.isurpass.house.result.JsonResult;
 import cn.com.isurpass.house.service.UserService;
-import cn.com.isurpass.house.util.Constants;
 import cn.com.isurpass.house.util.FormUtils;
 import cn.com.isurpass.house.result.PageResult;
 import cn.com.isurpass.house.vo.*;
@@ -22,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
@@ -161,7 +158,7 @@ public class UserController {
     public String unbundlingGateway(@RequestBody String mydata,HttpServletRequest request) {
         try {
             EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
-            us.findPro(emp.getOrganizationid());
+            //us.findPro(emp.getOrganizationid());
             us.unbundlinggateway(mydata);
         } catch (Exception e) {
             e.printStackTrace();
@@ -179,7 +176,6 @@ public class UserController {
         EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
         Integer organizationid = emp.getOrganizationid();
         Integer employeeid = emp.getEmployeeid();
-        //TODO 用户代码工作完成后打开这部分注释
         try {
             us.findTypeUserPro(organizationid,employeeid);
         } catch (Exception e) {
@@ -188,13 +184,19 @@ public class UserController {
         }
         //String userCode = us.createUserCode(employeeid,organizationid,null);
         //String supCode = us.createSupCode(organizationid,null);
-        //String supname = us.findSupName(organizationid);
+        String supname = us.findSupName(organizationid);
+        String suporgid= us.findSupOrgId(organizationid);
         String insname = us.findInsName(organizationid);
+        String groupid = us.findGroupid(organizationid);
         //model.addAttribute("supCode",supCode);
         //model.addAttribute("userCode",userCode);
-        //model.addAttribute("supname",supname);
+        model.addAttribute("supname",supname);
+        model.addAttribute("suporgid",suporgid);
         model.addAttribute("orgInfo",us.findOrgInfo(organizationid));
         model.addAttribute("insname",insname);
+        model.addAttribute("groupid",groupid);
+        model.addAttribute("installername",emp.getLoginname());
+        model.addAttribute("installercode",emp.getCode());
         return "user/typeUserInfo";
     }
     @RequestMapping("findCodes")
@@ -221,4 +223,32 @@ public class UserController {
         }
 
     }
+    @RequestMapping("findsuppliercode")
+    @ResponseBody
+    public String findSupplierCode(Model model,HttpServletRequest request){
+        String ss = request.getParameter("suporgid");
+        int suporgid = Integer.parseInt(ss);
+        //model.addAttribute("suppliercode",us.findSupplierCode(suporgid));
+        return us.findSupplierCode(suporgid);
+    }
+    @RequestMapping("modifypassword")
+    public String modifypasswordpage(HttpServletRequest request) {
+        return "user/modifyPassword";
+    }
+    @RequestMapping("updatePassowrd")
+    @ResponseBody
+    public String updatePassword(Model model,HttpServletRequest request){
+        try{
+            String oldpassword = request.getParameter("oldpassword");
+            String newpassword = request.getParameter("newpassword");
+            if(StringUtils.isEmpty(oldpassword)||StringUtils.isEmpty(newpassword)){
+                return "failed";
+            }
+            us.updatePassword(oldpassword,newpassword,request);
+            return "success";
+        }catch (Exception e){
+            return "failed";
+        }
+    }
+
 }

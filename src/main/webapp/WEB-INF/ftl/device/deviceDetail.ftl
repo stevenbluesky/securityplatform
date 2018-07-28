@@ -78,20 +78,24 @@
                                 <th>
                                     <button id="operate" type="submit" class="btn btn-default"
                                             onclick='toggleDeviceStatus(${(zwave.zwavedeviceid)?c!})'
-                                            style="width:28%"><@spring.message code="label.close"/></button>
+                                            style="width:40%"><@spring.message code="label.close"/></button>
                                 </th>
                             </tr>
                     </@shiro.hasPermission>
                     <@shiro.hasPermission name="label.ModifyDeviceArea">
                             <tr>
                                 <th><@spring.message code="label.areanumber"/></th>
-                                <th><input type="text" style="width:150px" class="form-control" id="area" name="area" value="${(zwave.area)!}"
-                                           placeholder="<@spring.message code="label.areanumber"/>"></th>
+                                <th>
+                                    <#if (zwave.area??&&zwave.area>1000)>1-${(zwave.area-1000)?c}<#else>
+                                    <input type="text" style="width:150px" class="form-control" id="area" name="area" value="${(zwave.area)!}"
+                                           placeholder="<@spring.message code="label.areanumber"/>"></#if>
+                                </th>
                             </tr>
-                            <tr>
+                        <#if (zwave.area??&&zwave.area>1000)>
+                        <#else><tr>
                                 <th></th>
                                 <th><button id="area" type="submit" class="btn btn-default" onclick='savearea()'
-                                            style="width:150px"><@spring.message code="label.save"/></button></th></tr>
+                                            style="width:150px"><@spring.message code="label.save"/></button></th></tr></#if>
                     </@shiro.hasPermission>
                         </table>
                     </div>

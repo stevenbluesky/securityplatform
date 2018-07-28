@@ -2,7 +2,7 @@
 <#include "../_head1.ftl"/>
 
           <div class="row">
-              <div class="text-center"><h1><@spring.message code="label.employeelist"/></h1></div>
+              <div class="text-center"><h1><@spring.message code="label.AllUsers"/></h1></div>
               <hr>
               <form id="searchform" class="form-horizontal">
                   <div class="form-group col-md-12">

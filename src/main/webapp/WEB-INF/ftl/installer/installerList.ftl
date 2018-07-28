@@ -6,10 +6,10 @@
                       <form id="searchform" class="form-horizontal">
                           <div class="form-group col-md-12">
                           <div class="form-group col-md-4" align="right">
-                              <label for="searchcode" class="col-md-5 control-label"><@spring.message code="label.code"/></label>
+                              <label for="searchcode" class="col-md-5 control-label"><@spring.message code="label.groupid"/></label>
                               <div class="col-md-7">
                                   <input type="text" class="form-control" id="searchcode" name="searchcode"
-                                         placeholder="<@spring.message code="label.code"/>">
+                                         placeholder="<@spring.message code="label.groupid"/>">
                               </div>
                           </div>
                           <div class="form-group col-md-4" align="right">
@@ -79,7 +79,7 @@
     <tr>
         <th data-field=""></th>
         <th data-field="organizationid" data-visible="false">ID</th>
-        <th data-field="code" class="text-center"><@spring.message code="label.code"/></th>
+        <th data-field="code" class="text-center"><@spring.message code="label.groupid"/></th>
         <th data-field="name" class="text-center"><@spring.message code="label.pname"/></th>
         <th data-field="city" class="text-center"><@spring.message code="label.city"/></th>
         <th data-field="status" class="text-center" data-formatter="formatter_status"><@spring.message code="label.status"/></th>

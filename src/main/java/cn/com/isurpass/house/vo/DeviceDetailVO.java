@@ -1,5 +1,7 @@
 package cn.com.isurpass.house.vo;
 
+import java.util.Date;
+
 public class DeviceDetailVO {
 
     private String devicetype;
@@ -8,6 +10,13 @@ public class DeviceDetailVO {
     private String warningstatuses;
     private Integer status;
     private Integer zwavedeviceid;
+    private String channelcount;
+    private String deviceid;
+    private String name;
+    private String statuses;
+    private Date createtime;
+    private Integer area;
+    private Integer battery;
 
     public Integer getZwavedeviceid() {
         return zwavedeviceid;
@@ -69,5 +78,61 @@ public class DeviceDetailVO {
             return false;
         }
         return this.warningstatuses == "[255]";
+    }
+
+    public String getChannelcount() {
+        return channelcount;
+    }
+
+    public void setChannelcount(String channelcount) {
+        this.channelcount = channelcount;
+    }
+
+    public String getDeviceid() {
+        return deviceid;
+    }
+
+    public void setDeviceid(String deviceid) {
+        this.deviceid = deviceid;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getStatuses() {
+        return statuses;
+    }
+
+    public void setStatuses(String statuses) {
+        this.statuses = statuses;
+    }
+
+    public Date getCreatetime() {
+        return createtime;
+    }
+
+    public void setCreatetime(Date createtime) {
+        this.createtime = createtime;
+    }
+
+    public Integer getArea() {
+        return area;
+    }
+
+    public void setArea(Integer area) {
+        this.area = area;
+    }
+
+    public Integer getBattery() {
+        return battery;
+    }
+
+    public void setBattery(Integer battery) {
+        this.battery = battery;
     }
 }

@@ -33,6 +33,15 @@ public class UserAddVO {
     private String installerorg;
     private String installer;
     private String groupid;
+    private Integer monitoringstationid;
+
+    public Integer getMonitoringstationid() {
+        return monitoringstationid;
+    }
+
+    public void setMonitoringstationid(Integer monitoringstationid) {
+        this.monitoringstationid = monitoringstationid;
+    }
 
     public String getGroupid() {
         return groupid;

@@ -38,10 +38,10 @@
             </div>
 
             <div class="form-group">
-                <label for="code" class="col-sm-3 control-label"  style="text-align: left;"><@spring.message code="label.orgcode"/>*</label>
+                <label for="code" class="col-sm-3 control-label"  style="text-align: left;"><@spring.message code="label.groupid"/>*</label>
                 <div class="col-sm-9">
                 <#--<#if (orgInfo.code)??>${orgInfo.code}<#else><@spring.message code="label.none"/></#if>-->
-                    <input class="form-control" id="code" name="code" value="${(orgInfo.code)!}" placeholder="<@spring.message code="label.orgcode"/>">
+                    <input class="form-control" id="code" name="code" value="${(orgInfo.code)!}" placeholder="<@spring.message code="label.groupid"/>">
                 </div>
             </div>
             <div class="form-group">

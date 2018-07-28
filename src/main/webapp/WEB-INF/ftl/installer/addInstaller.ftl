@@ -2,7 +2,7 @@
 <#include "../_head0.ftl"/>
 <#import "/spring.ftl" as spring/>
     <div class="row-horizontal">
-        <div class="col-md-1"></div>
+       <div class="col-md-1"></div>
         <div class="col-md-10">
             <form class="form-horizontal" id="defaultForm" method="POST">
                 <#if orgInfo??>
@@ -36,10 +36,10 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="code" class="col-sm-3 control-label"  style="text-align: left;"><@spring.message code="label.orgcode"/>*</label>
+                    <label for="code" class="col-sm-3 control-label"  style="text-align: left;"><@spring.message code="label.groupid"/>*</label>
                     <div class="col-sm-9">
                         <input type="text" class="form-control" id="code" name="code" value="${(orgInfo.code)!}"
-                               placeholder="<@spring.message code="label.orgcode"/>">
+                               placeholder="<@spring.message code="label.groupid"/>">
                     </div>
                 </div>
                     <div class="form-group">

@@ -8,7 +8,7 @@
                 <hr>
                 <div class="form-group">
                     <label for="codepostfix"
-                           class="col-sm-2 "><@spring.message code='label.usercodepostfix'/></label>
+                           class="col-sm-2 "><@spring.message code='label.aibaseid'/></label>
                     <div class="col-sm-4">
                         <#if userVO.usercode??>${(userVO.usercode)!}<#else><@spring.message code='label.none'/></#if>
                     </div>
@@ -20,7 +20,7 @@
                     <#if userVO.groupid??>${(userVO.groupid)!}<#else><@spring.message code='label.none'/></#if>
                     </div>
                     <label for="codepostfix"
-                           class="col-sm-2 "><@spring.message code='label.alarmcode'/></label>
+                           class="col-sm-2 "><@spring.message code='label.code'/></label>
                     <div class="col-sm-4">
                     <#if userVO.supcode??>${(userVO.supcode)!}<#else><@spring.message code='label.none'/></#if>
                     </div>
@@ -41,7 +41,7 @@
                 <div class="form-group">
 
                     <label for="codepostfix"
-                           class="col-sm-2 "><@spring.message code='label.appaccount'/></label>
+                           class="col-sm-2 "><@spring.message code='label.apploginemail'/></label>
                     <div class="col-sm-4">
                     ${(userVO.appaccount)!}
                     </div>
@@ -89,7 +89,7 @@
                     </div>
 
                     <label for="detailaddress"
-                           class="col-sm-2 "><@spring.message code='label.installer'/></label>
+                           class="col-sm-2 "><@spring.message code='label.InstallerPersonList'/></label>
                     <div class="col-sm-4">
                     ${(userVO.installer)!}
                     </div>
@@ -131,7 +131,7 @@
                     <label for="address" class="col-sm-2 "><@spring.message code='label.status'/></label>
                     <div class="col-sm-4">
                             <#if (userVO.serialnumber)??>
-                             <#if (userVO.status)?exists && userVO.status==1><@spring.message code="label.normal"/><#elseif (userVO.status)?exists && userVO.status==2><@spring.message code="label.suspenced"/><#elseif (userVO.status)?exists && userVO.status==9><@spring.message code="label.delete"/><#else><@spring.message code="label.unknown"/></#if>
+                             <#if (userVO.status)?exists && userVO.status==1><@spring.message code="label.activated"/><#elseif (userVO.status)?exists && userVO.status==2><@spring.message code="label.deactivated"/><#elseif (userVO.status)?exists && userVO.status==3><@spring.message code="label.inventory"/><#elseif (userVO.status)?exists && userVO.status==0><@spring.message code="label.noeffect"/><#else><@spring.message code="label.unknown"/></#if>
                             </#if>
                         <@shiro.hasPermission name="label.SynchronousSIMInfo">
                             <#if (userVO.serialnumber)??>

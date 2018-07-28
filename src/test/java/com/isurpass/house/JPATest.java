@@ -1,10 +1,7 @@
 package com.isurpass.house;
 
 import cn.com.isurpass.house.dao.*;
-import cn.com.isurpass.house.po.EmployeePO;
-import cn.com.isurpass.house.po.EmployeeRolePO;
-import cn.com.isurpass.house.po.GatewayPO;
-import cn.com.isurpass.house.po.OrganizationPO;
+import cn.com.isurpass.house.po.*;
 import cn.com.isurpass.house.util.Constants;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,6 +34,8 @@ public class JPATest {
 	EmployeeDAO ed;
 	@Autowired
 	private GatewayDAO gd;
+	@Autowired
+	private GatewayBindingDAO gbd;
 	@Test
 	public void testOrg() {
 		List<OrganizationPO> list = org.findAllOrgSelect();
@@ -59,15 +58,30 @@ public class JPATest {
 		OrganizationPO org0 = org.findByOrganizationid(1);
 		System.out.println(org0.getOrganizationid());
 	}
-	@Test
+/*	@Test
 	public void mytest(){
-		List<Integer> list1 = new ArrayList<>();
-		list1.add(1);
-		list1.add(3);
-		List<Integer> list2 = new ArrayList<>();
-		list1.retainAll(list2);
-		System.out.println(list1.size());
-	}
+	//iRemote8005000000051 到 iRemote8005000001500
+		for(int i =51;i<1501;i++){
+			GatewayBindingPO gb = new GatewayBindingPO();
+			String j = "";
+			if(i<100){
+				j = "00"+i;
+			}else if(i<1000){
+				j ="0"+i;
+			}else{
+				j=i+"";
+			}
+			String deviceid = "iRemote800500000"+j;
+			gb.setDeviceid(deviceid);
+			gb.setBindingtype(0);
+			gb.setCreatetime(new Date());
+			gb.setOrganizationid(1);
+			gb.setStatus(1);
+			if(gbd.findByDeviceid(deviceid)==null){
+				gbd.save(gb);
+			}
+		}
+	}*/
 
 
     @Test

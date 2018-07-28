@@ -8,7 +8,7 @@
         <label for="searchname" class="col-md-5 control-label"><@spring.message code="label.devicename"/></label>
         <div class="col-md-7">
             <input class="form-control" type="text" id="searchname" name="name"
-                   placeholder=<@spring.message code="label.devicename"/>>
+                   placeholder='<@spring.message code="label.devicename"/>'>
         </div>
     </div>
     <#--设备类型下拉框-->
@@ -61,17 +61,17 @@
         <label for="searchcityname" class="col-md-5 control-label"><@spring.message code="label.area"/></label>
         <div class="col-md-7">
             <input type="text" class="form-control" id="searchcityname" name="cityname"
-                   placeholder=<@spring.message code="label.area"/>>
+                   placeholder='<@spring.message code="label.area"/>'>
         </div>
     </div>
     </div>
     <div class="form-group col-md-12">
 
     <div class="form-group col-md-4" align="right">
-        <label for="searchcustomer" class="col-md-5 control-label"><@spring.message code="label.customer"/></label>
+        <label for="searchcustomer" class="col-md-5 control-label"><@spring.message code="label.user"/></label>
         <div class="col-md-7">
             <input type="text" class="form-control" id="searchcustomer" name="customer"
-                   placeholder=<@spring.message code="label.customer"/>>
+                   placeholder='<@spring.message code="label.user"/>'>
         </div>
     </div>
 
@@ -80,7 +80,7 @@
                class="col-md-5 control-label"><@spring.message code="label.serviceprovider"/></label>
         <div class="col-md-7">
             <input type="text" class="form-control" id="searchserviceprovider" name="serviceprovider"
-                   placeholder=<@spring.message code="label.serviceprovider"/>>
+                   placeholder='<@spring.message code="label.serviceprovider"/>'>
         </div>
     </div>
 
@@ -89,16 +89,16 @@
                class="col-md-5 control-label"><@spring.message code="label.installerorg"/></label>
         <div class="col-md-7">
             <input type="text" class="form-control" id="searchinstallerorg" name="installerorg"
-                   placeholder=<@spring.message code="label.installerorg"/>>
+                   placeholder='<@spring.message code="label.installerorg"/>'>
         </div>
     </div>
     </div>
     <div class="form-group col-md-12">
     <div class="form-group col-md-4" align="right">
-        <label for="searchinstaller" class="col-md-5 control-label"><@spring.message code="label.installer"/></label>
+        <label for="searchinstaller" class="col-md-5 control-label"><@spring.message code="label.InstallerPersonList"/></label>
         <div class="col-md-7">
             <input type="text" class="form-control" id="searchinstaller" name="installer"
-                   placeholder=<@spring.message code="label.installer"/>>
+                   placeholder='<@spring.message code="label.InstallerPersonList"/>'>
         </div>
     </div>
 
@@ -106,7 +106,7 @@
         <label for="searchinstallerorg" class="col-md-5 control-label"><@spring.message code="label.gatewayID"/></label>
         <div class="col-md-7">
             <input type="text" class="form-control" id="searchgatewayid" name="deviceid"
-                   placeholder=<@spring.message code="label.gatewayID"/>>
+                   placeholder='<@spring.message code="label.gatewayID"/>'>
         </div>
     </div>
 
@@ -133,7 +133,7 @@
         <th data-field="status" class="text-center" data-formatter='formatter_devicestatus'><div id="dstatus"><@spring.message code="label.status"/>↑↓</div></th>
         <th data-field="statuses" class="text-center" data-formatter='formatter_statuses'><div id="dstatuses"><@spring.message code="label.statuses"/></div></th><#--多位状态数组-->
         <th data-field="battery" class="text-center"><div id="dbattery"><@spring.message code="label.energy"/>↑↓</div></th>
-        <th data-field="area" class="text-center"><@spring.message code="label.areanumber"/></th>
+<#--        <th data-field="area" class="text-center" data-formatter='formatter_area'><@spring.message code="label.areanumber"/></th>-->
         <th data-field="city" class="text-center"><@spring.message code="label.area"/></th>
         <th data-field="organizationname" class="text-center"><@spring.message code="label.serviceprovider"/></th>
         <th data-field="installerorgname" class="text-center"><@spring.message code="label.installerorg"/></th>
@@ -273,6 +273,12 @@
         $("#searchsubmit").click(function(){
             $("#table").bootstrapTable("refresh",{pageNumber:1})
         });
+/*        function formatter_area(value,row,index) {
+            if(value>1000){
+                return "1-"+(value-1000);
+            }
+            return value;
+        }*/
     </script>
 <#include "../modal.ftl"/>
 <#include "../_foot1.ftl"/>

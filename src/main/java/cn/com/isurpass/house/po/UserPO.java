@@ -29,6 +29,15 @@ public class UserPO {
 	private Integer status;
 	private Date createtime;
 	private String groupid;
+	private Integer monitoringstationid;
+
+	public Integer getMonitoringstationid() {
+		return monitoringstationid;
+	}
+
+	public void setMonitoringstationid(Integer monitoringstationid) {
+		this.monitoringstationid = monitoringstationid;
+	}
 
 	public String getGroupid() {
 		return groupid;
@@ -166,6 +175,8 @@ public class UserPO {
 				", personid=" + personid +
 				", status=" + status +
 				", createtime=" + createtime +
+				", groupid='" + groupid + '\'' +
+				", monitoringstationid=" + monitoringstationid +
 				'}';
 	}
 }

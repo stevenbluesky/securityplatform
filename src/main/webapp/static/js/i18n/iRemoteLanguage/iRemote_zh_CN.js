@@ -7,7 +7,9 @@ var lan = {
     dalose:"数据库连接断开，请稍等",//-4
     orgnameexist:"公司名称已存在",//-11
     loginnameexist:"登录名已存在",//-12
-    loginfaied:"登录信息错误或该账号被冻结",//-98
+    loginfaied:"密码错误",//-98
+    nameerror:"用户名不存在",//-6
+    accountfroze:"账号被冻结",//-7
     notpermission:"无权操作",//-99
     notempty: "必填字段不能为空!",//-100
     statusnull:"status不能为空.",//-101

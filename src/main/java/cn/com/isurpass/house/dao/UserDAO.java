@@ -79,8 +79,6 @@ public interface UserDAO extends CrudRepository<UserPO, Integer> {
     @Query(value = "select userid from user where loginname=:loginname",nativeQuery = true)
     Integer getUserid(@Param("loginname") String loginname);
 
-    List<UserPO> findByCodepostfixContaining(String searchCode);
-
     void deleteByUserid(Integer integer);
 
     UserPO findByAppaccount(String appaccount);
@@ -90,4 +88,6 @@ public interface UserDAO extends CrudRepository<UserPO, Integer> {
     List<UserPO> findByAppaccountContaining(String searchAppAccount);
 
     List<UserPO> findByUsercodeContaining(String searchCode);
+
+    int countByMonitoringstationid(Integer organizationid);
 }

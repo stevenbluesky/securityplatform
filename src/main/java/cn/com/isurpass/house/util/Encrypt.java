@@ -32,7 +32,8 @@ public class Encrypt {
         String name = "admin";
         String pw = "123";
         String organizationid = "002";
-        System.out.println(Encrypt.check(name,pw,organizationid,"Rbn75L+MLenexJhu806/ALkLRcIYz8ri"));
+        System.out.println(Encrypt.encrypt(name,pw,organizationid));
+        System.out.println(Encrypt.check(name,pw,organizationid,"8GIoHFxkvlMve7SlrD1hVdKKt9Shb/DJ"));
 //        long s = System.currentTimeMillis();
 //        Encrypt svr = new Encrypt();
 //        String str = encrypt(name, pw, code);

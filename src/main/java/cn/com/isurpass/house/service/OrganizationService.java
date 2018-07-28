@@ -245,6 +245,7 @@ public class OrganizationService {
         if (orgInfo == null) {
             emp.setOrganizationid(orgId);
             emp.setStatus(1);
+            emp.setType(0);
             emp.setCreatetime(new Date());
 //            if (!FormUtils.isEmpty(emp)) {// 管理员不为空..由于此方法一开始就对管理员账号不存在的情况进行了处理,所以此处管理员对象是肯定存在的.
             // TODO 现在数据库里面 Loginname
@@ -390,7 +391,7 @@ public class OrganizationService {
             if (org == null) {//如果未找到则可以使用
                 return true;
             }
-        }else if(loginorg.getOrgtype()==Constants.ORGTYPE_AMETA){//ameta在操作
+        }else if(loginorg.getOrgtype()==Constants.ORGTYPE_AMETA){
             if(parentorgid!=null){
                 OrganizationPO org = od.findByCodeAndParentorgid(code,parentorgid);
                 if (org == null) {
@@ -401,6 +402,11 @@ public class OrganizationService {
                 if (org == null) {
                     return true;
                 }
+            }
+        }else{
+            OrganizationPO org =  od.findByCodeAndOrganizationid(code,loginorg.getOrganizationid());
+            if (org == null) {//如果未找到则可以使用
+                return true;
             }
         }
         return false;
@@ -466,7 +472,6 @@ public class OrganizationService {
         org.setParentorgid(orgPO.getParentorgid());
         as.findAddressInfo(orgPO, org);
         ps.findPersonInfo(orgPO, org);
-        System.out.println(org.toString());
         return org;
     }
 
@@ -852,5 +857,9 @@ public class OrganizationService {
     @Transactional(readOnly = true)
     public List<OrganizationPO> listAllInsOrg() {
         return od.findByOrgtype(Constants.ORGTYPE_INSTALLER);
+    }
+    @Transactional(readOnly = true)
+    public List<OrganizationPO> listMyInsOrg(EmployeePO emp) {
+        return od.findByParentorgidAndOrgtype(emp.getOrganizationid(),Constants.ORGTYPE_INSTALLER);
     }
 }

@@ -71,4 +71,9 @@ public interface GatewayuserDAO extends CrudRepository<GatewayUserPO, Integer> {
     void deleteByDeviceid(String mydata);
 
     void deleteByUserid(Integer integer);
+
+	@Query(value = "select g.deviceid from gatewayuser g \n" +
+			"\t join user u on g.userid = u.userid \n" +
+			"\t join organization o on o.organizationid = u.monitoringstationid OR o.organizationid = u.organizationid where o.organizationid=:id",nativeQuery = true)
+	List<String> findDeviceidByMonitoringStation(@Param("id") Integer id);
 }

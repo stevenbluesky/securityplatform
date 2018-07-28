@@ -22,8 +22,8 @@ function getMenu() {
             });
         },
         error:function (obj) {
-            alert("Menu Load Failed!");
-            //window.location.href="../logout";
+            //alert("Menu Load Failed!");
+            window.location.href="../login";
         }
     });
 }

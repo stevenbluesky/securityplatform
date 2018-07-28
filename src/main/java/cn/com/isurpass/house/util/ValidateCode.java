@@ -103,7 +103,7 @@ public class ValidateCode{
         Graphics g = buffImg.getGraphics();
         //1.设置颜色,画边框
         g.setColor(Color.gray);
-        g.drawRect(0,0,width,height);
+        g.drawRect(0,0,0,0);
         //2.设置颜色,填充内部
         g.setColor(Color.white);
         g.fillRect(1,1,width-2,height-2);
@@ -117,9 +117,9 @@ public class ValidateCode{
             g.drawLine(r.nextInt(width),r.nextInt(width),r.nextInt(width),r.nextInt(width));
         }
         //4.设置验证码
-        g.setColor(Color.blue);
+        g.setColor(Color.BLACK);
         //4.1设置验证码字体
-        g.setFont(new Font("Times New Roman",Font.BOLD|Font.ITALIC,fontSize));
+        g.setFont(new Font("Microsoft Yahei",Font.ITALIC|Font.ITALIC,fontSize));
         for (int i = 0; i < codeCount; i++) {
             char c = codeSequence[r.nextInt(codeSequence.length)];
             builderCode.append(c);

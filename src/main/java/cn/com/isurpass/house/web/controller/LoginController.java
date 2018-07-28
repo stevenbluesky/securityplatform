@@ -1,41 +1,25 @@
 package cn.com.isurpass.house.web.controller;
 
-import javax.imageio.ImageIO;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
+import cn.com.isurpass.house.dao.EmployeeDAO;
+import cn.com.isurpass.house.po.EmployeePO;
 import cn.com.isurpass.house.po.OrganizationPO;
+import cn.com.isurpass.house.result.JsonResult;
+import cn.com.isurpass.house.service.EmployeeService;
+import cn.com.isurpass.house.service.OrganizationService;
 import cn.com.isurpass.house.util.Constants;
 import cn.com.isurpass.house.util.ValidateCode;
-import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
-import jdk.nashorn.internal.runtime.ECMAException;
+import cn.com.isurpass.house.vo.LoginVO;
+import com.alibaba.fastjson.JSON;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.UnavailableSecurityManagerException;
-import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.alibaba.fastjson.JSON;
-
-import cn.com.isurpass.house.po.EmployeePO;
-import cn.com.isurpass.house.result.JsonResult;
-import cn.com.isurpass.house.service.EmployeeService;
-import cn.com.isurpass.house.service.OrganizationService;
-import cn.com.isurpass.house.util.FormUtils;
-import cn.com.isurpass.house.vo.LoginVO;
-
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.OutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @Controller
@@ -43,17 +27,27 @@ import java.util.List;
 public class LoginController {
 
 	@Autowired
-	EmployeeService emps;
+	private EmployeeService emps;
 	@Autowired
-	OrganizationService os;
+	private OrganizationService os;
+	@Autowired
+	private EmployeeDAO ed;
 
 	@RequestMapping("login")
 	@ResponseBody
-	public JsonResult pageLogin(LoginVO login, HttpServletResponse response, HttpServletRequest request) {
+	public JsonResult pageLogin(LoginVO login, HttpServletRequest request) {
 		String validateCode = (String) request.getSession().getAttribute("validateCode");
 		String code = login.getCaptchacode();
 		if(StringUtils.isEmpty(code)||!code.equalsIgnoreCase(validateCode)){
 			return new JsonResult(-1, "-2");
+		}
+		EmployeePO byLoginname = ed.findByLoginname(login.getLoginname());
+		if(byLoginname==null){
+			return new JsonResult(-1, "-6");//用户名不存在
+		}
+		Integer status = byLoginname.getStatus();
+		if(!status.equals(Constants.STATUS_NORMAL)){
+			return new JsonResult(-1, "-7");//账号被冻结
 		}
 		try{
 			OrganizationPO org = emps.findOrgByLoginName(login.getLoginname());
@@ -74,18 +68,13 @@ public class LoginController {
 			request.getSession().setAttribute("emp", emp);
 			OrganizationPO org = os.findOrgByLoginEmp(request);
 			request.getSession().setAttribute("loginorg",org);
-			//TODO 这里可以加一个当前员工角色的字段返回到前端,可以很容易的进行内容的显隐
 			request.getSession().setAttribute("admin", os.isAdmin(emp.getOrganizationid()));
 
 			return new JsonResult(1, "success");
-		} catch (UnavailableSecurityManagerException e) {
-			e.printStackTrace();
-			return new JsonResult(-1, "-98");
  		} catch (Exception e) {
 			e.printStackTrace();
 			return new JsonResult(-1, "-98");
 		}
-
 	}
 
 	@RequestMapping("getOrg")
@@ -95,7 +84,7 @@ public class LoginController {
 	}
 	@RequestMapping("getOrgCode")
 	@ResponseBody
-	public String getOrgCode(Model model, HttpServletRequest request) {
+	public String getOrgCode(HttpServletRequest request) {
 		String loginname = request.getParameter("loginname");
 		try {
 			OrganizationPO codeByLoginname = os.findCodeByLoginname(loginname);
@@ -105,16 +94,16 @@ public class LoginController {
 		}
 		return "success";
 	}
+
 	/**
 	 * 生成验证码
 	 * @param request
 	 * @param response
-	 * @return
 	 */
 	@RequestMapping(value="getCode")
 	public void getCode(HttpServletRequest request, HttpServletResponse response){
-		ValidateCode code = new ValidateCode(100,30,4,30,25,"validateCode");
+		ValidateCode code = new ValidateCode(100,30,4,10,25,"validateCode");
 		request.getSession();
-		String validateCode = code.getCode(request, response);
+		code.getCode(request, response);
 	}
 }

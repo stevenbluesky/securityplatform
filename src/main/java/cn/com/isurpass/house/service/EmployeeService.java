@@ -15,17 +15,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.*;
-
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 
-
 @Service
 public class EmployeeService {
-    //TODO
     @Autowired
-    EmployeeDAO ed;
+    private EmployeeDAO ed;
     @Autowired
     private EmployeeroleDAO employeeroleDAO;
     @Autowired
@@ -35,31 +34,31 @@ public class EmployeeService {
     @Autowired
     private PrivilegeDAO privilegeDAO;
     @Autowired
-    AddressDAO ad;
+    private AddressDAO ad;
     @Autowired
-    CountryDAO country;
+    private CountryDAO country;
     @Autowired
-    ProvinceDAO province;
+    private ProvinceDAO province;
     @Autowired
-    CityDAO city;
+    private CityDAO city;
     @Autowired
-    PersonDAO pd;
+    private PersonDAO pd;
     @Autowired
-    PersonService ps;
+    private PersonService ps;
     @Autowired
-    OrganizationDAO od;
+    private OrganizationDAO od;
     @Autowired
-    OrganizationService os;
+    private OrganizationService os;
     @Autowired
-    AddressService as;
+    private AddressService as;
     @Autowired
     private EmployeeroleDAO erd;
     @Autowired
-    RoleDAO rd;
+    private RoleDAO rd;
     @Autowired
-    RolePrivilegeDAO rpd;
+    private RolePrivilegeDAO rpd;
     @Autowired
-    PrivilegeDAO privilegedao;
+    private PrivilegeDAO privilegedao;
 
     public void changeStatus(Integer empid, Integer status) {
         EmployeePO emp = ed.findByEmployeeid(empid);
@@ -83,10 +82,10 @@ public class EmployeeService {
         ed.save(emp);
     }
 
-    /*
+    /**
      * 判断一个员工登录用户名在其机构下是否已经被注册,如果被注册返回true
-     * */
-    @Transactional(readOnly = true)
+     */
+    @Transactional(rollbackFor = Exception.class)
     public boolean isRegister(Integer orgid, String loginname) {
         List<EmployeePO> list = ed.findByOrganizationidAndLoginname(orgid, loginname);
         if (!list.isEmpty()) {
@@ -103,7 +102,8 @@ public class EmployeeService {
         EmployeePO emp1 = (EmployeePO) request.getSession().getAttribute("emp");
         //修改员工时才会存在的员工session
         EmployeeAddVO empInfo = (EmployeeAddVO) request.getSession().getAttribute("empInfo");
-        if (emp.getOrganizationid() == null) { //如果没有传入机构id
+        //如果没有传入机构id
+        if (emp.getOrganizationid() == null) {
             if (empInfo != null) {
                 //修改
                 emp.setOrganizationid(empInfo.getOrganizationid());
@@ -123,7 +123,6 @@ public class EmployeeService {
 
         EmployeePO empPO = new EmployeePO();
 
-        // ID => name
         String countryname = null;
         String provincename = null;
         String cityname = null;
@@ -158,6 +157,7 @@ public class EmployeeService {
         if (emp.getStatus()==null) {
             emp.setStatus(Constants.STATUS_NORMAL);
         }
+        empPO.setType(emp.getType());
         empPO.setStatus(emp.getStatus());
         empPO.setExpiredate(emp.getExpiredate());
         empPO.setOrganizationid(emp.getOrganizationid());
@@ -225,31 +225,37 @@ public class EmployeeService {
     }
 
 //    @Transactional(readOnly = true)
-    public Map<String, Object> listEmployee(Pageable pageable, HttpServletRequest request) {
-        // 角色不要在里面判断,可以在方法上加上权限注解.(如,管理员才可以访问)
+    public Map<String, Object> listEmployee(Pageable pageable, HttpServletRequest request,int type) {
+        List<Integer> typelist = new ArrayList<>();
+        if(type==Constants.INSTALLOR_TYPE){
+            typelist.add(1);
+        }else if(type==Constants.OPERATOR_TYPE){
+            typelist.add(0);
+        }else{
+            typelist.add(0);
+            typelist.add(1);
+        }
 
-        // 只显示对应的服务商所具有权限的安装商,如果是ameta,则可以看见所有的
-        // 首先判断当前登录的员工角色,
-        // 如果角色是员工,over.
-        // 如果是安装商,再通过员工的机构id查询所有属于它的员工,
-        // 如果是服务商,则查询它的所有的安装商,通过服务商,安装商id list查询其所有的员工
-        // 如果是ameta,直接查询所有的员工
-
-        // 另一种办法,首先判断当前登录的员工角色,如果角色是员工,over.
-        // 通过当前员工的机构id,查询此机构是否具有父机构,如果有,查询其父机构id.这样遍历取此机构所有
         EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
-
+        Integer orgid = emp.getOrganizationid();
+        Integer orgtype = od.findByOrganizationid(orgid).getOrgtype();
         List<Integer> list0 = new ArrayList<>();
         Map<String, Object> map = new HashMap<>();
-        if (os.isAdmin(emp.getOrganizationid())) {//如果是ameta返回所有的员工信息
+        if (os.isAdmin(emp.getOrganizationid())){
+            if(typelist.size()==1){
+                return listAllInstaller(pageable,typelist);
+            }
             return listAllEmployee(pageable);
         } else {
-            List<Integer> list = os.findChildrenOrgid(emp.getOrganizationid(), list0);
-            list.add(emp.getOrganizationid());
-//            System.out.println(list+"fdsf");
-            Page<EmployeePO> empList = ed.findByOrganizationidIn(pageable, list);
-            map.put("total", ed.countByOrganizationidIn(list));
-//            map.put("total", empList.getTotalElements());
+            List<Integer> childrenOrgid = new ArrayList<>();
+            if(type==Constants.OPERATOR_TYPE&&orgtype.equals(Constants.ORGTYPE_SUPPLIER)){
+                childrenOrgid.add(emp.getOrganizationid());
+            }else {
+                childrenOrgid = os.findChildrenOrgid(orgid, list0);
+            }
+            childrenOrgid.add(emp.getOrganizationid());
+            Page<EmployeePO> empList = ed.findByOrganizationidInAndTypeIn(pageable, childrenOrgid,typelist);
+            map.put("total", ed.countByOrganizationidInAndTypeIn(childrenOrgid,typelist));
             List<EmployeeListVO> listt = new ArrayList<>();
             empList.forEach(e -> {
                 forEachEmp(listt, e);
@@ -259,21 +265,27 @@ public class EmployeeService {
         }
     }
 
-    // @RequiresPermissions("employeeList")
-//    @Transactional(readOnly = true)
+    @Transactional(readOnly = true)
     public Map<String, Object> listAllEmployee(Pageable pageable) {
-        // System.out.println(em.toString());
         Map<String, Object> map = new HashMap<>();
         map.put("total", ed.count());
         List<EmployeeListVO> list = new ArrayList<>();
         Page<EmployeePO> empList = ed.findAll(pageable);
+        empList.forEach((EmployeePO e) -> {forEachEmp(list, e); });
+        map.put("rows", list);
+        return map;
+    }
+    public Map<String, Object> listAllInstaller(Pageable pageable,List<Integer> typelist) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("total", ed.countByTypeIn(typelist));
+        List<EmployeeListVO> list = new ArrayList<>();
+        Page<EmployeePO> empList = ed.findByTypeIn(pageable,typelist);
         empList.forEach((EmployeePO e) -> {
             forEachEmp(list, e);
         });
         map.put("rows", list);
         return map;
     }
-
     private void forEachEmp(List<EmployeeListVO> list, EmployeePO e) {
         EmployeeListVO emp = new EmployeeListVO();
         emp.setName(e.getLoginname());
@@ -303,7 +315,6 @@ public class EmployeeService {
                     return empList.get(i);
                 }
             }
-//            return ed.findByLoginnameAndPasswordAndOrganizationid(loginname, password, org.getOrganizationid());
         } else {
             return null;
         }
@@ -320,7 +331,6 @@ public class EmployeeService {
 
     /**
      * 对EmployeeParentOrgIdVO进行查找,填充
-     *
      * @param emp
      * @return
      */
@@ -331,7 +341,7 @@ public class EmployeeService {
         OrganizationPO org0 = od.findByOrganizationid(emp.getOrganizationid());
         if (org0 != null) {
             empp.setInstallerorgid(org0.getOrganizationid());//录入员工的机构为安装商
-            if (org0.getOrgtype() == Constants.ORGTYPE_INSTALLER)//如果机构为安装商，则其父机构为服务商，
+            if (org0.getOrgtype().equals(Constants.ORGTYPE_INSTALLER))//如果机构为安装商，则其父机构为服务商，
             {
                 if(org0.getParentorgid()==null){
                     empp.setOrganizationid(0);
@@ -357,6 +367,7 @@ public class EmployeeService {
     public EmployeeAddVO getEmployeeVOInfo(Integer id) {
         EmployeeAddVO emp = new EmployeeAddVO();
         EmployeePO empPO = ed.findByEmployeeid(id);
+        emp.setType(empPO.getType());
         emp.setLoginname(empPO.getLoginname());
         emp.setPassword(empPO.getPassword());
         emp.setQuestion(empPO.getQuestion());
@@ -401,7 +412,7 @@ public class EmployeeService {
             }
         }else if ("delete".equals(hope)) {
             OrganizationPO loginorg = (OrganizationPO) request.getSession().getAttribute("loginorg");
-            if(Constants.ORGTYPE_AMETA!=loginorg.getOrgtype()){
+            if(!Constants.ORGTYPE_AMETA.equals(loginorg.getOrgtype())){
                 return ;
             }
             for (Object id : ids) {
@@ -440,7 +451,16 @@ public class EmployeeService {
     }
 
 //    @Transactional(readOnly = true)
-    public Map<String, Object> search(Pageable pageable, OrgSearchVO search, HttpServletRequest request) {
+    public Map<String, Object> search(Pageable pageable, OrgSearchVO search, HttpServletRequest request,int type) {
+        List<Integer> typelist = new ArrayList<>();
+        if(type==Constants.INSTALLOR_TYPE){
+            typelist.add(1);
+        }else if(type==Constants.OPERATOR_TYPE){
+            typelist.add(0);
+        } else{
+            typelist.add(0);
+            typelist.add(1);
+        }
         EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
         Integer orgid = emp.getOrganizationid();
         Integer orgtype = od.findByOrganizationid(orgid).getOrgtype();
@@ -461,13 +481,18 @@ public class EmployeeService {
             orgname = "%" + search.getSearchorgname() + "%";
         }
         if(Constants.ORGTYPE_AMETA.equals(orgtype)){
-            olist = od.findAllEmp(pageable,name,code,orgname);
-            total = od.countAllEmp(name,code,orgname);
+            olist = od.findAllEmpByType(pageable,name,code,orgname,typelist);
+            total = od.countAllEmpByType(name,code,orgname,typelist);
         }else{
             List<Integer> list1 = new ArrayList<>();
-            List<Integer> childrenOrgid = os.findChildrenOrgid(orgid, list1);
-            olist = od.findAllSupEmp(pageable,name,code,orgname,childrenOrgid);
-            total = od.countAllSupEmp(name,code,orgname,childrenOrgid);
+            List<Integer> childrenOrgid = new ArrayList<>();
+            if(type==Constants.OPERATOR_TYPE&&orgtype.equals(Constants.ORGTYPE_SUPPLIER)){
+                childrenOrgid.add(emp.getOrganizationid());
+            }else {
+                childrenOrgid = os.findChildrenOrgid(orgid, list1);
+            }
+            olist = od.findAllSupEmpByType(pageable,name,code,orgname,childrenOrgid,typelist);
+            total = od.countAllSupEmpByType(name,code,orgname,childrenOrgid,typelist);
         }
         for(Object[] o:olist){
             EmployeeListVO empVO = new EmployeeListVO();
@@ -530,18 +555,24 @@ public class EmployeeService {
 
     /**
      * 根据登录员工的角色、权限拿到对应的菜单
-     *
      * @param emp
      * @param request
+     * @param response
      * @return
      */
     @Transactional(readOnly = true)
-    public String getMenuTree(EmployeePO emp, HttpServletRequest request) {
+    public String getMenuTree(EmployeePO emp, HttpServletRequest request, HttpServletResponse response) {
+        if(emp==null){
+            try {
+                response.sendRedirect(request.getContextPath()+"/login");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         ResourceBundle resourceBundle;
         String language = request.getLocale().getLanguage();
         if ("zh".equals(language)) {
             resourceBundle = ResourceBundle.getBundle("messages", Locale.SIMPLIFIED_CHINESE);
-            //resourceBundle =ResourceBundle.getBundle("messages",Locale.US);
         } else {
             resourceBundle = ResourceBundle.getBundle("messages", Locale.US);
         }
@@ -629,7 +660,6 @@ public class EmployeeService {
 
     /**
      * 通过角色信息判断此用户是否是ameta管理员
-     *
      * @param id
      * @return
      */
@@ -646,23 +676,6 @@ public class EmployeeService {
         return false;
     }
 
-    /*@Transactional(readOnly = true)
-    public EmployeePO findInstallerInfo(Integer orgid) {
-        Integer admin = ed.findAdmin(orgid,3);
-        if (admin == null) {
-            return null;
-        }
-        return ed.findByEmployeeid(admin);
-    }
-
-    @Transactional(readOnly = true)
-    public EmployeePO findSuppllierAdmin(Integer orgid){
-        Integer admin = ed.findAdmin(orgid,2);
-        if (admin == null) {
-            return null;
-        }
-        return ed.findByEmployeeid(admin);
-    }*/
 
     /**
      * 在获取员工信息时,通过此方法来同步status和exiredate之间的关系
@@ -679,9 +692,6 @@ public class EmployeeService {
     }
 
     public EmployeeAddVO queryEmployeeInfo(HttpServletRequest request, Integer employeeid) {
-        /*if (!hasProvilege(employeeid, request)) {
-            throw new RuntimeException("-998");//TODO 判断权限写的业务逻辑太混乱了，暂时不判断
-        }*/
         EmployeeAddVO employeeAddVO = new EmployeeAddVO();
         EmployeePO byEmployeeid = ed.findByEmployeeid(employeeid);
         if (byEmployeeid == null) {
@@ -721,8 +731,9 @@ public class EmployeeService {
     @Transactional(readOnly = true)
     public Boolean validCode(String code, Integer organizationid) {
         EmployeePO emp = ed.findByCodeAndOrganizationid(code,organizationid);
-        if (emp == null)
+        if(emp == null) {
             return true;
+        }
         return false;
     }
     @Transactional

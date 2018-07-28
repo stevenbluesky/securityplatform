@@ -17,7 +17,11 @@ import cn.com.isurpass.house.dao.CityDAO;
 import cn.com.isurpass.house.dao.ProvinceDAO;
 import cn.com.isurpass.house.po.ProvincePO;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 @RunWith(SpringJUnit4ClassRunner.class)  
 @ContextConfiguration("classpath:application.xml")  
@@ -62,5 +66,20 @@ public class CityTest {
     public void testNull() {
         List<OrganizationPO> byOrgtype = od.findByOrgtype(null);//不能通过null取所有的数据
         System.out.println(byOrgtype.size());
+    }
+    @Test
+    public void transfertimezone(){
+	    String ot = "2018-05-24 10:44:24.651+0000";
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        ot.substring(0,ot.indexOf("."));
+        try {
+            Date nd = sdf.parse(ot);
+            System.out.println(nd.toString());
+            String format = sdf.format(new Date(nd.getTime() - (long) 4 * 60 * 60 * 1000));
+            System.out.println(format.toString());
+            System.out.println(new Date(nd.getTime() - (long) 4 * 60 * 60 * 1000));
+        } catch (ParseException e) {
+
+        }
     }
 }

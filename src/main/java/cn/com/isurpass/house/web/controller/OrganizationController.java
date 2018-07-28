@@ -33,11 +33,6 @@ import cn.com.isurpass.house.vo.OrgAddVO;
 
 /**
  * 服务商相关 接口 和 访问路径
- *
- * @author jwzh
- */
-
-/**
  * @author jwzh
  */
 @Controller
@@ -245,8 +240,17 @@ public class OrganizationController {
     public List<OrganizationPO> listAllInsOrg(HttpServletRequest request) {
         return ss.listAllInsOrg();
     }
+
+    @RequestMapping("listMyInsOrg")
+    @ResponseBody
+    public List<OrganizationPO> listMyInsOrg(HttpServletRequest request) {
+        EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
+        return ss.listMyInsOrg(emp);
+    }
+
     @RequestMapping("addSupplierPage")
     public String addSupplier(@RequestParam(required = false) Integer organizationid, HttpServletRequest request) {
+        request.getSession().setAttribute("empInfo", null);
         if (organizationid != null) {
             request.getSession().setAttribute("orgInfo", ss.getOrganizationVOInfo(organizationid));
         } else {
@@ -270,6 +274,7 @@ public class OrganizationController {
 
     @RequestMapping("addInstallerPage")
     public String addInstallerPage(@RequestParam(required = false) Integer organizationid, HttpServletRequest request) {
+        request.getSession().setAttribute("empInfo", null);
         if (organizationid != null) {
 //		    request.setAttribute("orgInfo",ss.getOrganizationVOInfo(organizationid));
             request.getSession().setAttribute("orgInfo", ss.getOrganizationVOInfo(organizationid));
@@ -297,6 +302,7 @@ public class OrganizationController {
 
     @RequestMapping("addsupplieremp")
     public String addSupplierEmp(@RequestParam(required = false) Integer organizationid, HttpServletRequest request) {
+        request.getSession().setAttribute("empInfo", null);
         OrganizationPO loginorg = ss.findOrgByLoginEmp(request);
         if (organizationid != null) {
             request.getSession().setAttribute("orgInfo", ss.getOrganizationVOInfo(organizationid));
@@ -308,6 +314,7 @@ public class OrganizationController {
     }
     @RequestMapping("addinstalleremp")
     public String addInstallerEmp(@RequestParam(required = false) Integer organizationid, HttpServletRequest request) {
+        request.getSession().setAttribute("empInfo", null);
         if (organizationid != null) {
             request.getSession().setAttribute("orgInfo", ss.getOrganizationVOInfo(organizationid));
         } else {
@@ -315,13 +322,41 @@ public class OrganizationController {
         }
         return "installer/AmetaAddInsEmp";
     }
+    @RequestMapping("addoperatorofameta")
+    public String addAmetaOperator(HttpServletRequest request) {
+        request.getSession().setAttribute("empInfo", null);
+        OrganizationPO loginorg = (OrganizationPO) request.getSession().getAttribute("loginorg");
+        request.getSession().setAttribute("orgInfo", ss.getOrganizationVOInfo(loginorg.getOrganizationid()));
+        return "operator/AmetaAddOperator";
+    }
     @RequestMapping("addoperator")
     public String addOperator(@RequestParam(required = false) Integer organizationid, HttpServletRequest request) {
+        request.getSession().setAttribute("empInfo", null);
         if (organizationid != null) {
             request.getSession().setAttribute("orgInfo", ss.getOrganizationVOInfo(organizationid));
         } else {
             request.getSession().setAttribute("orgInfo", null);
         }
         return "installer/AmetaAddOperator";
+    }
+    @RequestMapping("addoperater")
+    public String addOperater(@RequestParam(required = false) Integer organizationid, HttpServletRequest request) {
+        request.getSession().setAttribute("empInfo", null);
+        if (organizationid != null) {
+            request.getSession().setAttribute("orgInfo", ss.getOrganizationVOInfo(organizationid));
+        } else {
+            request.getSession().setAttribute("orgInfo", null);
+        }
+        return "allusers/addOperater";
+    }
+    @RequestMapping("addinstallerperson")
+    public String addInstallerperson(@RequestParam(required = false) Integer organizationid, HttpServletRequest request) {
+        request.getSession().setAttribute("empInfo", null);
+        if (organizationid != null) {
+            request.getSession().setAttribute("orgInfo", ss.getOrganizationVOInfo(organizationid));
+        } else {
+            request.getSession().setAttribute("orgInfo", null);
+        }
+        return "allusers/newInstaller";
     }
 }

@@ -3,9 +3,11 @@ var lan = {
     addsuccess:"success",//2
     error0:"error",//-1
     varificationcodeerror:"Verification Number Error",//-2
-    orgfreeze:"Your institution or parent is frozen. Please contact your superior.",//-3
+    orgfreeze:"Organization Frozen. Please contact your distributor.",//-3
     dalose:"database connection disconnected, please wait ",//-4
-    loginfaied:"Login information error or the account is frozen.",//-98
+    loginfaied:"Invalid Password",//-98
+    nameerror:"Invalid User Name",//-6
+    accountfroze:"Account Frozen",//-7
     orgnameexist:"The company name already exists",//-11
     loginnameexist:"The loginname already exists",//-12
     notpermission:"No Permission",//-99

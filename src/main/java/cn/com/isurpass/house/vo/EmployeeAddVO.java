@@ -17,7 +17,7 @@ public class EmployeeAddVO {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private Date expiredate;
     private Integer status;
-
+    private Integer type;
     private String firstname;
     private String lastname;
     private String title;
@@ -295,6 +295,7 @@ public class EmployeeAddVO {
                 ", code='" + code + '\'' +
                 ", expiredate=" + expiredate +
                 ", status=" + status +
+                ", type=" + type +
                 ", firstname='" + firstname + '\'' +
                 ", lastname='" + lastname + '\'' +
                 ", title='" + title + '\'' +
@@ -316,4 +317,13 @@ public class EmployeeAddVO {
                 ", createtime=" + createtime +
                 '}';
     }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
 }

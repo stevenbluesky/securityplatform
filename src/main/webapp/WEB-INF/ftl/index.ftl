@@ -28,9 +28,10 @@
     </div>
 
     <div class="col-md-4">
+    <#if emp??&&loginorg?? ><h4 style="display: inline;float:left"><#if emp.type==1><@spring.message code='label.installerportal'/><#elseif loginorg.orgtype==1><@spring.message code='label.distributorportal'/><#elseif loginorg.orgtype==2><@spring.message code='label.installercompanyportal'/></#if></h4></#if>
     </div>
     <div class="col-md-5" align="middle">
-        <br>
+        <#--<br>-->
         <#if emp??&&loginorg?? ><h4 style="display: inline;float: right"><@spring.message code='label.welcome'/>,${loginorg.name}_${emp.loginname}&nbsp;&nbsp;<a href="logout" ><@spring.message code='label.logout'/></a></h4></#if>
         <br>
     </div>

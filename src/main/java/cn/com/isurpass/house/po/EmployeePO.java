@@ -26,6 +26,7 @@ public class EmployeePO {
 	private String question;
 	private String answer;
 	private Integer status; // 0:未生效 1:正常 2:冻结 9:删除
+	private Integer type;//0普通员 1安装员
 	private Integer personid;
 	private Integer addressid;
 	private Date expiredate;
@@ -43,11 +44,7 @@ public class EmployeePO {
 		this.answer = answer;
 	}
 
-	public EmployeePO(Integer employeeid, String loginname, String code, String name, String password,
-			Integer organizationid, String question, String answer, Integer status, Integer personid, Integer addressid,
-			Date expiredate, Date createtime) {
-		super();
-		this.employeeid = employeeid;
+	public EmployeePO(String loginname, String code, String name, String password, Integer organizationid, String question, String answer, Integer status, Integer type, Integer personid, Integer addressid, Date expiredate, Date createtime) {
 		this.loginname = loginname;
 		this.code = code;
 		this.name = name;
@@ -56,10 +53,11 @@ public class EmployeePO {
 		this.question = question;
 		this.answer = answer;
 		this.status = status;
+		this.type = type;
 		this.personid = personid;
 		this.addressid = addressid;
 		this.expiredate = expiredate;
-		this.createtime=createtime;
+		this.createtime = createtime;
 	}
 
 	public Integer getEmployeeid() {
@@ -158,30 +156,39 @@ public class EmployeePO {
 		this.expiredate = expiredate;
 	}
 
-    @Override
-    public String toString() {
-        return "EmployeePO{" +
-                "employeeid=" + employeeid +
-                ", loginname='" + loginname + '\'' +
-                ", code='" + code + '\'' +
-                ", name='" + name + '\'' +
-                ", password='" + password + '\'' +
-                ", organizationid=" + organizationid +
-                ", question='" + question + '\'' +
-                ", answer='" + answer + '\'' +
-                ", status=" + status +
-                ", personid=" + personid +
-                ", addressid=" + addressid +
-                ", expiredate=" + expiredate +
-                ", createtime=" + createtime +
-                '}';
-    }
+	@Override
+	public String toString() {
+		return "EmployeePO{" +
+				"employeeid=" + employeeid +
+				", loginname='" + loginname + '\'' +
+				", code='" + code + '\'' +
+				", name='" + name + '\'' +
+				", password='" + password + '\'' +
+				", organizationid=" + organizationid +
+				", question='" + question + '\'' +
+				", answer='" + answer + '\'' +
+				", status=" + status +
+				", type=" + type +
+				", personid=" + personid +
+				", addressid=" + addressid +
+				", expiredate=" + expiredate +
+				", createtime=" + createtime +
+				'}';
+	}
 
-    public Date getCreatetime() {
+	public Date getCreatetime() {
         return createtime;
     }
 
     public void setCreatetime(Date createtime) {
         this.createtime = createtime;
     }
+
+	public Integer getType() {
+		return type;
+	}
+
+	public void setType(Integer type) {
+		this.type = type;
+	}
 }

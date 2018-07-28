@@ -12,7 +12,6 @@
             <div class="col-md-3">
                 <p><@spring.message code="label.dname"/></p>
                 <p><@spring.message code="label.gatewayID"/></p>
-                <p><@spring.message code="label.businessstatus"/></p>
                 <p><@spring.message code="label.user"/></p>
                 <p><@spring.message code="label.installtime"/></p>
             </div>
@@ -20,7 +19,6 @@
             <div class="col-md-3">
                 <p><#if (gwd.name)??>${gwd.name}<#else><@spring.message code="label.none"/></#if></p>
                 <p><#if (gwd.deviceid)??>${gwd.deviceid}<#else><@spring.message code="label.none"/></#if></p>
-                <p><#if (gwd.businessstatus)?exists&&gwd.businessstatus==1><@spring.message code="label.online"/><#else><@spring.message code="label.unknown"/></#if></p>
                 <p><#if (gwd.customer)??>${gwd.customer}<#else><@spring.message code="label.none"/></#if></p>
                 <p><#if (gwd.createtime)??>${gwd.createtime?string('yyyy-MM-dd')}<#else><@spring.message code="label.none"/></#if></p>
 
@@ -29,7 +27,7 @@
                 <p><@spring.message code="label.model"/></p>
                 <p><@spring.message code="label.firmwareversion"/></p>
                 <p><@spring.message code="label.devicestatus"/></p>
-                <p><@spring.message code="label.installer"/></p>
+                <p><@spring.message code="label.InstallerPersonList"/></p>
             </div>
             <div class="col-md-3">
                 <p><#if (gwd.model)??>${gwd.model}<#else><@spring.message code="label.none"/></#if></p>
@@ -98,6 +96,8 @@
                 <th data-field="status" class="text-center"
                     data-formatter='formatter_devicestatus'><@spring.message code="label.status"/></th>
                 <th data-field="battery" class="text-center"><@spring.message code="label.energy"/></th>
+                <th data-field="area" class="text-center"
+                    data-formatter='formatter_area'><@spring.message code="label.areanumber"/></th>
             </tr>
             </thead>
         </table>
@@ -180,7 +180,12 @@
         if (value == 1)
             return '<@spring.message code="label.online"/>';
     }
-
+    function formatter_area(value,row,index) {
+        if(value>1000){
+            return "1-"+(value-1000);
+        }
+        return value;
+    }
     function togglePhonecardStatus(hope) {
         let ids = [${(gwd.phonecardid)!}];
         //异步更新

@@ -24,6 +24,7 @@
             <input type="hidden" name="organizationid"  id="organizationid" value="${loginorg.organizationid}">
         </#if>
             <#if empInfo??><input type="hidden" name="employeeid"  id="employeeid" value="${empInfo.employeeid}"></#if>
+            <#if empInfo??><input type="hidden" name="type"  id="emptype" value="${empInfo.type}"></#if>
             <div class="form-group">
                 <label for="loginname"
                        class="col-sm-3 control-label"  style="text-align: left;"><@spring.message code="label.loginname"/>*</label>

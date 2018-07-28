@@ -48,7 +48,7 @@ public class ShiroPermsFilter extends PermissionsAuthorizationFilter {
             WebUtilsPro.writeJson(map, httpServletResponse);
         } else {//如果是普通请求进行重定向
             log.info("no permisson");
-            httpServletResponse.sendRedirect("noPermission.html");
+            httpServletResponse.sendRedirect(servletRequest.getContextPath()+"/login");
         }
         return false;
     }
