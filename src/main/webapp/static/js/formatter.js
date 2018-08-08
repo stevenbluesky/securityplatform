@@ -553,6 +553,8 @@ function formatterReturnStatus(status){
         case '-120':return lan.alrphonecard;
         case '-121':return lan.alrappaccount;
         case '-122':return lan.wholeaddress;
+        case '-123':return lan.repeatgateway;
+        case '-124':return lan.repeatsim;
         case '-133':return lan.notsup;//不支持的设备类型
         case '-134':return lan.devicetimeout;//超时
         case '-199':return lan.unknownerror;//未知错误

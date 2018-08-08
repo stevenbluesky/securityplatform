@@ -50,7 +50,8 @@ public class TokenKeeper {
     }
 
     private static String login(){
-        String url = "https://app.aibasecloud.com/iremote/thirdpart/login";
+        //String url = "https://app.aibasecloud.com/iremote/thirdpart/login";
+        String url = "https://"+Constants.OPERATE_DEVICE_URL+"/iremote/thirdpart/login";
         Map<String, String> map = new HashMap<>();
         map.put("code", TokenKeeper.code);
         map.put("password", TokenKeeper.password);

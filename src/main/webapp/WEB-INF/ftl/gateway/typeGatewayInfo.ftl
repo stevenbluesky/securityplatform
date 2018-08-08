@@ -6,7 +6,7 @@
     <div class="row-horizontal">
         <div class="col-md-1"></div>
         <div class="col-md-10">
-          <form id="typeform" action="add" method="get">
+          <form class="form-horizontal" id="typeform" action="add" method="get">
               <div class="text-center"><h1><@spring.message code="label.enteringgatewayinfo"/></h1></div>
               <hr>
               <div  class="form-group">

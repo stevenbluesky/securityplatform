@@ -114,8 +114,6 @@ public class ZwaveDeviceService {
         long end = System.currentTimeMillis(); //获取结束时间
         map.put("rows", list);
         map.put("total", zd.countByDeviceidIn(filterlist));
-        System.out.println("timer： " + (end - start) + "ms");
-        System.out.println("timer0： " + (end0 - start0) + "ms");
         return map;
     }
 

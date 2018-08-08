@@ -96,81 +96,78 @@
                 </div>
 
                 <hr>
-                <div class="form-group">
-                    <label for="deviceid" class="col-sm-2 "><@spring.message code='label.gatewayID'/>
-                        </label>
-                    <div class="col-sm-4">
-                    ${(userVO.deviceid)!}
-                    <#if (userVO.deviceid)??>
-                        <input type="hidden" id="deviceid" name="deviceid" value="${userVO.deviceid}">
-                        <@shiro.hasPermission name="label.UnbundlingUserGateway">
-                            <input style="margin-left:10px;" class="btn btn-sm" value='<@spring.message code="label.unbundling"/>' type="button" onclick='unbundlingUserWithGateway();'></button>
-                        </@shiro.hasPermission>
-                    </#if>
-                    </div>
-                    <label for="address" class="col-sm-2 "><@spring.message code='label.status'/></label>
-                    <div class="col-sm-4">
-                    <#if (userVO.deviceid)??>
-                        <#if (userVO.gatewaystatus)?exists && userVO.gatewaystatus==1><@spring.message code="label.online"/><#elseif (userVO.gatewaystatus)?exists && userVO.gatewaystatus==0><@spring.message code="label.offline"/><#else><@spring.message code="label.unknown"/></#if>
-                    </#if>
-                    </div>
+    <#assign advList = userVO.gpVO! />
+    <#if !advList?exists || advList?size==0>
+    <#else>
+        <#list advList as adv>
+            <div class="form-group">
+                <label for="deviceid" class="col-sm-2 "><@spring.message code='label.gatewayID'/> ${adv_index+1}
+                </label>
+                <div class="col-sm-4">
+            <#if (adv.deviceid)??>
+                    ${adv.deviceid!}
+                    <#if (adv.deviceid)??><input readonly="readonly" type="hidden" id="deviceid${adv_index+1}" name="deviceid" value="${adv.deviceid!}"></#if>
+                    <@shiro.hasPermission name="label.UnbundlingUserGateway">
+                        <input style="margin-left:10px;" class="btn btn-sm" value='<@spring.message code="label.unbundling"/>' type="button" onclick='unbundlingUserWithGateway(${adv_index+1});'></button>
+                    </@shiro.hasPermission>
                 </div>
-                <div class="form-group">
-                    <label for="serialnumber" class="col-sm-2 "><@spring.message code='label.serialnumber'/></label>
-                    <div class="col-sm-4">
-                        <#if (userVO.userid)??><input type="hidden" id="userid" name="userid" value="${userVO.userid}"></#if>
-                        <#if (userVO.serialnumber)??><input type="hidden" id="serialnumber" name="serialnumber" value="${userVO.serialnumber}"></#if>
-                        <#if (userVO.phonecardid)??><input type="hidden" id="phonecardid" name="phonecardid" value="${userVO.phonecardid}"></#if>
-                    ${(userVO.serialnumber)!}
-                    <#if (userVO.serialnumber)??>
+            </#if>
+                <label for="address" class="col-sm-2 "><@spring.message code='label.status'/></label>
+                <div class="col-sm-4">
+                    <#if (adv.deviceid)??>
+                        <#if (adv.gatewaystatus)?exists && adv.gatewaystatus==1><@spring.message code="label.online"/><#elseif (adv.gatewaystatus)?exists && adv.gatewaystatus==0><@spring.message code="label.offline"/><#else><@spring.message code="label.unknown"/></#if>
+                    </#if>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="serialnumber" class="col-sm-2 "><@spring.message code='label.serialnumber'/> ${adv_index+1}</label>
+                <div class="col-sm-4">
+                    <#if (userVO.userid)??><input type="hidden" id="userid" name="userid" value="${userVO.userid?c}"></#if>
+                    <#if (adv.serialnumber)??><input readonly="readonly" type="hidden" id="serialnumber${adv_index+1}" name="serialnumber" value="${adv.serialnumber!}"></#if>
+                    <#if (adv.phonecardid)??><input type="hidden" id="phonecardid${adv_index+1}" name="phonecardid" value="${adv.phonecardid?c}"></#if>
+                    <#if (adv.serialnumber)??>
+                        ${adv.serialnumber!}
                         <@shiro.hasPermission name="label.UnbundlingUserGateway">
-                            <input style="margin-left:10px;" class="btn btn-sm" value='<@spring.message code="label.unbundling"/>' type="button" onclick='unbundlingUserWithPhoneNmber();'></button>
+                            <input style="margin-left:10px;" class="btn btn-sm" value='<@spring.message code="label.unbundling"/>' type="button" onclick='unbundlingUserWithPhoneNmber(${adv_index+1});'></button>
                         </@shiro.hasPermission>
                     </#if>
-                    </div>
-                    <label for="address" class="col-sm-2 "><@spring.message code='label.status'/></label>
-                    <div class="col-sm-4">
-                            <#if (userVO.serialnumber)??>
-                             <#if (userVO.status)?exists && userVO.status==1><@spring.message code="label.activated"/><#elseif (userVO.status)?exists && userVO.status==2><@spring.message code="label.deactivated"/><#elseif (userVO.status)?exists && userVO.status==3><@spring.message code="label.inventory"/><#elseif (userVO.status)?exists && userVO.status==0><@spring.message code="label.noeffect"/><#else><@spring.message code="label.unknown"/></#if>
-                            </#if>
-                        <@shiro.hasPermission name="label.SynchronousSIMInfo">
-                            <#if (userVO.serialnumber)??>
-                        <button style="" type="button" class="btn btn-sm" onclick='updatePhonecardStatus("synchronous");'><@spring.message code="label.synchronous"/></button>
-                            </#if>
-                        </@shiro.hasPermission>
-                        <@shiro.hasPermission name="label.ActiveeSIM">
-                            <#if (userVO.status)?exists && userVO.status==2>
-                        <button style="" type="button" id='startPhonecard' class='btn btn-sm' onclick='updatePhonecardStatus("start");'><@spring.message code='label.start'/></button>
-                            </#if>
-                        </@shiro.hasPermission>
-                            <@shiro.hasPermission name="label.FreezeSIM">
-                            <#if (userVO.status)?exists && userVO.status==1>
-                        <button style="" type="button" id='stopPhonecard' class='btn btn-sm' onclick='updatePhonecardStatus("freeze");'><@spring.message code='label.freeze'/></button>
-                            </#if>
-                        </@shiro.hasPermission>
-                    </div>
                 </div>
-
+                <label for="address" class="col-sm-2 "><@spring.message code='label.status'/></label>
+                <div class="col-sm-4">
+                    <#if (adv.serialnumber)??>
+                        <#if (adv.phonecardstatus)?exists && adv.phonecardstatus==1><@spring.message code="label.activated"/><#elseif (adv.phonecardstatus)?exists && adv.phonecardstatus==2><@spring.message code="label.deactivated"/><#elseif (adv.phonecardstatus)?exists && adv.phonecardstatus==3><@spring.message code="label.inventory"/><#elseif (adv.phonecardstatus)?exists && adv.phonecardstatus==0><@spring.message code="label.noeffect"/><#else><@spring.message code="label.unknown"/></#if>
+                    </#if>
+                    <@shiro.hasPermission name="label.SynchronousSIMInfo">
+                        <#if (adv.serialnumber)??>
+                            <button style="" type="button" class="btn btn-sm" onclick='updatePhonecardStatus("synchronous#${adv_index+1}");'><@spring.message code="label.synchronous"/></button>
+                        </#if>
+                    </@shiro.hasPermission>
+                    <@shiro.hasPermission name="label.ActiveeSIM">
+                        <#if (adv.phonecardstatus)?exists && adv.phonecardstatus==2>
+                            <button style="" type="button" id='startPhonecard' class='btn btn-sm' onclick='updatePhonecardStatus("start#${adv_index+1}");'><@spring.message code='label.start'/></button>
+                        </#if>
+                    </@shiro.hasPermission>
+                    <@shiro.hasPermission name="label.FreezeSIM">
+                        <#if (adv.phonecardstatus)?exists && adv.phonecardstatus==1>
+                            <button style="" type="button" id='stopPhonecard' class='btn btn-sm' onclick='updatePhonecardStatus("freeze#${adv_index+1}");'><@spring.message code='label.freeze'/></button>
+                        </#if>
+                    </@shiro.hasPermission>
+                </div>
+            </div>
+        </#list>
+    </#if>
             </form>
-
         </div>
-
-
     </div>
 
 <!-- JavaScript 部分 -->
     <script type="text/javascript">
-        function formatterGender(){
-            let gender = ${(userVO.gender)!"-1"};
-            let formatterStatus = formatter_gender(gender);
-            $("#gender").text(formatterStatus);
-        }
-        function unbundlingUserWithPhoneNmber() {
+        function unbundlingUserWithPhoneNmber(obj) {
             if (!confirm("<@spring.message code='label.unbundlingconfirm'/>")) {
                 return;
             }
            var userid = $("#userid").val();
-           var serialnumber = $("#serialnumber").val();
+           var serialnumber = $("#serialnumber"+obj).val();
            var mydata = userid+"#"+serialnumber;
             $.ajax({
                 type: 'post',
@@ -193,11 +190,11 @@
 
             });
         }
-        function unbundlingUserWithGateway(){
+        function unbundlingUserWithGateway(obj){
             if (!confirm("<@spring.message code='label.unbundlingconfirm'/>")) {
                 return;
             }
-            var mydata =$("#deviceid").val();;
+            var mydata =$("#deviceid"+obj).val();
             $.ajax({
                 type: 'post',
                 url: '../user/unbundlinggateway',
@@ -219,13 +216,12 @@
 
             });
         }
-        $(function () {
-            formatterGender();
-        });
         //更新状态
-        function updatePhonecardStatus(obj) {
+        function updatePhonecardStatus(obje) {
+            var nu = obje.split("#")[1];
+            var obj = obje.split("#")[0];
             var confirmdelete = "";
-            var id = $("#phonecardid").val();
+            var id = $("#phonecardid"+nu).val();
             if (obj == "start") {
                 if (!confirm("<@spring.message code='label.startconfirm'/>")) {
                     return;

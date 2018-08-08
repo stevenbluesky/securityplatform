@@ -564,7 +564,7 @@ public class EmployeeService {
     public String getMenuTree(EmployeePO emp, HttpServletRequest request, HttpServletResponse response) {
         if(emp==null){
             try {
-                response.sendRedirect(request.getContextPath()+"/login");
+                response.sendRedirect(request.getContextPath()+"/index");
             } catch (IOException e) {
                 e.printStackTrace();
             }

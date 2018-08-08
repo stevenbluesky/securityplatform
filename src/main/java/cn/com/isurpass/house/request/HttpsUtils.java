@@ -172,7 +172,21 @@ public class HttpsUtils {
         String url = "https://"+ Constants.OPERATE_DEVICE_URL+"/iremote/thirdpart/zufang/closedevice";
         return toggleDevice(zwavedeviceid, 1, url);
     }
-
+    public static String getQrInfo(String deviceid){
+        String url = "https://"+ Constants.OPERATE_DEVICE_URL+"/iremote/thirdpart/zufang/querygatewayqrcode";
+        Map<String, String> map = new HashMap<>();
+        map.put("token", TokenKeeper.getToken());
+        map.put("deviceid", deviceid);
+        String post = HttpsUtils.post(url, null, map, null);
+        JSONObject jo = JSONObject.parseObject(post);
+        if (jo == null || jo.getInteger("resultCode") == 30300) {
+            TokenKeeper.getNewToken();
+            map.put("token", TokenKeeper.getToken());
+            map.put("deviceid", deviceid);
+            return HttpsUtils.post(url, null, map, null);
+        }
+        return post;
+    }
     public static void main(String[] args) throws Exception {
       /*  for (int i = 0; i < 100; i++) {
             Map<String, String> map = new HashMap<>();

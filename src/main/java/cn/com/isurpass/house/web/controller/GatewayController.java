@@ -1,14 +1,29 @@
 package cn.com.isurpass.house.web.controller;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.imageio.ImageIO;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import cn.com.isurpass.house.po.EmployeePO;
 import cn.com.isurpass.house.util.FormUtils;
 import cn.com.isurpass.house.vo.DeviceDetailVO;
+import com.alibaba.fastjson.JSONObject;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -30,6 +45,8 @@ import cn.com.isurpass.house.result.PageResult;
 import cn.com.isurpass.house.vo.GatewayDetailVO;
 import cn.com.isurpass.house.vo.TransferVO;
 import cn.com.isurpass.house.vo.TypeGatewayInfoVO;
+
+import static com.google.zxing.client.j2se.MatrixToImageWriter.toBufferedImage;
 
 @Controller
 @RequestMapping("/gateway")
@@ -139,6 +156,58 @@ public class GatewayController {
 		}
 		return "success";
 	}
+
+	/**
+	 * 根据网关id查询二维码信息并生成二维码
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "getGatewayQrcode",method = RequestMethod.POST)
+	public String getGatewayQrcode(@RequestBody String deviceid){
+		deviceid = deviceid.replaceAll(" ","");
+		String qrinfo = gs.getQrcodeInfo(deviceid);
+		if ( qrinfo == null) {
+			qrinfo = "";
+		}
+		return qrinfo;
+		/*"{\"type\":\"gateway\",\"qid\":\"80XjcRQ9LkqsY3e4ocgX\"}"*/
+	}
+	@RequestMapping(value = "getGatewayQrcode1")
+	public void getErWeiCode(HttpServletRequest request,HttpServletResponse response){
+		String qrstring =request.getParameter("qrstring");
+		try {
+			JSONObject jsobj = JSONObject.parseObject(qrstring);
+			String type = jsobj.getString("type");
+			if(!type.equals("gateway")){
+				qrstring = "";
+			}
+		}catch (Exception ee){
+			qrstring = "";
+		}
+		if(qrstring!=null&&!"".equals(qrstring)){
+			 ServletOutputStream stream=null;
+			try {
+				int width=400;
+				int height=400;
+				 stream=response.getOutputStream();
+				 QRCodeWriter writer=new QRCodeWriter();
+				 BitMatrix m=writer.encode(qrstring, BarcodeFormat.QR_CODE, height,width);
+				 MatrixToImageWriter.writeToStream(m, "png", stream);
+				} catch (Exception e) {
+				   e.printStackTrace();
+				}finally{
+					 if(stream!=null){
+						 try {
+							 stream.flush();
+							 stream.close();
+						 } catch (IOException e) {
+							 e.printStackTrace();
+						 }
+					 }
+			}
+		}
+	}
+
 	//页面跳转
 	@RequestMapping("gatewayList")
 	public String gatewayList() {
@@ -154,5 +223,10 @@ public class GatewayController {
 	@RequestMapping("addGateway")
 	public String addGateway() {
 		return "gateway/addGateway";
+	}
+
+	@RequestMapping("queryGatewayQrcode")
+	public String queryGatewayQrcodePage() {
+		return "gateway/queryGatewayQrcode";
 	}
 }

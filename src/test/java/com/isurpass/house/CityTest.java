@@ -1,6 +1,7 @@
 package com.isurpass.house;
 
 import javax.annotation.Resource;
+import javax.sound.midi.Soundbank;
 
 import cn.com.isurpass.house.dao.AddressDAO;
 import cn.com.isurpass.house.dao.OrganizationDAO;
@@ -19,6 +20,7 @@ import cn.com.isurpass.house.po.ProvincePO;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
@@ -64,8 +66,22 @@ public class CityTest {
 
     @Test
     public void testNull() {
-        List<OrganizationPO> byOrgtype = od.findByOrgtype(null);//不能通过null取所有的数据
-        System.out.println(byOrgtype.size());
+        //List<OrganizationPO> byOrgtype = od.findByOrgtype(null);//不能通过null取所有的数据
+        //System.out.println(byOrgtype.size());
+        String s = ",,,,23,,";
+        String[] split = s.split(",");
+        System.out.println(split.length);
+        System.out.println(split[0]+"-"+split[1]+"-"+split[2]);
+        System.out.println(s.substring(0,s.indexOf(",")));
+        //System.out.println(s.substring(s.indexOf(",")));
+        /*String d = "khbjikjbhuijbhk3";
+        String f = "jnkjkjkjnknk4";
+        List<String> a = new ArrayList<>();
+        a.add(d);a.add(f);
+        List<String> b = new ArrayList<>();
+        b.add(d);
+        a.retainAll(b);
+        System.out.println(a);*/
     }
     @Test
     public void transfertimezone(){

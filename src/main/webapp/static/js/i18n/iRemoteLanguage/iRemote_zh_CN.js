@@ -37,7 +37,8 @@ var lan = {
     notsup:"不支持的设备类型",//不支持的设备类型 133
     devicetimeout:"超时",//超时 134
     unknownerror:"未知错误",//未知错误 199
-
+    repeatgateway:"网关重复",
+    repeatsim:"SIM卡重复",
 
     normal: "正常",
     unvalid: '未生效',

@@ -80,6 +80,11 @@ public class PhoneCardInterfaceCallUtils {
         // 打印返回结果
         JSONObject jsStr = JSONObject.parseObject(result);
         String status = (String)jsStr.get("status");
+        String errorMessage = (String)jsStr.get("errorMessage");
+        String errorCode = (String)jsStr.get("errorCode");
+        if(errorCode!=null||errorMessage!=null){
+            throw new MyArgumentNullException("errorMessage:"+errorMessage+";errorCode:"+errorCode);
+        }
         return result;
     }
 

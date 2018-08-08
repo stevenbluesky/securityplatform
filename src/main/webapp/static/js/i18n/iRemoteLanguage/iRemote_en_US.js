@@ -37,6 +37,8 @@ var lan = {
     notsup:"Unsupported type of device",//不支持的设备类型
     devicetimeout:"Timeout",//超时
     unknownerror:"Unknown error",//未知错误
+    repeatgateway:"Gateway Repeated",
+    repeatsim:"SIM Card Repeated",
 
     normal: "Normal",
     unvalid: 'Ready',

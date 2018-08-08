@@ -92,6 +92,9 @@
 <#--新增，启用，停用按钮-->
 <button style="float: right;" type="button" id='deletePhonecard' class='btn btn-default' onclick='updatePhonecardStatus("delete")'><@spring.message code='label.delete'/></button>
 </@shiro.hasPermission>
+<@shiro.hasPermission name="label.InputGatewayInformation">
+<button style="float: right;" type="button" id='queryGateway' class='btn btn-default' onclick='queryGatewayQrcode()'><@spring.message code='label.queryqrcode'/></button>
+</@shiro.hasPermission>
 <#--<@shiro.hasPermission name="label.InputGatewayInformation">
 <button style="float: right;" type="button" class="btn btn-default" onclick="window.location.href='typeGatewayInfo'"><@spring.message code="label.entering"/></button>
 </@shiro.hasPermission>-->
@@ -216,6 +219,10 @@
             return new Array("-1");
         }
         return ids;
+    }
+    function queryGatewayQrcode() {
+        $('#myModal').modal('show');
+        $("#iframeDetail").attr("src", 'queryGatewayQrcode');
     }
     //更新状态
     function updatePhonecardStatus(obj) {

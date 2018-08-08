@@ -3,6 +3,7 @@ package cn.com.isurpass.house.service;
 import cn.com.isurpass.house.dao.*;
 import cn.com.isurpass.house.exception.MyArgumentNullException;
 import cn.com.isurpass.house.po.*;
+import cn.com.isurpass.house.request.HttpsUtils;
 import cn.com.isurpass.house.util.BeanCopyUtils;
 import cn.com.isurpass.house.util.Constants;
 import cn.com.isurpass.house.util.RemoveDuplicate;
@@ -10,6 +11,7 @@ import cn.com.isurpass.house.vo.DeviceDetailVO;
 import cn.com.isurpass.house.vo.EmployeeListVO;
 import cn.com.isurpass.house.vo.GatewayDetailVO;
 import cn.com.isurpass.house.vo.TypeGatewayInfoVO;
+import com.alibaba.fastjson.JSONObject;
 import com.jhlabs.vecmath.Tuple3f;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -52,6 +54,8 @@ public class GatewayService {
 	private EmployeeroleDAO employeeroleDAO;
 	@Autowired
 	private ZwaveSubDeviceDAO zsddao;
+	@Autowired
+	private GatewayPhonecardDAO gpDAO;
 	/**
 	 * 新增网关信息
 	 * @param tgi
@@ -306,9 +310,11 @@ public class GatewayService {
 				gate.setInstaller(emp.getLoginname());
 			}
 			//电话卡信息
-			PhonecardUserPO puPO = pud.findByUserid(user.getUserid());
-			if(puPO!=null) {
-				PhonecardPO pc = pd.findByPhonecardid(puPO.getPhonecardid());
+			//PhonecardUserPO puPO = pud.findByUserid(user.getUserid()).get(0);//TODO 部分网关该处报错导致前端无数据
+			GatewayPhonecardPO byDeviceid = gpDAO.findByDeviceid(deviceid);
+			if(byDeviceid!=null&&!StringUtils.isEmpty(byDeviceid.getSerialnumber())) {
+				PhonecardPO pc = pd.findBySerialnumber(byDeviceid.getSerialnumber());
+				//PhonecardPO pc = pd.findByPhonecardid(puPO.getPhonecardid());
 				if(pc!=null) {
 					gate.setPhonecardid(pc.getPhonecardid());
 					gate.setPhonecardserialnumber(pc.getSerialnumber());
@@ -542,4 +548,15 @@ public class GatewayService {
 		return map;
 	}
 
+	public String getQrcodeInfo(String deviceid) {
+		String qrInfo = HttpsUtils.getQrInfo(deviceid);
+		JSONObject jo = JSONObject.parseObject(qrInfo);
+		if (jo == null || jo.isEmpty()) {
+			return null;
+		}
+		if(jo.getInteger("resultCode")!=0){
+			return null;
+		}
+		return jo.getString("qrstring");
+	}
 }

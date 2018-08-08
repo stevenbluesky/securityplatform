@@ -9,7 +9,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-
 import cn.com.isurpass.house.po.UserPO;
 
 @Repository
@@ -28,21 +27,13 @@ public interface UserDAO extends CrudRepository<UserPO, Integer> {
 
     List<UserPO> findAll();
 
-    Page<UserPO> findByInstallerorgid(Integer organizationid, Pageable pageable);
-
     Page<UserPO> findByOrganizationid(Integer organizationid, Pageable pageable);
-
-    Page<UserPO> findByInstallerid(Integer employeeid, Pageable pageable);
 
     List<UserPO> findByCitycodeContaining(String findCode);
 
     List<UserPO> findByInstalleridIn(List<Integer> employeeidlist);
 
     List<UserPO> findByUseridIn(List<Integer> useridlist);
-
-    Integer countByInstallerid(Integer employeeid);
-
-    Integer countByInstallerorgid(Integer organizationid);
 
     List<UserPO> findAll(Specification<UserPO> specification);
 
@@ -53,22 +44,6 @@ public interface UserDAO extends CrudRepository<UserPO, Integer> {
     List<UserPO> findByCitycodeIn(List<String> citycodelist);
 
     List<UserPO> findByOrganizationidIn(List<Integer> orgidlist);
-
-    Page<UserPO> findByUseridIn(List<Integer> ids, Pageable pageable);
-
-    Integer countByUseridIn(List<Integer> ids);
-
-    Page<UserPO> findByUseridInAndInstallerid(List<Integer> ids, Integer employeeid, Pageable pageable);
-
-    Integer countByUseridInAndInstallerid(List<Integer> ids, Integer employeeid);
-
-    Page<UserPO> findByUseridInAndOrganizationid(List<Integer> ids, Integer organizationid, Pageable pageable);
-
-    Integer countByUseridInAndOrganizationid(List<Integer> ids, Integer organizationid);
-
-    Page<UserPO> findByUseridInAndInstallerorgid(List<Integer> ids, Integer organizationid, Pageable pageable);
-
-    Integer countByUseridInAndInstallerorgid(List<Integer> ids, Integer organizationid);
 
     List<UserPO> findByInstallerorgidIn(List<Integer> orgidlist);
 
@@ -83,11 +58,103 @@ public interface UserDAO extends CrudRepository<UserPO, Integer> {
 
     UserPO findByAppaccount(String appaccount);
 
-    Integer countByOrganizationid(Integer organizationid);
-
     List<UserPO> findByAppaccountContaining(String searchAppAccount);
 
     List<UserPO> findByUsercodeContaining(String searchCode);
 
     int countByMonitoringstationid(Integer organizationid);
+
+    @Query(value = "SELECT gu.deviceid,u.userid,u.name,u.status,u.appaccount,u.citycode,u.organizationid,u.personid,u.usercode, gp.serialnumber FROM \n" +
+            "user u LEFT JOIN gatewayuser gu ON u.userid=gu.userid\n" +
+            "LEFT JOIN gateway g ON gu.deviceid=g.deviceid\n" +
+            "LEFT JOIN gatewayphonecard gp ON gp.deviceid=g.deviceid order by u.userid desc limit :size1 ,:number1 ",nativeQuery = true)
+    List<Object[]> findUserWithGateway(@Param("size1")int size, @Param("number1")int number);
+
+    @Query(value = "SELECT count(*) FROM \n" +
+            "user u LEFT JOIN gatewayuser gu ON u.userid=gu.userid \n" +
+            "left JOIN gateway g ON gu.deviceid=g.deviceid",nativeQuery = true)
+    Integer countUserWithGateway();
+
+    @Query(value = "SELECT g.deviceid,u.userid,u.name,u.status,u.appaccount,u.citycode,u.organizationid,u.personid,u.usercode, gp.serialnumber FROM user u \n" +
+            "LEFT JOIN gatewayuser gu ON u.userid=gu.userid " +
+            "LEFT JOIN gateway g ON gu.deviceid=g.deviceid " +
+            "LEFT JOIN gatewayphonecard gp ON gp.deviceid=g.deviceid where u.installerid=:employeeid order by u.userid desc limit :size1 ,:number1 ",nativeQuery = true)
+    List<Object[]> findUserByInstallerid(@Param("employeeid")Integer employeeid, @Param("size1")int size, @Param("number1")int number);
+
+    @Query(value = "SELECT count(1) FROM \n" +
+            "user u LEFT JOIN gatewayuser gu ON u.userid=gu.userid \n" +
+            "LEFT JOIN gateway g ON gu.deviceid=g.deviceid where u.installerid=:employeeid",nativeQuery = true)
+    Integer countUserByInstallerid(@Param("employeeid")Integer employeeid);
+
+    @Query(value = "SELECT gu.deviceid,u.userid,u.name,u.status,u.appaccount,u.citycode,u.organizationid,u.personid,u.usercode, gp.serialnumber FROM \n" +
+            "user u LEFT JOIN gatewayuser gu ON u.userid=gu.userid\n" +
+            "LEFT JOIN gateway g ON gu.deviceid=g.deviceid\n" +
+            "LEFT JOIN gatewayphonecard gp ON gp.deviceid=g.deviceid where u.installerorgid=:installerorg order by u.userid desc limit :size1 ,:number1 ",nativeQuery = true)
+    List<Object[]> findUserByInstallerorg(@Param("installerorg") Integer installerorg,@Param("size1")int size, @Param("number1")int number);
+
+    @Query(value = "SELECT count(*) FROM \n" +
+            "user u LEFT JOIN gatewayuser gu ON u.userid=gu.userid \n" +
+            "LEFT JOIN gateway g ON gu.deviceid=g.deviceid where u.installerorgid=:installerorg",nativeQuery = true)
+    Integer countUserByInstallerorg(@Param("installerorg") Integer installerorg);
+
+    @Query(value = "SELECT gu.deviceid,u.userid,u.name,u.status,u.appaccount,u.citycode,u.organizationid,u.personid,u.usercode, gp.serialnumber FROM \n" +
+            "user u LEFT JOIN gatewayuser gu ON u.userid=gu.userid\n" +
+            "LEFT JOIN gateway g ON gu.deviceid=g.deviceid\n" +
+            "LEFT JOIN gatewayphonecard gp ON gp.deviceid=g.deviceid where u.organizationid=:organizationid order by u.userid desc limit :size1 ,:number1 ",nativeQuery = true)
+    List<Object[]> findUserByOrganizationorg(@Param("organizationid") Integer organizationid, @Param("size1")int size, @Param("number1")int number);
+
+    @Query(value = "SELECT count(*) FROM \n" +
+            "user u LEFT JOIN gatewayuser gu ON u.userid=gu.userid \n" +
+            "LEFT JOIN gateway g ON gu.deviceid=g.deviceid where u.organizationid=:organizationid",nativeQuery = true)
+    Integer countUserByOrganizationorg(@Param("organizationid")Integer organizationid);
+
+    @Query(value = "SELECT gu.deviceid,u.userid,u.name,u.status,u.appaccount,u.citycode,u.organizationid,u.personid,u.usercode, gp.serialnumber FROM \n" +
+            "user u LEFT JOIN gatewayuser gu ON u.userid=gu.userid\n" +
+            "LEFT JOIN gateway g ON gu.deviceid=g.deviceid\n" +
+            "LEFT JOIN gatewayphonecard gp ON gp.deviceid=g.deviceid where u.userid in :ids and u.installerid=:employeeid order by u.userid desc limit :size1 ,:number1  ",nativeQuery = true)
+    List<Object[]> findByUserlistAndInstalleridS(@Param("ids")List<Integer> ids, @Param("employeeid")Integer employeeid, @Param("size1")int size, @Param("number1")int number);
+
+    @Query(value = "SELECT count(*) FROM \n" +
+            "user u LEFT JOIN gatewayuser gu ON u.userid=gu.userid\n" +
+            "LEFT JOIN gateway g ON gu.deviceid=g.deviceid\n" +
+            "LEFT JOIN gatewayphonecard gp ON gp.deviceid=g.deviceid where u.userid in :ids and u.installerid=:employeeid ",nativeQuery = true)
+    Integer countByUserlistAndInstalleridS(@Param("ids")List<Integer> ids, @Param("employeeid")Integer employeeid);
+
+    @Query(value = "SELECT gu.deviceid,u.userid,u.name,u.status,u.appaccount,u.citycode,u.organizationid,u.personid,u.usercode, gp.serialnumber FROM \n" +
+            "user u LEFT JOIN gatewayuser gu ON u.userid=gu.userid\n" +
+            "LEFT JOIN gateway g ON gu.deviceid=g.deviceid\n" +
+            "LEFT JOIN gatewayphonecard gp ON gp.deviceid=g.deviceid where u.userid in :ids order by u.userid desc limit :size1 ,:number1 ",nativeQuery = true)
+    List<Object[]> findByUserlistS(@Param("ids")List<Integer> ids, @Param("size1")int size, @Param("number1")int number);
+
+    @Query(value = "SELECT count(*) FROM \n" +
+            "user u LEFT JOIN gatewayuser gu ON u.userid=gu.userid\n" +
+            "LEFT JOIN gateway g ON gu.deviceid=g.deviceid\n" +
+            "LEFT JOIN gatewayphonecard gp ON gp.deviceid=g.deviceid where u.userid in :ids",nativeQuery = true)
+    int countByUserlistS(@Param("ids")List<Integer> ids);
+
+    @Query(value = "SELECT gu.deviceid,u.userid,u.name,u.status,u.appaccount,u.citycode,u.organizationid,u.personid,u.usercode, gp.serialnumber FROM \n" +
+            "user u LEFT JOIN gatewayuser gu ON u.userid=gu.userid\n" +
+            "LEFT JOIN gateway g ON gu.deviceid=g.deviceid\n" +
+            "LEFT JOIN gatewayphonecard gp ON gp.deviceid=g.deviceid where u.userid in :ids and u.organizationid=:organizationid order by u.userid desc limit :size1 ,:number1 ",nativeQuery = true)
+    List<Object[]> findByUserlistAndOrganizationS(@Param("ids")List<Integer> ids, @Param("organizationid")Integer organizationid,@Param("size1")int size, @Param("number1")int number);
+
+    @Query(value = "SELECT count(*) FROM \n" +
+            "user u LEFT JOIN gatewayuser gu ON u.userid=gu.userid\n" +
+            "LEFT JOIN gateway g ON gu.deviceid=g.deviceid\n" +
+            "LEFT JOIN gatewayphonecard gp ON gp.deviceid=g.deviceid where u.userid in :ids and u.organizationid=:organizationid ",nativeQuery = true)
+    int countByUserlistAndOrganizationS(@Param("ids")List<Integer> ids, @Param("organizationid")Integer organizationid);
+
+    @Query(value = "SELECT gu.deviceid,u.userid,u.name,u.status,u.appaccount,u.citycode,u.organizationid,u.personid,u.usercode, gp.serialnumber FROM \n" +
+            "user u LEFT JOIN gatewayuser gu ON u.userid=gu.userid\n" +
+            "LEFT JOIN gateway g ON gu.deviceid=g.deviceid\n" +
+            "LEFT JOIN gatewayphonecard gp ON gp.deviceid=g.deviceid where u.userid in :ids and u.installerorgid=:organizationid order by u.userid desc limit :size1 ,:number1 ",nativeQuery = true)
+    List<Object[]> findByUserlistAndInstallerorgS(@Param("ids")List<Integer> ids, @Param("organizationid")Integer organizationid, @Param("size1")int size, @Param("number1")int number);
+
+    @Query(value = "SELECT count(*) FROM \n" +
+            "user u LEFT JOIN gatewayuser gu ON u.userid=gu.userid\n" +
+            "LEFT JOIN gateway g ON gu.deviceid=g.deviceid\n" +
+            "LEFT JOIN gatewayphonecard gp ON gp.deviceid=g.deviceid where u.userid in :ids and u.installerorgid=:organizationid ",nativeQuery = true)
+    int countByUserlistAndInstallerorgS(@Param("ids")List<Integer> ids, @Param("organizationid")Integer organizationid);
+
+
 }

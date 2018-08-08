@@ -6,6 +6,8 @@
                 <div class="text-center"><h1><@spring.message code='label.modifyUserInfo'/></h1></div>
                 <hr>
             <#--<#if admin?? && admin == true>-->
+
+            <div class="col-sm-12" >
                 <div class="form-group">
                     <label for="organizationid"
                            class="col-sm-3 control-label" style="text-align: left;"><@spring.message code="label.parentsupplier"/>*</label>
@@ -26,18 +28,20 @@
                 </div>
             </#if>-->
 
-
+            </div>
+            <div class="col-sm-12" >
                 <div  class="form-group">
                     <label for="codepostfix"  class="col-sm-3 control-label"><@spring.message code='label.monitoringstation'/>*</label>
                     <div class="col-sm-9">
                         <select name="monitoringstationid" id="monitoringstation" class="selectpicker" data-live-search="true"
                                 title="<@spring.message code="label.monitoringstation"/>">
-                            <option value="1" <#if userVO.monitoringstationid??&&userVO.monitoringstationid==1>selected</#if>>Lanvac Surveillance Inc</option>
+                            <option value="143" <#if userVO.monitoringstationid??&&userVO.monitoringstationid==143>selected</#if>>Lanvac Surveillance Inc</option>
                             <option value="0" <#if userVO.monitoringstationid??&&userVO.monitoringstationid==0>selected</#if>><@spring.message code="label.none"/></option>
                         </select>
                     </div>
                 </div>
-
+            </div>
+            <div class="col-sm-12" >
                 <div  class="form-group"><#--报警中心所需用户代码DNIS-->
                     <label for="codepostfix"  class="col-sm-3 control-label"><@spring.message code='label.groupid'/>*</label>
                     <div class="col-sm-9">
@@ -45,7 +49,8 @@
                         <input  class="form-control" id="inscode" name="groupid" value="${(userVO.groupid)!}" placeholder="<@spring.message code='label.groupid'/>"/>
                     </div>
                 </div>
-
+            </div>
+            <div class="col-sm-12" >
                 <div  class="form-group"><#--报警中心所需accountnumber-->
                     <label for="codepostfix"  class="col-sm-3 control-label"><@spring.message code='label.code'/>*</label>
                     <div class="col-sm-9">
@@ -53,6 +58,8 @@
                         <input  class="form-control" id="supcode" name="supcode" value="${(userVO.supcode)!}" placeholder="<@spring.message code='label.code'/>"/>
                     </div>
                 </div>
+            </div>
+            <div class="col-sm-12" >
                 <div  class="form-group">
                     <label for="codepostfix"  class="col-sm-3 control-label"><@spring.message code='label.aibaseid'/></label>
                     <div class="col-sm-9">
@@ -60,6 +67,8 @@
                         <input type="hidden" class="form-control" id="codepostfix" name="usercode" value="${(userVO.usercode)!}" placeholder="<@spring.message code='label.usercodepostfix'/>">
                     </div>
                 </div>
+            </div>
+            <div class="col-sm-12" >
                 <div  class="form-group">
                     <label for="firstname"  class="col-sm-3 control-label"><@spring.message code='label.firstname'/>*</label>
                     <div class="col-sm-9">
@@ -67,37 +76,48 @@
                         <input type="text" class="form-control" id="firstname" name="firstname" value="${(userVO.firstname)!}" placeholder="<@spring.message code='label.firstname'/>">
                     </div>
                 </div>
+            </div>
+            <div class="col-sm-12" >
                 <div  class="form-group">
                     <label for="lastname"  class="col-sm-3 control-label"><@spring.message code='label.lastname'/>*</label>
                     <div class="col-sm-9">
                         <input type="text" class="form-control" id="lastname" name="lastname" value="${(userVO.lastname)!}" placeholder="<@spring.message code='label.lastname'/>">
                     </div>
                 </div>
+            </div>
+            <div class="col-sm-12" >
                 <div  class="form-group">
                     <label for="phonenumber"  class="col-sm-3 control-label"><@spring.message code='label.phonenumber'/></label>
                     <div class="col-sm-9">
                         <input type="text" class="form-control" id="phonenumber" name="phonenumber" value="${(userVO.phonenumber)!}" placeholder="<@spring.message code='label.phonenumber'/>">
                     </div>
                 </div>
+            </div>
+            <div class="col-sm-12" >
                 <div  class="form-group">
                     <label for="email"  class="col-sm-3 control-label"><@spring.message code='label.email'/></label>
                     <div class="col-sm-9">
                         <input type="text" class="form-control" id="email" name="email" value="${(userVO.email)!}" placeholder="<@spring.message code='label.email'/>">
                     </div>
                 </div>
+            </div>
+            <div class="col-sm-12" >
                 <div  class="form-group">
                     <label for="fax"  class="col-sm-3 control-label"><@spring.message code='label.fax'/></label>
                     <div class="col-sm-9">
                         <input type="text" class="form-control" id="fax" name="fax" value="${(userVO.fax)!}" placeholder="<@spring.message code='label.fax'/>">
                     </div>
                 </div>
-
+            </div>
+            <div class="col-sm-12" >
                 <div  class="form-group">
                     <label for="detailaddress"  class="col-sm-3 control-label"><@spring.message code='label.detailaddress'/></label>
                     <div class="col-sm-9">
                         <input type="text" class="form-control" id="detailaddress" name="detailaddress" value="${(userVO.detailaddress)!}" placeholder="<@spring.message code='label.detailaddress'/>">
                     </div>
                 </div>
+            </div>
+            <div class="col-sm-12" >
                 <div  class="form-group">
                     <label for="address"  class="col-sm-3 control-label"></label>
                     <div class="col-sm-9">
@@ -120,24 +140,29 @@
                         </div>
                     </div>
                 </div>
+            </div>
+                <div id="addgatewaydiv1">
+                <div class="col-sm-12" >
+                        <div  class="form-group">
+                            <label for="deviceid"  class="col-sm-3 control-label"><@spring.message code='label.gatewayID'/> 1</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" id="deviceid1" name="deviceid" value="${(userVO.deviceid)!}" placeholder="<@spring.message code='label.gatewayID'/>">
+                            </div>
+                            <div class="col-sm-3">
+                                <button id="gatewaydevice2" type="button" onclick="addgateway()" type="" class="btn btn-success" style="width:30%;"><@spring.message code='label.addnew'/></button>
+                            </div>
+                        </div>
+                </div>
+                <div class="col-sm-12" >
+                        <div  class="form-group">
+                            <label for="serialnumber"  class="col-sm-3 control-label"><@spring.message code='label.phonecardid'/> 1</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="serialnumber1" name="serialnumber" value="${(userVO.serialnumber)!}" placeholder="<@spring.message code='label.phonecardid'/>">
 
-
-
-
-                <div  class="form-group">
-                    <label for="deviceid"  class="col-sm-3 control-label"><@spring.message code='label.gatewayID'/></label>
-                    <div class="col-sm-9">
-                        <input type="text" class="form-control" id="deviceid" name="deviceid" value="${(userVO.deviceid)!}" placeholder="<@spring.message code='label.gatewayID'/>">
+                            </div>
+                        </div>
                     </div>
                 </div>
-
-                <div  class="form-group">
-                    <label for="serialnumber"  class="col-sm-3 control-label"><@spring.message code='label.phonecardid'/></label>
-                    <div class="col-sm-9">
-                        <input type="text" class="form-control" id="serialnumber" name="serialnumber" value="${(userVO.serialnumber)!}" placeholder="<@spring.message code='label.phonecardid'/>">
-                    </div>
-                </div>
-
                 <div id="msg" class="text-center"></div>
                <#-- <div class="row text-center">
                     <div class="col-sm-6"><button id="btn-submit" type="buttom" class="btn btn-default" style="width:25%;"><@spring.message code='label.submit'/></button></div>
@@ -159,8 +184,9 @@
     <script type="text/javascript">
 
         $(document).ready(function() {
+            cou = 2;
             getCountry(-1);
-
+            fillGatewayAndSIM();
             $('#defaultForm').bootstrapValidator({
                 message: 'This value is not valid',
                 feedbackIcons: {
@@ -248,7 +274,54 @@
                 }
             });
         }
+        function fillGatewayAndSIM() {
+            <#assign advList = userVO.gpVO! />
+            <#if !advList?exists || advList?size==0>
+
+            <#else>
+                <#list advList as adv>
+                ${adv_index}
+                <#if adv_index==0><#else>addgateway();</#if>
+                    $("#deviceid"+(${adv_index}+1)).val('${adv.deviceid!''}');
+                    $("#serialnumber"+(${adv_index}+1)).val('${adv.serialnumber!''}');
+                </#list>
+            </#if>
+        }
+        function addgateway() {
+            var co = cou;
+            var vbottom = "<div id=\"addgatewaydiv"+co+"\"><div class=\"col-sm-12\" >\n" +
+                    "              <div  class=\"form-group\">\n" +
+                    "                <label for=\"deviceid\"  class=\"col-sm-3 control-label\" style=\"text-align: left;\"><@spring.message code='label.gatewayID'/> "+co+"</label>\n" +
+                    "                  <div class=\"col-sm-9\">\n" +
+                    "                <div class=\"col-sm-8\" style=\"margin-left:0px;padding-left: 0px\">\n" +
+                    "                 <input type=\"text\" class=\"form-control\"  id=\"deviceid"+co+"\" name=\"deviceid\" placeholder=\"<@spring.message code='label.gatewayID'/>\">\n" +
+                    "               </div>\n" +
+                    "                  </div>\n" +
+                    "               </div>\n" +
+                    "              </div>\n" +
+                    "              <div class=\"col-sm-12\" style=\"height: 45px\">\n" +
+                    "              <div  class=\"form-group\">\n" +
+                    "                <label for=\"serialnumber\"  class=\"col-sm-3 control-label\" style=\"text-align: left;\"><@spring.message code='label.phonecardid'/> "+co+"</label>\n" +
+                    "                <div class=\"col-sm-9\" style=\"height: 45px\">\n" +
+                    "                 <input type=\"text\" class=\"form-control\" id=\"serialnumber"+co+"\" name=\"serialnumber\" placeholder=\"Default NONE. Input serial number if activate\">\n" +
+                    "               </div>\n" +
+                    "              </div>\n" +
+                    "              </div></div>";
+            var vcurrent = document.getElementById("addgatewaydiv"+(co-1));
+            //下面
+            var newNodeBottom = document.createElement("div");
+            newNodeBottom.innerHTML = vbottom;
+            cou = co + 1;
+            vcurrent.parentNode.insertBefore(newNodeBottom, vcurrent.nextSibling);
+        }
         $("#btn-submit").click(function () {
+            for(var i=1;i<cou;i++){
+                var de = $("#deviceid"+i).val();
+                if(de==null||de==""||de==undefined){
+                    alert("Gateway ID"+i+" Required!");
+                    return ;
+                }
+            }
             $("#defaultForm").bootstrapValidator('validate');//提交验证
                 if ($("#defaultForm").data('bootstrapValidator').isValid()) {//获取验证结果，如果成功，执行下面代码
                     var url = "../user/modify";

@@ -7,7 +7,7 @@
                 <div class="text-center"><h1><@spring.message code='label.modifypassword'/></h1></div>
                 <hr>
                 <div class="col-sm-12">
-                <div  class="form-group" align="middle">
+                <div  class="form-group" align="left">
                     <label for="lastname"  class="col-sm-2 control-label"><@spring.message code='label.oldpassword'/>*</label>
                     <div class="col-sm-5">
                         <input type="text" class="form-control" id="oldpassword" name="oldpassword" value="" placeholder="<@spring.message code='label.oldpassword'/>">
@@ -15,7 +15,7 @@
                 </div>
                 </div>
                 <div class="col-sm-12">
-                <div  class="form-group" align="middle">
+                <div  class="form-group" align="left">
                     <label for="lastname"  class="col-sm-2 control-label"><@spring.message code='label.newpassword1'/>*</label>
                     <div class="col-sm-5">
                         <input type="text" class="form-control" id="newpassword1" name="newpassword1" value="" placeholder="<@spring.message code='label.newpassword1'/>">
@@ -23,7 +23,7 @@
                 </div>
                 </div>
                 <div class="col-sm-12">
-                <div  class="form-group" align="middle">
+                <div  class="form-group" align="left">
                 <label for="lastname"  class="col-sm-2 control-label"><@spring.message code='label.newpassword'/>*</label>
                 <div class="col-sm-5">
                     <input type="text" class="form-control" id="newpassword" name="newpassword" value="" placeholder="<@spring.message code='label.newpassword'/>">

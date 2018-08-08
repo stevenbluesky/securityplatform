@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -68,10 +69,10 @@ public class UserController {
     @RequestMapping("fillGateway")
     @ResponseBody
     public String fillGateway(@RequestBody String appaccount,Model model) {
-        GatewayPO gatewayPO = us.fillGateway(appaccount);
-        if(gatewayPO!=null){
-            model.addAttribute("deviceid",gatewayPO.getDeviceid());
-            return gatewayPO.getDeviceid();
+        List<String> devicelist = us.fillGateway(appaccount);
+        if(devicelist!=null){
+//            model.addAttribute("deviceid",devicelist);
+            return devicelist.toString();
         }else{
             return "failed";
         }

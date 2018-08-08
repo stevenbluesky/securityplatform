@@ -1,5 +1,7 @@
 package cn.com.isurpass.house.vo;
 
+import java.util.List;
+
 public class UserAddVO {
     private Integer organizationid;
     private Integer userid;
@@ -34,6 +36,15 @@ public class UserAddVO {
     private String installer;
     private String groupid;
     private Integer monitoringstationid;
+    private List<GatewayPhonecardVO> gpVO;
+
+    public List<GatewayPhonecardVO> getGpVO() {
+        return gpVO;
+    }
+
+    public void setGpVO(List<GatewayPhonecardVO> gpVO) {
+        this.gpVO = gpVO;
+    }
 
     public Integer getMonitoringstationid() {
         return monitoringstationid;

@@ -2,7 +2,6 @@ package cn.com.isurpass.house.service;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
-
 import cn.com.isurpass.house.dao.*;
 import cn.com.isurpass.house.po.*;
 import cn.com.isurpass.house.util.PhoneCardInterfaceCallUtils;
@@ -14,10 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-
 import cn.com.isurpass.house.exception.MyArgumentNullException;
 import cn.com.isurpass.house.util.Constants;
-
 import javax.servlet.http.HttpServletRequest;
 
 @Service
