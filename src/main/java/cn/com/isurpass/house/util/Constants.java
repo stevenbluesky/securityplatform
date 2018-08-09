@@ -38,7 +38,7 @@ public class Constants {
 	//public static final Integer ROLE_EMPLOYEE=7;  //此用户没有权限.一般情况下不会有员工为此角色,除非新增了机构角色.
 	public static final Integer ROLE_INSTALLER_EMPLOYEE=8;
 
-	public static final String OPERATE_DEVICE_URL="app.aibasecloud.com";
+	public static final String OPERATE_DEVICE_URL=ReadConfig.get("restUrl");
 	//public static final String OPERATE_DEVICE_URL="dev.isurpass.com.cn";
 
 

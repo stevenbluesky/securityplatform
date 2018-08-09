@@ -18,12 +18,12 @@
                 <div class="col-sm-9">
                         ${loginorg.name!}
                 </div>
-                <input type="hidden" class="form-control" id="organizationid" name="organizationid" value="${(empInfo.organizationid)!}">
+                <input type="hidden" class="form-control" id="organizationid" name="organizationid" value="${(empInfo.organizationid)!?c}">
             </div>
         <#else >
-            <input type="hidden" name="organizationid"  id="organizationid" value="${loginorg.organizationid}">
+            <input type="hidden" name="organizationid"  id="organizationid" value="${(loginorg.organizationid)!?c}">
         </#if>
-            <#if empInfo??><input type="hidden" name="employeeid"  id="employeeid" value="${empInfo.employeeid}"></#if>
+            <#if empInfo??><input type="hidden" name="employeeid"  id="employeeid" value="${(empInfo.employeeid)!?c}"></#if>
             <div class="form-group">
                 <label for="loginname"
                        class="col-sm-3 control-label"  style="text-align: left;"><@spring.message code="label.loginname"/>*</label>

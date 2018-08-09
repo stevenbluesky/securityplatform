@@ -36,6 +36,8 @@ var lan = {
     wholeaddress:"Please fill in the whole address information ",//-122
     notsup:"Unsupported type of device",//不支持的设备类型
     devicetimeout:"Timeout",//超时
+    noresponse:"Device no response",//设备无响应 -135
+    devicebusy:"Device is busy",//设备忙 -136
     unknownerror:"Unknown error",//未知错误
     repeatgateway:"Gateway Repeated",
     repeatsim:"SIM Card Repeated",

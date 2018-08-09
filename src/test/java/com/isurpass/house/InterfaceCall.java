@@ -52,7 +52,7 @@ public class InterfaceCall {
     public void interfaceCallGet() throws Exception{
         //curl -X GET --header "Accept: application/json" --header "Authorization: Basic YW1ldGFjYTphNDRmNDJmMS0wMmRiLTRhY2EtYjZhMC04MWYxNTBmZGI1YmI=" "https://restapi7.jasper.com/rws/api/v1/devices?modifiedSince=2016-04-18T17%3A31%3A34%2B00%3A00&pageSize=50&pageNumber=1"
         String gg = "https://restapi7.jasper.com/rws/api/v1/devices?modifiedSince=2016-04-18T17%3A31%3A34%2B00%3A00&pageSize=50&pageNumber=1";
-        String urlStr = "https://restapi7.jasper.com/rws/api/v1/devices/89302690201003397976";
+        String urlStr = "https://restapi7.jasper.com/rws/api/v1/devices/89302690201005656395";
         String params = "1";
         byte[] requestBytes = params.getBytes("utf-8"); // 将参数转为二进制流
         HttpClient httpClient = new HttpClient();// 客户端实例化

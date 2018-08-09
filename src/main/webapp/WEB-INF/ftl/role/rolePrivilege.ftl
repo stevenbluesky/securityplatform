@@ -15,7 +15,7 @@
     <div class="row" style="text-align: left; margin-top: 20px;">
     </#if>
         <div class="col-md-6">
-            <span style="margin-right: 10px;"><input id="privilege_${(privilege.privilegeid)!}" type="checkbox" value="${(privilege.privilegeid)!}"/></span>
+            <span style="margin-right: 10px;"><input id="privilege_${(privilege.privilegeid)!}" type="checkbox" value="${(privilege.privilegeid)!?c}"/></span>
                 <span style="margin-right: 80px;">${(privilege.code)!}</span>
         </div>
     <#if (privilege_index+1)%2 == 0 || !privilege_has_next>

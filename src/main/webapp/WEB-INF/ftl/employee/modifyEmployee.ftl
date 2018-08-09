@@ -18,12 +18,12 @@
                 <div class="col-sm-9">
                         ${loginorg.name!}
                 </div>
-                <input type="hidden" class="form-control" id="organizationid" name="organizationid" value="${(empInfo.organizationid)!}">
+                <input type="hidden" class="form-control" id="organizationid" name="organizationid" value="${(empInfo.organizationid)!?c}">
             </div>
         <#else >
-            <input type="hidden" name="organizationid"  id="organizationid" value="${loginorg.organizationid}">
+            <input type="hidden" name="organizationid"  id="organizationid" value="${loginorg.organizationid!?c}">
         </#if>
-            <#if empInfo??><input type="hidden" name="employeeid"  id="employeeid" value="${empInfo.employeeid}"></#if>
+            <#if empInfo??><input type="hidden" name="employeeid"  id="employeeid" value="${empInfo.employeeid!?c}"></#if>
             <#if empInfo??><input type="hidden" name="type"  id="emptype" value="${empInfo.type}"></#if>
             <div class="form-group">
                 <label for="loginname"

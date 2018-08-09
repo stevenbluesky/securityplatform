@@ -19,7 +19,7 @@
                 </div>
             </div>
         <#else >
-            <input type="hidden" name="organizationid"  id="organizationid" value="${loginorg.organizationid}">
+            <input type="hidden" name="organizationid"  id="organizationid" value="${loginorg.organizationid!?c}">
         </#if>
             <input type="hidden" name="type"  id="emptype" value="0">
             <div class="form-group">

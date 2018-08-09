@@ -350,26 +350,7 @@ public class ZwaveDeviceService {
         if (zw == null) {
             throw new RuntimeException(CodeConstants.CODE_STATUS_DEVICE_NOT_EXISIT.toString());
         }
-        List<GatewayUserPO> gupo = gud.findByDeviceid(zw.getDeviceid());
-        EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
-        List<Integer> roleids = erd.findByEmployeeid(emp.getEmployeeid()).stream().map(EmployeeRolePO::getRoleid).collect(toList());
-        if (roleids.size() == 0) {
-            throw new RuntimeException(CodeConstants.CODE_STATUS_NO_PERMISSION.toString());
-        }
-/*        if (!roleids.contains(Constants.ROLE_AMETA_ADMIN) && !roleids.contains(Constants.ROLE_SUPPLIER_ADMIN)) {
-            //登录的角色不包涵ameta管理员或者服务商管理员角色,则无法继续执行
-            throw new RuntimeException(CodeConstants.CODE_STATUS_NO_PERMISSION.toString());
-        }
-        if (!roleids.contains(Constants.ROLE_AMETA_ADMIN) && roleids.contains(Constants.ROLE_SUPPLIER_ADMIN)) {
-            //登录的角色不是ameta的管理员,且具有服务商管理员的角色时
-            List<GatewayUserPO> byDeviceid = gud.findByDeviceid(zw.getDeviceid());
-            if (byDeviceid == null || byDeviceid.size() == 0) {
-                throw new RuntimeException(CodeConstants.CODE_STATUS_NO_PERMISSION.toString());
-            }
-            if (emp.getOrganizationid() != ud.findByUserid(byDeviceid.get(0).getUserid()).getOrganizationid()) {
-                throw new RuntimeException(CodeConstants.CODE_STATUS_NO_PERMISSION.toString());
-            }
-        }*/
+
         String s = "";
         //TODO 打开不止255还有99等
         if (toStatus == 0) {//关
@@ -384,7 +365,7 @@ public class ZwaveDeviceService {
         }
         if (jo.getInteger("resultCode") == 0) {
             return s;
-        } else if (jo.getInteger("resultCode") == 10023 ||jo.getInteger("resultCode") == 10011) {
+        } else if (jo.getInteger("resultCode") == 10023 ||jo.getInteger("resultCode") == 10011||jo.getInteger("resultCode") == 30311) {
             throw new RuntimeException(CodeConstants.CODE_STATUS_DEVICE_NOT_EXISIT.toString());
         }else if (jo.getInteger("resultCode") == 10006) {//设备超时
             throw new RuntimeException(CodeConstants.CODE_STATUS_TIMEOUT.toString());
@@ -394,7 +375,11 @@ public class ZwaveDeviceService {
             throw new RuntimeException(CodeConstants.CODE_STATUS_NO_PERMISSION.toString());
         }else if (jo.getInteger("resultCode") == 30312) {
             throw new RuntimeException(CodeConstants.CODE_DEVICE_OFFLINE.toString());
-        } else {//返回的错误还有很多,这里没作具体的显示//10023找不到指定的设备 12离线
+        }else if (jo.getInteger("resultCode") == 10024) {
+                throw new RuntimeException(CodeConstants.CODE_STATUS_NORESPONSE.toString());//设备没有响应
+        }else if (jo.getInteger("resultCode") == 10020) {
+            throw new RuntimeException(CodeConstants.CODE_STATUS_DEVICEBUSY.toString());//设备忙
+        } else {//返回的错误还有很多,这里没作具体的显示
             System.out.println(jo.toString());
             throw new RuntimeException(CodeConstants.CODE_STATUS_ERROR.toString());
         }

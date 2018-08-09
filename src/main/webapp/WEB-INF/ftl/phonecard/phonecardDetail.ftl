@@ -14,7 +14,7 @@
             <div  class="form-group">
                 <label for="name"  class="col-sm-6 control-label"><@spring.message code='label.serialnumber'/></label>
                <#if (pnd.serialnumber)??>${pnd.serialnumber}<#else><@spring.message code="label.none"/></#if>
-                <input type="hidden" name="" id="sesese" value="${pnd.phonecardid}"/>
+                <input type="hidden" name="" id="sesese" value="${pnd.phonecardid!?c}"/>
             </div>
             </div>
                 <div class="col-md-12">

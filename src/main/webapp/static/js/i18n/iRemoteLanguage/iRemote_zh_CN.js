@@ -35,7 +35,9 @@ var lan = {
     alrappaccount:"该app账号已被绑定，请检查是否填写错误",//-121
     wholeaddress:"请填选完整地址信息",//-122
     notsup:"不支持的设备类型",//不支持的设备类型 133
-    devicetimeout:"超时",//超时 134
+    devicetimeout:"超时",//超时 -134
+    noresponse:"设备无响应",//设备无响应 -135
+    devicebusy:"设备忙",//设备忙 -136
     unknownerror:"未知错误",//未知错误 199
     repeatgateway:"网关重复",
     repeatsim:"SIM卡重复",

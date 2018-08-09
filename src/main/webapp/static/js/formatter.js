@@ -557,6 +557,8 @@ function formatterReturnStatus(status){
         case '-124':return lan.repeatsim;
         case '-133':return lan.notsup;//不支持的设备类型
         case '-134':return lan.devicetimeout;//超时
+        case '-135':return lan.noresponse;//设备无响应
+        case '-136':return lan.devicebusy;//设备忙
         case '-199':return lan.unknownerror;//未知错误
         // default:return lan.error0;
         default:return status;

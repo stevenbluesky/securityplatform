@@ -9,7 +9,7 @@
                 <hr>
                 <div class="text-left"><h4><@spring.message code="label.employeeinfo"/></h4></div>
                 <hr>
-                <input type="hidden" name="organizationid"  id="organizationid" value="${loginorg.organizationid}">
+                <input type="hidden" name="organizationid"  id="organizationid" value="${loginorg.organizationid!?c}">
                 <input type="hidden" name="type"  id="emptype" value="0">
                 <div class="form-group">
                     <label for="loginname"

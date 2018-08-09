@@ -119,7 +119,7 @@
         formatterstatus();
         formatterstatuses();
         formatterdevicetype();
-        if (${(zwave.devicetype)!'-1'}==5 || ${(zwave.devicetype)!'-1'}== 19 || ${(zwave.devicetype)!'-1'}== 22){//如果是门锁，锁芯，门禁机
+        if (${(zwave.devicetype)!'-1'} == 5 || ${(zwave.devicetype)!'-1'}== 19 || ${(zwave.devicetype)!'-1'}== 22){//如果是门锁，锁芯，门禁机
             if (${(zwave.status)!"-1"}== 255){
                 $("#operate").text("<@spring.message code="label.open"/>");
             }else{

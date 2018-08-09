@@ -12,5 +12,7 @@ public class CodeConstants {
     public static final Integer PRIVILEGE_EXISIT = -118;//权限已存在
     public static final Integer CODE_STATUS_NO_SUP= -133;//不支持的设备类型
     public static final Integer CODE_STATUS_TIMEOUT = -134;//超时
+    public static final Integer CODE_STATUS_NORESPONSE = -135;//设备无响应
+    public static final Integer CODE_STATUS_DEVICEBUSY =-136;//设备忙
 //    public static final Integer
 }

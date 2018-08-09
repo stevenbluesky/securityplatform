@@ -36,7 +36,7 @@
                   <div  class="form-group"><#--报警中心所需代码 DNIS-->
                       <label for="codepostfix"  class="col-sm-2 control-label" style="text-align: left;"><@spring.message code='label.groupid'/>*</label>
                       <div class="col-sm-4">
-                          <input  class="form-control" id="inscode" name="groupid"  placeholder="<@spring.message code='label.groupid'/>" value="${(groupid)}">
+                          <input  class="form-control" id="inscode" name="groupid"  placeholder="<@spring.message code='label.groupid'/>" value="${groupid!}">
                       </div>
                       <label for="codepostfix"  class="col-sm-2 control-label" style="text-align: left"><@spring.message code='label.InstallerPersonList'/>:</label>
                       <div class="col-sm-4" style="line-height:34px;">
@@ -408,7 +408,7 @@ function fillGateway (obj) {
 //将网关id传递到网关详情页面
 function setCookie(name, value) {
     var exp = new Date();
-    exp.setTime(exp.getTime() + 100 * 1000);//Cookie有效期设置为10s
+    exp.setTime(exp.getTime() + 100 * 1000);//Cookie有效期设置为100s
     document.cookie = name + "=" + escape(value) + ";expires=" + exp.toGMTString();
     $("#iframeDetail").attr("src", '../gateway/gatewayDetail?deviceid=' + value);
 }
@@ -416,7 +416,7 @@ $("#btn-submit").click(function () {
         for(var i=1;i<cou;i++){
             var de = $("#deviceid"+i).val();
             if(de==null||de==""||de==undefined){
-                alert("Gateway ID"+i+" Required!");
+                alert("Gateway ID "+i+" Required!");
                 return ;
             }
         }
@@ -454,7 +454,7 @@ function getParentOrg() {
         async: true,
         success: function (data) {
             var parentorgid ="";
-            <#if orgInfo.parentorgid??>parentorgid='${(orgInfo.parentorgid)}' </#if>
+            <#if orgInfo.parentorgid??>parentorgid='${(orgInfo.parentorgid)?c}' </#if>
             var str ="";
             for (var i = 0; i < data.length; i++) {
                 //str += '<option value=' + data[i].organizationid + '>' + data[i].name + '</option>'

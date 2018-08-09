@@ -122,7 +122,7 @@ public interface GatewayDAO extends CrudRepository<GatewayPO,Integer>{
 	@Query(value="SELECT g.deviceid as deviceid,IFNULL(g.name,'') AS name,g.status as status,IFNULL(u.appaccount,'') AS customer,IFNULL(c.cityname,'')AS cityname,IFNULL(o1.name,'') AS serviceprovider,IFNULL(o2.name,'') AS installerorg,IFNULL(e.loginname,'') AS installer FROM \n" +
 			"gateway g   \n" +
 			"JOIN gatewayuser gu ON g.deviceid=gu.deviceid \n" +
-			"JOIN USER u ON gu.userid=u.userid\n" +
+			"JOIN user u ON gu.userid=u.userid\n" +
 			"JOIN organization o ON u.monitoringstationid=o.organizationid OR u.organizationid = :organizationid \n" +
 			"LEFT JOIN city c ON u.citycode=c.citycode\n" +
 			"LEFT JOIN organization o1 ON u.organizationid=o1.organizationid\n" +
@@ -135,7 +135,7 @@ public interface GatewayDAO extends CrudRepository<GatewayPO,Integer>{
 	@Query(value="select count(*) from (SELECT count(*) FROM \n" +
 			"gateway g   \n" +
 			"JOIN gatewayuser gu ON g.deviceid=gu.deviceid \n" +
-			"JOIN USER u ON gu.userid=u.userid\n" +
+			"JOIN user u ON gu.userid=u.userid\n" +
 			"JOIN organization o ON u.monitoringstationid=o.organizationid OR u.organizationid = :organizationid \n" +
 			"LEFT JOIN city c ON u.citycode=c.citycode\n" +
 			"LEFT JOIN organization o1 ON u.organizationid=o1.organizationid\n" +

@@ -7,7 +7,7 @@
         <div class="col-md-10">
             <form class="form-horizontal" id="defaultForm">
                <#if orgInfo??>
-                    <input id="orgid" name="orgid" type="hidden" value="${(orgInfo.organizationid)!}"/>
+                    <input id="orgid" name="orgid" type="hidden" value="${(orgInfo.organizationid)!?c}"/>
                     <div class="text-center"><h1><@spring.message code="label.modifysupplier"/></h1></div>
                <#else>
                     <div class="text-center"><h1><@spring.message code="label.addsupplier"/></h1></div>

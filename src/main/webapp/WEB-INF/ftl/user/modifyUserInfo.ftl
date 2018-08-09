@@ -157,16 +157,13 @@
                         <div  class="form-group">
                             <label for="serialnumber"  class="col-sm-3 control-label"><@spring.message code='label.phonecardid'/> 1</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" id="serialnumber1" name="serialnumber" value="${(userVO.serialnumber)!}" placeholder="<@spring.message code='label.phonecardid'/>">
+                                <input type="text" class="form-control" id="serialnumber1" name="serialnumber" value="${(userVO.serialnumber)!}" placeholder="Default NONE. Input serial number if activate">
 
                             </div>
                         </div>
                     </div>
                 </div>
                 <div id="msg" class="text-center"></div>
-               <#-- <div class="row text-center">
-                    <div class="col-sm-6"><button id="btn-submit" type="buttom" class="btn btn-default" style="width:25%;"><@spring.message code='label.submit'/></button></div>
-                </div>-->
                 <div class="row">
                     <div class="col-sm-3"></div>
                     <div class="col-sm-9">
@@ -257,7 +254,7 @@
                 async: true,
                 success: function (data) {
                     var parentorgid ="";
-                    <#if userVO.organizationid??>parentorgid='${(userVO.organizationid)}' </#if>
+                    <#if userVO.organizationid??>parentorgid='${(userVO.organizationid)?c}' </#if>
                     var str ="";
                     for (var i = 0; i < data.length; i++) {
                         //str += '<option value=' + data[i].organizationid + '>' + data[i].name + '</option>'
@@ -318,7 +315,7 @@
             for(var i=1;i<cou;i++){
                 var de = $("#deviceid"+i).val();
                 if(de==null||de==""||de==undefined){
-                    alert("Gateway ID"+i+" Required!");
+                    alert("Gateway ID "+i+" Required!");
                     return ;
                 }
             }

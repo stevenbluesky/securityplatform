@@ -19,35 +19,35 @@ import static java.util.stream.Collectors.toList;
 public class UserService {
 
     @Autowired
-    UserDAO ud;
+    private UserDAO ud;
     @Autowired
-    CountryDAO country;
+    private CountryDAO country;
     @Autowired
-    ProvinceDAO province;
+    private ProvinceDAO province;
     @Autowired
-    CityDAO city;
+    private CityDAO city;
     @Autowired
-    AddressDAO ad;
+    private AddressDAO ad;
     @Autowired
-    PersonDAO pd;
+    private PersonDAO pd;
     @Autowired
-    OrganizationDAO od;
+    private OrganizationDAO od;
     @Autowired
-    PhonecarduserDAO pcud;
+    private PhonecarduserDAO pcud;
     @Autowired
-    PhonecardDAO pcard;
+    private PhonecardDAO pcard;
     @Autowired
-    EmployeeService emps;
+    private EmployeeService emps;
     @Autowired
-    GatewayuserDAO gd;
+    private GatewayuserDAO gd;
     @Autowired
-    GatewayBindingDAO gbd;
+    private GatewayBindingDAO gbd;
     @Autowired
-    EmployeeroleDAO erd;
+    private EmployeeroleDAO erd;
     @Autowired
-    GatewayDAO gateway;
+    private GatewayDAO gateway;
     @Autowired
-    OrganizationService os;
+    private OrganizationService os;
     @Autowired
     private PhonecardDAO phonecardDAO;
     @Autowired
@@ -79,7 +79,7 @@ public class UserService {
             throw new RuntimeException("-121");
         }
         for(int i=0;i<devicearray.length;i++) {
-            if (gd.findByDeviceid(devicearray[i]).size() != 0) {
+            if (gd.findByDeviceid(devicearray[i]).size() != 0) {//网关已跟用户绑定
                 throw new RuntimeException("-108");
             }
             if (gbd.findByDeviceid(devicearray[i]) == null) {//网关不存在
@@ -385,7 +385,7 @@ public class UserService {
             u0 = ud.findByCitycodeIn(citycodelist);
             set.add(u0);
         }
-        if (usv.getSearchAppAccount() != null && usv.getSearchAppAccount() != "") {
+        if (!StringUtils.isEmpty(usv.getSearchAppAccount())) {
             u1 = ud.findByAppaccountContaining(usv.getSearchAppAccount());
             set.add(u1);
         }
@@ -406,11 +406,11 @@ public class UserService {
             u4 = ud.findByOrganizationidIn(orgidlist);
             set.add(u4);
         }
-        if (usv.getSearchName() != null && usv.getSearchName() != "") {
+        if (!StringUtils.isEmpty(usv.getSearchName())) {
             u5 = ud.findByNameContaining(usv.getSearchName());
             set.add(u5);
         }
-        if (usv.getSearchCode() != null && usv.getSearchCode() != "") {
+        if (!StringUtils.isEmpty(usv.getSearchCode())) {
             u6 = ud.findByUsercodeContaining(usv.getSearchCode());
             set.add(u6);
         }
@@ -499,29 +499,6 @@ public class UserService {
         }
         userAddVO.setGpVO(gpvolist);
 
-        /*List<String> glist = new ArrayList<>();
-        for (GatewayUserPO g:gatewayuserlist) {
-            glist.add(g.getDeviceid());
-        }
-        userAddVO.setGatewaylist(glist);
-        //目前只考虑用户只有一个网关,直接取第一个
-        userAddVO.setDeviceid(gatewayuserlist.get(0).getDeviceid());
-        userAddVO.setGatewaystatus(gateway.findByDeviceid(gatewayuserlist.get(0).getDeviceid()).getStatus());//TODO
-
-        if (byUserid1.size()<1) {
-            return;
-        }
-        List<String> slist = new ArrayList<>();
-        for(PhonecardUserPO p:byUserid1){
-            slist.add(pcard.findByPhonecardid(p.getPhonecardid()).getSerialnumber());
-        }
-        PhonecardPO byPhonecardid = pcard.findByPhonecardid(byUserid1.getPhonecardid());
-        if (byPhonecardid == null) {
-            return;
-        }
-        userAddVO.setSerialnumber(byPhonecardid.getSerialnumber());
-        userAddVO.setStatus(byPhonecardid.getStatus());
-        userAddVO.setPhonecardid(byUserid1.getPhonecardid());*/
     }
 
     private void getUserPersonInfo(UserPO byUserid, UserAddVO userAddVO) {
@@ -637,15 +614,15 @@ public class UserService {
                         if(bySerialnumber==null){
                             throw new RuntimeException("-111");//该电话卡不存在
                         }else{
-                            GatewayPhonecardPO gppo1 = gpDAO.findBySerialnumber(serialnumberarray[i]);
-                            GatewayPhonecardPO gppo = gpDAO.findByDeviceid(devicearray[i]);
+                            GatewayPhonecardPO gppo1 = gpDAO.findBySerialnumber(serialnumberarray[i]);//电话卡查询结果
+                            GatewayPhonecardPO gppo = gpDAO.findByDeviceid(devicearray[i]);//网关查询结果
                             if(gppo!=null&&!devicearray[i].equals(gppo.getDeviceid())){
                                 throw new RuntimeException("-119");
                             }
-                            if(gppo!=null&&gppo.getSerialnumber()!=null&&!gppo.getSerialnumber().equals(serialnumberarray[i])){
+                            if(gppo!=null&&!StringUtils.isEmpty(gppo.getSerialnumber())&&!gppo.getSerialnumber().equals(serialnumberarray[i])){
                                 throw new RuntimeException("-120");//该用户有电话卡未解绑
                             }
-                            if(gppo1!=null&&gppo1.getSerialnumber()!=null&&!gppo1.getSerialnumber().equals(serialnumberarray[i])){
+                            if(gppo1!=null&&!devicearray[i].equals(gppo1.getDeviceid())){
                                 //该电话卡已被其他人绑定
                                 throw new RuntimeException("-110");
                             }
@@ -666,7 +643,7 @@ public class UserService {
                                     gp = new GatewayPhonecardPO(devicearray[i],serialnumberarray[i]);
                                 }
                             }
-                            if(gp.getSerialnumber()==null&&!StringUtils.isEmpty(serialnumberarray[i])){
+                            if(StringUtils.isEmpty(gp.getSerialnumber())&&!StringUtils.isEmpty(serialnumberarray[i])){
                                 gp.setSerialnumber(serialnumberarray[i]);
                             }
                             gpDAO.save(gp);

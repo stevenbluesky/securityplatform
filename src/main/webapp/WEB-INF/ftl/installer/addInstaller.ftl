@@ -6,7 +6,7 @@
         <div class="col-md-10">
             <form class="form-horizontal" id="defaultForm" method="POST">
                 <#if orgInfo??>
-                    <input id="orgid" type="hidden" value="${(orgInfo.organizationid)!}"/>
+                    <input id="orgid" type="hidden" value="${(orgInfo.organizationid)!?c}"/>
                     <div class="text-center"><h1><@spring.message code="label.modifyinstaller"/></h1></div>
                 <#else>
                     <div class="text-center"><h1><@spring.message code="label.AddInstaller"/></h1></div>

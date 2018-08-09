@@ -14,7 +14,7 @@
     <div class="row" style="text-align: left; margin-top: 20px;">
     </#if>
         <div class="col-md-4">
-            <span style="margin-right: 10px;"><input id="role_${(role.roleid)!}" type="checkbox" value="${(role.roleid)!}" /></span><span style="margin-right: 40px;" />${(role.name)!}</span>
+            <span style="margin-right: 10px;"><input id="role_${(role.roleid)!?c}" type="checkbox" value="${(role.roleid)!?c}" /></span><span style="margin-right: 40px;" />${(role.name)!}</span>
         </div>
     <#if (role_index+1)%3 == 0 || !role_has_next>
     </div>
@@ -70,7 +70,7 @@
             url: 'modifyEmployeeRole',
             contentType: 'application/json',
             traditional: true,
-            data: "{\"id\":" + ${(cemp.employeeid)!} + ",\"list\":" + JSON.stringify(checks) + "}",
+            data: "{\"id\":" + ${(cemp.employeeid)!?c} + ",\"list\":" + JSON.stringify(checks) + "}",
             success: function (data) {//返回json结果
                 alert("<@spring.message code='label.updatesuccess'/>");
                 //window.location.href = "../employee/employeeList";
