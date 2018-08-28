@@ -104,6 +104,17 @@
               </div>
               </div>
               <div class="col-sm-12">
+                  <div  class="form-group">
+                      <label for="phonenumber"  class="col-sm-2 control-label" style="text-align: left;"></label>
+
+                      <div class="col-sm-10">
+                        <@spring.message code='label.additioninformation'/>
+                            <input type="checkbox" id="addbox" name="addbox"  style="zoom:150%;vertical-align: -3px;">
+                      </div>
+                  </div>
+              </div>
+              <div id="additioninformation">
+              <div class="col-sm-12">
               <div  class="form-group">
                 <label for="phonenumber"  class="col-sm-2 control-label" style="text-align: left;"><@spring.message code='label.phonenumber'/></label>
                 <div class="col-sm-10">
@@ -159,6 +170,7 @@
                </div>
               </div>
               </div>
+              </div>
               <div id="addgatewaydiv1">
               <div class="col-sm-12" >
               <div  class="form-group">
@@ -208,6 +220,7 @@
 
 $(document).ready(function() {
     //$("#serialnumber").hide();
+    $("#additioninformation").hide();
     cou = 2;
     getCountry(-1);
     $("#dnistips").hide();
@@ -376,6 +389,13 @@ function popup(cou) {
         $("#serialnumber").val("");
     }
 });*/
+$("#addbox").change(function () {
+    if($("#addbox").is(':checked')){
+        $("#additioninformation").show();
+    }else{
+        $("#additioninformation").hide();
+    }
+});
 function fillGateway (obj) {
     var appaccount = obj.value;
     if(appaccount == "" || appaccount == undefined || appaccount == null){}else{

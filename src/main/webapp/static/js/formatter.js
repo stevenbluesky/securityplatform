@@ -358,9 +358,7 @@ function formatter_devicestatus1(devicetype,status) {
                 case -1:
                     return lan.error;
                 case 0:
-                    return lan.withdraw;
-                case 255:
-                    return lan.fortify;
+                    return lan.normal;
             }
         case '48':case '49':case '50':case '52':
         switch (status) {

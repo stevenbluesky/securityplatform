@@ -595,6 +595,7 @@ public class UserService {
         preUser.setCodepostfix(user.getUsercode());
         preUser.setUsercode(user.getUsercode());
         preUser.setSupcode(user.getSupcode());
+        preUser.setGroupid(user.getGroupid());
         preUser.setMonitoringstationid(user.getMonitoringstationid());
         /******处理网关及电话卡*****/
         List<GatewayUserPO> gatewayuseruser = gd.findByUserid(preUser.getUserid());
