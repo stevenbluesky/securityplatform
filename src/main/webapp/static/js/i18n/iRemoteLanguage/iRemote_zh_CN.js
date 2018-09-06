@@ -42,6 +42,8 @@ var lan = {
     repeatgateway:"网关重复",
     repeatsim:"SIM卡重复",
 
+    inventory:"待激活",
+    deactivated:"冻结",
     normal: "正常",
     unvalid: '未生效',
     suspenced: "冻结",

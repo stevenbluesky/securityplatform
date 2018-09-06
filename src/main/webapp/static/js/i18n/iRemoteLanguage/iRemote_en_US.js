@@ -42,6 +42,8 @@ var lan = {
     repeatgateway:"Gateway Repeated",
     repeatsim:"SIM Card Repeated",
 
+    inventory:"INVENTORY",
+    deactivated:"DEACTIVATED",
     normal: "Normal",
     unvalid: 'Ready',
     suspenced: "Suspected",

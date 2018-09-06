@@ -592,11 +592,16 @@ public class UserService {
         preUser.setName(user.getFirstname() + user.getLastname());
         preUser.setOrganizationid(user.getOrganizationid());
         preUser.setLoginname(user.getPhonenumber());
-        preUser.setCodepostfix(user.getUsercode());
-        preUser.setUsercode(user.getUsercode());
+        String distributorcode = od.findByOrganizationid(user.getOrganizationid()).getCode();
+        String installerorgcode = od.findByOrganizationid(preUser.getInstallerorgid()).getCode();
+        String installercode = empDAO.findByEmployeeid(preUser.getInstallerid()).getCode();
+        String newusercode = "001"+distributorcode+installerorgcode+installercode+ user.getSupcode();
+        preUser.setCodepostfix(newusercode);
+        preUser.setUsercode(newusercode);
         preUser.setSupcode(user.getSupcode());
         preUser.setGroupid(user.getGroupid());
         preUser.setMonitoringstationid(user.getMonitoringstationid());
+
         /******处理网关及电话卡*****/
         List<GatewayUserPO> gatewayuseruser = gd.findByUserid(preUser.getUserid());
         List<PhonecardUserPO> phonecarduser = pcud.findByUserid(preUser.getUserid());

@@ -271,6 +271,24 @@
                 }
             });
         }
+
+
+        $("#supcode").keyup(function () {
+            var deletecode = $("#codepostfix").val();
+            var userid = $("#supcode").val();
+            if(userid.length>3){
+                var finalcode = deletecode.strike();
+                $("#uback").html(finalcode);
+            }
+        });
+        $("#organizationid").change(function () {
+            var deletecode = $("#codepostfix").val();
+            var userid = $("#supcode").val();
+            if(userid.length>3){
+                var finalcode = deletecode.strike();
+                $("#uback").html(finalcode);
+            }
+        });
         function fillGatewayAndSIM() {
             <#assign advList = userVO.gpVO! />
             <#if !advList?exists || advList?size==0>

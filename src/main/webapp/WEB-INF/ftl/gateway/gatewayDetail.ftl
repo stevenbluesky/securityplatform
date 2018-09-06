@@ -1,89 +1,164 @@
 <!-- 网关详情 -->
 <#import "/spring.ftl" as spring />
 <#include "../_head0.ftl"/>
+
 <div class="row-horizontal">
-    <div class="col-md-1"></div>
-
-    <div class="col-md-10">
-        <div class="text-center"><h2><@spring.message code="label.gatewaydetail"/></h2></div>
-        <div class="text-left"><h4><@spring.message code="label.gatewayinfo"/></h4></div>
-        <hr>
-        <div class="row">
-            <div class="col-md-3">
-                <p><@spring.message code="label.dname"/></p>
-                <p><@spring.message code="label.gatewayID"/></p>
-                <p><@spring.message code="label.user"/></p>
-                <p><@spring.message code="label.installtime"/></p>
-            </div>
-
-            <div class="col-md-3">
-                <p><#if (gwd.name)??>${gwd.name}<#else><@spring.message code="label.none"/></#if></p>
-                <p><#if (gwd.deviceid)??>${gwd.deviceid}<#else><@spring.message code="label.none"/></#if></p>
-                <p><#if (gwd.customer)??>${gwd.customer}<#else><@spring.message code="label.none"/></#if></p>
-                <p><#if (gwd.createtime)??>${gwd.createtime?string('yyyy-MM-dd')}<#else><@spring.message code="label.none"/></#if></p>
-
-            </div>
-            <div class="col-md-3">
-                <p><@spring.message code="label.model"/></p>
-                <p><@spring.message code="label.firmwareversion"/></p>
-                <p><@spring.message code="label.devicestatus"/></p>
-                <p><@spring.message code="label.InstallerPersonList"/></p>
-            </div>
-            <div class="col-md-3">
-                <p><#if (gwd.model)??>${gwd.model}<#else><@spring.message code="label.none"/></#if></p>
-                <p><#if (gwd.firmwareversion)??>${gwd.firmwareversion}<#else><@spring.message code="label.none"/></#if></p>
-                <p><#if (gwd.status)?exists && gwd.status==1><@spring.message code="label.online"/><#elseif (gwd.status)?exists && gwd.status==0><@spring.message code="label.offline"/><#else><@spring.message code="label.unknown"/></#if></p>
-                <p><#if (gwd.installer)??>${gwd.installer}<#else><@spring.message code="label.none"/></#if></p>
-            </div>
+            <div class="text-center"><h2><@spring.message code="label.gatewaydetail"/></h2></div>
+    <hr>
+            <div class="text-left"><h4><@spring.message code="label.gatewayinfo"/></h4></div>
+    <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="col-xs-3 col-sm-3 col-md-3" >
+            <@spring.message code="label.dname"/>
         </div>
-        <br>
-        <div class="text-left"><h4><@spring.message code="label.phonecardinfo"/></h4></div>
-        <hr>
-        <div class="row">
-            <div class="col-md-3">
-                <p><@spring.message code="label.serialnumber"/></p>
-                <p><@spring.message code="label.status"/></p>
-                <p><@spring.message code="label.firmwareversion"/></p>
-                <p>First programmed On</p>
-                <p>Ordering Date</p>
+        <div class="col-xs-3 col-sm-3 col-md-3" >
+        <#if (gwd.name)??>${gwd.name}<#else><@spring.message code="label.none"/></#if>
+        </div>
+        <div class="col-xs-3 col-sm-3 col-md-3" >
+        <@spring.message code="label.model"/>
+        </div>
+        <div class="col-xs-3 col-sm-3 col-md-3" >
+        <#if (gwd.model)??>${gwd.model}<#else><@spring.message code="label.none"/></#if>
+        </div>
+    </div>
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="col-xs-3 col-sm-3 col-md-3" >
+                <@spring.message code="label.gatewayID"/>
+                </div>
+                <div class="col-xs-3 col-sm-3 col-md-3" >
+                <#if (gwd.deviceid)??>${gwd.deviceid}<#else><@spring.message code="label.none"/></#if>
+                </div>
+                <div class="col-xs-3 col-sm-3 col-md-3" >
+                <@spring.message code="label.firmwareversion"/>
+                </div>
+                <div class="col-xs-3 col-sm-3 col-md-3" >
+                <#if (gwd.firmwareversion)??>${gwd.firmwareversion}<#else><@spring.message code="label.none"/></#if>
+                </div>
             </div>
-            <div class="col-md-3">
-                <p><#if (gwd.phonecardserialnumber)??>${gwd.phonecardserialnumber}<#else><@spring.message code="label.none"/></#if></p>
-                <p><span id="phonecardstatus"></span>
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="col-xs-3 col-sm-3 col-md-3" >
+                <@spring.message code="label.user"/>
+                </div>
+                <div class="col-xs-3 col-sm-3 col-md-3" >
+                <#if (gwd.customer)??>${gwd.customer}<#else><@spring.message code="label.none"/></#if>
+                </div>
+                <div class="col-xs-3 col-sm-3 col-md-3" >
+                <@spring.message code="label.devicestatus"/>
+                </div>
+                <div class="col-xs-3 col-sm-3 col-md-3" >
+                <#if (gwd.status)?exists && gwd.status==1><@spring.message code="label.online"/><#elseif (gwd.status)?exists && gwd.status==0><@spring.message code="label.offline"/><#else><@spring.message code="label.unknown"/></#if>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="col-xs-3 col-sm-3 col-md-3" >
+                <@spring.message code="label.installtime"/>
+                </div>
+                <div class="col-xs-3 col-sm-3 col-md-3" >
+                <#if (gwd.createtime)??>${gwd.createtime?string('yyyy-MM-dd')}<#else><@spring.message code="label.none"/></#if>
+                </div>
+                <div class="col-xs-3 col-sm-3 col-md-3" >
+                <@spring.message code="label.InstallerPersonList"/>
+                </div>
+                <div class="col-xs-3 col-sm-3 col-md-3" >
+                <#if (gwd.installer)??>${gwd.installer}<#else><@spring.message code="label.none"/></#if>
+                </div>
+            </div>
+            <div class="text-left"><h7>&nbsp;</h7></div>
+            <hr>
+            <div class="text-left"><h4><@spring.message code="label.phonecardinfo"/></h4></div>
+
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="col-xs-3 col-sm-3 col-md-3" >
+                <@spring.message code="label.serialnumber"/>
+                </div>
+                <div class="col-xs-3 col-sm-3 col-md-3" >
+                <#if (gwd.phonecardserialnumber)??>${gwd.phonecardserialnumber}<#else><@spring.message code="label.none"/></#if>
+                </div>
+                <div class="col-xs-3 col-sm-3 col-md-3" >
+                <@spring.message code="label.model"/>
+                </div>
+                <div class="col-xs-3 col-sm-3 col-md-3" >
+                <#if (gwd.phonecardmodel)??>${gwd.phonecardmodel}<#else><@spring.message code="label.none"/></#if>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="col-xs-3 col-sm-3 col-md-3" >
+                <@spring.message code="label.status"/>
+                </div>
+                <div class="col-xs-3 col-sm-3 col-md-3" >
+                    <span id="phonecardstatus"></span>
                 <#if (gwd.phonecardstatus)?exists&&gwd.phonecardstatus==1>
-                    <@shiro.hasPermission name="button:changeStatus">
-                     <input style="margin-left: 20px;" class="btn btn-sm" value="<@spring.message code="label.freeze"/>"
-                            type="button" onclick="togglePhonecardStatus('freeze')">
+                    <@shiro.hasPermission name="label.FreezeSIM">
+                        <input style="margin-left: 20px;" class="btn btn-sm" value="<@spring.message code="label.freeze"/>"
+                               type="button" onclick="togglePhonecardStatus('freeze')">
                     </@shiro.hasPermission>
                 <#elseif (gwd.phonecardstatus)?exists>
-                    <@shiro.hasPermission name="button:changeStatus"><@shiro.hasPermission name="label.Activated">
-                    <input style="margin-left: 20px;" class="btn btn-sm  btn-success"
-                           value="<@spring.message code="label.unsuspence"/>" type="button"
-                           onclick="togglePhonecardStatus('start')">
-                    </@shiro.hasPermission></@shiro.hasPermission>
+                    <@shiro.hasPermission name="label.ActiveSIM">
+                        <input style="margin-left: 20px;" class="btn btn-sm  btn-success"
+                               value="<@spring.message code="label.unsuspence"/>" type="button"
+                               onclick="togglePhonecardStatus('start')">
+                    </@shiro.hasPermission>
                 </#if>
-                </p>
-                <p><#if (gwd.phonecardfirmwareversion)??>${gwd.phonecardfirmwareversion}<#else><@spring.message code="label.none"/></#if></p>
-                <p><#if (gwd.firstprogrammedon)??>${gwd.firstprogrammedon?string('yyyy-MM-dd')}<#else><@spring.message code="label.none"/></#if></p>
-                <p><#if (gwd.orderingdate)??>${gwd.orderingdate?string('yyyy-MM-dd')}<#else><@spring.message code="label.none"/></#if></p>
+                </div>
+                <div class="col-xs-3 col-sm-3 col-md-3" >
+                    Rate Plan
+                </div>
+                <div class="col-xs-3 col-sm-3 col-md-3" >
+                <#if (gwd.rateplan)??>${gwd.rateplan}<#else><@spring.message code="label.none"/></#if>
+                </div>
             </div>
-            <div class="col-md-3">
-                <p><@spring.message code="label.model"/></p>
-                <p>Rate Plan</p>
-                <p>Activation Date</p>
-                <p>Last Programmed On</p>
-                <p>Expire Date</p>
+
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="col-xs-3 col-sm-3 col-md-3" >
+                <@spring.message code="label.firmwareversion"/>
+                </div>
+                <div class="col-xs-3 col-sm-3 col-md-3" >
+                <#if (gwd.phonecardfirmwareversion)??>${gwd.phonecardfirmwareversion}<#else><@spring.message code="label.none"/></#if>
+                </div>
+                <div class="col-xs-3 col-sm-3 col-md-3" >
+                    Activation Date
+                </div>
+                <div class="col-xs-3 col-sm-3 col-md-3" >
+                <#if (gwd.activationdate)??>${gwd.activationdate?string('yyyy-MM-dd')}<#else><@spring.message code="label.none"/></#if>
+                </div>
             </div>
-            <div class="col-md-3">
-                <p><#if (gwd.phonecardmodel)??>${gwd.phonecardmodel}<#else><@spring.message code="label.none"/></#if></p>
-                <p><#if (gwd.rateplan)??>${gwd.rateplan}<#else><@spring.message code="label.none"/></#if></p>
-                <p><#if (gwd.activationdate)??>${gwd.activationdate?string('yyyy-MM-dd')}<#else><@spring.message code="label.none"/></#if></p>
-                <p><#if (gwd.lastprogrammedon)??>${gwd.lastprogrammedon?string('yyyy-MM-dd')}<#else><@spring.message code="label.none"/></#if></p>
-                <p><#if (gwd.expiredate)??>${gwd.expiredate?string('yyyy-MM-dd')}<#else><@spring.message code="label.none"/></#if></p>
+
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="col-xs-3 col-sm-3 col-md-3" >
+                    First programmed On
+                </div>
+                <div class="col-xs-3 col-sm-3 col-md-3" >
+                <#if (gwd.firstprogrammedon)??>${gwd.firstprogrammedon?string('yyyy-MM-dd')}<#else><@spring.message code="label.none"/></#if>
+                </div>
+                <div class="col-xs-3 col-sm-3 col-md-3" >
+                    Last Programmed On
+                </div>
+                <div class="col-xs-3 col-sm-3 col-md-3" >
+                <#if (gwd.lastprogrammedon)??>${gwd.lastprogrammedon?string('yyyy-MM-dd')}<#else><@spring.message code="label.none"/></#if>
+                </div>
             </div>
-        </div>
-        <div class="text-left"><h4><@spring.message code="label.associatedequipment"/></h4></div>
-        <hr>
+
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="col-xs-3 col-sm-3 col-md-3" >
+                    Ordering Date
+                </div>
+                <div class="col-xs-3 col-sm-3 col-md-3" >
+                <#if (gwd.orderingdate)??>${gwd.orderingdate?string('yyyy-MM-dd')}<#else><@spring.message code="label.none"/></#if>
+                </div>
+                <div class="col-xs-3 col-sm-3 col-md-3" >
+                    Expire Date
+                </div>
+                <div class="col-xs-3 col-sm-3 col-md-3" >
+                <#if (gwd.expiredate)??>${gwd.expiredate?string('yyyy-MM-dd')}<#else><@spring.message code="label.none"/></#if>
+                </div>
+            </div>
+
+    <div class="text-left">&nbsp;</div>
+    <hr>
+    <div class="text-left"><h4><@spring.message code="label.associatedequipment"/></h4></div>
+    <div class="col-md-12">
+
+
         <table id="table" data-toggle="table">
             <thead>
             <tr>
@@ -102,7 +177,7 @@
             </thead>
         </table>
     </div>
-    <div class="col-md-1"></div>
+    <!--<div class="col-md-1"></div> -->
 </div>
 
 <!-- JavaScript 部分 -->

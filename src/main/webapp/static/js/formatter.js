@@ -10,10 +10,10 @@ function formatter_gender(value) {
 function formatter_status(value, row, index) {
     if (value == 1)
         return lan.normal;
-    if (value == 0)
-        return lan.unvalid;
+    if (value == 3)
+        return lan.inventory;
     if (value == 2)
-        return lan.suspenced;
+        return lan.deactivated;
     if (value == 9)
         return lan.deleted;
     if(value == -1)
