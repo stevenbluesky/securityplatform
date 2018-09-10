@@ -5,8 +5,8 @@
 <form class="form-horizontal" id="searchForm" method="POST">
     <div class="text-center"><h1><@spring.message code="label.gatewaylist"/></h1></div>
     <hr>
-    <div class="form-group col-md-12">
-    <div class="form-group col-md-4" align="right">
+    <div class="form-group">
+    <div class="col-md-4" align="right">
         <label for="searchinstallerorg" class="col-md-5 control-label"><@spring.message code="label.gatewayID"/></label>
         <div class="col-md-7">
             <input type="text" class="form-control" id="searchgatewayid" name="deviceid"
@@ -14,14 +14,14 @@
         </div>
     </div>
 
-    <div class="form-group col-md-4" align="right">
+    <div class="col-md-4" align="right">
         <label for="searchname" class="col-md-5 control-label"><@spring.message code="label.devicename"/></label>
         <div class="col-md-7">
             <input class="form-control" type="text" id="searchname" name="name" placeholder='<@spring.message code="label.devicename"/>'>
         </div>
     </div>
 
-    <div class="form-group col-md-4" align="right">
+    <div class="col-md-4" align="right">
         <label for="searchcityname" class="col-md-5 control-label"><@spring.message code="label.city"/></label>
         <div class="col-md-7">
             <input type="text" class="form-control" id="searchcityname" name="cityname"
@@ -30,10 +30,9 @@
     </div>
     </div>
 
-    <div class="form-group col-md-12">
+    <div class="form-group">
 
-
-    <div class="form-group col-md-4" align="right">
+    <div class="col-md-4" align="right">
         <label for="searchserviceprovider"
                class="col-md-5 control-label"><@spring.message code="label.serviceprovider"/></label>
         <div class="col-md-7">
@@ -42,7 +41,7 @@
         </div>
     </div>
 
-    <div class="form-group col-md-4" align="right">
+    <div class="col-md-4" align="right">
         <label for="searchinstallerorg"
                class="col-md-5 control-label"><@spring.message code="label.installerorg"/></label>
         <div class="col-md-7">
@@ -50,7 +49,7 @@
                    placeholder='<@spring.message code="label.installerorg"/>'>
         </div>
     </div>
-        <div class="form-group col-md-4" align="right">
+        <div class="col-md-4" align="right">
             <label for="searchinstaller" class="col-md-5 control-label"><@spring.message code="label.InstallerPersonList"/></label>
             <div class="col-md-7">
                 <input type="text" class="form-control" id="searchinstaller" name="installer"
@@ -58,9 +57,9 @@
             </div>
         </div>
     </div>
-    <div class="form-group col-md-12">
+    <div class="form-group">
 
-        <div class="form-group col-md-4" align="right">
+        <div class="col-md-4" align="right">
             <label for="searchcustomer" class="col-md-5 control-label"><@spring.message code="label.user"/></label>
             <div class="col-md-7">
                 <input type="text" class="form-control" id="searchcustomer" name="customer"
@@ -68,7 +67,7 @@
             </div>
         </div>
 
-    <div class="form-group col-md-4" align="right">
+    <div class="col-md-4" align="right">
         <label for="searchcitycode" class="col-md-5 control-label"><@spring.message code=""/></label>
         <div class="col-md-7">
             <input type="hidden" class="form-control" id="searchcitycode" name="citycode"
@@ -76,7 +75,7 @@
         </div>
     </div>
 
-    <div class="form-group col-md-4" align="right">
+    <div class="col-md-4" align="right">
         <div class="col-md-5"></div>
         <div class="col-md-7">
             <button type="button" id="searchsubmit" class="btn btn-default"

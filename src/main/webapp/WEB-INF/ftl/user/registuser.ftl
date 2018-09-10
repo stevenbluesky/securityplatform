@@ -1,65 +1,63 @@
 <#include "../_head0.ftl"/>
 <#include "../_head1.ftl"/>
 <div class="row">
-           <form class="form-horizontal" action="" method="POST">
-                   <div class="text-center"><h1><@spring.message code='label.registendusers'/></h1></div>
-                   <hr>
-               <div class="form-group col-xs-12 col-sm-12 col-md-12">
-               <div class="form-group col-md-4" align="left">
-                   <label for="searchinstallerorg" class="col-md-5 control-label"><@spring.message code='label.username'/></label>
-                   <div class="col-md-7">
-                       <input type="text" class="form-control" id="searchName" name="searchName"
-                              placeholder="<@spring.message code='label.username'/>">
-                   </div>
+   <form class="form-horizontal" action="" method="POST">
+       <div class="text-center"><h1><@spring.message code='label.registendusers'/></h1></div>
+       <hr>
+       <div class="form-group">
+           <div class="col-md-4" align="left">
+               <label for="searchinstallerorg" class="col-md-5 control-label"><@spring.message code='label.username'/></label>
+               <div class="col-md-7">
+                   <input type="text" class="form-control" id="searchName" name="searchName"
+                          placeholder="<@spring.message code='label.username'/>">
                </div>
-                   <div class="form-group col-md-4" align="right">
-                       <label for="searchSerialnumber" class="col-md-5 control-label"><@spring.message code='label.apploginemail'/></label>
-                       <div class="col-md-7">
-                           <input type="text" class="form-control" id="searchPhonenumber" name="searchPhonenumber"
-                                  placeholder="<@spring.message code='label.apploginemail'/>">
-                       </div>
-                   </div>
-                   <div class="form-group col-md-4" align="right">
-                       <label for="searchAppAccount" class="col-md-5 control-label"><@spring.message code='label.gatewayID'/></label>
-                       <div class="col-md-7">
-                           <input type="text" class="form-control" id="searchGatewayid" name="searchGatewayid"
-                                  placeholder="<@spring.message code='label.gatewayID'/>">
-                       </div>
-                   </div>
+           </div>
+           <div class="col-md-4" align="right">
+               <label for="searchSerialnumber" class="col-md-5 control-label"><@spring.message code='label.apploginemail'/></label>
+               <div class="col-md-7">
+                   <input type="text" class="form-control" id="searchPhonenumber" name="searchPhonenumber"
+                          placeholder="<@spring.message code='label.apploginemail'/>">
                </div>
-               <div class="form-group col-xs-12 col-sm-12 col-md-12">
-                   <div class="form-group col-md-5" align="left">
-                       <label for="searchinstallerorg" class="col-md-4 control-label"><@spring.message code='label.starttime'/></label>
-                       <div class="col-md-8">
-
-                               <div class="col-sm-12 input-group date form_datetime">
-                                   <input class="form-control" size="16" id="searchStarttime" name="searchStarttime" type="text" readonly placeholder="<@spring.message code='label.starttime'/>" >
-                                   <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-                                   <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
-                               </div>
-                           </div>
-
-                   </div>
-                   <div class="form-group col-md-5" align="right">
-                       <label for="searchinstallerorg" class="col-md-4 control-label"><@spring.message code='label.endtime'/></label>
-                       <div class="col-md-8">
-                               <div class="col-sm-12 input-group date form_datetime">
-                                   <input class="form-control" size="16" id="searchEndtime" name="searchEndtime" type="text" readonly placeholder="<@spring.message code='label.endtime'/>" >
-                                   <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-                                   <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
-                               </div>
-
-                       </div>
-                   </div>
-                   <div class="form-group col-md-2" align="right">
-                       <div class="col-md-12">
-                           <button type="button" id="searchbtn" class="btn btn-default"
-                                   style="width:100%;"><@spring.message code="label.search"/></button>
-                       </div>
-                   </div>
+           </div>
+           <div class="col-md-4" align="right">
+               <label for="searchAppAccount" class="col-md-5 control-label"><@spring.message code='label.gatewayID'/></label>
+               <div class="col-md-7">
+                   <input type="text" class="form-control" id="searchGatewayid" name="searchGatewayid"
+                          placeholder="<@spring.message code='label.gatewayID'/>">
                </div>
+           </div>
+       </div>
 
-           </form>
+       <div class="form-group">
+           <div class="col-md-5" align="left">
+               <label for="searchinstallerorg" class="col-md-4 control-label"><@spring.message code='label.starttime'/></label>
+               <div class="col-md-8">
+
+                       <div class="col-sm-12 input-group date form_datetime">
+                           <input class="form-control" size="16" id="searchStarttime" name="searchStarttime" type="text" readonly placeholder="<@spring.message code='label.starttime'/>" >
+                           <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                           <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                       </div>
+                   </div>
+           </div>
+           <div class="col-md-5" align="right">
+               <label for="searchinstallerorg" class="col-md-4 control-label"><@spring.message code='label.endtime'/></label>
+               <div class="col-md-8">
+                       <div class="col-md-12 input-group date form_datetime">
+                           <input class="form-control" size="16" id="searchEndtime" name="searchEndtime" type="text" readonly placeholder="<@spring.message code='label.endtime'/>" >
+                           <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                           <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                       </div>
+               </div>
+           </div>
+           <div class="col-md-2" align="right">
+               <div class="col-md-12">
+                   <button type="button" id="searchbtn" class="btn btn-default"
+                           style="width:100%;"><@spring.message code="label.search"/></button>
+               </div>
+           </div>
+       </div>
+   </form>
 </div>
 
 <table id="table" data-toggle="table">
@@ -74,9 +72,9 @@
     </tr>
     </thead>
 </table>
-      </div>
+      <#--</div>
         <div class="col-md-1"></div>
-    </div>
+    </div>-->
     <script type="text/javascript">
         $('#table').bootstrapTable({
             url: 'registuserJsonList',

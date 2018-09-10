@@ -5,15 +5,15 @@
               <div class="text-center"><h1><@spring.message code="label.Operater"/></h1></div>
               <hr>
               <form id="searchform" class="form-horizontal">
-                  <div class="form-group col-md-12">
-                  <div class="form-group col-md-4" >
+                  <div class="form-group">
+                  <div class="col-md-4" >
                       <label for="searchcode" class="col-md-5 control-label"><@spring.message code="label.empcode"/></label>
                       <div class="col-md-7">
                           <input type="text" class="form-control" id="searchcode" name="searchcode"
                                  placeholder="<@spring.message code="label.empcode"/>">
                       </div>
                   </div>
-                  <div class="form-group col-md-4" >
+                  <div class="col-md-4" >
                       <label for="searchname"
                              class="col-md-5 control-label"><@spring.message code="label.username"/></label>
                       <div class="col-md-7">
@@ -21,7 +21,7 @@
                                  placeholder="<@spring.message code="label.username"/>">
                       </div>
                   </div>
-                  <div class="form-group col-md-4" >
+                  <div class="col-md-4" >
                       <label for="searchorgname"
                              class="col-md-5 control-label"><@spring.message code="label.parentorg"/></label>
                       <div class="col-md-7">
@@ -30,22 +30,22 @@
                       </div>
                   </div>
                   </div>
-                  <div class="form-group col-md-12">
-                  <div class="form-group col-md-4" align="right">
+                  <div class="form-group">
+                  <div class="col-md-4" align="right">
                       <label for="searchcitycode" class="col-md-5 control-label"><@spring.message code=""/></label>
                       <div class="col-md-7">
                           <input type="hidden" class="form-control" id="" name=""
                                  placeholder=<@spring.message code=""/>>
                       </div>
                   </div>
-                  <div class="form-group col-md-4" align="right">
+                  <div class="col-md-4" align="right">
                       <label for="searchcitycode" class="col-md-5 control-label"><@spring.message code=""/></label>
                       <div class="col-md-7">
                           <input type="hidden" class="form-control" id="" name=""
                                  placeholder=<@spring.message code=""/>>
                       </div>
                   </div>
-                  <div class="form-group col-md-4">
+                  <div class="col-md-4">
                       <div class="col-md-5"></div>
                       <div class="col-md-7">
                           <button id="searchbtn" type="button" style="width: 100%"

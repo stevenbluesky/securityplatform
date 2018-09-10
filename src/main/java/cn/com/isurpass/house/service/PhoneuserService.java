@@ -1,6 +1,7 @@
 package cn.com.isurpass.house.service;
 
 import cn.com.isurpass.house.dao.GatewayDAO;
+import cn.com.isurpass.house.dao.GatewayuserDAO;
 import cn.com.isurpass.house.dao.PhoneuserDAO;
 import cn.com.isurpass.house.po.GatewayPO;
 import cn.com.isurpass.house.po.PhoneuserPO;
@@ -10,10 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-
-import javax.servlet.http.HttpServletRequest;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -27,6 +24,7 @@ public class PhoneuserService {
     private PhoneuserDAO phoneuserDAO;
     @Autowired
     private GatewayDAO gd;
+
     public Map<String,Object> search(Pageable p, RegistUserSearchVO rus){
         Map<String, Object> map = new HashMap<>();
         String start = rus.getSearchStarttime();
@@ -45,8 +43,9 @@ public class PhoneuserService {
             String phonenumberstringlist = "";
             StringBuffer sb = new StringBuffer();
             for(GatewayPO g:gatewaylist){
-                if(!StringUtils.isEmpty(g.getAppaccount()))
+                if(!StringUtils.isEmpty(g.getAppaccount())) {
                     phonenumberlist.add(g.getAppaccount());
+                }
             }
             if(phonenumberlist.size()>0) {
                 sb.append("(");

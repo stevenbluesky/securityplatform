@@ -1,17 +1,12 @@
 package cn.com.isurpass.house.dao;
 
 import cn.com.isurpass.house.po.PhoneuserPO;
-import cn.com.isurpass.house.vo.RegistUserListVO;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import java.math.BigInteger;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -26,7 +21,7 @@ public class PhoneuserDAO  {
     protected EntityManager em;
 
     public int countTotal(){
-        String sqlString = "select count(*) from phoneuser where status=0";
+        String sqlString = "select count(*) from phoneuser where platform=9 and usertype=4 and status=0";
         Query query = em.createNativeQuery(sqlString);
         List re = query.getResultList();
         Object o = re.get(0);
@@ -38,7 +33,7 @@ public class PhoneuserDAO  {
     public List<PhoneuserPO> originalUser(Pageable p){
         int pageNumber = p.getPageNumber();
         int pageSize = p.getPageSize();
-        String sqlstring = "select * from phoneuser where status=0  order by phoneuserid desc limit  "+(pageNumber)*pageSize+","+pageSize;
+        String sqlstring = "select * from phoneuser where platform=9 and usertype=4 and status=0  order by phoneuserid desc limit  "+(pageNumber)*pageSize+","+pageSize;
         Query nativeQuery = em.createNativeQuery(sqlstring, PhoneuserPO.class);
         List<PhoneuserPO> resultList = nativeQuery.getResultList();
         return resultList;
@@ -47,7 +42,7 @@ public class PhoneuserDAO  {
     public List<PhoneuserPO> searchUser(String searchName, String searchPhonenumber, String starttime, String endtime, Pageable p,String phonenumberlist) {
         int pageNumber = p.getPageNumber();
         int pageSize = p.getPageSize();
-        String sqlstring = "select * from phoneuser where status=0 and createtime between '"+starttime +"' and '"+endtime+"' ";
+        String sqlstring = "select * from phoneuser where platform=9 and usertype=4 and status=0 and createtime between '"+starttime +"' and '"+endtime+"' ";
         if(!StringUtils.isEmpty(phonenumberlist)){
             sqlstring += " and phonenumber in "+phonenumberlist;
         }
@@ -63,7 +58,7 @@ public class PhoneuserDAO  {
         return resultList;
     }
     public int countsearchUser(String searchName, String searchPhonenumber, String starttime, String endtime,String phonenumberlist) {
-        String sqlstring = "select count(*) from phoneuser where status=0 and createtime between '"+starttime +"' and '"+endtime+"'";
+        String sqlstring = "select count(*) from phoneuser where platform=9 and usertype=4 and status=0 and createtime between '"+starttime +"' and '"+endtime+"'";
         if(!StringUtils.isEmpty(phonenumberlist)){
             sqlstring += " and phonenumber in "+phonenumberlist;
         }

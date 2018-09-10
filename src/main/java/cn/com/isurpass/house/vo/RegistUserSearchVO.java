@@ -1,7 +1,5 @@
 package cn.com.isurpass.house.vo;
 
-import java.util.Date;
-
 public class RegistUserSearchVO {
     private String searchName;
     private String searchPhonenumber;

@@ -5,15 +5,15 @@
               <div class="text-center"><h1><@spring.message code='label.phonecardlist'/></h1></div>
               <hr>
               <form id="searchForm" class="form-horizontal" method="POST" >
-                  <div class="form-group col-md-12">
-                  <div class="form-group col-md-4">
+                  <div class="form-group">
+                  <div class="col-md-4">
                       <label class="col-md-5  control-label"><@spring.message code='label.serialnumber'/></label>
                       <div class="col-md-7">
                           <input type="text" class="form-control" id="searchserialnumber" name="serialnumber"
                                  placeholder="<@spring.message code='label.serialnumber'/>" >
                       </div>
                   </div>
-                      <div class="form-group col-md-4">
+                      <div class="col-md-4">
                           <label class="col-md-5 control-label"><@spring.message code='label.status'/></label>
                           <div class="col-md-7">
                               <select id="searchstatus" name="status" <#--class="selectpicker"--> class="form-control" style="width: 100%"
@@ -25,7 +25,7 @@
                               </select>
                           </div>
                       </div>
-                  <div class="form-group col-md-4">
+                  <div class="col-md-4">
                       <label class="col-md-5 control-label">Rate Plan</label>
                       <div class="col-md-7">
                           <input type="text" class="form-control" id="searchrateplan" name="rateplan"
@@ -34,15 +34,15 @@
                   </div>
 
                   </div>
-                  <div class="form-group col-md-12">
-                      <div class="form-group col-md-4" align="right">
+                  <div class="form-group">
+                      <div class="col-md-4" align="right">
                           <label for="searchDealername" class="col-md-5 control-label"></label>
                           <div class="col-md-7">
                               <input type="hidden" class="form-control" id="" name=""
                                      placeholder="">
                           </div>
                       </div>
-                      <div class="form-group col-md-4" align="right">
+                      <div class="col-md-4" align="right">
                           <label for="searchDealername" class="col-md-5 control-label"></label>
                           <div class="col-md-7">
                               <input type="hidden" class="form-control" id="" name=""
@@ -50,7 +50,7 @@
                           </div>
                       </div>
 
-                      <div class="form-group col-md-4" align="right">
+                      <div class="col-md-4" align="right">
                           <div class="col-md-5"></div>
                           <div class="col-md-7">
                               <button type="button" id="searchsubmit" class="btn btn-default"
