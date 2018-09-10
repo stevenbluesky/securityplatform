@@ -23,14 +23,14 @@
 <body style="overflow-x: hidden;">
 <br>
 <div class="row">
-    <div class="col-md-3"  style="height:70px;width: 300px" align="right">
+    <div class="col-xs-3 col-sm-3 col-md-3"  style="height:70px;width: 300px" align="right">
         <img src="image/logo.png"  height="70" >
     </div>
 
-    <div class="col-md-4">
+    <div class="col-xs-4 col-sm-4 col-md-4">
     <#if emp??&&loginorg?? ><h4 style="display: inline;float:left"><#if emp.type==1><@spring.message code='label.installerportal'/><#elseif loginorg.orgtype==1><@spring.message code='label.distributorportal'/><#elseif loginorg.orgtype==2><@spring.message code='label.installercompanyportal'/></#if></h4></#if>
     </div>
-    <div class="col-md-5" align="middle">
+    <div class="col-xs-5 col-sm-5 col-md-5" align="middle">
         <#--<br>-->
         <#if emp??&&loginorg?? ><h4 style="display: inline;float: right"><@spring.message code='label.welcome'/>,${loginorg.name}_${emp.loginname}&nbsp;&nbsp;<a href="logout" ><@spring.message code='label.logout'/></a></h4></#if>
         <br>
@@ -38,17 +38,17 @@
 </div>
 <br>
 <div class="row">
-    <div id="wrap" class="col-md-2" >
+    <div id="wrap" class="col-xs-2 col-sm-2 col-md-2" >
         <div class="container">
             <div class="row">
-                <div class="col-sm-3">
+                <div class="col-xs-3 col-sm-3 col-md-3">
                     <div id="treeview12" class=""></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="col-md-10" style="height: 800px;overflow: hidden;z-index: 999;">
+    <div class="col-xs-10 col-sm-10 col-md-10" style="height: 800px;overflow: hidden;z-index: 999;">
         <iframe class="" id="right" name="right" frameborder="0" src="welcome.html"
                 style="height: 100%;width: 100%;overflow-x: hidden;" ></iframe>
     </div>

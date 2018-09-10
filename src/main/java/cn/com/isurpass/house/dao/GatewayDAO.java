@@ -144,4 +144,6 @@ public interface GatewayDAO extends CrudRepository<GatewayPO,Integer>{
 			"WHERE o.organizationid =:organizationid  \n" +
 			"GROUP BY g.deviceid) as b",nativeQuery = true)
 	Long countByMonitoringStation(@Param("organizationid")Integer organizationid);
+
+	List<GatewayPO> findByDeviceidContainingAndAppaccountIsNotNull(String searchGatewayid);
 }

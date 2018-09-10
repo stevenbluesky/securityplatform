@@ -4,17 +4,17 @@
     <div class="text-center"><h1><@spring.message code="label.devicelist"/></h1></div>
     <hr>
     <div class="form-group col-md-12">
-    <div class="form-group col-md-4" align="right">
-        <label for="searchname" class="col-md-5 control-label"><@spring.message code="label.devicename"/></label>
-        <div class="col-md-7">
+    <div class="form-group col-sm-4" align="right">
+        <label for="searchname" class="col-sm-5 control-label"><@spring.message code="label.devicename"/></label>
+        <div class="col-sm-7">
             <input class="form-control" type="text" id="searchname" name="name"
                    placeholder='<@spring.message code="label.devicename"/>'>
         </div>
     </div>
     <#--设备类型下拉框-->
-    <div class="form-group col-md-4" align="right">
-        <label for="searchdevicetype" class="col-md-5 control-label"><@spring.message code="label.devicetype"/></label>
-        <div class="col-md-7">
+    <div class="form-group col-sm-4" align="right">
+        <label for="searchdevicetype" class="col-sm-5 control-label"><@spring.message code="label.devicetype"/></label>
+        <div class="col-sm-7">
             <select id="searchdevicetype" name="status" class="form-control" style="width: 100%"
                     title="<@spring.message code='label.devicetype'/>" >
                 <option value=""><@spring.message code='label.all'/></option>
@@ -57,62 +57,62 @@
         </div>
     </div>
 
-    <div class="form-group col-md-4" align="right">
-        <label for="searchcityname" class="col-md-5 control-label"><@spring.message code="label.area"/></label>
-        <div class="col-md-7">
+    <div class="form-group col-sm-4" align="right">
+        <label for="searchcityname" class="col-sm-5 control-label"><@spring.message code="label.area"/></label>
+        <div class="col-sm-7">
             <input type="text" class="form-control" id="searchcityname" name="cityname"
                    placeholder='<@spring.message code="label.area"/>'>
         </div>
     </div>
     </div>
-    <div class="form-group col-md-12">
+    <div class="form-group col-sm-12">
 
-    <div class="form-group col-md-4" align="right">
-        <label for="searchcustomer" class="col-md-5 control-label"><@spring.message code="label.user"/></label>
-        <div class="col-md-7">
+    <div class="form-group col-sm-4" align="right">
+        <label for="searchcustomer" class="col-sm-5 control-label"><@spring.message code="label.user"/></label>
+        <div class="col-sm-7">
             <input type="text" class="form-control" id="searchcustomer" name="customer"
                    placeholder='<@spring.message code="label.user"/>'>
         </div>
     </div>
 
-    <div class="form-group col-md-4" align="right">
+    <div class="form-group col-sm-4" align="right">
         <label for="searchserviceprovider"
-               class="col-md-5 control-label"><@spring.message code="label.serviceprovider"/></label>
-        <div class="col-md-7">
+               class="col-sm-5 control-label"><@spring.message code="label.serviceprovider"/></label>
+        <div class="col-sm-7">
             <input type="text" class="form-control" id="searchserviceprovider" name="serviceprovider"
                    placeholder='<@spring.message code="label.serviceprovider"/>'>
         </div>
     </div>
 
-    <div class="form-group col-md-4" align="right">
+    <div class="form-group col-sm-4" align="right">
         <label for="searchinstallerorg"
-               class="col-md-5 control-label"><@spring.message code="label.installerorg"/></label>
-        <div class="col-md-7">
+               class="col-sm-5 control-label"><@spring.message code="label.installerorg"/></label>
+        <div class="col-sm-7">
             <input type="text" class="form-control" id="searchinstallerorg" name="installerorg"
                    placeholder='<@spring.message code="label.installerorg"/>'>
         </div>
     </div>
     </div>
-    <div class="form-group col-md-12">
-    <div class="form-group col-md-4" align="right">
-        <label for="searchinstaller" class="col-md-5 control-label"><@spring.message code="label.InstallerPersonList"/></label>
-        <div class="col-md-7">
+    <div class="form-group col-sm-12">
+    <div class="form-group col-sm-4" align="right">
+        <label for="searchinstaller" class="col-sm-5 control-label"><@spring.message code="label.InstallerPersonList"/></label>
+        <div class="col-sm-7">
             <input type="text" class="form-control" id="searchinstaller" name="installer"
                    placeholder='<@spring.message code="label.InstallerPersonList"/>'>
         </div>
     </div>
 
-    <div class="form-group col-md-4" align="right">
-        <label for="searchinstallerorg" class="col-md-5 control-label"><@spring.message code="label.gatewayID"/></label>
-        <div class="col-md-7">
+    <div class="form-group col-sm-4" align="right">
+        <label for="searchinstallerorg" class="col-sm-5 control-label"><@spring.message code="label.gatewayID"/></label>
+        <div class="col-sm-7">
             <input type="text" class="form-control" id="searchgatewayid" name="deviceid"
                    placeholder='<@spring.message code="label.gatewayID"/>'>
         </div>
     </div>
 
-    <div class="form-group col-md-4" align="right">
-        <div class="col-md-5"></div>
-        <div class="col-md-7">
+    <div class="form-group col-sm-4" align="right">
+        <div class="col-sm-5"></div>
+        <div class="col-sm-7">
             <button type="button" id="searchsubmit" class="btn btn-default"
                     style="width:100%;"><@spring.message code="label.search"/></button>
         </div>
@@ -122,7 +122,7 @@
           <hr>
 
           
-<table id="table" data-toggle="table">
+<table id="table" data-toggle="table" >
     <thead>
     <tr>
         <th data-field=""></th>
@@ -143,7 +143,7 @@
     </thead>
 </table>
       </div>
-        <div class="col-md-1"></div>
+        <div class="col-sm-1"></div>
     </div>
     <script type="text/javascript">
         var mysort = "";
