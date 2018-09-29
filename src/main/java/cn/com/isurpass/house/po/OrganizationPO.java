@@ -26,6 +26,7 @@ public class OrganizationPO {
 	private Integer cscontactid;
 	private Date createtime;
 	private String groupid;
+	private Integer advertbannerid;
 	public OrganizationPO() {
 		super();
 	}
@@ -156,4 +157,11 @@ public class OrganizationPO {
 		this.createtime = createtime;
 	}
 
+	public Integer getAdvertbannerid() {
+		return advertbannerid;
+	}
+
+	public void setAdvertbannerid(Integer advertbannerid) {
+		this.advertbannerid = advertbannerid;
+	}
 }

@@ -187,6 +187,23 @@ public class HttpsUtils {
         }
         return post;
     }
+    public static String SetAdvertBanner(String phonenumber,Integer advertbannerid){
+        String url = "https://"+ Constants.OPERATE_DEVICE_URL+"/iremote/thirdpart/user/setadvertbanner";
+        Map<String, String> map = new HashMap<>();
+        map.put("token", TokenKeeper.getToken());
+        map.put("phonenumber", phonenumber);
+        map.put("advertbannerid", String.valueOf(advertbannerid));
+        String post = HttpsUtils.post(url, null, map, null);
+        JSONObject jo = JSONObject.parseObject(post);
+        if (jo == null || jo.getInteger("resultCode") == 30300) {
+            TokenKeeper.getNewToken();
+            map.put("token", TokenKeeper.getToken());
+            map.put("phonenumber", phonenumber);
+            map.put("advertbannerid", String.valueOf(advertbannerid));
+            return HttpsUtils.post(url, null, map, null);
+        }
+        return post;
+    }
     public static void main(String[] args) throws Exception {
       /*  for (int i = 0; i < 100; i++) {
             Map<String, String> map = new HashMap<>();

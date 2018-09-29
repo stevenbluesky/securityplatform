@@ -10,7 +10,7 @@
             <hr>
 
             <input type="hidden" name="organizationid"  id="organizationid" value="${loginorg.organizationid!?c}">
-            <input type="hidden" name="type"  id="emptype" value="1">
+            <input type="hidden" name="type"  id="emptype" value="0">
             <div class="form-group">
                 <label for="loginname"
                        class="col-sm-3 control-label"  style="text-align: left;"><@spring.message code="label.loginname"/>*</label>

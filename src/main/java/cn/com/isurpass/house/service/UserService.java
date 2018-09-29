@@ -3,8 +3,11 @@ package cn.com.isurpass.house.service;
 import cn.com.isurpass.house.dao.*;
 import cn.com.isurpass.house.exception.MyArgumentNullException;
 import cn.com.isurpass.house.po.*;
+import cn.com.isurpass.house.request.HttpsUtils;
 import cn.com.isurpass.house.util.*;
 import cn.com.isurpass.house.vo.*;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -58,7 +61,7 @@ public class UserService {
     private SupplierCodeLogDAO supcodeDAO;
     @Autowired
     private GatewayPhonecardDAO gpDAO;
-
+    private static Log log  = LogFactory.getLog(UserService.class);
     @Transactional(rollbackFor = Exception.class)
     public void add(UserAddVO u, HttpServletRequest request) {//531
         EmployeePO emp = (EmployeePO) SecurityUtils.getSubject().getPrincipal();
@@ -211,6 +214,18 @@ public class UserService {
                 pcud.save(pcup);
             }
         }
+        OrganizationPO byOrganizationid = null;
+        if (empp != null) {
+            byOrganizationid = od.findByOrganizationid(empp.getInstallerorgid());
+        }
+        if(!StringUtils.isEmpty(u.getAppaccount())&&!StringUtils.isEmpty(byOrganizationid.getAdvertbannerid())){
+            try {
+                HttpsUtils.SetAdvertBanner(u.getAppaccount(), byOrganizationid.getAdvertbannerid());
+            }catch (Exception e){
+                log.error("send request setadvertbanner failed");
+            }
+        }
+
     }
     public static boolean checkChar(String   fstrData) {
         char   c   =   fstrData.charAt(0);
