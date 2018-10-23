@@ -37,6 +37,7 @@ public class UserAddVO {
     private String groupid;
     private Integer monitoringstationid;
     private List<GatewayPhonecardVO> gpVO;
+    private String apphometitle;
 
     public List<GatewayPhonecardVO> getGpVO() {
         return gpVO;
@@ -284,5 +285,13 @@ public class UserAddVO {
 
     public void setUsercode(String usercode) {
         this.usercode = usercode;
+    }
+
+    public String getApphometitle() {
+        return apphometitle;
+    }
+
+    public void setApphometitle(String apphometitle) {
+        this.apphometitle = apphometitle;
     }
 }

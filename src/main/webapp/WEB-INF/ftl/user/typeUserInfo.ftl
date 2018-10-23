@@ -1,4 +1,3 @@
-<!-- 录入电话卡信息页面 -->
 <#include "../_head0.ftl"/>
     <div class="row-horizontal">
         <div class="col-md-1"></div>
@@ -86,6 +85,14 @@
                       <input type="text" class="form-control" id="appaccount" name="appaccount" onblur="fillGateway(this)" placeholder="<@spring.message code='label.apploginemail'/>">
                   </div>
               </div>
+              </div>
+              <div class="col-sm-12" >
+                  <div  class="form-group">
+                      <label for="apphometitle"  class="col-sm-2 control-label" style="text-align: left;"><@spring.message code='label.apphometitle'/></label>
+                      <div class="col-sm-10">
+                          <input type="text" class="form-control" id="apphometitle" name="apphometitle" <#if insname??>value="${(insname)}"</#if> placeholder="<@spring.message code='label.apphometitle'/>">
+                      </div>
+                  </div>
               </div>
               <div class="col-sm-12" >
               <div  class="form-group">

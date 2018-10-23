@@ -187,12 +187,13 @@ public class HttpsUtils {
         }
         return post;
     }
-    public static String SetAdvertBanner(String phonenumber,Integer advertbannerid){
+    public static String SetAdvertBanner(String phonenumber,Integer advertbannerid,String hometitle){
         String url = "https://"+ Constants.OPERATE_DEVICE_URL+"/iremote/thirdpart/user/setadvertbanner";
         Map<String, String> map = new HashMap<>();
         map.put("token", TokenKeeper.getToken());
         map.put("phonenumber", phonenumber);
         map.put("advertbannerid", String.valueOf(advertbannerid));
+        map.put("hometitle",hometitle);
         String post = HttpsUtils.post(url, null, map, null);
         JSONObject jo = JSONObject.parseObject(post);
         if (jo == null || jo.getInteger("resultCode") == 30300) {

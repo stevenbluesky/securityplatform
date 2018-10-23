@@ -218,9 +218,9 @@ public class UserService {
         if (empp != null) {
             byOrganizationid = od.findByOrganizationid(empp.getInstallerorgid());
         }
-        if(!StringUtils.isEmpty(u.getAppaccount())&&!StringUtils.isEmpty(byOrganizationid.getAdvertbannerid())){
+        if(!StringUtils.isEmpty(u.getAppaccount())){
             try {
-                HttpsUtils.SetAdvertBanner(u.getAppaccount(), byOrganizationid.getAdvertbannerid());
+                HttpsUtils.SetAdvertBanner(u.getAppaccount(), byOrganizationid.getAdvertbannerid(),u.getApphometitle());
             }catch (Exception e){
                 log.error("send request setadvertbanner failed");
             }

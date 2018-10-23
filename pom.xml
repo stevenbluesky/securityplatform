@@ -477,6 +477,11 @@
             <artifactId>tomcat-jdbc</artifactId>
             <version>8.5.6</version>
         </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.46</version>
+        </dependency>
 
     </dependencies>
 
