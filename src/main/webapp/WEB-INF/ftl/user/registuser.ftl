@@ -1,6 +1,6 @@
 <#include "../_head0.ftl"/>
 <#include "../_head1.ftl"/>
-<div class="row">
+<div class="">
    <form class="form-horizontal" action="" method="POST">
        <div class="text-center"><h1><@spring.message code='label.registendusers'/></h1></div>
        <hr>

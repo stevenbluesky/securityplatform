@@ -1,6 +1,6 @@
 <#include "../_head0.ftl"/>
 <#include "../_head1.ftl"/>
-                  <div class="row">
+                  <div class="">
                       <div class="text-center"><h1><@spring.message code="label.installerlist"/></h1></div>
                       <hr>
                       <form id="searchform" class="form-horizontal">

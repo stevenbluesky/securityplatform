@@ -1,59 +1,58 @@
 <#include "../_head0.ftl"/>
 <#include "../_head1.ftl"/>
-        
-                  <div class="row">
-                      <div class="text-center"><h1><@spring.message code="label.supplierlist"/></h1></div>
-                      <hr>
-                      <form id="searchform" class="form-horizontal">
-                          <div class="form-group">
-                          <div class="col-md-4">
-                              <label for="searchcode" class="col-md-5 control-label"><@spring.message code="label.code"/></label>
-                              <div class="col-md-7">
-                                  <input type="text" class="form-control" id="searchcode" name="searchcode"
-                                         placeholder="<@spring.message code="label.code"/>">
-                              </div>
-                          </div>
-                          <div class="col-md-4">
-                              <label for="searchname" class="col-md-5 control-label"><@spring.message code="label.pname"/></label>
-                              <div  class="col-md-7">
-                                  <input type="text" class="form-control" id="searchname" name="searchname"
-                                         placeholder="<@spring.message code="label.pname"/>">
-                              </div>
-                          </div>
-                          <div class="col-md-4">
-                              <label for="searchcity" class="col-md-5 control-label"><@spring.message code="label.city"/></label>
-                              <div class="col-md-7">
-                                  <input type="text" class="form-control" id="searchcity" name="searchcity"
-                                         placeholder="<@spring.message code="label.city"/>">
-                              </div>
-                          </div>
-                          </div>
-                          <div class="form-group">
-                          <div class="col-md-4" align="right">
-                              <label for="searchcitycode" class="col-md-5 control-label"><@spring.message code=""/></label>
-                              <div class="col-md-7">
-                                  <input type="hidden" class="form-control" id="" name=""
-                                         placeholder=<@spring.message code=""/>>
-                              </div>
-                          </div>
-                          <div class="col-md-4" align="right">
-                              <label for="searchcitycode" class="col-md-5 control-label"><@spring.message code=""/></label>
-                              <div class="col-md-7">
-                                  <input type="hidden" class="form-control" id="" name=""
-                                         placeholder=<@spring.message code=""/>>
-                              </div>
-                          </div>
-                          <div class="col-md-4" align="right">
-                              <div class="col-md-5"></div>
-                              <div class="col-md-7">
-                              <button id="searchbtn" type="button" style="width:100%;"
-                                      class="btn btn-default"><@spring.message code="label.search"/></button>
-                              </div>
-                          </div>
-                          </div>
-                      </form>
-                  </div>
-          <hr>
+<div class="">
+  <div class="text-center"><h1><@spring.message code="label.supplierlist"/></h1></div>
+  <form id="searchform" class="form-horizontal">
+      <hr>
+      <div class="form-group">
+      <div class="col-md-4">
+          <label for="searchcode" class="col-md-5 control-label"><@spring.message code="label.code"/></label>
+          <div class="col-md-7">
+              <input type="text" class="form-control" id="searchcode" name="searchcode"
+                     placeholder="<@spring.message code="label.code"/>">
+          </div>
+      </div>
+      <div class="col-md-4">
+          <label for="searchname" class="col-md-5 control-label"><@spring.message code="label.pname"/></label>
+          <div  class="col-md-7">
+              <input type="text" class="form-control" id="searchname" name="searchname"
+                     placeholder="<@spring.message code="label.pname"/>">
+          </div>
+      </div>
+      <div class="col-md-4">
+          <label for="searchcity" class="col-md-5 control-label"><@spring.message code="label.city"/></label>
+          <div class="col-md-7">
+              <input type="text" class="form-control" id="searchcity" name="searchcity"
+                     placeholder="<@spring.message code="label.city"/>">
+          </div>
+      </div>
+      </div>
+      <div class="form-group">
+      <div class="col-md-4" align="right">
+          <label for="searchcitycode" class="col-md-5 control-label"><@spring.message code=""/></label>
+          <div class="col-md-7">
+              <input type="hidden" class="form-control" id="" name=""
+                     placeholder=<@spring.message code=""/>>
+          </div>
+      </div>
+      <div class="col-md-4" align="right">
+          <label for="searchcitycode" class="col-md-5 control-label"><@spring.message code=""/></label>
+          <div class="col-md-7">
+              <input type="hidden" class="form-control" id="" name=""
+                     placeholder=<@spring.message code=""/>>
+          </div>
+      </div>
+      <div class="col-md-4" align="right">
+          <div class="col-md-5"></div>
+          <div class="col-md-7">
+          <button id="searchbtn" type="button" style="width:100%;"
+                  class="btn btn-default"><@spring.message code="label.search"/></button>
+          </div>
+      </div>
+      </div>
+  </form>
+</div>
+<hr>
 <@shiro.hasPermission name="label.FreezeDistributor">
             <button style="float: right;" class='btn btn-default'
                     onclick='toggleOrganizationStatus("unsuspence");'><@spring.message code='label.unsuspence'/></button>

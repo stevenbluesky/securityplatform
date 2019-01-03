@@ -1,7 +1,7 @@
 <#include "../_head0.ftl"/>
 <#include "../_head1.ftl"/>
 <#import "/spring.ftl" as spring />
-<div class="row">
+<div class="">
 <form class="form-horizontal" id="searchForm" method="POST">
     <div class="text-center"><h1><@spring.message code="label.gatewaylist"/></h1></div>
     <hr>
