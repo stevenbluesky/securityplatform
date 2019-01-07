@@ -31,20 +31,60 @@
                   </div>
                   </div>
                   <div class="form-group">
-                  <div class="col-md-4" align="right">
-                      <label for="searchcitycode" class="col-md-5 control-label"><@spring.message code=""/></label>
-                      <div class="col-md-7">
-                          <input type="hidden" class="form-control" id="" name=""
-                                 placeholder=<@spring.message code=""/>>
+
+                      <div class="col-md-4" align="right">
+                          <label for="searchinstallerorg" class="col-md-5 control-label"><@spring.message code='label.usertype'/></label>
+                          <div class="col-md-7">
+                              <select id="searchUserType" name="usertype" class="col-md-12 form-control selectpicker" data-live-search="true" style="width: 100%"
+                                      title="<@spring.message code='label.usertype'/>" >
+                                  <option value="" selected><@spring.message code='label.all'/></option>
+                                  <option value="1"><@spring.message code='label.admintype'/></option>
+                                  <option value="2"><@spring.message code='label.employeetype'/></option>
+                                  <option value="3"><@spring.message code='label.installertype'/></option>
+                              </select>
+                          </div>
+                      </div>
+                      <div class="col-md-4" align="right">
+                          <label for="searchinstallerorg" class="col-md-5 control-label"><@spring.message code='label.status'/></label>
+                          <div class="col-md-7">
+                              <select id="searchStatus" name="status" class="col-md-12 form-control selectpicker" data-live-search="true" style="width: 100%"
+                                      title="<@spring.message code='label.devicetype'/>" >
+                                  <option value="" selected><@spring.message code='label.all'/></option>
+                                  <option value="1"><@spring.message code='label.normal'/></option>
+                                  <option value="2"><@spring.message code='label.freeze'/></option>
+                              </select>
+                          </div>
+                      </div>
+                      <div class="col-md-4" align="right">
+                          <label for="searchcitycode" class="col-md-5 control-label"><@spring.message code=""/></label>
+                          <div class="col-md-7">
+                              <input type="hidden" class="form-control" id="" name=""
+                                     placeholder=<@spring.message code=""/>>
+                          </div>
                       </div>
                   </div>
-                  <div class="col-md-4" align="right">
-                      <label for="searchcitycode" class="col-md-5 control-label"><@spring.message code=""/></label>
-                      <div class="col-md-7">
-                          <input type="hidden" class="form-control" id="" name=""
-                                 placeholder=<@spring.message code=""/>>
-                      </div>
-                  </div>
+                      <div class="form-group">
+
+                          <div class="col-md-4" align="right">
+                              <label for="searchinstallerorg" class="col-md-5 control-label"><@spring.message code='label.starttime'/></label>
+                              <div class="col-md-7">
+                                  <div class="col-sm-12 input-group date form_datetime">
+                                      <input class="form-control" size="16" id="searchStarttime" name="starttime" type="text" readonly placeholder="<@spring.message code='label.starttime'/>" >
+                                      <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                      <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="col-md-4" align="right">
+                              <label for="searchinstallerorg" class="col-md-5 control-label"><@spring.message code='label.endtime'/></label>
+                              <div class="col-md-7">
+                                  <div class="col-md-12 input-group date form_datetime">
+                                      <input class="form-control" size="16" id="searchEndtime" name="endtime" type="text" readonly placeholder="<@spring.message code='label.endtime'/>" >
+                                      <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                      <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                                  </div>
+                              </div>
+                          </div>
                   <div class="col-md-4">
                       <div class="col-md-5"></div>
                       <div class="col-md-7">
@@ -57,27 +97,22 @@
           </div>
           <hr>
 <@shiro.hasPermission name="label.ModifyRole">
-<button style="float: right;" class='btn btn-default'
-        onclick='modifyEmployeeRole();'><@spring.message code='label.Modifyemprole'/></button>
+            <button style="float: right;" class='btn btn-default' onclick='modifyEmployeeRole();'><@spring.message code='label.Modifyemprole'/></button>
 </@shiro.hasPermission>
 <@shiro.hasPermission name="label.FreezeEmployee">
-               <button style="float: right;" class='btn btn-default'
-                       onclick='toggleEmployeeStatus0("unsuspence");'><@spring.message code='label.unsuspence'/></button>
-			<button style="float: right;" class='btn btn-default'
-                    onclick='toggleEmployeeStatus0("suspence");'><@spring.message code='label.suspenced'/></button>
+            <button style="float: right;" class='btn btn-default' onclick='toggleEmployeeStatus0("unsuspence");'><@spring.message code='label.unsuspence'/></button>
+			<button style="float: right;" class='btn btn-default' onclick='toggleEmployeeStatus0("suspence");'><@spring.message code='label.suspenced'/></button>
 </@shiro.hasPermission>
 <@shiro.hasPermission name="label.AddEmployee">
-            <button onclick="window.location.href='addEmployeePage'" style="float: right;"
-                    class="btn btn-default"><@spring.message code="label.addnew"/></button>
+            <button onclick="window.location.href='addEmployeePage'" style="float: right;" class="btn btn-default"><@spring.message code="label.addnew"/></button>
 </@shiro.hasPermission>
 <@shiro.hasPermission name="label.ModifyEmployee">
-           <button style="float: right;" class='btn btn-default' id='btn1'
-                   onclick='toggleEmployeeStatus0("modify");'><@spring.message code='label.modify'/></button>
+           <button style="float: right;" class='btn btn-default' id='btn1' onclick='toggleEmployeeStatus0("modify");'><@spring.message code='label.modify'/></button>
 </@shiro.hasPermission>
 <@shiro.hasPermission name="label.DeleteEmployee">
-<button style="float: right;" class='btn btn-default'
-        onclick='toggleEmployeeStatus0("delete");'><@spring.message code='label.delete'/></button>
+<button style="float: right;" class='btn btn-default' onclick='toggleEmployeeStatus0("delete");'><@spring.message code='label.delete'/></button>
 </@shiro.hasPermission>
+<button style="float: right;" type="button" id='export' class='btn btn-default' onclick='exportData()'><@spring.message code='label.export'/></button>
 <table id="table" data-toggle="table">
     <thead>
     <tr>
@@ -86,12 +121,9 @@
         <th data-field="code" class="text-center"><@spring.message code="label.empcode"/></th>
         <th data-field="name" class="text-center"><@spring.message code="label.username"/></th>
         <th data-field="parentOrgName" class="text-center"><@spring.message code="label.parentorg"/></th>
-        <th data-field="status" data-formatter='formatter_status'
-            class="text-center"><@spring.message code="label.status"/></th>
-        <#--<th data-field="employeeroleid" class="text-center"><@spring.message code="label.privilege"/></th>-->
-        <th data-field="operate" data-formatter="formatter_op"
-            data-events="operateEvents" data-visible="false"
-            class="text-center"><@spring.message code="label.operate"/></th>
+        <th data-field="status" data-formatter='formatter_status' class="text-center"><@spring.message code="label.status"/></th>
+        <th data-field="createtime" data-formatter="formatter_date" class="text-center"><@spring.message code="label.createtime"/></th>
+        <th data-field="operate" data-events="operateEvents" data-visible="false" class="text-center"><@spring.message code="label.operate"/></th>
     </tr>
     </thead>
 </table>
@@ -111,7 +143,7 @@
             sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
             pageNumber: 1,                      //初始化加载第一页，默认第一页,并记录
             pageSize: '10',                     //每页的记录行数（*）
-            pageList: [10, 25, 50, 100],        //可供选择的每页的行数（*）
+            pageList: [10, 25, 50, 100,200,500,1000],        //可供选择的每页的行数（*）
             search: false,                      //是否显示表格搜索
             strictSearch: false,
             showColumns: false,                  //是否显示所有的列（选择显示的列）
@@ -130,6 +162,10 @@
                     searchcode: $("#searchcode").val(),
                     searchname: $("#searchname").val(),
                     searchorgname: $("#searchorgname").val(),
+                    usertype:$("#searchUserType").val(),
+                    status:$("#searchStatus").val(),
+                    starttime:$("#searchStarttime").val(),
+                    endtime:$("#searchEndtime").val(),
                     rows: params.limit,                         //页面大小
                     page: (params.offset / params.limit) + 1,   //页码
                     sort: params.sort,      //排序列名
@@ -235,6 +271,53 @@
 
             });
         }
+        function exportData() {
+            var searchname = $("#searchname").val();
+            var searchcode = $("#searchcode").val();
+            var searchorgname = $("#searchorgname").val();
+            var usertype = $("#searchUserType").val();
+            var status = $("#searchStatus").val();
+            var starttime = $("#searchStarttime").val();
+            var endtime = $("#searchEndtime").val();
+
+            window.open("exportalluserdata?searchname="+searchname+"&searchcode="+searchcode+"&searchorgname="+searchorgname+"&usertype="+usertype+"&status="+status+
+                    "&starttime="+starttime+"&endtime="+endtime);
+
+        }
+        function formatter_date(value, row, index) {
+            if(value==null){
+                return '';
+            }
+            return new Date(value).Format("yyyy-MM-dd");
+        }
+        <#--日期格式化器-->
+        Date.prototype.Format = function (fmt) {
+            var o = {
+                "M+": this.getMonth() + 1, //月份
+                "d+": this.getDate(), //日
+                "h+": this.getHours(), //小时
+                "m+": this.getMinutes(), //分
+                "s+": this.getSeconds(), //秒
+                "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+                "S": this.getMilliseconds() //毫秒
+            };
+            if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+            for (var k in o)
+                if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+            return fmt;
+        }
+        $('.form_datetime').datetimepicker({
+            //language:  'fr',
+            format: 'yyyy-mm-dd',
+            weekStart: 1,
+            minView:'month',
+            todayBtn:  1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            forceParse: 0,
+            showMeridian: 1
+        });
     </script>
 
 <#include "../modal.ftl"/>

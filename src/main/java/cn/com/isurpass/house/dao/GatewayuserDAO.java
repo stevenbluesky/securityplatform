@@ -1,5 +1,6 @@
 package cn.com.isurpass.house.dao;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -76,4 +77,12 @@ public interface GatewayuserDAO extends CrudRepository<GatewayUserPO, Integer> {
 			"\t join user u on g.userid = u.userid \n" +
 			"\t join organization o on o.organizationid = u.monitoringstationid OR o.organizationid = u.organizationid where o.organizationid=:id",nativeQuery = true)
 	List<String> findDeviceidByMonitoringStation(@Param("id") Integer id);
+
+	GatewayUserPO findByDeviceidAndUserid(String deviceid, Integer userid);
+
+	@Query(value = "SELECT deviceid FROM gatewayuser WHERE createtime >= :starttime",nativeQuery = true)
+	List<String> findDeviceidByStarttime(@Param("starttime")Date starttime);
+
+	@Query(value = "SELECT deviceid FROM gatewayuser WHERE createtime <= :endtime",nativeQuery = true)
+	List<String> findDeviceidByEndtime(@Param("endtime")Date endtime);
 }

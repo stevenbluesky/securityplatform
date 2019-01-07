@@ -1,5 +1,7 @@
 package cn.com.isurpass.house.vo;
 
+import java.util.Date;
+
 public class UserInfoListVO {
 	private Integer userid;
 	private String name;
@@ -12,6 +14,7 @@ public class UserInfoListVO {
 	private String codepostfix;
 	private String usercode;
 	private String appaccount;
+	private Date createtime;
 
 	public String getAppaccount() {
 		return appaccount;
@@ -88,5 +91,13 @@ public class UserInfoListVO {
 
 	public void setUsercode(String usercode) {
 		this.usercode = usercode;
+	}
+
+	public Date getCreatetime() {
+		return createtime;
+	}
+
+	public void setCreatetime(Date createtime) {
+		this.createtime = createtime;
 	}
 }

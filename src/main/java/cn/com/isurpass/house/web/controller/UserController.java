@@ -6,9 +6,11 @@ import cn.com.isurpass.house.po.GatewayPO;
 import cn.com.isurpass.house.po.UserPO;
 import cn.com.isurpass.house.result.JsonResult;
 import cn.com.isurpass.house.service.UserService;
+import cn.com.isurpass.house.util.ExportExcelUtil;
 import cn.com.isurpass.house.util.FormUtils;
 import cn.com.isurpass.house.result.PageResult;
 import cn.com.isurpass.house.vo.*;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +23,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -100,6 +105,59 @@ public class UserController {
             return us.search(pageable, usv, request);
         }
         return us.listUserInfo(pageable, request);
+    }
+    @RequestMapping(value = "/exportenduserdata")
+    @ResponseBody
+    public String exportEndUserData(UserSearchVO usv, HttpServletRequest request, HttpServletResponse response) {
+        List<EndUserInfoVO> dataset = null;
+        if(FormUtils.isEmpty(usv)){
+            dataset = us.listUserInfo(request);
+        }else{
+            dataset = us.search(usv, request);
+        }
+
+        if(dataset==null||dataset.size()==0){
+            return "No Data !";
+        }
+        String sheetName = "End Users Data";
+        String titleName = "End Users Data";
+        String fileName = "End Users Data";
+        int columnNumber = 9;
+        int[] columnWidth = { 22, 20,25,25,30,30,30,12,25 };
+        String[] columnName = { "AiBase ID", "Name" ,"Gateway ID","SIM Card Number","APP Login Email","City","Distributor","Status","Createtime"};
+        try {
+            HSSFWorkbook wb = new ExportExcelUtil().exportNoResponse(sheetName, titleName, columnNumber, columnWidth, columnName, dataset);
+            if(wb==null){
+                return "System Error !";
+            }
+            this.setResponseHeader(response, fileName);
+            OutputStream os = response.getOutputStream();
+            wb.write(os);
+            os.flush();
+            os.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "Export Successfully !";
+    }
+
+    /**
+     * 发送响应流方法
+     */
+    private void setResponseHeader(HttpServletResponse response, String fileName) {
+        try {
+            try {
+                fileName = new String(fileName.getBytes(), "ISO8859-1");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            response.setContentType("application/octet-stream;charset=ISO8859-1");
+            response.setHeader("Content-Disposition", "attachment;filename=" + fileName + ".xls");
+            response.addHeader("Pargam", "no-cache");
+            response.addHeader("Cache-Control", "no-cache");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     @RequestMapping("toggleUserStatus")

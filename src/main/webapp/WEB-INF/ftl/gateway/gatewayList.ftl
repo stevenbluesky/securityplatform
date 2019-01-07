@@ -66,7 +66,17 @@
                        placeholder='<@spring.message code="label.user"/>'>
             </div>
         </div>
-
+        <div class="col-md-4" align="right">
+            <label for="searchinstallerorg" class="col-md-5 control-label"><@spring.message code='label.status'/></label>
+            <div class="col-md-7">
+                <select id="searchStatus" name="status" class="col-md-12 form-control selectpicker" data-live-search="true" style="width: 100%"
+                        title="<@spring.message code='label.devicetype'/>" >
+                    <option value="" selected><@spring.message code='label.all'/></option>
+                    <option value="1"><@spring.message code='label.online'/></option>
+                    <option value="0"><@spring.message code='label.offline'/></option>
+                </select>
+            </div>
+        </div>
     <div class="col-md-4" align="right">
         <label for="searchcitycode" class="col-md-5 control-label"><@spring.message code=""/></label>
         <div class="col-md-7">
@@ -75,25 +85,54 @@
         </div>
     </div>
 
-    <div class="col-md-4" align="right">
-        <div class="col-md-5"></div>
-        <div class="col-md-7">
-            <button type="button" id="searchsubmit" class="btn btn-default"
-                    style="width:100%;"><@spring.message code="label.search"/></button>
-        </div>
+
     </div>
+    <#--最下一栏-->
+    <div class="form-group">
+    <#--网关绑定时间 开始时间搜索-->
+        <div class="col-md-4" align="right">
+            <label for="searchinstallerorg" class="col-md-5 control-label"><@spring.message code='label.starttime'/></label>
+            <div class="col-md-7">
+                <div class="col-sm-12 input-group date form_datetime">
+                    <input class="form-control" size="16" id="searchStarttime" name="starttime" type="text" readonly placeholder="<@spring.message code='label.starttime'/>" >
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                </div>
+            </div>
+        </div>
+        <#--网关绑定时间 结束时间搜索-->
+        <div class="col-md-4" align="right">
+            <label for="searchinstallerorg" class="col-md-5 control-label"><@spring.message code='label.endtime'/></label>
+            <div class="col-md-7">
+                <div class="col-md-12 input-group date form_datetime">
+                    <input class="form-control" size="16" id="searchEndtime" name="endtime" type="text" readonly placeholder="<@spring.message code='label.endtime'/>" >
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                </div>
+            </div>
+        </div>
+        <#--搜索按钮-->
+        <div class="col-md-4" align="right">
+            <div class="col-md-5"></div>
+            <div class="col-md-7">
+                <button type="button" id="searchsubmit" class="btn btn-default"
+                        style="width:100%;"><@spring.message code="label.search"/></button>
+            </div>
+        </div>
     </div>
 </form>
 </div>
 <#--<button class='btn btn-default' style="float: right;visibility: hidden;">asdfaf</button>
 <button class='btn btn-default' style="float: right;margin-top: -10px;visibility: hidden;">asdfaf</button>-->
+<#--删除按钮-->
 <@shiro.hasPermission name="label.DeleteGateway">
-<#--新增，启用，停用按钮-->
 <button style="float: right;" type="button" id='deletePhonecard' class='btn btn-default' onclick='updatePhonecardStatus("delete")'><@spring.message code='label.delete'/></button>
 </@shiro.hasPermission>
+<#--查询网关二维码-->
 <@shiro.hasPermission name="label.InputGatewayInformation">
 <button style="float: right;" type="button" id='queryGateway' class='btn btn-default' onclick='queryGatewayQrcode()'><@spring.message code='label.queryqrcode'/></button>
 </@shiro.hasPermission>
+<button style="float: right;" type="button" id='export' class='btn btn-default' onclick='exportData()'><@spring.message code='label.export'/></button>
 <#--<@shiro.hasPermission name="label.InputGatewayInformation">
 <button style="float: right;" type="button" class="btn btn-default" onclick="window.location.href='typeGatewayInfo'"><@spring.message code="label.entering"/></button>
 </@shiro.hasPermission>-->
@@ -112,6 +151,7 @@
         <th data-field="installerorg" class="text-center"><@spring.message code="label.installerorg"/></th>
         <th data-field="installer" class="text-center"><@spring.message code="label.InstallerPersonList"/></th>
         <th data-field="customer" class="text-center"><@spring.message code="label.user"/></th>
+        <th data-field="bindingtime" data-formatter="formatter_date" class="text-center"><@spring.message code="label.bindingtime"/></th>
     <#--<th data-field=""><@spring.message code="label.businessstatus"/></th>-->
     <#--<th data-field="operate" data-formatter="formatter_operate"><@spring.message code="label.operate"/></th>-->
     </tr>
@@ -134,7 +174,7 @@
         sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
         pageNumber: 1,                      //初始化加载第一页，默认第一页,并记录
         pageSize: '10',                     //每页的记录行数（*）
-        pageList: [10, 25, 50, 100],        //可供选择的每页的行数（*）
+        pageList: [10, 25, 50, 100,200,500,1000],        //可供选择的每页的行数（*）
         search: false,                      //是否显示表格搜索*******
         strictSearch: false,
         showColumns: false,                  //是否显示所有的列（选择显示的列）******
@@ -158,6 +198,9 @@
                 installerorg: $("#searchinstallerorg").val(),
                 installer: $("#searchinstaller").val(),
                 deviceid: $("#searchgatewayid").val(),
+                status: $("#searchStatus").val(),
+                starttime: $("#searchStarttime").val(),
+                endtime: $("#searchEndtime").val(),
                 rows: params.limit,                         //页面大小
                 page: (params.offset / params.limit) + 1,   //页码
                 sort: params.deviceid,      //排序列名
@@ -223,6 +266,22 @@
         $('#myModal').modal('show');
         $("#iframeDetail").attr("src", 'queryGatewayQrcode');
     }
+    function exportData() {
+       var name = $("#searchname").val();
+       var cityname =  $("#searchcityname").val();
+       var citycode =  $("#searchcitycode").val();
+       var customer =  $("#searchcustomer").val();
+       var serviceprovider =  $("#searchserviceprovider").val();
+       var installerorg = $("#searchinstallerorg").val();
+       var installer =  $("#searchinstaller").val();
+       var deviceid =  $("#searchgatewayid").val();
+       var status =  $("#searchStatus").val();
+       var starttime = $("#searchStarttime").val();
+       var endtime = $("#searchEndtime").val();
+       window.open("exportgatewaydata?name="+name+"&cityname="+cityname+"&citycode="+citycode+"&customer="+customer+"&serviceprovider="+serviceprovider+
+               "&installerorg="+installerorg+"&installer="+installer+"&deviceid="+deviceid+"&status="+status+"&starttime="+starttime+"&endtime="+endtime);
+
+    }
     //更新状态
     function updatePhonecardStatus(obj) {
         var checkedIds = getCheckedId();
@@ -264,6 +323,40 @@
             }
         });
     }
+    function formatter_date(value, row, index) {
+        if(value==null){
+            return '';
+        }
+        return new Date(value).Format("yyyy-MM-dd");
+    }
+    <#--日期格式化器-->
+    Date.prototype.Format = function (fmt) {
+        var o = {
+            "M+": this.getMonth() + 1, //月份
+            "d+": this.getDate(), //日
+            "h+": this.getHours(), //小时
+            "m+": this.getMinutes(), //分
+            "s+": this.getSeconds(), //秒
+            "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+            "S": this.getMilliseconds() //毫秒
+        };
+        if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        for (var k in o)
+            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+        return fmt;
+    }
+    $('.form_datetime').datetimepicker({
+        //language:  'fr',
+        format: 'yyyy-mm-dd',
+        weekStart: 1,
+        minView:'month',
+        todayBtn:  1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        forceParse: 0,
+        showMeridian: 1
+    });
 </script>
 <#include "../modal.ftl"/>
 <#include "../_foot1.ftl"/>

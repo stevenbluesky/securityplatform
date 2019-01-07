@@ -1,5 +1,7 @@
 package cn.com.isurpass.house.po;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 import java.util.List;
 
@@ -18,7 +20,7 @@ public class GatewayPO {
 	private Integer status; // 0:离线 1:在线
 	private String model;
 	private String firmwareversion;
-	private Integer battery; // 0:离线 1:在线
+	private Integer battery;
 	private Date createtime;
 
 	public String getAppaccount() {

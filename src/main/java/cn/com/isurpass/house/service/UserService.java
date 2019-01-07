@@ -268,6 +268,55 @@ public class UserService {
         }
         return null;
     }
+
+    @Transactional(readOnly = true)
+    public List<EndUserInfoVO> listUserInfo(HttpServletRequest request) {
+        EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
+        Integer orgtype = od.findByOrganizationid(emp.getOrganizationid()).getOrgtype();
+        List<EmployeeRolePO> elist = erd.findByEmployeeid(emp.getEmployeeid());
+        List<Integer> emprolelist2 = new ArrayList<>();
+        elist.forEach(single ->{emprolelist2.add(single.getRoleid());});
+        List<Integer> rolelist = RemoveDuplicate.removeDuplicate(emprolelist2);
+        if(rolelist!= null &&rolelist.size()==1&&rolelist.get(0)==4){
+            List<Object[]> userList = ud.findUserByInstallerid(emp.getEmployeeid());
+            return transferUserInfo( userList);
+        }
+        if (orgtype.equals(Constants.ORGTYPE_AMETA)) {
+            List<Object[]> userList = ud.findUserWithGateway();
+            return transferUserInfo(userList);
+        }
+        if (orgtype.equals(Constants.ORGTYPE_INSTALLER)) {
+            List<Object[]> userList =ud.findUserByInstallerorg(emp.getOrganizationid());
+            return transferUserInfo(userList);
+        }
+        if (orgtype.equals(Constants.ORGTYPE_SUPPLIER)) {
+            List<Object[]> userList =ud.findUserByOrganizationorg(emp.getOrganizationid());
+            return transferUserInfo(userList);
+        }
+        return null;
+    }
+    public List<EndUserInfoVO> transferUserInfo(List<Object[]> userList) {
+        if (userList == null) {
+            return null;
+        }
+        List<EndUserInfoVO> listvo = new ArrayList<>();
+        userList.forEach(u -> {
+            EndUserInfoVO user = new EndUserInfoVO();
+            CityPO citypo = city.findByCitycode((String) u[5]);
+            OrganizationPO orgpo = od.findByOrganizationid((Integer) u[6]);
+            user.setDeviceid((String) u[0]);
+            user.setName((String) u[2]);
+            user.setStatus((Integer) u[3]==1?"Normal":"Deactivate");
+            user.setAppaccount((String) u[4]);
+            user.setCity(citypo == null ? null : citypo.getCityname());
+            user.setSuppliername(orgpo == null ? null : orgpo.getName());
+            user.setUsercode((String) u[8]);
+            user.setSerialnumber((String) u[9]);
+            user.setCreatetime((Date)u[10]);
+            listvo.add(user);
+        });
+        return listvo;
+    }
     public Map<String, Object> transferUserInfo(List<Object[]> userList, Integer count) {
         if (userList == null) {
             return null;
@@ -287,6 +336,7 @@ public class UserService {
             user.setSuppliername(orgpo == null ? null : orgpo.getName());
             user.setUsercode((String) u[8]);
             user.setSerialnumber((String) u[9]);
+            user.setCreatetime((Date)u[10]);
             listvo.add(user);
         });
         map.put("rows", listvo);
@@ -394,6 +444,9 @@ public class UserService {
         List<UserPO> u4 = Collections.EMPTY_LIST;
         List<UserPO> u5 = Collections.EMPTY_LIST;
         List<UserPO> u6 = Collections.EMPTY_LIST;
+        List<UserPO> u7 = Collections.EMPTY_LIST;
+        List<UserPO> u8 = Collections.EMPTY_LIST;
+        List<UserPO> u9 = Collections.EMPTY_LIST;
         Set<List<UserPO>> set = new HashSet<>();
         if (!FormUtils.isEmpty(usv.getSearchCity())) {
             List<String> citycodelist = city.findByCitynameContaining(usv.getSearchCity()).stream().map(CityPO::getCitycode).collect(toList());
@@ -428,6 +481,18 @@ public class UserService {
         if (!StringUtils.isEmpty(usv.getSearchCode())) {
             u6 = ud.findByUsercodeContaining(usv.getSearchCode());
             set.add(u6);
+        }
+        if (!StringUtils.isEmpty(usv.getStatus())) {
+            u7 = ud.findByStatus(usv.getStatus());
+            set.add(u7);
+        }
+        if (!StringUtils.isEmpty(usv.getStarttime())) {
+            u8 = ud.findByCreatetimeAfter(usv.getStarttime());
+            set.add(u8);
+        }
+        if (!StringUtils.isEmpty(usv.getEndtime())) {
+            u9 = ud.findByCreatetimeBefore(usv.getEndtime());
+            set.add(u9);
         }
         set.remove(null);
         Iterator<List<UserPO>> iterator = set.iterator();
@@ -465,6 +530,91 @@ public class UserService {
         return transferUserInfo(listpage,total);
     }
 
+    @Transactional(readOnly = true)
+    public List<EndUserInfoVO> search(UserSearchVO usv, HttpServletRequest request) {
+        List<UserPO> u0 = Collections.EMPTY_LIST;
+        List<UserPO> u1 = Collections.EMPTY_LIST;
+        List<UserPO> u2 = Collections.EMPTY_LIST;
+        List<UserPO> u3 = Collections.EMPTY_LIST;
+        List<UserPO> u4 = Collections.EMPTY_LIST;
+        List<UserPO> u5 = Collections.EMPTY_LIST;
+        List<UserPO> u6 = Collections.EMPTY_LIST;
+        List<UserPO> u7 = Collections.EMPTY_LIST;
+        List<UserPO> u8 = Collections.EMPTY_LIST;
+        List<UserPO> u9 = Collections.EMPTY_LIST;
+        Set<List<UserPO>> set = new HashSet<>();
+        if (!FormUtils.isEmpty(usv.getSearchCity())) {
+            List<String> citycodelist = city.findByCitynameContaining(usv.getSearchCity()).stream().map(CityPO::getCitycode).collect(toList());
+            u0 = ud.findByCitycodeIn(citycodelist);
+            set.add(u0);
+        }
+        if (!StringUtils.isEmpty(usv.getSearchAppAccount())) {
+            u1 = ud.findByAppaccountContaining(usv.getSearchAppAccount());
+            set.add(u1);
+        }
+        if (!FormUtils.isEmpty(usv.getSearchGatewayid())) {
+            List<String> gatewayidlist = gateway.findByDeviceidContaining(usv.getSearchGatewayid()).stream().map(GatewayPO::getDeviceid).collect(toList());
+            List<Integer> useridlist = gd.findByDeviceidIn(gatewayidlist).stream().map(GatewayUserPO::getUserid).collect(toList());
+            u2 = ud.findByUseridIn(useridlist);
+            set.add(u2);
+        }
+        if (!FormUtils.isEmpty(usv.getSearchSerialnumber())) {
+            List<Integer> phonecardidlist = pcard.findBySerialnumberContaining(usv.getSearchSerialnumber()).stream().map(PhonecardPO::getPhonecardid).collect(toList());
+            List<Integer> useridlist0 = pcud.findByPhonecardidIn(phonecardidlist).stream().map(PhonecardUserPO::getUserid).collect(toList());
+            u3 = ud.findByUseridIn(useridlist0);
+            set.add(u3);
+        }
+        if (!FormUtils.isEmpty(usv.getSearchDealername())) {
+            List<Integer> orgidlist = od.findByNameContaining(usv.getSearchDealername()).stream().map(OrganizationPO::getOrganizationid).collect(toList());
+            u4 = ud.findByOrganizationidIn(orgidlist);
+            set.add(u4);
+        }
+        if (!StringUtils.isEmpty(usv.getSearchName())) {
+            u5 = ud.findByNameContaining(usv.getSearchName());
+            set.add(u5);
+        }
+        if (!StringUtils.isEmpty(usv.getSearchCode())) {
+            u6 = ud.findByUsercodeContaining(usv.getSearchCode());
+            set.add(u6);
+        }
+        if (!StringUtils.isEmpty(usv.getStatus())) {
+            u7 = ud.findByStatus(usv.getStatus());
+            set.add(u7);
+        }
+        if (!StringUtils.isEmpty(usv.getStarttime())) {
+            u8 = ud.findByCreatetimeAfter(usv.getStarttime());
+            set.add(u8);
+        }
+        if (!StringUtils.isEmpty(usv.getEndtime())) {
+            u9 = ud.findByCreatetimeBefore(usv.getEndtime());
+            set.add(u9);
+        }
+        set.remove(null);
+        Iterator<List<UserPO>> iterator = set.iterator();
+        List<UserPO> ux = iterator.next();
+        while (iterator.hasNext()) {
+            ux.retainAll(iterator.next());
+        }
+        List<Integer> ids = ux.stream().map(UserPO::getUserid).collect(toList());
+        if (ids.isEmpty()) {
+            return null;
+        }
+        EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
+        Integer orgtype = od.findByOrganizationid(emp.getOrganizationid()).getOrgtype();
+        List<Object[]> listpage = null;
+        List<Integer> emprolelist = erd.findByEmployeeid(emp.getEmployeeid()).stream().map(EmployeeRolePO::getRoleid).collect(toList());
+        List<Integer> rolelist = RemoveDuplicate.removeDuplicate(emprolelist);
+        if (rolelist!= null &&rolelist.size()==1&&rolelist.get(0)==4) {
+            listpage = ud.findByUserlistAndInstalleridS(ids,emp.getEmployeeid());
+        } else if (orgtype.equals(Constants.ORGTYPE_AMETA)) {
+            listpage = ud.findByUserlistS(ids);
+        } else if (orgtype.equals(Constants.ORGTYPE_SUPPLIER)) {
+            listpage = ud.findByUserlistAndOrganizationS(ids,emp.getOrganizationid());
+        } else  {
+            listpage = ud.findByUserlistAndInstallerorgS(ids, emp.getOrganizationid());
+        }
+        return transferUserInfo(listpage);
+    }
     /**
      * 查询添加用户时所有表单信息
      */

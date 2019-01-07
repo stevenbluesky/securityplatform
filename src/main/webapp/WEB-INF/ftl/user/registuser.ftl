@@ -29,9 +29,9 @@
        </div>
 
        <div class="form-group">
-           <div class="col-md-5" align="left">
-               <label for="searchinstallerorg" class="col-md-4 control-label"><@spring.message code='label.starttime'/></label>
-               <div class="col-md-8">
+           <div class="col-md-4" align="left">
+               <label for="searchinstallerorg" class="col-md-5 control-label"><@spring.message code='label.starttime'/></label>
+               <div class="col-md-7">
 
                        <div class="col-sm-12 input-group date form_datetime">
                            <input class="form-control" size="16" id="searchStarttime" name="searchStarttime" type="text" readonly placeholder="<@spring.message code='label.starttime'/>" >
@@ -40,9 +40,9 @@
                        </div>
                    </div>
            </div>
-           <div class="col-md-5" align="right">
-               <label for="searchinstallerorg" class="col-md-4 control-label"><@spring.message code='label.endtime'/></label>
-               <div class="col-md-8">
+           <div class="col-md-4" align="right">
+               <label for="searchinstallerorg" class="col-md-5 control-label"><@spring.message code='label.endtime'/></label>
+               <div class="col-md-7">
                        <div class="col-md-12 input-group date form_datetime">
                            <input class="form-control" size="16" id="searchEndtime" name="searchEndtime" type="text" readonly placeholder="<@spring.message code='label.endtime'/>" >
                            <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
@@ -50,8 +50,9 @@
                        </div>
                </div>
            </div>
-           <div class="col-md-2" align="right">
-               <div class="col-md-12">
+           <div class="col-md-4" align="right">
+               <div class="col-md-5"></div>
+               <div class="col-md-7">
                    <button type="button" id="searchbtn" class="btn btn-default"
                            style="width:100%;"><@spring.message code="label.search"/></button>
                </div>
@@ -88,7 +89,7 @@
             sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
             pageNumber: 1,                      //初始化加载第一页，默认第一页,并记录
             pageSize: '10',                     //每页的记录行数（*）
-            pageList: [10, 25, 50, 100],        //可供选择的每页的行数（*）
+            pageList: [10, 25, 50, 100,200,500,1000],        //可供选择的每页的行数（*）
             search: false,                      //是否显示表格搜索
             strictSearch: false,
             showColumns: false,                  //是否显示所有的列（选择显示的列）

@@ -442,6 +442,7 @@ public class OrganizationService {
             list.add(o.getOrganizationid());
             findChildrenOrgid(o.getOrganizationid(), list);
         });
+        list.add(id);
         return list;
     }
 
@@ -505,8 +506,8 @@ public class OrganizationService {
 
         if (search.getSearchcity() == null || search.getSearchcity() == "") {//如果不搜索城市名称
             Integer organizationid = emp.getOrganizationid();
-            map.put("total", od.countByCodeLikeAndNameLikeAndOrgtypeAndParentorgid(code,name,orgtype1,organizationid));
-            orgList = od.findByCodeLikeAndNameLikeAndOrgtypeAndParentorgid(pageable,code, name, orgtype1,organizationid);
+            map.put("total", od.countByCodeContainingAndNameContainingAndOrgtype(code,name,orgtype1));
+            orgList = od.findByCodeContainingAndNameContainingAndOrgtype(pageable,code, name, orgtype1);
         } else {
             //先通过citycode和city查找相似的,再通过返回的List集合中的citycode在organization表中查找
             List<CityPO> list = city.findByCitynameLike(city1);

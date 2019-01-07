@@ -1,5 +1,7 @@
 package cn.com.isurpass.house.vo;
 
+import java.util.Date;
+
 public class EmployeeListVO {
 
 	private Integer employeeid;
@@ -8,6 +10,7 @@ public class EmployeeListVO {
 	private String code;
 	private Integer status;
 	private String orgname;
+	private Date createtime;
 
 	public EmployeeListVO() {
 		super();
@@ -70,4 +73,11 @@ public class EmployeeListVO {
 		this.status = status;
 	}
 
+	public Date getCreatetime() {
+		return createtime;
+	}
+
+	public void setCreatetime(Date createtime) {
+		this.createtime = createtime;
+	}
 }

@@ -1,5 +1,10 @@
 package cn.com.isurpass.house.vo;
 
+import com.alibaba.fastjson.annotation.JSONField;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.util.Date;
+
 public class TypeGatewayInfoVO {
 	private String deviceid;
 	private String name;
@@ -16,6 +21,12 @@ public class TypeGatewayInfoVO {
 	private String installerorg;
 	private String installer;
 	private String devicename;
+	@DateTimeFormat(pattern="yyyy-MM-dd")
+	private Date bindingtime;
+	@DateTimeFormat(pattern="yyyy-MM-dd")
+	private Date starttime;
+	@DateTimeFormat(pattern="yyyy-MM-dd")
+	private Date endtime;
 	
 	public String getDevicename() {
 		return devicename;
@@ -102,13 +113,28 @@ public class TypeGatewayInfoVO {
 	public void setInstaller(String installer) {
 		this.installer = installer;
 	}
-	@Override
-	public String toString() {
-		return "TypeGatewayInfoVO [deviceid=" + deviceid + ", name=" + name + ", status=" + status + ", model=" + model
-				+ ", battery=" + battery + ", createtime=" + createtime + ", firmwareversion=" + firmwareversion
-				+ ", cityname=" + cityname + ", citycode=" + citycode + ", customer=" + customer + ", serviceprovider="
-				+ serviceprovider + ", installerorg=" + installerorg + ", installer=" + installer + ", devicename="
-				+ devicename + "]";
+
+	public Date getStarttime() {
+		return starttime;
 	}
-	
+
+	public void setStarttime(Date starttime) {
+		this.starttime = starttime;
+	}
+
+	public Date getEndtime() {
+		return endtime;
+	}
+
+	public void setEndtime(Date endtime) {
+		this.endtime = endtime;
+	}
+
+	public Date getBindingtime() {
+		return bindingtime;
+	}
+
+	public void setBindingtime(Date bindingtime) {
+		this.bindingtime = bindingtime;
+	}
 }

@@ -1,5 +1,6 @@
 package cn.com.isurpass.house.dao;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -70,29 +71,49 @@ public interface OrganizationDAO extends CrudRepository<OrganizationPO, Integer>
     @Query(value = "select * from organization where parentorgid is NULL ",nativeQuery = true)
     List<OrganizationPO> findNUllParentorgid();
 
-    Object countByCodeLikeAndNameLikeAndOrgtypeAndParentorgid(String code, String name, Integer orgtype1, Integer organizationid);
+    Object countByCodeContainingAndNameContainingAndOrgtypeAndParentorgid(String code, String name, Integer orgtype1, Integer organizationid);
 
-    Page<OrganizationPO> findByCodeLikeAndNameLikeAndOrgtypeAndParentorgid(Pageable pageable, String code, String name, Integer orgtype1, Integer organizationid);
+    Page<OrganizationPO> findByCodeContainingAndNameContainingAndOrgtypeAndParentorgid(Pageable pageable, String code, String name, Integer orgtype1, Integer organizationid);
 
-    @Query(value = "SELECT e.employeeid,e.code,e.loginname,o.name,e.status  FROM employee e \n" +
+    @Query(value = "SELECT e.employeeid,e.code,e.loginname,o.name,e.status,e.createtime  FROM employee e \n" +
             "\tJOIN organization o ON e.organizationid=o.organizationid \n" +
-            "\tAND IFNULL(e.code,'') LIKE :code AND e.loginname LIKE :name AND o.name LIKE :orgname AND e.type IN :typelist",nativeQuery = true)
-    List<Object[]> findAllEmpByType(Pageable pageable, @Param("name")String name,@Param("code") String code,@Param("orgname") String orgname,@Param("typelist") List<Integer>typelist);
+            "\tAND IFNULL(e.code,'') LIKE :code AND e.loginname LIKE :name AND o.name LIKE :orgname AND e.type IN :typelist and e.status in :statuslist \n " +
+            "\tand e.createtime >= :starttime and e.createtime <= :endtime and e.employeeid in :tempempidlist ",nativeQuery = true)
+    List<Object[]> findAllEmpByType(Pageable pageable, @Param("name")String name, @Param("code") String code, @Param("orgname") String orgname, @Param("typelist") List<Integer>typelist,
+                                    @Param("statuslist") List<Integer>statuslist, @Param("starttime") Date starttime, @Param("endtime") Date enttime, @Param("tempempidlist") List<Integer>tempempidlist);
+    @Query(value = "SELECT e.employeeid,e.code,e.loginname,o.name,e.status,e.createtime  FROM employee e \n" +
+            "\tJOIN organization o ON e.organizationid=o.organizationid \n" +
+            "\tAND IFNULL(e.code,'') LIKE :code AND e.loginname LIKE :name AND o.name LIKE :orgname AND e.type IN :typelist and e.status in :statuslist \n " +
+            "\tand e.createtime >= :starttime and e.createtime <= :endtime and e.employeeid in :tempempidlist ",nativeQuery = true)
+    List<Object[]> findAllEmpByType(@Param("name")String name, @Param("code") String code, @Param("orgname") String orgname, @Param("typelist") List<Integer>typelist,
+                                    @Param("statuslist") List<Integer>statuslist, @Param("starttime") Date starttime, @Param("endtime") Date enttime, @Param("tempempidlist") List<Integer>tempempidlist);
 
     @Query(value = "SELECT COUNT(*) FROM employee e \n" +
             "\t JOIN organization o ON e.organizationid=o.organizationid \n" +
-            "\tAND IFNULL(e.code,'') LIKE :code AND e.loginname LIKE :name AND o.name LIKE :orgname AND e.type IN :typelist",nativeQuery = true)
-    Long countAllEmpByType(@Param("name")String name,@Param("code") String code,@Param("orgname") String orgname,@Param("typelist") List<Integer>typelist);
+            "\tAND IFNULL(e.code,'') LIKE :code AND e.loginname LIKE :name AND o.name LIKE :orgname AND e.type IN :typelist and e.status in :statuslist \n " +
+            "\tand e.createtime >= :starttime and e.createtime <= :endtime and e.employeeid in :tempempidlist ",nativeQuery = true)
+    Long countAllEmpByType(@Param("name")String name,@Param("code") String code,@Param("orgname") String orgname,@Param("typelist") List<Integer>typelist,
+                           @Param("statuslist") List<Integer>statuslist, @Param("starttime") Date starttime, @Param("endtime") Date enttime, @Param("tempempidlist") List<Integer>tempempidlist);
 
-    @Query(value = "SELECT e.employeeid,e.code,e.loginname,o.name,e.status  FROM employee e \n" +
+    @Query(value = "SELECT e.employeeid,e.code,e.loginname,o.name,e.status,e.createtime  FROM employee e \n" +
             "\tJOIN organization o ON e.organizationid=o.organizationid \n" +
-            "\tAND IFNULL(e.code,'') LIKE :code AND e.loginname LIKE :name AND o.name LIKE :orgname AND o.organizationid IN :childrenOrgid AND e.type IN :typelist ",nativeQuery = true)
-    List<Object[]> findAllSupEmpByType(Pageable pageable, @Param("name")String name,@Param("code") String code,@Param("orgname") String orgname,@Param("childrenOrgid") List<Integer> childrenOrgid,@Param("typelist") List<Integer>typelist);
+            "\tAND IFNULL(e.code,'') LIKE :code AND e.loginname LIKE :name AND o.name LIKE :orgname AND o.organizationid IN :childrenOrgid AND e.type IN :typelist and e.status in :statuslist \n " +
+            "\tand e.createtime >= :starttime and e.createtime <= :endtime and e.employeeid in :tempempidlist ",nativeQuery = true)
+    List<Object[]> findAllSupEmpByType(Pageable pageable, @Param("name")String name,@Param("code") String code,@Param("orgname") String orgname,@Param("childrenOrgid") List<Integer> childrenOrgid,@Param("typelist") List<Integer>typelist,
+                                       @Param("statuslist") List<Integer>statuslist, @Param("starttime") Date starttime, @Param("endtime") Date enttime, @Param("tempempidlist") List<Integer>tempempidlist);
+    @Query(value = "SELECT e.employeeid,e.code,e.loginname,o.name,e.status,e.createtime  FROM employee e \n" +
+            "\tJOIN organization o ON e.organizationid=o.organizationid \n" +
+            "\tAND IFNULL(e.code,'') LIKE :code AND e.loginname LIKE :name AND o.name LIKE :orgname AND o.organizationid IN :childrenOrgid AND e.type IN :typelist and e.status in :statuslist \n " +
+            "\tand e.createtime >= :starttime and e.createtime <= :endtime and e.employeeid in :tempempidlist ",nativeQuery = true)
+    List<Object[]> findAllSupEmpByType(@Param("name")String name,@Param("code") String code,@Param("orgname") String orgname,@Param("childrenOrgid") List<Integer> childrenOrgid,@Param("typelist") List<Integer>typelist,
+                                       @Param("statuslist") List<Integer>statuslist, @Param("starttime") Date starttime, @Param("endtime") Date enttime, @Param("tempempidlist") List<Integer>tempempidlist);
 
     @Query(value = "SELECT COUNT(*) FROM employee e \n" +
             "\t JOIN organization o ON e.organizationid=o.organizationid \n" +
-            "\tAND IFNULL(e.code,'') LIKE :code AND e.loginname LIKE :name AND o.name LIKE :orgname AND o.organizationid IN :childrenOrgid AND e.type IN :typelist",nativeQuery = true)
-    Long countAllSupEmpByType(@Param("name")String name,@Param("code") String code,@Param("orgname") String orgname,@Param("childrenOrgid") List<Integer> childrenOrgid ,@Param("typelist") List<Integer>typelist);
+            "\tAND IFNULL(e.code,'') LIKE :code AND e.loginname LIKE :name AND o.name LIKE :orgname AND o.organizationid IN :childrenOrgid AND e.type IN :typelist and e.status in :statuslist \n " +
+            "\tand e.createtime >= :starttime and e.createtime <= :endtime and e.employeeid in :tempempidlist ",nativeQuery = true)
+    Long countAllSupEmpByType(@Param("name")String name,@Param("code") String code,@Param("orgname") String orgname,@Param("childrenOrgid") List<Integer> childrenOrgid ,@Param("typelist") List<Integer>typelist,
+                              @Param("statuslist") List<Integer>statuslist, @Param("starttime") Date starttime, @Param("endtime") Date enttime, @Param("tempempidlist") List<Integer>tempempidlist);
 
     @Query(value = "SELECT o1.organizationid,o1.code as code,o1.name as name,c.cityname,o1.status,o2.name as parentname,o2.code as parentcode FROM organization o1 \n" +
             "LEFT JOIN city c ON o1.citycode=c.citycode \n" +
@@ -124,4 +145,8 @@ public interface OrganizationDAO extends CrudRepository<OrganizationPO, Integer>
     List<OrganizationPO> findByParentorgidAndOrgtype(Integer organizationid, Integer orgtypeInstaller);
 
     OrganizationPO findByCodeAndOrganizationid(String code, Integer organizationid);
+
+    Object countByCodeContainingAndNameContainingAndOrgtype(String code, String name, Integer orgtype1);
+
+    Page<OrganizationPO> findByCodeContainingAndNameContainingAndOrgtype(Pageable pageable, String code, String name, Integer orgtype1);
 }

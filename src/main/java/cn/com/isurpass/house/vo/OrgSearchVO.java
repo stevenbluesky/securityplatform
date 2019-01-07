@@ -1,6 +1,9 @@
 package cn.com.isurpass.house.vo;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.io.UnsupportedEncodingException;
+import java.util.Date;
 
 /**
  * 服务商,安装商与员工搜索的实体类
@@ -12,6 +15,12 @@ public class OrgSearchVO {
     private String searchparentname;
     private String searchparentcode;
     private String searchorgname;
+    private Integer usertype;
+    private Integer status;
+    @DateTimeFormat(pattern="yyyy-MM-dd")
+    private Date starttime;
+    @DateTimeFormat(pattern="yyyy-MM-dd")
+    private Date endtime;
 
     public String getSearchorgname() {
         return searchorgname;
@@ -61,6 +70,38 @@ public class OrgSearchVO {
         this.searchcode = searchcode;
     }
 
+    public Integer getUsertype() {
+        return usertype;
+    }
+
+    public void setUsertype(Integer usertype) {
+        this.usertype = usertype;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public Date getStarttime() {
+        return starttime;
+    }
+
+    public void setStarttime(Date starttime) {
+        this.starttime = starttime;
+    }
+
+    public Date getEndtime() {
+        return endtime;
+    }
+
+    public void setEndtime(Date endtime) {
+        this.endtime = endtime;
+    }
+
     @Override
     public String toString() {
         return "OrgSearchVO{" +
@@ -70,6 +111,10 @@ public class OrgSearchVO {
                 ", searchparentname='" + searchparentname + '\'' +
                 ", searchparentcode='" + searchparentcode + '\'' +
                 ", searchorgname='" + searchorgname + '\'' +
+                ", usertype=" + usertype +
+                ", status=" + status +
+                ", starttime=" + starttime +
+                ", endtime=" + endtime +
                 '}';
     }
 }

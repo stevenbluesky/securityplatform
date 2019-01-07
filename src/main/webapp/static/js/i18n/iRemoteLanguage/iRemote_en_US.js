@@ -43,7 +43,7 @@ var lan = {
     repeatsim:"SIM Card Repeated",
 
     inventory:"INVENTORY",
-    deactivated:"DEACTIVATED",
+    deactivated:"Deactivated",
     normal: "Normal",
     unvalid: 'Ready',
     suspenced: "Suspected",

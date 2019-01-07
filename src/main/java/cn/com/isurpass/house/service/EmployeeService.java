@@ -265,6 +265,47 @@ public class EmployeeService {
         }
     }
 
+    public List<AllUserInfoVO> listEmployee(HttpServletRequest request,int type) {
+        List<Integer> typelist = new ArrayList<>();
+        if(type==Constants.INSTALLOR_TYPE){
+            typelist.add(1);
+        }else if(type==Constants.OPERATOR_TYPE){
+            typelist.add(0);
+        }else{
+            typelist.add(0);
+            typelist.add(1);
+        }
+        EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
+        Integer orgid = emp.getOrganizationid();
+        Integer orgtype = od.findByOrganizationid(orgid).getOrgtype();
+        List<Integer> list0 = new ArrayList<>();
+        if (os.isAdmin(emp.getOrganizationid())){
+            List<AllUserInfoVO> list = new ArrayList<>();
+            if(typelist.size()==1){
+                List<EmployeePO> empList = ed.findByTypeIn(typelist);
+                empList.forEach((EmployeePO e) -> { forEachEmp2(list, e);});
+            }else{
+                List<EmployeePO> empList = ed.findAll();
+                empList.forEach((EmployeePO e) -> {forEachEmp2(list, e); });
+            }
+            return list;
+        } else {
+            List<Integer> childrenOrgid = new ArrayList<>();
+            if(type==Constants.OPERATOR_TYPE&&orgtype.equals(Constants.ORGTYPE_SUPPLIER)){
+                childrenOrgid.add(emp.getOrganizationid());
+            }else {
+                childrenOrgid = os.findChildrenOrgid(orgid, list0);
+            }
+            childrenOrgid.add(emp.getOrganizationid());
+            List<EmployeePO> empList = ed.findByOrganizationidInAndTypeIn(childrenOrgid,typelist);
+            List<AllUserInfoVO> listt = new ArrayList<>();
+            empList.forEach(e -> {
+                forEachEmp2(listt, e);
+            });
+            return listt;
+        }
+    }
+
     @Transactional(readOnly = true)
     public Map<String, Object> listAllEmployee(Pageable pageable) {
         Map<String, Object> map = new HashMap<>();
@@ -275,6 +316,7 @@ public class EmployeeService {
         map.put("rows", list);
         return map;
     }
+
     public Map<String, Object> listAllInstaller(Pageable pageable,List<Integer> typelist) {
         Map<String, Object> map = new HashMap<>();
         map.put("total", ed.countByTypeIn(typelist));
@@ -286,6 +328,7 @@ public class EmployeeService {
         map.put("rows", list);
         return map;
     }
+
     private void forEachEmp(List<EmployeeListVO> list, EmployeePO e) {
         EmployeeListVO emp = new EmployeeListVO();
         emp.setName(e.getLoginname());
@@ -296,9 +339,22 @@ public class EmployeeService {
         if (od.findByOrganizationid(e.getOrganizationid()) != null) {
             emp.setParentOrgName(od.findByOrganizationid(e.getOrganizationid()).getName());
         }
+        emp.setCreatetime(e.getCreatetime());
         list.add(emp);
     }
-
+    private void forEachEmp2(List<AllUserInfoVO> list, EmployeePO e) {
+        AllUserInfoVO emp = new AllUserInfoVO();
+        emp.setName(e.getLoginname());
+        emp.setCode(e.getCode());
+        emp.setStatus(e.getStatus()==1?"Normal":"Deactivate");
+        if (od.findByOrganizationid(e.getOrganizationid()) != null) {
+            emp.setParentOrgName(od.findByOrganizationid(e.getOrganizationid()).getName());
+        }else{
+            emp.setParentOrgName("");
+        }
+        emp.setCreatetime(e.getCreatetime());
+        list.add(emp);
+    }
     @Transactional(readOnly = true)
     public EmployeePO findByLoginname(String loginname) {
         return ed.findByLoginname(loginname);
@@ -453,6 +509,8 @@ public class EmployeeService {
 //    @Transactional(readOnly = true)
     public Map<String, Object> search(Pageable pageable, OrgSearchVO search, HttpServletRequest request,int type) {
         List<Integer> typelist = new ArrayList<>();
+        List<Integer> statuslist = new ArrayList<>();
+        List<Integer> tempempidlist = new ArrayList<>();
         if(type==Constants.INSTALLOR_TYPE){
             typelist.add(1);
         }else if(type==Constants.OPERATOR_TYPE){
@@ -460,6 +518,22 @@ public class EmployeeService {
         } else{
             typelist.add(0);
             typelist.add(1);
+        }
+        if(search.getStatus()==null){//根据员工登录状态查询
+            statuslist.add(1);
+            statuslist.add(2);
+        }else{
+            statuslist.add(search.getStatus());
+        }
+        if(search.getStarttime()==null){
+            Calendar curr = Calendar.getInstance();
+            curr.set(Calendar.YEAR,curr.get(Calendar.YEAR)-200);
+            search.setStarttime(curr.getTime());
+        }
+        if(search.getEndtime()==null){
+            Calendar curr = Calendar.getInstance();
+            curr.set(Calendar.YEAR,curr.get(Calendar.YEAR)+200);
+            search.setEndtime(curr.getTime());
         }
         EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
         Integer orgid = emp.getOrganizationid();
@@ -480,9 +554,26 @@ public class EmployeeService {
         if (search.getSearchorgname() != null) {
             orgname = "%" + search.getSearchorgname() + "%";
         }
+        List<Integer> roleidlist = new ArrayList<>();
+        if(search.getUsertype()!=null) {
+            if (search.getUsertype() == 1) {
+                roleidlist.add(1);
+                roleidlist.add(2);
+                roleidlist.add(3);
+            } else if (search.getUsertype() == 2) {
+                roleidlist.add(5);
+                roleidlist.add(6);
+                roleidlist.add(8);
+            } else {
+                roleidlist.add(4);
+            }
+        }else{
+            roleidlist = Arrays.asList(new Integer[]{1,2,3,4,5,6,8});
+        }
+        tempempidlist = employeeroleDAO.findEmployeeidByRoleidIn(roleidlist);
         if(Constants.ORGTYPE_AMETA.equals(orgtype)){
-            olist = od.findAllEmpByType(pageable,name,code,orgname,typelist);
-            total = od.countAllEmpByType(name,code,orgname,typelist);
+            olist = od.findAllEmpByType(pageable,name,code,orgname,typelist,statuslist,search.getStarttime(),search.getEndtime(),tempempidlist);
+            total = od.countAllEmpByType(name,code,orgname,typelist,statuslist,search.getStarttime(),search.getEndtime(),tempempidlist);
         }else{
             List<Integer> list1 = new ArrayList<>();
             List<Integer> childrenOrgid = new ArrayList<>();
@@ -491,8 +582,8 @@ public class EmployeeService {
             }else {
                 childrenOrgid = os.findChildrenOrgid(orgid, list1);
             }
-            olist = od.findAllSupEmpByType(pageable,name,code,orgname,childrenOrgid,typelist);
-            total = od.countAllSupEmpByType(name,code,orgname,childrenOrgid,typelist);
+            olist = od.findAllSupEmpByType(pageable,name,code,orgname,childrenOrgid,typelist,statuslist,search.getStarttime(),search.getEndtime(),tempempidlist);
+            total = od.countAllSupEmpByType(name,code,orgname,childrenOrgid,typelist,statuslist,search.getStarttime(),search.getEndtime(),tempempidlist);
         }
         for(Object[] o:olist){
             EmployeeListVO empVO = new EmployeeListVO();
@@ -501,11 +592,99 @@ public class EmployeeService {
             empVO.setName((String)o[2]);
             empVO.setParentOrgName((String)o[3]);
             empVO.setStatus((Integer)o[4]);
+            empVO.setCreatetime((Date)o[5]);
             list.add(empVO);
         }
         map.put("rows", list);
         map.put("total",total);
         return map;
+    }
+    public List<AllUserInfoVO> search(OrgSearchVO search, HttpServletRequest request,int type) {
+        //TODO 还没开始动啊
+        List<Integer> typelist = new ArrayList<>();
+        List<Integer> statuslist = new ArrayList<>();
+        List<Integer> tempempidlist = new ArrayList<>();
+        if(type==Constants.INSTALLOR_TYPE){
+            typelist.add(1);
+        }else if(type==Constants.OPERATOR_TYPE){
+            typelist.add(0);
+        } else{
+            typelist.add(0);
+            typelist.add(1);
+        }
+        if(search.getStatus()==null){//根据员工登录状态查询
+            statuslist.add(1);
+            statuslist.add(2);
+        }else{
+            statuslist.add(search.getStatus());
+        }
+        if(search.getStarttime()==null){
+            Calendar curr = Calendar.getInstance();
+            curr.set(Calendar.YEAR,curr.get(Calendar.YEAR)-200);
+            search.setStarttime(curr.getTime());
+        }
+        if(search.getEndtime()==null){
+            Calendar curr = Calendar.getInstance();
+            curr.set(Calendar.YEAR,curr.get(Calendar.YEAR)+200);
+            search.setEndtime(curr.getTime());
+        }
+        EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
+        Integer orgid = emp.getOrganizationid();
+        Integer orgtype = od.findByOrganizationid(orgid).getOrgtype();
+        String name = "";
+        String code = "";
+        String orgname = "";
+        List<Object[]> olist = new ArrayList<>();
+        List<AllUserInfoVO> list = new ArrayList<>();
+        if (search.getSearchname() != null) {
+            name = "%" + search.getSearchname() + "%";
+        }
+        if (search.getSearchcode() != null) {
+            code = "%" + search.getSearchcode() + "%";
+        }
+        if (search.getSearchorgname() != null) {
+            orgname = "%" + search.getSearchorgname() + "%";
+        }
+        List<Integer> roleidlist = new ArrayList<>();
+        if(search.getUsertype()!=null) {
+            if (search.getUsertype() == 1) {
+                roleidlist.add(1);
+                roleidlist.add(2);
+                roleidlist.add(3);
+            } else if (search.getUsertype() == 2) {
+                roleidlist.add(5);
+                roleidlist.add(6);
+                roleidlist.add(8);
+            } else {
+                roleidlist.add(4);
+            }
+        }else{
+            roleidlist = Arrays.asList(new Integer[]{1,2,3,4,5,6,8});
+        }
+        tempempidlist = employeeroleDAO.findEmployeeidByRoleidIn(roleidlist);
+        if(Constants.ORGTYPE_AMETA.equals(orgtype)){
+            olist = od.findAllEmpByType(name,code,orgname,typelist,statuslist,search.getStarttime(),search.getEndtime(),tempempidlist);
+        }else{
+            List<Integer> list1 = new ArrayList<>();
+            List<Integer> childrenOrgid = new ArrayList<>();
+            if(type==Constants.OPERATOR_TYPE&&orgtype.equals(Constants.ORGTYPE_SUPPLIER)){
+                childrenOrgid.add(emp.getOrganizationid());
+            }else {
+                childrenOrgid = os.findChildrenOrgid(orgid, list1);
+            }
+            olist = od.findAllSupEmpByType(name,code,orgname,childrenOrgid,typelist,statuslist,search.getStarttime(),search.getEndtime(),tempempidlist);
+        }
+        for(Object[] o:olist){
+            AllUserInfoVO empVO = new AllUserInfoVO();
+            empVO.setCode((String)o[1]);
+            empVO.setName((String)o[2]);
+            empVO.setParentOrgName((String)o[3]);
+            empVO.setStatus((Integer)o[4]==1?"Normal":"Deactivate");
+            empVO.setCreatetime((Date)o[5]);
+
+            list.add(empVO);
+        }
+        return list;
     }
 
 

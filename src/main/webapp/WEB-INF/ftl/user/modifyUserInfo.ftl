@@ -1,5 +1,6 @@
 <!-- 录入电话卡信息页面 -->
 <#include "../_head0.ftl"/>
+    <div class="col-md-12">
     <div class="row-horizontal">
 
             <form id="defaultForm" method="POST">
@@ -172,10 +173,9 @@
                     </div>
                 </div>
             </form>
-
-        </div>
-
     </div>
+</div>
+
 
 <!-- JavaScript 部分 -->
     <script type="text/javascript">

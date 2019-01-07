@@ -1,83 +1,116 @@
 <#include "../_head0.ftl"/>
 <#include "../_head1.ftl"/>
 <div class="">
-           <form class="form-horizontal" action="" method="POST">
-                   <div class="text-center"><h1><@spring.message code='label.UserList'/></h1></div>
-                   <hr>
-               <div class="form-group">
+   <form class="form-horizontal" action="" method="POST">
+       <div class="text-center"><h1><@spring.message code='label.UserList'/></h1></div>
+       <hr>
+       <div class="form-group">
+           <div class="col-md-4" align="right">
+               <label for="searchinstallerorg" class="col-md-5 control-label"><@spring.message code='label.aibaseid'/></label>
+               <div class="col-md-7">
+                   <input type="text" class="form-control" id="searchCode" name="searchCode"
+                          placeholder="<@spring.message code='label.aibaseid'/>">
+               </div>
+           </div>
                <div class="col-md-4" align="right">
-                   <label for="searchinstallerorg" class="col-md-5 control-label"><@spring.message code='label.aibaseid'/></label>
+                   <label for="searchinstallerorg" class="col-md-5 control-label"><@spring.message code='label.name'/></label>
                    <div class="col-md-7">
-                       <input type="text" class="form-control" id="searchCode" name="searchCode"
-                              placeholder="<@spring.message code='label.aibaseid'/>">
-                   </div>
-               </div>
-                   <div class="col-md-4" align="right">
-                       <label for="searchinstallerorg" class="col-md-5 control-label"><@spring.message code='label.name'/></label>
-                       <div class="col-md-7">
-                           <input type="text" class="form-control" id="searchName" name="searchName"
-                                  placeholder="<@spring.message code='label.name'/>">
-                       </div>
-                   </div>
-
-               <div class="col-md-4" align="right">
-                   <label for="searchGatewayid" class="col-md-5 control-label"><@spring.message code='label.gatewayID'/></label>
-                   <div class="col-md-7">
-                       <input type="text" class="form-control" id="searchGatewayid" name="searchGatewayid"
-                              placeholder="<@spring.message code='label.gatewayID'/>">
-                   </div>
-               </div>
-               </div>
-               <div class="form-group">
-               <div class="col-md-4" align="right">
-                   <label for="searchSerialnumber" class="col-md-5 control-label"><@spring.message code='label.serialnumber'/></label>
-                   <div class="col-md-7">
-                       <input type="text" class="form-control" id="searchSerialnumber" name="searchSerialnumber"
-                              placeholder="<@spring.message code='label.serialnumber'/>">
-                   </div>
-               </div>
-                   <div class="col-md-4" align="right">
-                       <label for="searchAppAccount" class="col-md-5 control-label"><@spring.message code='label.apploginemail'/></label>
-                       <div class="col-md-7">
-                           <input type="text" class="form-control" id="searchAppAccount" name="searchAppAccount"
-                                  placeholder="<@spring.message code='label.apploginemail'/>">
-                       </div>
-                   </div>
-
-                   <div class="col-md-4" align="right">
-                       <label for="searchCity" class="col-md-5 control-label"><@spring.message code='label.city'/></label>
-                       <div class="col-md-7">
-                           <input type="text" class="form-control" id="searchCity" name="searchCity"
-                                  placeholder="<@spring.message code='label.city'/>">
-                       </div>
-                   </div>
-               </div>
-               <div class="form-group">
-
-                   <div class="col-md-4" align="right">
-                       <label for="searchDealername" class="col-md-5 control-label"><@spring.message code='label.serviceprovider'/></label>
-                       <div class="col-md-7">
-                           <input type="text" class="form-control" id="searchDealername" name="searchDealername"
-                                  placeholder="<@spring.message code='label.serviceprovider'/>">
-                       </div>
-                   </div>
-               <div class="col-md-4" align="right">
-                   <label for="searchDealername" class="col-md-5 control-label"></label>
-                   <div class="col-md-7">
-                       <input type="hidden" class="form-control" id="" name=""
-                              placeholder="">
+                       <input type="text" class="form-control" id="searchName" name="searchName"
+                              placeholder="<@spring.message code='label.name'/>">
                    </div>
                </div>
 
-               <div class="col-md-4" align="right">
-                   <div class="col-md-5"></div>
-                   <div class="col-md-7">
-                       <button type="button" id="searchbtn" class="btn btn-default"
-                               style="width:100%;"><@spring.message code="label.search"/></button>
+           <div class="col-md-4" align="right">
+               <label for="searchGatewayid" class="col-md-5 control-label"><@spring.message code='label.gatewayID'/></label>
+               <div class="col-md-7">
+                   <input type="text" class="form-control" id="searchGatewayid" name="searchGatewayid"
+                          placeholder="<@spring.message code='label.gatewayID'/>">
+               </div>
+           </div>
+       </div>
+       <div class="form-group">
+           <div class="col-md-4" align="right">
+               <label for="searchSerialnumber" class="col-md-5 control-label"><@spring.message code='label.serialnumber'/></label>
+               <div class="col-md-7">
+                   <input type="text" class="form-control" id="searchSerialnumber" name="searchSerialnumber"
+                          placeholder="<@spring.message code='label.serialnumber'/>">
+               </div>
+           </div>
+           <div class="col-md-4" align="right">
+               <label for="searchAppAccount" class="col-md-5 control-label"><@spring.message code='label.apploginemail'/></label>
+               <div class="col-md-7">
+                   <input type="text" class="form-control" id="searchAppAccount" name="searchAppAccount"
+                          placeholder="<@spring.message code='label.apploginemail'/>">
+               </div>
+           </div>
+
+           <div class="col-md-4" align="right">
+               <label for="searchCity" class="col-md-5 control-label"><@spring.message code='label.city'/></label>
+               <div class="col-md-7">
+                   <input type="text" class="form-control" id="searchCity" name="searchCity"
+                          placeholder="<@spring.message code='label.city'/>">
+               </div>
+           </div>
+       </div>
+       <div class="form-group">
+           <div class="col-md-4" align="right">
+               <label for="searchDealername" class="col-md-5 control-label"><@spring.message code='label.serviceprovider'/></label>
+               <div class="col-md-7">
+                   <input type="text" class="form-control" id="searchDealername" name="searchDealername"
+                          placeholder="<@spring.message code='label.serviceprovider'/>">
+               </div>
+           </div>
+           <div class="col-md-4" align="right">
+               <label for="searchinstallerorg" class="col-md-5 control-label"><@spring.message code='label.status'/></label>
+               <div class="col-md-7">
+                   <select id="searchStatus" name="status" class="col-md-12 form-control selectpicker" data-live-search="true" style="width: 100%"
+                           title="<@spring.message code='label.devicetype'/>" >
+                       <option value="" selected><@spring.message code='label.all'/></option>
+                       <option value="1"><@spring.message code='label.normal'/></option>
+                       <option value="2"><@spring.message code='label.freeze'/></option>
+                   </select>
+               </div>
+           </div>
+           <div class="col-md-4" align="right">
+               <label for="searchDealername" class="col-md-5 control-label"></label>
+               <div class="col-md-7">
+                   <input type="hidden" class="form-control" id="" name=""
+                          placeholder="">
+               </div>
+           </div>
+       </div>
+       <div class="form-group">
+            <#--终端用户创建时间 开始时间搜索-->
+           <div class="col-md-4" align="right">
+               <label for="searchinstallerorg" class="col-md-5 control-label"><@spring.message code='label.starttime'/></label>
+               <div class="col-md-7">
+                   <div class="col-sm-12 input-group date form_datetime">
+                       <input class="form-control" size="16" id="searchStarttime" name="starttime" type="text" readonly placeholder="<@spring.message code='label.starttime'/>" >
+                       <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                       <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
                    </div>
                </div>
+           </div>
+            <#--终端用户创建时间 结束时间搜索-->
+           <div class="col-md-4" align="right">
+               <label for="searchinstallerorg" class="col-md-5 control-label"><@spring.message code='label.endtime'/></label>
+               <div class="col-md-7">
+                   <div class="col-md-12 input-group date form_datetime">
+                       <input class="form-control" size="16" id="searchEndtime" name="endtime" type="text" readonly placeholder="<@spring.message code='label.endtime'/>" >
+                       <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                       <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                   </div>
                </div>
-           </form>
+           </div>
+           <div class="col-md-4" align="right">
+               <div class="col-md-5"></div>
+               <div class="col-md-7">
+                   <button type="button" id="searchbtn" class="btn btn-default"
+                           style="width:100%;"><@spring.message code="label.search"/></button>
+               </div>
+           </div>
+       </div>
+   </form>
 </div>
 
 <@shiro.hasPermission name="label.DeleteUser">
@@ -92,6 +125,7 @@
 <@shiro.hasPermission name="label.ModifyUser">
 <button style="float: right;" type="button" class='btn btn-default' onclick='modifyUser();'><@spring.message code='label.modify'/></button>
 </@shiro.hasPermission>
+<button style="float: right;" type="button" id='export' class='btn btn-default' onclick='exportData()'><@spring.message code='label.export'/></button>
 <table id="table" data-toggle="table">
     <thead>
     <tr>
@@ -105,12 +139,12 @@
         <th data-field="city" class="text-center"><@spring.message code='label.city'/></th>
         <th data-field="suppliername" class="text-center"><@spring.message code='label.serviceprovider'/></th>
         <th data-field="status" class="text-center" data-formatter="formatter_status"><@spring.message code='label.status'/></th>
+        <th data-field="createtime" data-formatter="formatter_date" class="text-center"><@spring.message code="label.createtime"/></th>
         <th data-field="operate" class="text-center" data-visible="false"><@spring.message code='label.operate'/></th>
     </tr>
     </thead>
 </table>
       </div>
-        <div class="col-md-1"></div>
     </div>
     <script type="text/javascript">
         $('#table').bootstrapTable({
@@ -149,6 +183,9 @@
                     //searchPhonenumber:$("#searchPhonenumber").val(),
                     searchAppAccount:$("#searchAppAccount").val(),
                     searchDealername:$("#searchDealername").val(),
+                    status:$("#searchStatus").val(),
+                    starttime:$("#searchStarttime").val(),
+                    endtime:$("#searchEndtime").val(),
                     rows: params.limit,                         //页面大小
                     page: (params.offset / params.limit) + 1,   //页码
                     sort: params.sort,      //排序列名
@@ -243,6 +280,56 @@
 
             });
         }
+        function exportData() {
+            var searchName = $("#searchName").val();
+            var searchCode = $("#searchCode").val();
+            var searchCity = $("#searchCity").val();
+            var searchSerialnumber = $("#searchSerialnumber").val();
+            var searchGatewayid = $("#searchGatewayid").val();
+            var searchAppAccount = $("#searchAppAccount").val();
+            var searchDealername = $("#searchDealername").val();
+            var status = $("#searchStatus").val();
+            var starttime = $("#searchStarttime").val();
+            var endtime = $("#searchEndtime").val();
+
+            window.open("exportenduserdata?searchName="+searchName+"&searchCode="+searchCode+"&searchCity="+searchCity+"&searchSerialnumber="+searchSerialnumber+"&searchGatewayid="+searchGatewayid+
+                    "&searchAppAccount="+searchAppAccount+"&searchDealername="+searchDealername+"&status="+status+"&starttime="+starttime+"&endtime="+endtime);
+
+        }
+        function formatter_date(value, row, index) {
+            if(value==null){
+                return '';
+            }
+            return new Date(value).Format("yyyy-MM-dd");
+        }
+        <#--日期格式化器-->
+        Date.prototype.Format = function (fmt) {
+            var o = {
+                "M+": this.getMonth() + 1, //月份
+                "d+": this.getDate(), //日
+                "h+": this.getHours(), //小时
+                "m+": this.getMinutes(), //分
+                "s+": this.getSeconds(), //秒
+                "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+                "S": this.getMilliseconds() //毫秒
+            };
+            if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+            for (var k in o)
+                if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+            return fmt;
+        }
+        $('.form_datetime').datetimepicker({
+            //language:  'fr',
+            format: 'yyyy-mm-dd',
+            weekStart: 1,
+            minView:'month',
+            todayBtn:  1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            forceParse: 0,
+            showMeridian: 1
+        });
     </script>
 <#include "../modal.ftl"/>
 <#include "../_foot1.ftl"/>

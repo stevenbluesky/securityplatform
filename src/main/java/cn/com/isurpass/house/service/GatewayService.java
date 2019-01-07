@@ -7,10 +7,7 @@ import cn.com.isurpass.house.request.HttpsUtils;
 import cn.com.isurpass.house.util.BeanCopyUtils;
 import cn.com.isurpass.house.util.Constants;
 import cn.com.isurpass.house.util.RemoveDuplicate;
-import cn.com.isurpass.house.vo.DeviceDetailVO;
-import cn.com.isurpass.house.vo.EmployeeListVO;
-import cn.com.isurpass.house.vo.GatewayDetailVO;
-import cn.com.isurpass.house.vo.TypeGatewayInfoVO;
+import cn.com.isurpass.house.vo.*;
 import com.alibaba.fastjson.JSONObject;
 import com.jhlabs.vecmath.Tuple3f;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -181,14 +178,20 @@ public class GatewayService {
 		List<String> installerorgdeviceidlist = StringUtils.isEmpty(tgiv.getInstallerorg())?tlist:findIdListByInstallerorg(tgiv.getInstallerorg());
 		List<String> installerdeviceidlist = StringUtils.isEmpty(tgiv.getInstaller())?tlist:findIdListByInstaller(tgiv.getInstaller());
 		List<String> deviceiddeviceidlist = StringUtils.isEmpty(tgiv.getDeviceid())?tlist:findIdListByDeviceid(tgiv.getDeviceid());
+		List<String> starttimedeviceidlist = StringUtils.isEmpty(tgiv.getStarttime())?tlist:findIdListByStarttime(tgiv.getStarttime());
+		List<String> endtimedeviceidlist = StringUtils.isEmpty(tgiv.getEndtime())?tlist:findIdListByEndtime(tgiv.getEndtime());
+		List<String> statusdeviceidlist = StringUtils.isEmpty(tgiv.getStatus())?tlist:findIdListByStatus(tgiv.getStatus());
 		//当有任意一个集合为空时，返回空数据
-		if(citynamedeviceidlist==null||devicenamedeviceidlist==null||serviceproviderdeviceidlist==null||installerdeviceidlist==null||citycodedeviceidlist==null||customerdeviceidlist==null||installerorgdeviceidlist==null||deviceiddeviceidlist==null){
+		if (citynamedeviceidlist == null || devicenamedeviceidlist == null || serviceproviderdeviceidlist == null || installerdeviceidlist == null
+				||citycodedeviceidlist == null || customerdeviceidlist == null || installerorgdeviceidlist == null || deviceiddeviceidlist == null
+				||starttimedeviceidlist == null || endtimedeviceidlist == null || statusdeviceidlist == null) {
 			map.put("total", 0);
 			map.put("rows", list);
 			return map;
 		}
 		//求8个网关id集合的交集
-		List<String> result = reretain(citynamedeviceidlist,devicenamedeviceidlist,serviceproviderdeviceidlist,installerdeviceidlist,citycodedeviceidlist,customerdeviceidlist,installerorgdeviceidlist,deviceiddeviceidlist);
+		List<String> result = reretain(citynamedeviceidlist,devicenamedeviceidlist,serviceproviderdeviceidlist,installerdeviceidlist,citycodedeviceidlist,
+				customerdeviceidlist,installerorgdeviceidlist,deviceiddeviceidlist,starttimedeviceidlist,endtimedeviceidlist,statusdeviceidlist);
 		//当用户为ameta管理员时，不进行筛选，否则筛选出自己的网关列表
 		if(orgglist.size()==1&&orgglist.get(0).equals("-2")){
 		}else {
@@ -201,6 +204,99 @@ public class GatewayService {
 		map.put("rows", list);
 		return map;
 	}
+
+	@Transactional(readOnly = true)
+	public List<GatewayInfoVO> listNUllGatewayData(EmployeePO emp) {
+		List<GatewayInfoVO> list = new ArrayList<>();//返回的list对象
+		Integer organizationid = emp.getOrganizationid();
+		OrganizationPO org = od.findByOrganizationid(organizationid);//当前用户所属机构
+		if(org.getOrgtype()==Constants.ORGTYPE_SUPPLIER){//为服务商,拿本身及旗下安装商的网关
+			//如果是报警中心，拿所有选了其报警服务的用户的网关和自己旗下的网关
+			int monitorcount = ud.countByMonitoringstationid(organizationid);
+			if(monitorcount>0){
+				List<Object[]> msobj = gd.findAllGatewayByMonitoringStation(organizationid);
+				list = newtransfer2(msobj);
+			}else {
+				List<Object[]> obj = gd.findInfoBySupplier(organizationid);
+				list = newtransfer2(obj);
+			}
+		}else if(org.getOrgtype()==Constants.ORGTYPE_INSTALLER){//为安装商，拿自己的网关
+			List<EmployeeRolePO> elist = employeeroleDAO.findByEmployeeid(emp.getEmployeeid());
+			List<Integer> emprolelist2 = new ArrayList<>();
+			elist.forEach(single ->{emprolelist2.add(single.getRoleid());});
+			List emprolelist = RemoveDuplicate.removeDuplicate(emprolelist2);
+			if(emprolelist.contains(Constants.ROLE_INSTALLER)&&emprolelist.size()==1){//只是安装员id
+				List<Object[]> obj = gd.findInfoByInstaller(emp.getEmployeeid());
+				list = newtransfer2(obj);
+			}else {
+				List<Object[]> obj = gd.findInfoByInstallerorg(organizationid);
+				list = newtransfer2(obj);
+			}
+		}else{//为ameta管理员，拿所有网关
+			List<Object[]> obj = gd.findAllGatewayInfo();
+			list = newtransfer2(obj);
+		}
+		return list;
+	}
+    @Transactional(readOnly = true)
+    public List<GatewayInfoVO> listGatewayData(TypeGatewayInfoVO tgiv, EmployeePO emp) {
+        List<GatewayInfoVO> list = new ArrayList<>();//返回的list对象
+        List<String> orgglist = new ArrayList<>();//根据用户所属机构查找出来的网关id集合
+        Integer organizationid = emp.getOrganizationid();
+        OrganizationPO org = od.findByOrganizationid(organizationid);
+        if(org.getOrgtype()==Constants.ORGTYPE_SUPPLIER){//为服务商,拿本身及旗下安装商的网关
+            int count =ud.countByMonitoringstationid(organizationid);
+            if(count>0){//为告警中心
+                orgglist = gud.findDeviceidByMonitoringStation(organizationid);
+            }else {
+                orgglist = gud.findDeviceidByOwnSupplier(organizationid, Constants.STATUS_NORMAL, Constants.ORGTYPE_SUPPLIER);
+            }
+        }else if(org.getOrgtype()==Constants.ORGTYPE_INSTALLER){//为安装商，拿自己的网关
+            List<EmployeeRolePO> elist = employeeroleDAO.findByEmployeeid(emp.getEmployeeid());
+            List<Integer> emprolelist2 = new ArrayList<>();
+            elist.forEach(single ->{emprolelist2.add(single.getRoleid());});
+            List<Integer> emprolelist = RemoveDuplicate.removeDuplicate(emprolelist2);
+            if(emprolelist.contains(Constants.ROLE_INSTALLER)&&emprolelist.size()==1){//只是安装员id
+                orgglist = gud.findDeviceidByOwnInstaller(emp.getEmployeeid());
+            }else {
+                orgglist = gud.findDeviceidByOwnInstallerorg(org.getOrganizationid());
+            }
+        }else{//为ameta管理员，拿所有网关
+            orgglist.add("-2");
+        }
+        List<String > tlist = new ArrayList<>();//标记作用，当搜索条件为空时，标记
+        tlist.add("-1");
+        //如果传入参数为空，则默认查网关列表的全部
+        List<String> citynamedeviceidlist = StringUtils.isEmpty(tgiv.getCityname())?tlist:findIdListByCityname(tgiv.getCityname());
+        List<String> citycodedeviceidlist = StringUtils.isEmpty(tgiv.getCitycode())?tlist:findIdListByCitycode(tgiv.getCitycode());
+        List<String> devicenamedeviceidlist = StringUtils.isEmpty(tgiv.getName())?tlist:findIdListByDevicename(tgiv.getName());
+        List<String> customerdeviceidlist = StringUtils.isEmpty(tgiv.getCustomer())?tlist:findIdListByCustomer(tgiv.getCustomer());
+        List<String> serviceproviderdeviceidlist = StringUtils.isEmpty(tgiv.getServiceprovider())?tlist:findIdListByServiceprovider(tgiv.getServiceprovider());
+        List<String> installerorgdeviceidlist = StringUtils.isEmpty(tgiv.getInstallerorg())?tlist:findIdListByInstallerorg(tgiv.getInstallerorg());
+        List<String> installerdeviceidlist = StringUtils.isEmpty(tgiv.getInstaller())?tlist:findIdListByInstaller(tgiv.getInstaller());
+        List<String> deviceiddeviceidlist = StringUtils.isEmpty(tgiv.getDeviceid())?tlist:findIdListByDeviceid(tgiv.getDeviceid());
+        List<String> starttimedeviceidlist = StringUtils.isEmpty(tgiv.getStarttime())?tlist:findIdListByStarttime(tgiv.getStarttime());
+        List<String> endtimedeviceidlist = StringUtils.isEmpty(tgiv.getEndtime())?tlist:findIdListByEndtime(tgiv.getEndtime());
+        List<String> statusdeviceidlist = StringUtils.isEmpty(tgiv.getStatus())?tlist:findIdListByStatus(tgiv.getStatus());
+        //当有任意一个集合为空时，返回空数据
+        if (citynamedeviceidlist == null || devicenamedeviceidlist == null || serviceproviderdeviceidlist == null || installerdeviceidlist == null
+                ||citycodedeviceidlist == null || customerdeviceidlist == null || installerorgdeviceidlist == null || deviceiddeviceidlist == null
+                ||starttimedeviceidlist == null || endtimedeviceidlist == null || statusdeviceidlist == null) {
+            return list;
+        }
+        //求8个网关id集合的交集
+        List<String> result = reretain(citynamedeviceidlist,devicenamedeviceidlist,serviceproviderdeviceidlist,installerdeviceidlist,citycodedeviceidlist,
+                customerdeviceidlist,installerorgdeviceidlist,deviceiddeviceidlist,starttimedeviceidlist,endtimedeviceidlist,statusdeviceidlist);
+        //当用户为ameta管理员时，不进行筛选，否则筛选出自己的网关列表
+        if(orgglist.size()==1&&orgglist.get(0).equals("-2")){
+        }else {
+            result.retainAll(orgglist);
+        }
+        List<GatewayPO> gateList = gd.findByDeviceidIn(result);//从网关表中拿基本数据
+        //填充数据
+        list =transfer2(gateList);
+        return list;
+    }
 	/**
 	 * 根据城市名称模糊查询网关id列表
 	 * @param cityname
@@ -280,6 +376,30 @@ public class GatewayService {
 	public List<String> findIdListByDeviceid(String deviceid){
 		List<String> deviceiddeviceidlist = gd.findDeviceidByDeviceid("%"+deviceid+"%");
 		return deviceiddeviceidlist.size()==0?null:deviceiddeviceidlist;
+	}
+	/**
+	 * 根据网关绑定起始时间查询其对应的网关列表
+	 */
+	@Transactional(readOnly = true)
+	public List<String> findIdListByStarttime(Date starttime){
+		List<String> starttimedeviceidlist = gud.findDeviceidByStarttime(starttime);
+		return starttimedeviceidlist.size()==0?null:starttimedeviceidlist;
+	}
+	/**
+	 * 根据网关绑定起始时间查询其对应的网关列表
+	 */
+	@Transactional(readOnly = true)
+	public List<String> findIdListByEndtime(Date endtime){
+		List<String> endtimedeviceidlist = gud.findDeviceidByEndtime(endtime);
+		return endtimedeviceidlist.size()==0?null:endtimedeviceidlist;
+	}
+	/**
+	 * 根据网关状态查询其对应的网关列表
+	 */
+	@Transactional(readOnly = true)
+	public List<String> findIdListByStatus(int status){
+		List<String> statusdeviceidlist = gd.findDeviceidByStatus(status);
+		return statusdeviceidlist.size()==0?null:statusdeviceidlist;
 	}
 	/**
 	 * 根据deviceid获取网关详细信息
@@ -420,10 +540,28 @@ public class GatewayService {
 			gateVO.setServiceprovider((String) o[5]);
 			gateVO.setInstallerorg((String) o[6]);
 			gateVO.setInstaller((String) o[7]);
+			gateVO.setBindingtime((Date)o[8]);
 			list.add(gateVO);
 		}
 		return list;
 	}
+    private List<GatewayInfoVO> newtransfer2(List<Object[]> obj){
+        List<GatewayInfoVO> list = new ArrayList<>();//返回的list对象
+        for(Object[] o:obj){
+            GatewayInfoVO gateVO = new GatewayInfoVO();
+            gateVO.setDeviceid((String) o[0]);
+            gateVO.setName((String) o[1]);
+            gateVO.setStatus((Integer) o[2]==1?"Online":"Offline");
+            gateVO.setCustomer((String) o[3]);
+            gateVO.setCityname((String) o[4]);
+            gateVO.setServiceprovider((String) o[5]);
+            gateVO.setInstallerorg((String) o[6]);
+            gateVO.setInstaller((String) o[7]);
+            gateVO.setBindingtime((Date)o[8]);
+            list.add(gateVO);
+        }
+        return list;
+    }
 	/**
 	 * 填充数据
 	 * @param gateList
@@ -451,16 +589,49 @@ public class GatewayService {
 					gateVO.setServiceprovider(od.findByOrganizationid(upo.getOrganizationid()).getName());
 				}
 				gateVO.setCustomer(upo.getAppaccount());
+				gateVO.setBindingtime(gud.findByDeviceidAndUserid(o.getDeviceid(),userid).getCreatetime());
 			}
 			gateVO.setName(o.getName());
 			gateVO.setStatus(o.getStatus());
 			gateVO.setModel(o.getModel());
 			gateVO.setBattery(o.getBattery());
 			gateVO.setFirmwareversion(o.getFirmwareversion());
+
 			list.add(gateVO);
 		}
 		return list;
 	}
+    private List<GatewayInfoVO> transfer2(List<GatewayPO> gateList){
+        List<GatewayInfoVO> list = new ArrayList<>();//返回的list对象
+        for(GatewayPO o : gateList) {
+            GatewayInfoVO gateVO = new GatewayInfoVO();
+            gateVO.setDeviceid(o.getDeviceid());
+            List<GatewayUserPO> userlist = gud.findByDeviceid(o.getDeviceid());
+            if (userlist != null && userlist.size() != 0) {//网关用户表匹配到了数据，该网关已跟用户绑定
+                Integer userid = userlist.get(0).getUserid();
+                UserPO upo = ud.findUserByUserid(userid);
+                if(upo.getCitycode()==null){
+                    //gateVO.setCityname("NONE");
+                }else {
+                    gateVO.setCityname(cd.findByCitycode(upo.getCitycode()).getCityname());
+                }
+                gateVO.setInstallerorg(od.findByOrganizationid(upo.getInstallerorgid()).getName());
+                if (upo.getInstallerid() != null) {
+                    gateVO.setInstaller(ed.findByEmployeeid(upo.getInstallerid()).getLoginname());
+                }
+                if(od.findByOrganizationid(upo.getOrganizationid())!=null){
+                    gateVO.setServiceprovider(od.findByOrganizationid(upo.getOrganizationid()).getName());
+                }
+                gateVO.setCustomer(upo.getAppaccount());
+                gateVO.setBindingtime(gud.findByDeviceidAndUserid(o.getDeviceid(),userid).getCreatetime());
+            }
+            gateVO.setName(o.getName());
+            gateVO.setStatus(o.getStatus()==1?"Online":"Offline");
+
+            list.add(gateVO);
+        }
+        return list;
+    }
 	/**
 	 * 传递8个搜索条件查询出来的网关id集合，进行交集处理
 	 * @param list1
@@ -473,7 +644,8 @@ public class GatewayService {
 	 * @param list8
 	 * @return
 	 */
-	private List<String> reretain(List<String> list1, List<String> list2, List<String> list3, List<String> list4, List<String> list5, List<String> list6, List<String> list7, List<String> list8){
+	private List<String> reretain(List<String> list1, List<String> list2, List<String> list3, List<String> list4, List<String> list5, List<String> list6, List<String> list7, List<String> list8,
+			List<String> list9, List<String> list10, List<String> list11){
 		List<Object> list = new ArrayList<>();
 		if(!"-1".equals(list1.get(0))){//有搜索条件，有搜索结果
 			list.add(list1);
@@ -497,6 +669,15 @@ public class GatewayService {
 		}
 		if(!"-1".equals(list8.get(0))){
 			list.add(list8);
+		}
+		if(!"-1".equals(list9.get(0))){
+			list.add(list9);
+		}
+		if(!"-1".equals(list10.get(0))){
+			list.add(list10);
+		}
+		if(!"-1".equals(list11.get(0))){
+			list.add(list11);
 		}
 		if(list.size()==0) {
 			return null;

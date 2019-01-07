@@ -1,10 +1,9 @@
 package cn.com.isurpass.house.web.controller;
 
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,8 +14,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import cn.com.isurpass.house.po.EmployeePO;
+import cn.com.isurpass.house.util.ExportExcelUtil;
 import cn.com.isurpass.house.util.FormUtils;
-import cn.com.isurpass.house.vo.DeviceDetailVO;
+import cn.com.isurpass.house.vo.*;
 import com.alibaba.fastjson.JSONObject;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
@@ -24,6 +24,7 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -42,9 +43,6 @@ import cn.com.isurpass.house.exception.MyArgumentNullException;
 import cn.com.isurpass.house.po.ZwaveDevicePO;
 import cn.com.isurpass.house.service.GatewayService;
 import cn.com.isurpass.house.result.PageResult;
-import cn.com.isurpass.house.vo.GatewayDetailVO;
-import cn.com.isurpass.house.vo.TransferVO;
-import cn.com.isurpass.house.vo.TypeGatewayInfoVO;
 
 import static com.google.zxing.client.j2se.MatrixToImageWriter.toBufferedImage;
 
@@ -208,6 +206,59 @@ public class GatewayController {
 		}
 	}
 
+	@RequestMapping(value = "/exportgatewaydata")
+	@ResponseBody
+	public String exportGatewayData(TypeGatewayInfoVO tgiv,HttpServletRequest request,HttpServletResponse response) {
+		EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
+		List<GatewayInfoVO> dataset = null;
+		if(FormUtils.isEmpty(tgiv)){
+			dataset = gs.listNUllGatewayData(emp);
+		}else{
+		    dataset = gs.listGatewayData(tgiv,emp);
+        }
+
+		if(dataset==null||dataset.size()==0){
+			return "No Data !";
+		}
+		String sheetName = "Gateway Data";
+		String titleName = "Gateway Data";
+		String fileName = "Gateway Data";
+		int columnNumber = 9;
+		int[] columnWidth = { 25, 20,10,30,30,30,20,35,25 };
+		String[] columnName = { "Gateway ID", "Name" ,"Status","City","Distributor","Instatller Company","Installer","End User","Binding Time"};
+		try {
+			HSSFWorkbook wb = new ExportExcelUtil().exportNoResponse(sheetName, titleName, columnNumber, columnWidth, columnName, dataset);
+			if(wb==null){
+				return "System Error !";
+			}
+			this.setResponseHeader(response, fileName);
+			OutputStream os = response.getOutputStream();
+			wb.write(os);
+			os.flush();
+			os.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "Export Successfully !";
+	}
+	/**
+	 * 发送响应流方法
+	 */
+	private void setResponseHeader(HttpServletResponse response, String fileName) {
+		try {
+			try {
+				fileName = new String(fileName.getBytes(),"ISO8859-1");
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
+			response.setContentType("application/octet-stream;charset=ISO8859-1");
+			response.setHeader("Content-Disposition", "attachment;filename="+ fileName+".xls");
+			response.addHeader("Pargam", "no-cache");
+			response.addHeader("Cache-Control", "no-cache");
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
 	//页面跳转
 	@RequestMapping("gatewayList")
 	public String gatewayList() {

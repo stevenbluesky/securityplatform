@@ -1,5 +1,9 @@
 package cn.com.isurpass.house.vo;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.util.Date;
+
 public class UserSearchVO {
     private String searchName;
     private String searchCity;
@@ -8,6 +12,11 @@ public class UserSearchVO {
     private String searchSerialnumber;
     private String searchDealername;
     private String searchCode;
+    private Integer status;
+    @DateTimeFormat(pattern="yyyy-MM-dd")
+    private Date starttime;
+    @DateTimeFormat(pattern="yyyy-MM-dd")
+    private Date endtime;
 
 
     public String getSearchName() {
@@ -64,5 +73,29 @@ public class UserSearchVO {
 
     public void setSearchCode(String searchCode) {
         this.searchCode = searchCode;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public Date getStarttime() {
+        return starttime;
+    }
+
+    public void setStarttime(Date starttime) {
+        this.starttime = starttime;
+    }
+
+    public Date getEndtime() {
+        return endtime;
+    }
+
+    public void setEndtime(Date endtime) {
+        this.endtime = endtime;
     }
 }
