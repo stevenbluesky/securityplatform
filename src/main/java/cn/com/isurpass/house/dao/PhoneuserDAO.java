@@ -39,6 +39,13 @@ public class PhoneuserDAO  {
         return resultList;
     }
 
+    public List<PhoneuserPO> originalUser(){
+        String sqlstring = "select * from phoneuser where platform=9 and usertype=4 and status=0  order by phoneuserid desc ";
+        Query nativeQuery = em.createNativeQuery(sqlstring, PhoneuserPO.class);
+        List<PhoneuserPO> resultList = nativeQuery.getResultList();
+        return resultList;
+    }
+
     public List<PhoneuserPO> searchUser(String searchName, String searchPhonenumber, String starttime, String endtime, Pageable p,String phonenumberlist) {
         int pageNumber = p.getPageNumber();
         int pageSize = p.getPageSize();
@@ -57,6 +64,25 @@ public class PhoneuserDAO  {
         List<PhoneuserPO> resultList = nativeQuery.getResultList();
         return resultList;
     }
+
+
+    public List<PhoneuserPO> searchUser(String searchName, String searchPhonenumber, String starttime, String endtime,String phonenumberlist) {
+        String sqlstring = "select * from phoneuser where platform=9 and usertype=4 and status=0 and createtime between '"+starttime +"' and '"+endtime+"' ";
+        if(!StringUtils.isEmpty(phonenumberlist)){
+            sqlstring += " and phonenumber in "+phonenumberlist;
+        }
+        if(!StringUtils.isEmpty(searchName)){
+            sqlstring += " and name like '%"+searchName+"%'";
+        }
+        if(!StringUtils.isEmpty(searchPhonenumber)){
+            sqlstring += " and phonenumber like '%"+searchPhonenumber+"%'";
+        }
+        sqlstring += " order by phoneuserid desc ";
+        Query nativeQuery = em.createNativeQuery(sqlstring, PhoneuserPO.class);
+        List<PhoneuserPO> resultList = nativeQuery.getResultList();
+        return resultList;
+    }
+
     public int countsearchUser(String searchName, String searchPhonenumber, String starttime, String endtime,String phonenumberlist) {
         String sqlstring = "select count(*) from phoneuser where platform=9 and usertype=4 and status=0 and createtime between '"+starttime +"' and '"+endtime+"'";
         if(!StringUtils.isEmpty(phonenumberlist)){

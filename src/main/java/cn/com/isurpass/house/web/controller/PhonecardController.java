@@ -1,9 +1,18 @@
 package cn.com.isurpass.house.web.controller;
 
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.util.List;
 import java.util.Map;
 
 import cn.com.isurpass.house.po.EmployeePO;
 import cn.com.isurpass.house.result.JsonResult;
+import cn.com.isurpass.house.util.ExportExcelUtil;
+import cn.com.isurpass.house.util.FormUtils;
+import cn.com.isurpass.house.vo.RegistUserSearchVO;
+import cn.com.isurpass.house.vo.RegisteredEndUsersVO;
+import cn.com.isurpass.house.vo.SimCardVO;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +33,7 @@ import cn.com.isurpass.house.result.PageResult;
 import cn.com.isurpass.house.vo.TransferVO;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @Controller
 @RequestMapping("phonecard")
@@ -69,6 +79,56 @@ public class PhonecardController {
 		Pageable pageable = PageRequest.of(pr.getPage()-1,pr.getRows(),Sort.Direction.DESC,"phonecardid");
 		return ps.listPhonecard(pageable,pc,request);
 	}
+
+	@RequestMapping(value = "/exportsimcarddata")
+	@ResponseBody
+	public String exportSimCardData(PhonecardPO pc, HttpServletRequest request, HttpServletResponse response) {
+		EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
+		List<SimCardVO> dataset = ps.listPhonecard(pc,request);
+
+		if(dataset==null||dataset.size()==0){
+			return "No Data !";
+		}
+		String sheetName = "SIM Card Data";
+		String titleName = "SIM Card Data";
+		String fileName = "SIM Card Data";
+		int columnNumber = 6;
+		int[] columnWidth = { 35,20,20, 35,40,30};
+		String[] columnName = {"SIM Card Number" ,"Status","Model","Firmware Version","Rate Plan","Activation Date"};
+		try {
+			HSSFWorkbook wb = new ExportExcelUtil().exportNoResponse(sheetName, titleName, columnNumber, columnWidth, columnName, dataset);
+			if(wb==null){
+				return "System Error !";
+			}
+			this.setResponseHeader(response, fileName);
+			OutputStream os = response.getOutputStream();
+			wb.write(os);
+			os.flush();
+			os.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "Export Successfully !";
+	}
+	/**
+	 * 发送响应流方法
+	 */
+	private void setResponseHeader(HttpServletResponse response, String fileName) {
+		try {
+			try {
+				fileName = new String(fileName.getBytes(),"ISO8859-1");
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
+			response.setContentType("application/octet-stream;charset=ISO8859-1");
+			response.setHeader("Content-Disposition", "attachment;filename="+ fileName+".xls");
+			response.addHeader("Pargam", "no-cache");
+			response.addHeader("Cache-Control", "no-cache");
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+
 	@RequestMapping("phonecardDetail")
 	public String gatewayDetail(String phonecardid,Model model) {
 		if(StringUtils.isEmpty(phonecardid)){

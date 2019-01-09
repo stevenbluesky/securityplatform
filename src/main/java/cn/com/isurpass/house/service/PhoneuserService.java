@@ -7,6 +7,7 @@ import cn.com.isurpass.house.po.GatewayPO;
 import cn.com.isurpass.house.po.PhoneuserPO;
 import cn.com.isurpass.house.vo.RegistUserListVO;
 import cn.com.isurpass.house.vo.RegistUserSearchVO;
+import cn.com.isurpass.house.vo.RegisteredEndUsersVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -68,6 +69,43 @@ public class PhoneuserService {
         return map;
     }
 
+    public List<RegisteredEndUsersVO> search(RegistUserSearchVO rus){
+        String start = rus.getSearchStarttime();
+        String end = rus.getSearchEndtime();
+        if(StringUtils.isEmpty(start)){
+            start = "2012-01-01";
+        }
+        if(StringUtils.isEmpty(end)) {
+            end = "2099-12-30";
+        }
+        List<RegisteredEndUsersVO> transfer = null;
+        if(!StringUtils.isEmpty(rus.getSearchGatewayid())){
+            List<GatewayPO> gatewaylist = gd.findByDeviceidContainingAndAppaccountIsNotNull(rus.getSearchGatewayid());
+            List<String> phonenumberlist = new ArrayList<>();
+            String phonenumberstringlist = "";
+            StringBuffer sb = new StringBuffer();
+            for(GatewayPO g:gatewaylist){
+                if(!StringUtils.isEmpty(g.getAppaccount())) {
+                    phonenumberlist.add(g.getAppaccount());
+                }
+            }
+            if(phonenumberlist.size()>0) {
+                sb.append("(");
+                for(String s:phonenumberlist){
+                    sb.append("'"+s+"',");
+                }
+                phonenumberstringlist = sb.toString();
+                phonenumberstringlist = phonenumberstringlist.substring(0,phonenumberstringlist.lastIndexOf(",")) + ")";
+                List<PhoneuserPO> templist = phoneuserDAO.searchUser(rus.getSearchName(), rus.getSearchPhonenumber(), start, end, phonenumberstringlist);
+                transfer = transfer2(templist);
+            }
+        }else {
+            List<PhoneuserPO> templist = phoneuserDAO.searchUser(rus.getSearchName(), rus.getSearchPhonenumber(), start, end,"");
+            transfer = transfer2(templist);
+        }
+        return transfer;
+    }
+
     public Map<String,Object> listRegistUser(Pageable p){
         Map<String, Object> map = new HashMap<>();
         int count = phoneuserDAO.countTotal();
@@ -77,6 +115,13 @@ public class PhoneuserService {
         map.put("rows",transfer);
         map.put("total",count);
         return map;
+    }
+
+    public List<RegisteredEndUsersVO> listRegistUser(){
+        List<PhoneuserPO> templist = phoneuserDAO.originalUser();
+        List<RegisteredEndUsersVO> transfer = transfer2(templist);
+
+        return transfer;
     }
 
     public List<RegistUserListVO> transfer(List<PhoneuserPO> templist){
@@ -106,6 +151,36 @@ public class PhoneuserService {
                 }
             }
             r.setDeviceid(sb.toString());
+        }
+        return registUserListVOS;
+    }
+
+    public List<RegisteredEndUsersVO> transfer2(List<PhoneuserPO> templist){
+        List<RegisteredEndUsersVO> registUserListVOS = new ArrayList<>();
+        for(int i =0;i<templist.size();i++){
+            RegisteredEndUsersVO registUserListVO = new RegisteredEndUsersVO();
+            PhoneuserPO phoneuserPO = templist.get(i);
+            registUserListVO.setUsername(phoneuserPO.getName());
+            registUserListVO.setApploginemail(phoneuserPO.getPhonenumber());
+            registUserListVO.setRegistertime(phoneuserPO.getCreatetime());
+            registUserListVOS.add(registUserListVO);
+        }
+        for(RegisteredEndUsersVO r:registUserListVOS){
+            if(StringUtils.isEmpty(r.getApploginemail())){
+                continue;
+            }
+            List<GatewayPO> byAppaccount = gd.findByAppaccount(r.getApploginemail());
+            StringBuffer sb = new StringBuffer();
+            if(byAppaccount!=null&&byAppaccount.size()>0){
+                for(int i=0;i<byAppaccount.size();i++){
+                    if(i!=byAppaccount.size()-1){
+                        sb.append(byAppaccount.get(i).getDeviceid()+", ");
+                    }else{
+                        sb.append(byAppaccount.get(i).getDeviceid());
+                    }
+                }
+            }
+            r.setGatewayid(sb.toString());
         }
         return registUserListVOS;
     }

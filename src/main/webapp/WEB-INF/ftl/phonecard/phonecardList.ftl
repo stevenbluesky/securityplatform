@@ -74,6 +74,7 @@
 <@shiro.hasPermission name="label.SynchronousSIMInfo">
             <button style="float: right;" type="button" class="btn btn-default" onclick='updatePhonecardStatus("synchronous");'><@spring.message code="label.synchronous"/></button>
 </@shiro.hasPermission>
+<button style="float: right;" type="button" id='export' class='btn btn-default' onclick='exportData()'><@spring.message code='label.export'/></button>
 <#--<@shiro.hasPermission name="label.AddPhonecard">
            	<button style="float: right;" type="button" class="btn btn-default" onclick="window.location.href='typePhonecardInfo'"><@spring.message code="label.entering"/></button>
 </@shiro.hasPermission>-->
@@ -158,7 +159,14 @@
         $("#searchsubmit").click(function () {
             $("#table").bootstrapTable("refreshOptions", {pageNumber: 1})
         });
+        function exportData() {
+            var serialnumber = $("#searchserialnumber").val();
+            var rateplan =  $("#searchrateplan").val();
+            var status =  $("#searchstatus").val();
 
+            window.open("exportsimcarddata?serialnumber="+serialnumber+"&rateplan="+rateplan+"&status="+status);
+
+        }
         //状态格式化器
         function formatter_status(value, row, index) {
             if (value == 1)
@@ -188,6 +196,9 @@
         }
 
         function formatter_date(value, row, index) {
+            if(value==null){
+                return '';
+            }
             return new Date(value).Format("yyyy-MM-dd");
         }
         <#--获取复选框选中的列的id数组-->

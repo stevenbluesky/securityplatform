@@ -60,16 +60,16 @@
        </div>
    </form>
 </div>
-
+<button style="float: right;" type="button" id='export' class='btn btn-default' onclick='exportData()'><@spring.message code='label.export'/></button>
 <table id="table" data-toggle="table">
     <thead>
     <tr>
         <th data-field=""></th>
         <th data-field="phoneuserid" data-visible="false">ID</th>
-        <th data-field="name" class="text-center"><@spring.message code='label.username'/></th>
-        <th data-field="phonenumber" class="text-center"><@spring.message code='label.apploginemail'/></th>
-        <th data-field="createtime" data-formatter="formatter_date" class="text-center"><@spring.message code='label.registtime'/></th>
-        <th data-field="deviceid" class="text-center"><@spring.message code='label.gatewayID'/></th>
+        <th data-field="name" class="text-center col-md-2"><@spring.message code='label.username'/></th>
+        <th data-field="phonenumber" class="text-center col-md-3"><@spring.message code='label.apploginemail'/></th>
+        <th data-field="createtime" data-formatter="formatter_date" class="text-center col-md-2"><@spring.message code='label.registtime'/></th>
+        <th data-field="deviceid" class="text-center col-md-5"><@spring.message code='label.gatewayID'/></th>
     </tr>
     </thead>
 </table>
@@ -145,6 +145,16 @@
                 ids[index] = val.userid;
             });
             return ids;
+        }
+        function exportData() {
+            var searchName = $("#searchName").val();
+            var searchPhonenumber =  $("#searchPhonenumber").val();
+            var searchStarttime =  $("#searchStarttime").val();
+            var searchEndtime =  $("#searchEndtime").val();
+            var searchGatewayid =  $("#searchGatewayid").val();
+            window.open("exportregisteredendusersdata?searchName="+searchName+"&searchPhonenumber="+searchPhonenumber+"&searchStarttime="+searchStarttime+
+                    "&searchEndtime="+searchEndtime+ "&searchGatewayid="+searchGatewayid);
+
         }
         function formatter_date(value, row, index) {
             return new Date(value).Format("yyyy-MM-dd hh:mm:ss");

@@ -29,6 +29,10 @@ public interface PhonecardDAO extends CrudRepository<PhonecardPO,String>{
 			"LEFT JOIN phonecarduser pu ON p.phonecardid=pu.phonecardid LEFT JOIN user u ON pu.userid=u.userid\n" +
 			"WHERE p.serialnumber LIKE :serialnumber AND p.rateplan LIKE :rateplan AND p.status IN :statuslist and u.installerid= :employeeid ", nativeQuery = true)
     List<Object[]> findByInstaller(@Param("statuslist")List<Integer> statuslist, @Param("serialnumber")String serialnumber, @Param("rateplan")String rateplan,@Param("employeeid") Integer employeeid, Pageable pageable);
+	@Query(value = "SELECT p.phonecardid ,p.serialnumber,p.status,p.model,p.firmwareversion,p.rateplan,p.activationdate FROM phonecard p\n" +
+			"LEFT JOIN phonecarduser pu ON p.phonecardid=pu.phonecardid LEFT JOIN user u ON pu.userid=u.userid\n" +
+			"WHERE p.serialnumber LIKE :serialnumber AND p.rateplan LIKE :rateplan AND p.status IN :statuslist and u.installerid= :employeeid order by phonecardid desc ", nativeQuery = true)
+	List<Object[]> findByInstaller(@Param("statuslist")List<Integer> statuslist, @Param("serialnumber")String serialnumber, @Param("rateplan")String rateplan,@Param("employeeid") Integer employeeid);
 
 	@Query(value = "SELECT count(*) FROM phonecard p\n" +
 			"LEFT JOIN phonecarduser pu ON p.phonecardid=pu.phonecardid LEFT JOIN user u ON pu.userid=u.userid\n" +
@@ -39,6 +43,10 @@ public interface PhonecardDAO extends CrudRepository<PhonecardPO,String>{
 			"LEFT JOIN phonecarduser pu ON p.phonecardid=pu.phonecardid LEFT JOIN user u ON pu.userid=u.userid\n" +
 			"WHERE p.serialnumber LIKE :serialnumber AND p.rateplan LIKE :rateplan AND p.status IN :statuslist and u.installerorgid in :childrenOrgid ", nativeQuery = true)
 	List<Object[]> findByInstallerOrg(@Param("statuslist")List<Integer> statuslist, @Param("serialnumber")String serialnumber, @Param("rateplan")String rateplan,@Param("childrenOrgid") List<Integer> childrenOrgid, Pageable pageable);
+	@Query(value = "SELECT p.phonecardid ,p.serialnumber,p.status,p.model,p.firmwareversion,p.rateplan,p.activationdate FROM phonecard p\n" +
+			"LEFT JOIN phonecarduser pu ON p.phonecardid=pu.phonecardid LEFT JOIN user u ON pu.userid=u.userid\n" +
+			"WHERE p.serialnumber LIKE :serialnumber AND p.rateplan LIKE :rateplan AND p.status IN :statuslist and u.installerorgid in :childrenOrgid order by phonecardid desc ", nativeQuery = true)
+	List<Object[]> findByInstallerOrg(@Param("statuslist")List<Integer> statuslist, @Param("serialnumber")String serialnumber, @Param("rateplan")String rateplan,@Param("childrenOrgid") List<Integer> childrenOrgid);
 
 	@Query(value = "SELECT count(*) FROM phonecard p\n" +
 			"LEFT JOIN phonecarduser pu ON p.phonecardid=pu.phonecardid LEFT JOIN user u ON pu.userid=u.userid\n" +
@@ -49,6 +57,10 @@ public interface PhonecardDAO extends CrudRepository<PhonecardPO,String>{
 			"LEFT JOIN phonecarduser pu ON p.phonecardid=pu.phonecardid LEFT JOIN user u ON pu.userid=u.userid\n" +
 			"WHERE p.serialnumber LIKE :serialnumber AND p.rateplan LIKE :rateplan AND p.status IN :statuslist and u.organizationid in :childrenOrgid ", nativeQuery = true)
 	List<Object[]> findBySupplier(@Param("statuslist")List<Integer> statuslist, @Param("serialnumber")String serialnumber, @Param("rateplan")String rateplan,@Param("childrenOrgid") List<Integer> childrenOrgid, Pageable pageable);
+	@Query(value = "SELECT p.phonecardid ,p.serialnumber,p.status,p.model,p.firmwareversion,p.rateplan,p.activationdate FROM phonecard p\n" +
+			"LEFT JOIN phonecarduser pu ON p.phonecardid=pu.phonecardid LEFT JOIN user u ON pu.userid=u.userid\n" +
+			"WHERE p.serialnumber LIKE :serialnumber AND p.rateplan LIKE :rateplan AND p.status IN :statuslist and u.organizationid in :childrenOrgid order by phonecardid desc ", nativeQuery = true)
+	List<Object[]> findBySupplier(@Param("statuslist")List<Integer> statuslist, @Param("serialnumber")String serialnumber, @Param("rateplan")String rateplan,@Param("childrenOrgid") List<Integer> childrenOrgid);
 
 	@Query(value = "SELECT count(*) FROM phonecard p\n" +
 			"LEFT JOIN phonecarduser pu ON p.phonecardid=pu.phonecardid LEFT JOIN user u ON pu.userid=u.userid\n" +
@@ -59,6 +71,10 @@ public interface PhonecardDAO extends CrudRepository<PhonecardPO,String>{
 			"LEFT JOIN phonecarduser pu ON p.phonecardid=pu.phonecardid LEFT JOIN user u ON pu.userid=u.userid\n" +
 			"WHERE p.serialnumber LIKE :serialnumber AND p.rateplan LIKE :rateplan AND p.status IN :statuslist ", nativeQuery = true)
 	List<Object[]> findByAmeta(@Param("statuslist")List<Integer> statuslist, @Param("serialnumber")String serialnumber, @Param("rateplan")String rateplan, Pageable pageable);
+	@Query(value = "SELECT p.phonecardid ,p.serialnumber,p.status,p.model,p.firmwareversion,p.rateplan,p.activationdate FROM phonecard p\n" +
+			"LEFT JOIN phonecarduser pu ON p.phonecardid=pu.phonecardid LEFT JOIN user u ON pu.userid=u.userid\n" +
+			"WHERE p.serialnumber LIKE :serialnumber AND p.rateplan LIKE :rateplan AND p.status IN :statuslist order by phonecardid desc ", nativeQuery = true)
+	List<Object[]> findByAmeta(@Param("statuslist")List<Integer> statuslist, @Param("serialnumber")String serialnumber, @Param("rateplan")String rateplan);
 
 	long countByStatusInAndSerialnumberLikeAndRateplanLike(List<Integer> statuslist, String serialnumber, String rateplan);
 }

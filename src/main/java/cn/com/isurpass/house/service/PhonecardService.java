@@ -6,6 +6,7 @@ import cn.com.isurpass.house.dao.*;
 import cn.com.isurpass.house.po.*;
 import cn.com.isurpass.house.util.PhoneCardInterfaceCallUtils;
 import cn.com.isurpass.house.util.RemoveDuplicate;
+import cn.com.isurpass.house.vo.SimCardVO;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -136,6 +137,81 @@ public class PhonecardService {
 		map.put("total",count);
 		map.put("rows", relist);
 		return map;
+	}
+
+
+	@Transactional(readOnly = true)
+	public List<SimCardVO> listPhonecard(PhonecardPO pc, HttpServletRequest request) {
+		EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
+		List<EmployeeRolePO> elist = erd.findByEmployeeid(emp.getEmployeeid());
+		List<Integer> emprolelist2 = new ArrayList<>();
+		elist.forEach(single ->{emprolelist2.add(single.getRoleid());});
+		List<Integer> rolelist = RemoveDuplicate.removeDuplicate(emprolelist2);
+		OrganizationPO byOrganizationid = organizationDAO.findByOrganizationid(emp.getOrganizationid());
+		Integer orgtype = byOrganizationid.getOrgtype();
+		Integer status = pc.getStatus();
+		List<Integer> statuslist = new ArrayList<Integer>();
+		if(Integer.valueOf(2).equals(status)){//查询正常激活记录1
+			statuslist.add(1);
+		}else if(Integer.valueOf(3).equals(status)){//查询冻结记录 2
+			statuslist.add(2);
+		}else if(Integer.valueOf(4).equals(status)){//查询未激活记录 3
+			statuslist.add(3);
+		}else{//查询全部记录（暂不包括已删除记录）
+			statuslist.add(1);
+			statuslist.add(2);
+			statuslist.add(3);
+		}
+		String rateplan ="";
+		String serialnumber ="";
+		if(pc.getRateplan()!=null){
+			rateplan = "%"+pc.getRateplan()+"%";
+		}
+		if(pc.getSerialnumber()!=null){
+			serialnumber = "%"+pc.getSerialnumber()+"%";
+		}
+		List<Object[]> resultlist = new ArrayList<>();
+		List<Integer> list = new ArrayList<>();
+		List<SimCardVO> relist = new ArrayList<>();
+		List<Integer> childrenOrgid = os.findChildrenOrgid(emp.getOrganizationid(), list);
+		childrenOrgid.add(emp.getOrganizationid());
+		if (os.isAdmin(emp.getOrganizationid())) {
+			resultlist = pd.findByAmeta(statuslist,serialnumber,rateplan);
+		}else if(rolelist.size()==1&&rolelist.get(0)==4){//只有一个安装员的角色，就只拿他安装过的用户
+			resultlist = pd.findByInstaller(statuslist,serialnumber,rateplan,emp.getEmployeeid());
+		}else if(orgtype==Constants.ORGTYPE_INSTALLER){
+			resultlist = pd.findByInstallerOrg(statuslist,serialnumber,rateplan,childrenOrgid);
+		}else if(orgtype==Constants.ORGTYPE_SUPPLIER){
+			resultlist = pd.findBySupplier(statuslist,serialnumber,rateplan,childrenOrgid);
+		}
+		for(Object[] o:resultlist){
+			SimCardVO s = new SimCardVO();
+			s.setSerialnumber((String)o[1]);
+			switch ((Integer)o[2]){
+				case 1 :
+					s.setStatus("ACTIVATED");
+					break;
+				case 2 :
+					s.setStatus("DEACTIVATED");
+					break;
+				case 3 :
+					s.setStatus("INVENTORY");
+					break;
+				case 0 :
+					s.setStatus("Ready");
+					break;
+				default:
+					s.setStatus("Ready");
+					break;
+			}
+			s.setModel((String)o[3]);
+			s.setFirmwareversion((String)o[4]);
+			s.setRateplan((String)o[5]);
+			s.setActivationdate((Date)o[6]);
+			relist.add(s);
+		}
+
+		return relist;
 	}
 
 	@Transactional(rollbackFor = Exception.class)
