@@ -6,6 +6,7 @@ import cn.com.isurpass.house.dao.*;
 import cn.com.isurpass.house.po.*;
 import cn.com.isurpass.house.util.PhoneCardInterfaceCallUtils;
 import cn.com.isurpass.house.util.RemoveDuplicate;
+import cn.com.isurpass.house.vo.SimCardSearchVO;
 import cn.com.isurpass.house.vo.SimCardVO;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -74,7 +75,7 @@ public class PhonecardService {
 	 * @return
 	 */
 	@Transactional(readOnly = true)
-	public Map<String, Object> listPhonecard(Pageable pageable, PhonecardPO pc, HttpServletRequest request) {
+	public Map<String, Object> listPhonecard(Pageable pageable, SimCardSearchVO pc, HttpServletRequest request) {
 		EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
 		List<EmployeeRolePO> elist = erd.findByEmployeeid(emp.getEmployeeid());
 		List<Integer> emprolelist2 = new ArrayList<>();
@@ -104,6 +105,21 @@ public class PhonecardService {
 		if(pc.getSerialnumber()!=null){
 			serialnumber = "%"+pc.getSerialnumber()+"%";
 		}
+		//有激活时间的搜索
+		if(pc.getStarttime()!=null||pc.getEndtime()!=null){
+            if (pc.getStarttime() == null) {
+                Calendar curr = Calendar.getInstance();
+                curr.setTime(new Date());
+                curr.set(Calendar.YEAR, curr.get(Calendar.YEAR) - 200);
+                pc.setStarttime(curr.getTime());
+            }
+            if (pc.getEndtime() == null) {
+                Calendar curr = Calendar.getInstance();
+                curr.setTime(new Date());
+                curr.set(Calendar.YEAR, curr.get(Calendar.YEAR) + 200);
+                pc.setEndtime(curr.getTime());
+            }
+        }
 		List<Object[]> resultlist = new ArrayList<>();
 		long count = 0;
 		List<Integer> list = new ArrayList<>();
@@ -111,17 +127,37 @@ public class PhonecardService {
 		List<Integer> childrenOrgid = os.findChildrenOrgid(emp.getOrganizationid(), list);
 		childrenOrgid.add(emp.getOrganizationid());
 		if (os.isAdmin(emp.getOrganizationid())) {
-			resultlist = pd.findByAmeta(statuslist,serialnumber,rateplan,pageable);
-			count = pd.countByStatusInAndSerialnumberLikeAndRateplanLike(statuslist,serialnumber,rateplan);
+            if(pc.getStarttime()==null&&pc.getEndtime()==null){
+                resultlist = pd.findByAmeta(statuslist,serialnumber,rateplan,pageable);
+                count = pd.countByStatusInAndSerialnumberLikeAndRateplanLikeAndTime(statuslist,serialnumber,rateplan);
+            }else {
+                resultlist = pd.findByAmeta(statuslist, serialnumber, rateplan, pc.getStarttime(), pc.getEndtime(), pageable);
+                count = pd.countByStatusInAndSerialnumberLikeAndRateplanLikeAndTime(statuslist, serialnumber, rateplan, pc.getStarttime(), pc.getEndtime());
+            }
 		}else if(rolelist.size()==1&&rolelist.get(0)==4){//只有一个安装员的角色，就只拿他安装过的用户
-			resultlist = pd.findByInstaller(statuslist,serialnumber,rateplan,emp.getEmployeeid(),pageable);
-			count = pd.countByInstaller(statuslist,serialnumber,rateplan,emp.getEmployeeid());
+            if(pc.getStarttime()==null&&pc.getEndtime()==null){
+                resultlist = pd.findByInstaller(statuslist, serialnumber, rateplan, emp.getEmployeeid(), pageable);
+                count = pd.countByInstaller(statuslist, serialnumber, rateplan, emp.getEmployeeid());
+            }else {
+                resultlist = pd.findByInstaller(statuslist, serialnumber, rateplan, emp.getEmployeeid(),pc.getStarttime(), pc.getEndtime(), pageable);
+                count = pd.countByInstaller(statuslist, serialnumber, rateplan, emp.getEmployeeid(),pc.getStarttime(), pc.getEndtime());
+            }
 		}else if(orgtype==Constants.ORGTYPE_INSTALLER){
-			resultlist = pd.findByInstallerOrg(statuslist,serialnumber,rateplan,childrenOrgid,pageable);
-			count = pd.countByInstallerOrg(statuslist,serialnumber,rateplan,childrenOrgid);
+            if(pc.getStarttime()==null&&pc.getEndtime()==null){
+                resultlist = pd.findByInstallerOrg(statuslist, serialnumber, rateplan, childrenOrgid, pageable);
+                count = pd.countByInstallerOrg(statuslist, serialnumber, rateplan, childrenOrgid);
+            }else {
+                resultlist = pd.findByInstallerOrg(statuslist, serialnumber, rateplan, childrenOrgid,pc.getStarttime(), pc.getEndtime(), pageable);
+                count = pd.countByInstallerOrg(statuslist, serialnumber, rateplan, childrenOrgid,pc.getStarttime(), pc.getEndtime());
+            }
 		}else if(orgtype==Constants.ORGTYPE_SUPPLIER){
-			resultlist = pd.findBySupplier(statuslist,serialnumber,rateplan,childrenOrgid,pageable);
-			count = pd.countBySupplier(statuslist,serialnumber,rateplan,childrenOrgid);
+            if(pc.getStarttime()==null&&pc.getEndtime()==null){
+                resultlist = pd.findBySupplier(statuslist, serialnumber, rateplan, childrenOrgid, pageable);
+                count = pd.countBySupplier(statuslist, serialnumber, rateplan, childrenOrgid);
+            }else {
+                resultlist = pd.findBySupplier(statuslist, serialnumber, rateplan, childrenOrgid,pc.getStarttime(), pc.getEndtime(), pageable);
+                count = pd.countBySupplier(statuslist, serialnumber, rateplan, childrenOrgid,pc.getStarttime(), pc.getEndtime());
+            }
 		}
 		for(Object[] o:resultlist){
 			PhonecardPO p = new PhonecardPO();
@@ -141,7 +177,7 @@ public class PhonecardService {
 
 
 	@Transactional(readOnly = true)
-	public List<SimCardVO> listPhonecard(PhonecardPO pc, HttpServletRequest request) {
+	public List<SimCardVO> listPhonecard(SimCardSearchVO pc, HttpServletRequest request) {
 		EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
 		List<EmployeeRolePO> elist = erd.findByEmployeeid(emp.getEmployeeid());
 		List<Integer> emprolelist2 = new ArrayList<>();
@@ -170,19 +206,50 @@ public class PhonecardService {
 		if(pc.getSerialnumber()!=null){
 			serialnumber = "%"+pc.getSerialnumber()+"%";
 		}
+        //有激活时间的搜索
+        if(pc.getStarttime()!=null||pc.getEndtime()!=null){
+            if (pc.getStarttime() == null) {
+                Calendar curr = Calendar.getInstance();
+                curr.setTime(new Date());
+                curr.set(Calendar.YEAR, curr.get(Calendar.YEAR) - 200);
+                pc.setStarttime(curr.getTime());
+            }
+            if (pc.getEndtime() == null) {
+                Calendar curr = Calendar.getInstance();
+                curr.setTime(new Date());
+                curr.set(Calendar.YEAR, curr.get(Calendar.YEAR) + 200);
+                pc.setEndtime(curr.getTime());
+            }
+        }
 		List<Object[]> resultlist = new ArrayList<>();
 		List<Integer> list = new ArrayList<>();
 		List<SimCardVO> relist = new ArrayList<>();
 		List<Integer> childrenOrgid = os.findChildrenOrgid(emp.getOrganizationid(), list);
 		childrenOrgid.add(emp.getOrganizationid());
 		if (os.isAdmin(emp.getOrganizationid())) {
-			resultlist = pd.findByAmeta(statuslist,serialnumber,rateplan);
+            if(pc.getStarttime()==null&&pc.getEndtime()==null){
+                resultlist = pd.findByAmeta(statuslist,serialnumber,rateplan);
+            }else{
+                resultlist = pd.findByAmeta(statuslist,serialnumber,rateplan,pc.getStarttime(), pc.getEndtime());
+            }
 		}else if(rolelist.size()==1&&rolelist.get(0)==4){//只有一个安装员的角色，就只拿他安装过的用户
-			resultlist = pd.findByInstaller(statuslist,serialnumber,rateplan,emp.getEmployeeid());
+            if(pc.getStarttime()==null&&pc.getEndtime()==null){
+                resultlist = pd.findByInstaller(statuslist,serialnumber,rateplan,emp.getEmployeeid());
+            }else{
+                resultlist = pd.findByInstaller(statuslist,serialnumber,rateplan,emp.getEmployeeid(),pc.getStarttime(), pc.getEndtime());
+            }
 		}else if(orgtype==Constants.ORGTYPE_INSTALLER){
-			resultlist = pd.findByInstallerOrg(statuslist,serialnumber,rateplan,childrenOrgid);
+            if(pc.getStarttime()==null&&pc.getEndtime()==null){
+                resultlist = pd.findByInstallerOrg(statuslist,serialnumber,rateplan,childrenOrgid);
+            }else{
+                resultlist = pd.findByInstallerOrg(statuslist,serialnumber,rateplan,childrenOrgid,pc.getStarttime(), pc.getEndtime());
+            }
 		}else if(orgtype==Constants.ORGTYPE_SUPPLIER){
-			resultlist = pd.findBySupplier(statuslist,serialnumber,rateplan,childrenOrgid);
+            if(pc.getStarttime()==null&&pc.getEndtime()==null){
+                resultlist = pd.findBySupplier(statuslist,serialnumber,rateplan,childrenOrgid);
+            }else{
+                resultlist = pd.findBySupplier(statuslist,serialnumber,rateplan,childrenOrgid,pc.getStarttime(), pc.getEndtime());
+            }
 		}
 		for(Object[] o:resultlist){
 			SimCardVO s = new SimCardVO();

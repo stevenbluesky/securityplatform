@@ -9,9 +9,7 @@ import cn.com.isurpass.house.po.EmployeePO;
 import cn.com.isurpass.house.result.JsonResult;
 import cn.com.isurpass.house.util.ExportExcelUtil;
 import cn.com.isurpass.house.util.FormUtils;
-import cn.com.isurpass.house.vo.RegistUserSearchVO;
-import cn.com.isurpass.house.vo.RegisteredEndUsersVO;
-import cn.com.isurpass.house.vo.SimCardVO;
+import cn.com.isurpass.house.vo.*;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -30,7 +28,6 @@ import cn.com.isurpass.house.exception.MyArgumentNullException;
 import cn.com.isurpass.house.po.PhonecardPO;
 import cn.com.isurpass.house.service.PhonecardService;
 import cn.com.isurpass.house.result.PageResult;
-import cn.com.isurpass.house.vo.TransferVO;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -75,14 +72,14 @@ public class PhonecardController {
 	 */
 	@RequestMapping("phonecardJsonList")
 	@ResponseBody
-	public Map<String, Object> phonecardJsonList(PageResult pr,PhonecardPO pc,HttpServletRequest request) {
+	public Map<String, Object> phonecardJsonList(PageResult pr,SimCardSearchVO pc,HttpServletRequest request) {
 		Pageable pageable = PageRequest.of(pr.getPage()-1,pr.getRows(),Sort.Direction.DESC,"phonecardid");
 		return ps.listPhonecard(pageable,pc,request);
 	}
 
 	@RequestMapping(value = "/exportsimcarddata")
 	@ResponseBody
-	public String exportSimCardData(PhonecardPO pc, HttpServletRequest request, HttpServletResponse response) {
+	public String exportSimCardData(SimCardSearchVO pc, HttpServletRequest request, HttpServletResponse response) {
 		EmployeePO emp = (EmployeePO) request.getSession().getAttribute("emp");
 		List<SimCardVO> dataset = ps.listPhonecard(pc,request);
 

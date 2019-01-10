@@ -34,19 +34,28 @@
                   </div>
 
                   </div>
+              <#--最下一栏-->
                   <div class="form-group">
+                  <#--网关绑定时间 开始时间搜索-->
                       <div class="col-md-4" align="right">
-                          <label for="searchDealername" class="col-md-5 control-label"></label>
+                          <label for="searchinstallerorg" class="col-md-5 control-label"><@spring.message code='label.starttime'/></label>
                           <div class="col-md-7">
-                              <input type="hidden" class="form-control" id="" name=""
-                                     placeholder="">
+                              <div class="col-sm-12 input-group date form_datetime">
+                                  <input class="form-control" size="16" id="searchStarttime" name="starttime" type="text" readonly placeholder="<@spring.message code='label.starttime'/>" >
+                                  <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                  <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                              </div>
                           </div>
                       </div>
+                  <#--网关绑定时间 结束时间搜索-->
                       <div class="col-md-4" align="right">
-                          <label for="searchDealername" class="col-md-5 control-label"></label>
+                          <label for="searchinstallerorg" class="col-md-5 control-label"><@spring.message code='label.endtime'/></label>
                           <div class="col-md-7">
-                              <input type="hidden" class="form-control" id="" name=""
-                                     placeholder="">
+                              <div class="col-md-12 input-group date form_datetime">
+                                  <input class="form-control" size="16" id="searchEndtime" name="endtime" type="text" readonly placeholder="<@spring.message code='label.endtime'/>" >
+                                  <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                  <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                              </div>
                           </div>
                       </div>
 
@@ -133,6 +142,8 @@
                     serialnumber: $("#searchserialnumber").val(),
                     rateplan: $("#searchrateplan").val(),
                     status: $("#searchstatus").val(),
+                    starttime: $("#searchStarttime").val(),
+                    endtime: $("#searchEndtime").val(),
                     rows: params.limit,                         //页面大小
                     page: (params.offset / params.limit) + 1,   //页码
                     sort: params.sort,      //排序列名
@@ -163,8 +174,10 @@
             var serialnumber = $("#searchserialnumber").val();
             var rateplan =  $("#searchrateplan").val();
             var status =  $("#searchstatus").val();
+            var starttime = $("#searchStarttime").val();
+            var endtime = $("#searchEndtime").val();
 
-            window.open("exportsimcarddata?serialnumber="+serialnumber+"&rateplan="+rateplan+"&status="+status);
+            window.open("exportsimcarddata?serialnumber="+serialnumber+"&rateplan="+rateplan+"&status="+status+"&starttime="+starttime+"&endtime="+endtime);
 
         }
         //状态格式化器
@@ -194,7 +207,18 @@
                 if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
             return fmt;
         }
-
+        $('.form_datetime').datetimepicker({
+            //language:  'fr',
+            format: 'yyyy-mm-dd',
+            weekStart: 1,
+            minView:'month',
+            todayBtn:  1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            forceParse: 0,
+            showMeridian: 1
+        });
         function formatter_date(value, row, index) {
             if(value==null){
                 return '';
