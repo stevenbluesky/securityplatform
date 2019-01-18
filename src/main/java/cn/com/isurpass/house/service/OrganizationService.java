@@ -278,8 +278,8 @@ public class OrganizationService {
     @Transactional(readOnly = true)
     public Map<String, Object> listOrgByType(Pageable pageable, Integer orgType) {
         Map<String, Object> map = new HashMap<>();
-        Page<OrganizationPO> orgList = od.findByOrgtype(pageable, orgType);
-        map.put("total", od.countByOrgtype(orgType));
+        Page<OrganizationPO> orgList = od.findByOrgtypeAndStatusIn(pageable, orgType,new int[]{1,2});
+        map.put("total", od.countByOrgtypeAndStatusIn(orgType,new int[]{1,2}));
 //        map.put("total", orgList.getTotalElements());
         List<OrgListVO> list = new ArrayList<>();
         setProperties(orgList, list);
@@ -294,11 +294,11 @@ public class OrganizationService {
         Page<OrganizationPO> orgList = null;
         Map<String, Object> map = new HashMap<>();
         if (isAdmin(emp.getOrganizationid())) {
-            orgList = od.findByOrgtype(pageable, Constants.ORGTYPE_INSTALLER);
-            map.put("total", od.countByOrgtype(Constants.ORGTYPE_INSTALLER));
+            orgList = od.findByOrgtypeAndStatusIn(pageable, Constants.ORGTYPE_INSTALLER,new int[]{1,2});
+            map.put("total", od.countByOrgtypeAndStatusIn(Constants.ORGTYPE_INSTALLER,new int[]{1,2}));
         } else {
-            orgList = od.findByOrgtypeAndParentorgid(pageable, Constants.ORGTYPE_INSTALLER, emp.getOrganizationid());
-            map.put("total", od.countByOrgtypeAndParentorgid(Constants.ORGTYPE_INSTALLER, emp.getOrganizationid()));
+            orgList = od.findByOrgtypeAndParentorgidAndStatusIn(pageable, Constants.ORGTYPE_INSTALLER, emp.getOrganizationid(),new int[]{1,2});
+            map.put("total", od.countByOrgtypeAndParentorgidAndStatusIn(Constants.ORGTYPE_INSTALLER, emp.getOrganizationid(),new int[]{1,2}));
         }
 //        Map<String, Object> map = new HashMap<>();
 
@@ -506,8 +506,8 @@ public class OrganizationService {
 
         if (search.getSearchcity() == null || search.getSearchcity() == "") {//如果不搜索城市名称
             Integer organizationid = emp.getOrganizationid();
-            map.put("total", od.countByCodeContainingAndNameContainingAndOrgtype(code,name,orgtype1));
-            orgList = od.findByCodeContainingAndNameContainingAndOrgtype(pageable,code, name, orgtype1);
+            map.put("total", od.countByCodeContainingAndNameContainingAndOrgtypeAndStatusIn(code,name,orgtype1,new int[]{1,2}));
+            orgList = od.findByCodeContainingAndNameContainingAndOrgtypeAndStatusIn(pageable,code, name, orgtype1,new int[]{1,2});
         } else {
             //先通过citycode和city查找相似的,再通过返回的List集合中的citycode在organization表中查找
             List<CityPO> list = city.findByCitynameLike(city1);
@@ -531,11 +531,11 @@ public class OrganizationService {
                         list1.add(o.getOrganizationid());
                     }
                 }
-                map.put("total", od.countByCodeLikeAndNameLikeAndCitycodeInAndOrgtypeAndOrganizationidIn(code,name, list0, orgtype1, list1));
-                orgList = od.findByCodeLikeAndNameLikeAndCitycodeInAndOrgtypeAndOrganizationidIn(code,name, list0, orgtype1, list1, pageable);
+                map.put("total", od.countByCodeLikeAndNameLikeAndCitycodeInAndOrgtypeAndOrganizationidInAndStatusIn(code,name, list0, orgtype1, list1,new int[]{1,2}));
+                orgList = od.findByCodeLikeAndNameLikeAndCitycodeInAndOrgtypeAndOrganizationidInAndStatusIn(code,name, list0, orgtype1, list1,new int[]{1,2},pageable);
             } else {//查找服务商
-                map.put("total", od.countByCodeLikeAndNameLikeAndCitycodeInAndOrgtype(code,name, list0, orgtype1));
-                orgList = od.findByCodeLikeAndNameLikeAndCitycodeInAndOrgtype(code,name, list0, orgtype1, pageable);
+                map.put("total", od.countByCodeLikeAndNameLikeAndCitycodeInAndOrgtypeAndStatusIn(code,name, list0, orgtype1,new int[]{1,2}));
+                orgList = od.findByCodeLikeAndNameLikeAndCitycodeInAndOrgtypeAndStatusIn(code,name, list0, orgtype1,new int[]{1,2}, pageable);
             }
         }
 
@@ -615,10 +615,9 @@ public class OrganizationService {
                 return ;
             }
             for (Object id : ids) {
-                //deleteOrganization(Integer.valueOf(id.toString().replace( ",", "")), request);
-//                od.deleteByOrganizationid(Integer.valueOf(id.toString().replace( ",", "")));
                 OrganizationPO orgentity = od.findByOrganizationid(Integer.valueOf(id.toString().replace(",", "")));
-                od.delete(orgentity);
+                orgentity.setStatus(9);
+                od.save(orgentity);
             }
         }
     }
@@ -748,7 +747,7 @@ public class OrganizationService {
     }
 
     public Boolean validName(String name) {
-        OrganizationPO byName = od.findByName(name);
+        OrganizationPO byName = od.findByNameAndStatusIn(name,new int[]{1,2});
         if(byName==null){
             return true;
         }else {
@@ -852,15 +851,15 @@ public class OrganizationService {
     }
     @Transactional(readOnly = true)
     public List<OrganizationPO> listAllSupOrg() {
-        List<OrganizationPO> byOrgtype = od.findByOrgtype(Constants.ORGTYPE_SUPPLIER);
+        List<OrganizationPO> byOrgtype = od.findByOrgtypeAndStatusIn(Constants.ORGTYPE_SUPPLIER,new int[]{1,2});
         return byOrgtype;
     }
     @Transactional(readOnly = true)
     public List<OrganizationPO> listAllInsOrg() {
-        return od.findByOrgtype(Constants.ORGTYPE_INSTALLER);
+        return od.findByOrgtypeAndStatusIn(Constants.ORGTYPE_INSTALLER,new int[]{1,2});
     }
     @Transactional(readOnly = true)
     public List<OrganizationPO> listMyInsOrg(EmployeePO emp) {
-        return od.findByParentorgidAndOrgtype(emp.getOrganizationid(),Constants.ORGTYPE_INSTALLER);
+        return od.findByParentorgidAndOrgtypeAndStatusIn(emp.getOrganizationid(),Constants.ORGTYPE_INSTALLER,new int[]{1,2});
     }
 }

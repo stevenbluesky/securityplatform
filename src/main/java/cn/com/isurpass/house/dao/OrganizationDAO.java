@@ -30,11 +30,9 @@ public interface OrganizationDAO extends CrudRepository<OrganizationPO, Integer>
 
     long count();
 
-    OrganizationPO findByName(String name);
-
     List<OrganizationPO> findAll();
 
-    @Query(value = "select new OrganizationPO(organizationid,name) from OrganizationPO o where o.orgtype = :orgtype")
+    @Query(value = "select new OrganizationPO(organizationid,name) from OrganizationPO o where o.orgtype = :orgtype and o.status in (1,2) ")
     List<OrganizationPO> findAllOrgSelect(@Param("orgtype") Integer orgtype);
 
     @Query("select new OrganizationPO(organizationid,name) from OrganizationPO")
@@ -57,10 +55,6 @@ public interface OrganizationDAO extends CrudRepository<OrganizationPO, Integer>
     List<OrganizationPO> findByNameLikeAndCitycodeLike(String s, String s1);
 
     List<OrganizationPO> findByNameContaining(String searchName);
-
-    Object countByCodeLikeAndNameLikeAndCitycodeInAndOrgtypeAndOrganizationidIn(String code, String name, List<String> list0, Integer orgtype1, List<Integer> list1);
-
-    Page<OrganizationPO> findByCodeLikeAndNameLikeAndCitycodeInAndOrgtypeAndOrganizationidIn(String code, String name, List<String> list0, Integer orgtype1, List<Integer> list1, Pageable pageable);
 
     Page<OrganizationPO> findByCodeLikeAndNameLikeAndCitycodeInAndOrgtype(String code, String name, List<String> list0, Integer orgtype1, Pageable pageable);
 
@@ -118,25 +112,25 @@ public interface OrganizationDAO extends CrudRepository<OrganizationPO, Integer>
     @Query(value = "SELECT o1.organizationid,o1.code as code,o1.name as name,c.cityname,o1.status,o2.name as parentname,o2.code as parentcode FROM organization o1 \n" +
             "LEFT JOIN city c ON o1.citycode=c.citycode \n" +
             "LEFT JOIN organization o2 ON o1.parentorgid=o2.organizationid   \n" +
-            "WHERE o1.code LIKE :code AND o1.name LIKE :name AND c.cityname LIKE :city AND o2.name LIKE :parname AND o2.code LIKE :parcode AND o1.orgtype=2",nativeQuery = true)
+            "WHERE o1.code LIKE :code AND o1.name LIKE :name AND c.cityname LIKE :city AND o2.name LIKE :parname AND o2.code LIKE :parcode AND o1.orgtype=2 and o1.status in (1,2) ",nativeQuery = true)
     List<Object[]> findInstallerOrg(Pageable pageable, @Param("code")String code,@Param("name") String name, @Param("city")String city,@Param("parname")String parname,@Param("parcode")String parcode);
 
     @Query(value = "SELECT COUNT(*) FROM organization o1 \n" +
             "LEFT JOIN city c ON o1.citycode=c.citycode \n" +
             "LEFT JOIN organization o2 ON o1.parentorgid=o2.organizationid   \n" +
-            "WHERE o1.code LIKE :code AND o1.name LIKE :name AND c.cityname LIKE :city AND o2.name LIKE :parname AND o2.code LIKE :parcode AND o1.orgtype=2",nativeQuery = true)
+            "WHERE o1.code LIKE :code AND o1.name LIKE :name AND c.cityname LIKE :city AND o2.name LIKE :parname AND o2.code LIKE :parcode AND o1.orgtype=2 and o1.status in (1,2) ",nativeQuery = true)
     long countInstallerOrg(@Param("code")String code, @Param("name")String name,@Param("city") String city,@Param("parname")String parname,@Param("parcode")String parcode);
 
     @Query(value = "SELECT o1.organizationid,o1.code as code,o1.name as name,c.cityname,o1.status,o2.name as parentname,o2.code as parentcode FROM organization o1 \n" +
             "LEFT JOIN city c ON o1.citycode=c.citycode \n" +
             "LEFT JOIN organization o2 ON o1.parentorgid=o2.organizationid   \n" +
-            "WHERE o1.code LIKE :code AND o1.name LIKE :name AND c.cityname LIKE :city and o1.organizationid in :childrenOrgid AND o2.name LIKE :parname AND o2.code LIKE :parcode AND o1.orgtype=2",nativeQuery = true)
+            "WHERE o1.code LIKE :code AND o1.name LIKE :name AND c.cityname LIKE :city and o1.organizationid in :childrenOrgid AND o2.name LIKE :parname AND o2.code LIKE :parcode AND o1.orgtype=2 and o1.status in (1,2) ",nativeQuery = true)
     List<Object[]> findOwnInstallerOrg(Pageable pageable, @Param("name")String name,@Param("code") String code,@Param("city") String city,@Param("childrenOrgid") List<Integer> childrenOrgid,@Param("parname")String parname,@Param("parcode")String parcode);
 
     @Query(value = "SELECT COUNT(*) FROM organization o1 \n" +
             "LEFT JOIN city c ON o1.citycode=c.citycode \n" +
             "LEFT JOIN organization o2 ON o1.parentorgid=o2.organizationid   \n" +
-            "WHERE o1.code LIKE :code AND o1.name LIKE :name AND c.cityname LIKE :city AND o1.organizationid IN :childrenOrgid AND o2.name LIKE :parname AND o2.code LIKE :parcode AND o1.orgtype=2",nativeQuery = true)
+            "WHERE o1.code LIKE :code AND o1.name LIKE :name AND c.cityname LIKE :city AND o1.organizationid IN :childrenOrgid AND o2.name LIKE :parname AND o2.code LIKE :parcode AND o1.orgtype=2 and o1.status in (1,2) ",nativeQuery = true)
     long countOwnInstallerOrg(@Param("name")String name,@Param("code") String code,@Param("city") String city,@Param("childrenOrgid") List<Integer> childrenOrgid,@Param("parname")String parname,@Param("parcode")String parcode);
 
 
@@ -146,7 +140,29 @@ public interface OrganizationDAO extends CrudRepository<OrganizationPO, Integer>
 
     OrganizationPO findByCodeAndOrganizationid(String code, Integer organizationid);
 
-    Object countByCodeContainingAndNameContainingAndOrgtype(String code, String name, Integer orgtype1);
+    Page<OrganizationPO> findByOrgtypeAndStatusIn(Pageable pageable, Integer orgType, int[] ints);
 
-    Page<OrganizationPO> findByCodeContainingAndNameContainingAndOrgtype(Pageable pageable, String code, String name, Integer orgtype1);
+    List<OrganizationPO> findByOrgtypeAndStatusIn(Integer orgType, int[] ints);
+
+    Integer countByOrgtypeAndStatusIn(Integer orgType, int[] ints);
+
+    Object countByCodeContainingAndNameContainingAndOrgtypeAndStatusIn(String code, String name, Integer orgtype1, int[] ints);
+
+    Page<OrganizationPO> findByCodeContainingAndNameContainingAndOrgtypeAndStatusIn(Pageable pageable, String code, String name, Integer orgtype1, int[] ints);
+
+    Object countByCodeLikeAndNameLikeAndCitycodeInAndOrgtypeAndOrganizationidInAndStatusIn(String code, String name, List<String> list0, Integer orgtype1, List<Integer> list1, int[] ints);
+
+    Page<OrganizationPO> findByCodeLikeAndNameLikeAndCitycodeInAndOrgtypeAndOrganizationidInAndStatusIn(String code, String name, List<String> list0, Integer orgtype1, List<Integer> list1, int[] ints, Pageable pageable);
+
+    Object countByCodeLikeAndNameLikeAndCitycodeInAndOrgtypeAndStatusIn(String code, String name, List<String> list0, Integer orgtype1, int[] ints);
+
+    Page<OrganizationPO> findByCodeLikeAndNameLikeAndCitycodeInAndOrgtypeAndStatusIn(String code, String name, List<String> list0, Integer orgtype1, int[] ints, Pageable pageable);
+
+    Page<OrganizationPO> findByOrgtypeAndParentorgidAndStatusIn(Pageable pageable, Integer orgtypeInstaller, Integer organizationid, int[] ints);
+
+    Integer countByOrgtypeAndParentorgidAndStatusIn(Integer orgtypeInstaller, Integer organizationid, int[] ints);
+
+    List<OrganizationPO> findByParentorgidAndOrgtypeAndStatusIn(Integer organizationid, Integer orgtypeInstaller, int[] ints);
+
+    OrganizationPO findByNameAndStatusIn(String name, int[] ints);
 }
