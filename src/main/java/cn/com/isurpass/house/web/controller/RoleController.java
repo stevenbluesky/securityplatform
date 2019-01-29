@@ -62,6 +62,13 @@ public class RoleController {
         return "role/employeeRole";
     }
 
+    @RequestMapping("listEmployeeRoles")
+    public String listEmployeeRoles(Integer[] employeeids, Model model) {
+        model.addAttribute("employeeids", employeeids);
+        model.addAttribute("roleList", roleService.listEmployeeRole());
+        return "role/employeeRoles";
+    }
+
     @RequestMapping("listRolePrivilege")
     public String listRolePrivilege(Integer roleid, Integer addNew, Model model, HttpServletRequest request) {
         ResourceBundle resourceBundle;
@@ -93,6 +100,15 @@ public class RoleController {
             return new JsonResult(1, "1");
         }*/
         roleService.changeRoles(roleChangeVO.getId(), roleChangeVO.getList());
+        return new JsonResult(1, "1");
+    }
+
+    @RequestMapping("modifyEmployeeRoles")
+    @ResponseBody
+    public JsonResult changEmployeeRoles(@RequestBody RoleChangeVO roleChangeVO) {
+        for(Integer id : roleChangeVO.getEmployeeids()){
+            roleService.changeRoles(id, roleChangeVO.getList());
+        }
         return new JsonResult(1, "1");
     }
 

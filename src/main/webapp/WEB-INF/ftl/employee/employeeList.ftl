@@ -209,10 +209,10 @@
                 alert("<@spring.message code='label.nochecked'/>");
                 return;
             } else if (getCheckedId().length > 1) {
-                alert("<@spring.message code='label.chooseonepls'/>");
-                return;
+                $("#iframeDetail").attr("src", '../role/listEmployeeRoles?employeeids='+getCheckedId());
+            }else{
+                $("#iframeDetail").attr("src", '../role/listEmployeeRole?employeeid='+getCheckedId()[0]);
             }
-            $("#iframeDetail").attr("src", '../role/listEmployeeRole?employeeid='+getCheckedId()[0]);
             $('#myModal').modal('show');
         }
 

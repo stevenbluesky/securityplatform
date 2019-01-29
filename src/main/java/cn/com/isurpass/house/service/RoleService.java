@@ -96,10 +96,9 @@ public class RoleService {
     @Transactional(rollbackFor = Exception.class)
     public JsonResult changeRoles(Integer employeeid, List<Integer> roles) {
         List<EmployeeRolePO> roleList = erd.findByEmployeeid(employeeid);
-        if (roleList == null || roleList.size() == 0) {
-            return new JsonResult(-1, "-1");
+        if (roleList != null && roleList.size() > 0) {
+            erd.deleteAll(roleList);
         }
-        erd.deleteAll(roleList);
         List<EmployeeRolePO> employeeRolePOS = roles.stream().map(temp -> {
             EmployeeRolePO emprole = new EmployeeRolePO();
             emprole.setRoleid(temp);

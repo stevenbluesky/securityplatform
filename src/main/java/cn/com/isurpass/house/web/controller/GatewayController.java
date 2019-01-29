@@ -1,32 +1,19 @@
 package cn.com.isurpass.house.web.controller;
 
-import java.awt.image.BufferedImage;
-import java.io.*;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.imageio.ImageIO;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import cn.com.isurpass.house.exception.MyArgumentNullException;
 import cn.com.isurpass.house.po.EmployeePO;
+import cn.com.isurpass.house.result.PageResult;
+import cn.com.isurpass.house.service.GatewayService;
 import cn.com.isurpass.house.util.ExportExcelUtil;
 import cn.com.isurpass.house.util.FormUtils;
 import cn.com.isurpass.house.vo.*;
 import com.alibaba.fastjson.JSONObject;
 import com.google.zxing.BarcodeFormat;
-import com.google.zxing.EncodeHintType;
-import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -38,13 +25,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
-import cn.com.isurpass.house.exception.MyArgumentNullException;
-import cn.com.isurpass.house.po.ZwaveDevicePO;
-import cn.com.isurpass.house.service.GatewayService;
-import cn.com.isurpass.house.result.PageResult;
-
-import static com.google.zxing.client.j2se.MatrixToImageWriter.toBufferedImage;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/gateway")

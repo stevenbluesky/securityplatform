@@ -7,6 +7,7 @@ public class RoleChangeVO {
     private Integer id;
     private List<Integer> list;
     private String rolename;
+    private List<Integer> employeeids;
 
     public String getRolename() {
         return rolename;
@@ -36,6 +37,16 @@ public class RoleChangeVO {
         List<Integer> list0 = new ArrayList<>();
         list.forEach(role -> list0.add(Integer.valueOf(role)));
         this.list = list0;
+    }
+
+    public List<Integer> getEmployeeids() {
+        return employeeids;
+    }
+
+    public void setEmployeeids(List<String> employeeids) {
+        List<Integer> list0 = new ArrayList<>();
+        employeeids.forEach(role -> list0.add(Integer.valueOf(role)));
+        this.employeeids = list0;
     }
 
     public boolean isNew(){
