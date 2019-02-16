@@ -568,7 +568,9 @@ public class EmployeeService {
                 roleidlist.add(4);
             }
         }else{
-            roleidlist = Arrays.asList(new Integer[]{1,2,3,4,5,6,8});
+            for(int i =1;i<30;i++){
+                roleidlist.add(i);
+            }
         }
         tempempidlist = employeeroleDAO.findEmployeeidByRoleidIn(roleidlist);
         if(Constants.ORGTYPE_AMETA.equals(orgtype)){
