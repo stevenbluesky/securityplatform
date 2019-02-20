@@ -10,6 +10,7 @@ public class EmployeeListVO {
 	private String code;
 	private Integer status;
 	private String orgname;
+	private String rolestr;
 	private Date createtime;
 
 	public EmployeeListVO() {
@@ -79,5 +80,13 @@ public class EmployeeListVO {
 
 	public void setCreatetime(Date createtime) {
 		this.createtime = createtime;
+	}
+
+	public String getRolestr() {
+		return rolestr;
+	}
+
+	public void setRolestr(String rolestr) {
+		this.rolestr = rolestr;
 	}
 }

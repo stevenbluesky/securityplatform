@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface RolePrivilegeDAO extends CrudRepository<RolePrivilegePO,Integer>{
     List<RolePrivilegePO> findByRoleid(Integer roleid);
+
+    void deleteByRoleid(Integer roleid);
 }

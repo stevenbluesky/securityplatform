@@ -99,17 +99,20 @@ public class RoleController {
             roleService.addRole(rolename, roleChangeVO.getList());
             return new JsonResult(1, "1");
         }*/
-        roleService.changeRoles(roleChangeVO.getId(), roleChangeVO.getList());
-        return new JsonResult(1, "1");
+        return  roleService.changeRoles(roleChangeVO.getId(), roleChangeVO.getList());
     }
 
     @RequestMapping("modifyEmployeeRoles")
     @ResponseBody
     public JsonResult changEmployeeRoles(@RequestBody RoleChangeVO roleChangeVO) {
+        JsonResult jsonResult = new JsonResult(1,"1");
         for(Integer id : roleChangeVO.getEmployeeids()){
-            roleService.changeRoles(id, roleChangeVO.getList());
+            JsonResult result = roleService.changeRoles(id, roleChangeVO.getList());
+            if("needcode".equals(result.getMsg())){
+                jsonResult = new JsonResult(1,"needcode");
+            }
         }
-        return new JsonResult(1, "1");
+        return jsonResult;
     }
 
     @RequestMapping("addRole")

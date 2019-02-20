@@ -339,6 +339,17 @@ public class EmployeeService {
         if (od.findByOrganizationid(e.getOrganizationid()) != null) {
             emp.setParentOrgName(od.findByOrganizationid(e.getOrganizationid()).getName());
         }
+        List<Object[]> roleNameList = employeeroleDAO.findRoleNameByEmployeeid(e.getEmployeeid());
+        String rolestr = "";
+        for(Object[] r:roleNameList){
+            if(!rolestr.contains((String)r[1])) {
+                rolestr += r[1] + ", ";
+            }
+        }
+        if(rolestr.contains(", ")){
+            rolestr = rolestr.substring(0,rolestr.lastIndexOf(", "));
+        }
+        emp.setRolestr(rolestr);
         emp.setCreatetime(e.getCreatetime());
         list.add(emp);
     }
@@ -565,7 +576,13 @@ public class EmployeeService {
                 roleidlist.add(6);
                 roleidlist.add(8);
             } else {
-                roleidlist.add(4);
+                List<RolePO> rolelist = rd.findRolesByPrivilegeOfInstaller();
+                for(RolePO r:rolelist){
+                    if(r.getRoleid()==1||r.getRoleid()==5){
+                        continue;
+                    }
+                    roleidlist.add(r.getRoleid());
+                }
             }
         }else{
             for(int i =1;i<30;i++){
@@ -593,6 +610,17 @@ public class EmployeeService {
             empVO.setCode((String)o[1]);
             empVO.setName((String)o[2]);
             empVO.setParentOrgName((String)o[3]);
+            List<Object[]> roleNameList = employeeroleDAO.findRoleNameByEmployeeid((Integer)o[0]);
+            String rolestr = "";
+            for(Object[] r:roleNameList){
+                if(!rolestr.contains((String)r[1])) {
+                    rolestr += r[1] + ", ";
+                }
+            }
+            if(rolestr.contains(", ")){
+                rolestr = rolestr.substring(0,rolestr.lastIndexOf(", "));
+            }
+            empVO.setRolestr(rolestr);
             empVO.setStatus((Integer)o[4]);
             empVO.setCreatetime((Date)o[5]);
             list.add(empVO);
@@ -761,6 +789,7 @@ public class EmployeeService {
         List<Integer> privilegeid = new ArrayList<>();//权限列表
         //OrganizationPO org = od.findByOrganizationid(emp.getOrganizationid());//根据员工的机构id获取所属机构
         List<EmployeeRolePO> emprolelist = employeeroleDAO.findByEmployeeid(emp.getEmployeeid());//根据员工id获取员工的所有角色
+
         emprolelist.forEach(e -> roleprivilegelist.addAll(rolePrivilegeDAO.findByRoleid(e.getRoleid())));//遍历员工角色列表，获取角色权限列表
         roleprivilegelist.forEach(e -> privilegeid.add(e.getPrivilegeid()));//根据员工的角色权限列表得到员工的权限id列表
         List<PrivilegePO> privilegelist = privilegeDAO.findByPrivilegeidIn(privilegeid);//根据角色权限id列表去拿到权限权限列表

@@ -121,6 +121,9 @@
         <th data-field="code" class="text-center"><@spring.message code="label.empcode"/></th>
         <th data-field="name" class="text-center"><@spring.message code="label.username"/></th>
         <th data-field="parentOrgName" class="text-center"><@spring.message code="label.parentorg"/></th>
+<@shiro.hasPermission name="label.ModifyRole">
+        <th data-field="rolestr" class="text-center  col-md-2"><@spring.message code="label.EmployeeRole"/></th>
+</@shiro.hasPermission>
         <th data-field="status" data-formatter='formatter_status' class="text-center"><@spring.message code="label.status"/></th>
         <th data-field="createtime" data-formatter="formatter_date" class="text-center"><@spring.message code="label.createtime"/></th>
         <th data-field="operate" data-events="operateEvents" data-visible="false" class="text-center"><@spring.message code="label.operate"/></th>

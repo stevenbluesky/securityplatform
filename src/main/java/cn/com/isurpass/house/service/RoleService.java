@@ -1,19 +1,15 @@
 package cn.com.isurpass.house.service;
 
-import cn.com.isurpass.house.dao.EmployeeroleDAO;
-import cn.com.isurpass.house.dao.PrivilegeDAO;
-import cn.com.isurpass.house.dao.RoleDAO;
-import cn.com.isurpass.house.dao.RolePrivilegeDAO;
-import cn.com.isurpass.house.po.EmployeeRolePO;
-import cn.com.isurpass.house.po.PrivilegePO;
-import cn.com.isurpass.house.po.RolePO;
-import cn.com.isurpass.house.po.RolePrivilegePO;
+import cn.com.isurpass.house.dao.*;
+import cn.com.isurpass.house.po.*;
 import cn.com.isurpass.house.result.JsonResult;
 import cn.com.isurpass.house.shiro.FilterChainDefinitionsService;
 import cn.com.isurpass.house.shiro.MyShiroUtil;
 import cn.com.isurpass.house.shiro.ShiroHelper;
 import cn.com.isurpass.house.util.BeanCopyUtils;
+import cn.com.isurpass.house.vo.EmployeeVO;
 import cn.com.isurpass.house.vo.RoleListVO;
+import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.mgt.RealmSecurityManager;
@@ -36,6 +32,8 @@ public class RoleService {
     EmployeeService es;
     @Autowired
     RoleDAO rd;
+    @Autowired
+    private EmployeeDAO ed;
     @Autowired
     EmployeeroleDAO erd;
     @Autowired
@@ -96,6 +94,7 @@ public class RoleService {
     @Transactional(rollbackFor = Exception.class)
     public JsonResult changeRoles(Integer employeeid, List<Integer> roles) {
         List<EmployeeRolePO> roleList = erd.findByEmployeeid(employeeid);
+        EmployeePO employee = ed.findByEmployeeid(employeeid);
         if (roleList != null && roleList.size() > 0) {
             erd.deleteAll(roleList);
         }
@@ -106,9 +105,33 @@ public class RoleService {
             emprole.setCreatetime(new Date());
             return emprole;
         }).collect(toList());
+
+        boolean shouldHaveInstallerCode = false;
+        if(needHaveInstallerCode(roles)){
+            shouldHaveInstallerCode = true;
+            if(StringUtils.isNotBlank(employee.getCode())){
+                employee.setType(1);
+            }
+        }else{
+            employee.setType(0);
+        }
+        ed.save(employee);
         erd.saveAll(employeeRolePOS);
         shiroHelper.clearAuth();
+        if(shouldHaveInstallerCode && StringUtils.isBlank(employee.getCode())){
+            return new JsonResult(1,"needcode");
+        }
         return new JsonResult(1, "1");
+    }
+
+    private boolean needHaveInstallerCode(List<Integer> roles) {
+        for(Integer roleid : roles){
+            PrivilegePO privilege = pd.findPoOfInstallerPrivilege(roleid);
+            if(privilege!=null){
+                return true;
+            }
+        }
+        return false;
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -176,6 +199,8 @@ public class RoleService {
     public JsonResult delete(Integer roleid) {
         try {
             rd.deleteById(roleid);
+//            erd.deleteByRoleid(roleid);
+            rpd.deleteByRoleid(roleid);
             return new JsonResult(1, "1");
         } catch (Exception e) {
             e.printStackTrace();

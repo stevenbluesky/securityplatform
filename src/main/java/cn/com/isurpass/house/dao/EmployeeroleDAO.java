@@ -1,5 +1,7 @@
 package cn.com.isurpass.house.dao;
 
+import cn.com.isurpass.house.po.RolePO;
+import netscape.security.Privilege;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -20,4 +22,8 @@ public interface EmployeeroleDAO extends CrudRepository<EmployeeRolePO,Integer>{
     @Query(value = "SELECT employeeid FROM employeerole WHERE roleid in :roleidlist",nativeQuery = true)
     List<Integer> findEmployeeidByRoleidIn(@Param("roleidlist")List<Integer> roleidlist);
 
+    void deleteByRoleid(Integer roleid);
+
+    @Query(value = "SELECT e.* FROM employeerole er JOIN role e ON er.roleid=e.roleid WHERE er.employeeid=:employeeid ",nativeQuery = true)
+    List<Object[]> findRoleNameByEmployeeid(@Param("employeeid") Integer employeeid);
 }

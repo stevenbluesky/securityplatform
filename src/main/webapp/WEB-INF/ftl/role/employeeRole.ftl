@@ -72,7 +72,11 @@
             traditional: true,
             data: "{\"id\":" + ${(cemp.employeeid)!?c} + ",\"list\":" + JSON.stringify(checks) + "}",
             success: function (data) {//返回json结果
-                alert("<@spring.message code='label.updatesuccess'/>");
+                if(data.msg==="needcode"){
+                    alert("<@spring.message code='label.needcode'/>")
+                }else {
+                    alert("<@spring.message code='label.updatesuccess'/>");
+                }
                 //window.location.href = "../employee/employeeList";
                 parent.location.href=parent.location.href;
             },
