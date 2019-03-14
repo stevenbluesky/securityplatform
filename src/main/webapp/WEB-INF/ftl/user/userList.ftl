@@ -72,10 +72,15 @@
                </div>
            </div>
            <div class="col-md-4" align="right">
-               <label for="searchDealername" class="col-md-5 control-label"></label>
+               <label for="searchinstallerorg" class="col-md-5 control-label"><@spring.message code='label.monitoringstation'/></label>
                <div class="col-md-7">
-                   <input type="hidden" class="form-control" id="" name=""
-                          placeholder="">
+                   <select id="searchStation" name="monitoringstation" class="col-md-12 form-control selectpicker" data-live-search="true" style="width: 100%"
+                           title="<@spring.message code='label.monitoringstation'/>" >
+                       <option value="" selected><@spring.message code='label.all'/></option>
+                       <option value="143" >Lanvac Surveillance Inc</option>
+                       <option value="352" >Global Link</option>
+                       <option value="0" ><@spring.message code="label.none"/></option>
+                   </select>
                </div>
            </div>
        </div>
@@ -134,7 +139,10 @@
         <th data-field="usercode" class="text-center"><@spring.message code='label.aibaseid'/></th>
         <th data-field="name" class="text-center"><@spring.message code='label.name'/></th>
         <th data-field="deviceid" class="text-center"><@spring.message code='label.gatewayID'/></th>
+        <th data-field="monitoringstation" class="text-center"><@spring.message code='label.monitoringstation'/></th>
         <th data-field="serialnumber" class="text-center"><@spring.message code='label.serialnumber'/></th>
+        <th data-field="simstatus" class="text-center"  data-formatter="formatter_statuss"><@spring.message code='label.status'/></th>
+        <th data-field="activationdate" class="text-center" data-formatter="formatter_date" >Activation Date</th>
         <th data-field="appaccount" class="text-center"><@spring.message code='label.apploginemail'/></th>
         <th data-field="city" class="text-center"><@spring.message code='label.city'/></th>
         <th data-field="suppliername" class="text-center"><@spring.message code='label.serviceprovider'/></th>
@@ -183,6 +191,7 @@
                     //searchPhonenumber:$("#searchPhonenumber").val(),
                     searchAppAccount:$("#searchAppAccount").val(),
                     searchDealername:$("#searchDealername").val(),
+                    searchStation:$("#searchStation").val(),
                     status:$("#searchStatus").val(),
                     starttime:$("#searchStarttime").val(),
                     endtime:$("#searchEndtime").val(),
@@ -279,6 +288,17 @@
                 }
 
             });
+        }
+        //状态格式化器
+        function formatter_statuss(value, row, index) {
+            if (value == 1)
+                return '<@spring.message code='label.activated'/>';
+            if (value == 2)
+                return '<@spring.message code='label.deactivated'/>';
+            if (value == 3)
+                return '<@spring.message code='label.inventory'/>';
+            if (value == 0)
+                return '<@spring.message code='label.noeffect'/>';
         }
         function exportData() {
             var searchName = $("#searchName").val();

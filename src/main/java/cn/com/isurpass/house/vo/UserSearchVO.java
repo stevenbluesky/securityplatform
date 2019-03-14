@@ -17,6 +17,7 @@ public class UserSearchVO {
     private Date starttime;
     @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date endtime;
+    private Integer searchStation;
 
 
     public String getSearchName() {
@@ -97,5 +98,13 @@ public class UserSearchVO {
 
     public void setEndtime(Date endtime) {
         this.endtime = endtime;
+    }
+
+    public Integer getSearchStation() {
+        return searchStation;
+    }
+
+    public void setSearchStation(Integer searchStation) {
+        this.searchStation = searchStation;
     }
 }

@@ -15,6 +15,9 @@ public class UserInfoListVO {
 	private String usercode;
 	private String appaccount;
 	private Date createtime;
+	private String monitoringstation;
+	private Integer simstatus;
+	private Date activationdate;
 
 	public String getAppaccount() {
 		return appaccount;
@@ -99,5 +102,29 @@ public class UserInfoListVO {
 
 	public void setCreatetime(Date createtime) {
 		this.createtime = createtime;
+	}
+
+	public String getMonitoringstation() {
+		return monitoringstation;
+	}
+
+	public void setMonitoringstation(String monitoringstation) {
+		this.monitoringstation = monitoringstation;
+	}
+
+	public Integer getSimstatus() {
+		return simstatus;
+	}
+
+	public void setSimstatus(Integer simstatus) {
+		this.simstatus = simstatus;
+	}
+
+	public Date getActivationdate() {
+		return activationdate;
+	}
+
+	public void setActivationdate(Date activationdate) {
+		this.activationdate = activationdate;
 	}
 }

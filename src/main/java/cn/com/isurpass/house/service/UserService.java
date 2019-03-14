@@ -325,18 +325,21 @@ public class UserService {
         List<UserInfoListVO> listvo = new ArrayList<>();
         userList.forEach(u -> {
             UserInfoListVO user = new UserInfoListVO();
-            CityPO citypo = city.findByCitycode((String) u[5]);
-            OrganizationPO orgpo = od.findByOrganizationid((Integer) u[6]);
-            user.setDeviceid((String) u[0]);
-            user.setUserid((Integer) u[1]);
-            user.setName((String) u[2]);
-            user.setStatus((Integer) u[3]);
-            user.setAppaccount((String) u[4]);
+            CityPO citypo = city.findByCitycode((String) u[8]);
+            OrganizationPO orgpo = od.findByOrganizationid((Integer) u[9]);
+            user.setDeviceid((String) u[3]);
+            user.setUserid((Integer) u[4]);
+            user.setName((String) u[5]);
+            user.setStatus((Integer) u[6]);
+            user.setAppaccount((String) u[7]);
             user.setCity(citypo == null ? null : citypo.getCityname());
             user.setSuppliername(orgpo == null ? null : orgpo.getName());
-            user.setUsercode((String) u[8]);
-            user.setSerialnumber((String) u[9]);
-            user.setCreatetime((Date)u[10]);
+            user.setUsercode((String) u[11]);
+            user.setSerialnumber((String) u[12]);
+            user.setCreatetime((Date)u[13]);
+            user.setMonitoringstation((String)u[0]);
+            user.setSimstatus((Integer)u[1]);
+            user.setActivationdate((Date)u[2]);
             listvo.add(user);
         });
         map.put("rows", listvo);
@@ -447,6 +450,7 @@ public class UserService {
         List<UserPO> u7 = Collections.EMPTY_LIST;
         List<UserPO> u8 = Collections.EMPTY_LIST;
         List<UserPO> u9 = Collections.EMPTY_LIST;
+        List<UserPO> u10 = Collections.EMPTY_LIST;
         Set<List<UserPO>> set = new HashSet<>();
         if (!FormUtils.isEmpty(usv.getSearchCity())) {
             List<String> citycodelist = city.findByCitynameContaining(usv.getSearchCity()).stream().map(CityPO::getCitycode).collect(toList());
@@ -494,6 +498,17 @@ public class UserService {
             u9 = ud.findByCreatetimeBefore(usv.getEndtime());
             set.add(u9);
         }
+        List<Integer> monitoringstationidlist = new ArrayList<>();
+        if(usv.getSearchStation()==null){
+            List<UserPO> ul = ud.findMonitoringStationIdList();
+            for(UserPO u: ul){
+                monitoringstationidlist.add(u.getMonitoringstationid());
+            }
+        }else{
+            monitoringstationidlist.add(usv.getSearchStation());
+        }
+        u10 = ud.findByMonitoringstationidIn(monitoringstationidlist);
+        set.add(u10);
         set.remove(null);
         Iterator<List<UserPO>> iterator = set.iterator();
         List<UserPO> ux = iterator.next();
@@ -512,6 +527,7 @@ public class UserService {
         List<Object[]> listpage = null;
         int total = 0;
 //        List<EmployeeRolePO> emprolelist = erd.findByEmployeeid(emp.getEmployeeid());
+
         List<Integer> emprolelist = erd.findByEmployeeid(emp.getEmployeeid()).stream().map(EmployeeRolePO::getRoleid).collect(toList());
         List<Integer> rolelist = RemoveDuplicate.removeDuplicate(emprolelist);
         if (rolelist!= null &&rolelist.size()==1&&rolelist.get(0)==4) {
