@@ -78,7 +78,7 @@
                            title="<@spring.message code='label.monitoringstation'/>" >
                        <option value="" selected><@spring.message code='label.all'/></option>
                        <option value="143" >Lanvac Surveillance Inc</option>
-                       <option value="352" >Global Link</option>
+                       <option value="356" >Global Link</option>
                        <option value="0" ><@spring.message code="label.none"/></option>
                    </select>
                </div>

@@ -25,7 +25,7 @@
                               <select name="monitoringstationid" id="monitoringstation" class="selectpicker" data-live-search="true"
                                       title="<@spring.message code="label.monitoringstation"/>">
                                   <option value="143" >Lanvac Surveillance Inc</option>
-                                  <option value="352" >Global Link</option>
+                                  <option value="356" >Global Link</option>
                                   <option value="0" selected><@spring.message code="label.none"/></option>
                               </select>
                           </div>
